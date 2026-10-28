@@ -1,40 +1,267 @@
-<section class="home-discovery" aria-labelledby="home-match-title">
+
+<section
+  class="home-discovery"
+  aria-labelledby="home-match-title"
+>
   <div class="home-discovery-inner">
+
+    <!-- ==============================
+         SECTION HEADER
+    ============================== -->
     <header>
       <div>
-        <span>{{ t('DISCOVER THE POSSIBILITIES', 'புதிய வாய்ப்புகள்') }}</span>
-        <h2 id="home-match-title">{{ t('Recently Approved Profiles', 'சமீபத்தில் அங்கீகரிக்கப்பட்ட சுயவிவரங்கள்') }}</h2>
-        <p>{{ t('Explore basic details of approved and published members.', 'அங்கீகரிக்கப்பட்டு வெளியிடப்பட்ட உறுப்பினர்களின் அடிப்படை விவரங்களைப் பாருங்கள்.') }}</p>
+        <span>
+          {{ t('DISCOVER THE POSSIBILITIES', 'புதிய வாய்ப்புகள்') }}
+        </span>
+
+        <h2 id="home-match-title">
+          {{ t('Recently Approved Profiles', 'சமீபத்தில் அங்கீகரிக்கப்பட்ட சுயவிவரங்கள்') }}
+        </h2>
+
+        <p>
+          {{ t(
+            'Explore basic details of approved and published members.',
+            'அங்கீகரிக்கப்பட்டு வெளியிடப்பட்ட உறுப்பினர்களின் அடிப்படை விவரங்களைப் பாருங்கள்.'
+          ) }}
+        </p>
       </div>
-      <a routerLink="/free-search">{{ t('Free Search', 'இலவச தேடல்') }} <span aria-hidden="true">→</span></a>
+
+      <a routerLink="/free-search">
+        {{ t('Free Search', 'இலவச தேடல்') }}
+        <span aria-hidden="true">→</span>
+      </a>
     </header>
 
+    <!-- ==============================
+         LOADING SKELETON
+    ============================== -->
     @if (loading) {
-      <div class="home-skeleton-grid" role="status" [attr.aria-label]="t('Loading latest profiles','சுயவிவரங்கள் ஏற்றப்படுகின்றன')">
-        @for (index of [1,2,3,4,5,6]; track index) { <div class="home-skeleton"><div></div><span></span><span></span></div> }
-      </div>
-    } @else if (profiles.length) {
-      <div class="home-profile-grid">
-        @for (p of profiles; track p.code) {
-          <app-public-card [profile]="p" [compact]="true" />
+
+      <div
+        class="home-skeleton-grid"
+        role="status"
+        [attr.aria-label]="t(
+          'Loading latest profiles',
+          'சுயவிவரங்கள் ஏற்றப்படுகின்றன'
+        )"
+      >
+        @for (index of [1, 2, 3]; track index) {
+          <div class="home-skeleton">
+            <div></div>
+            <span></span>
+            <span></span>
+          </div>
         }
       </div>
+
+    } @else if (profiles.length) {
+
+      <!-- ==============================
+           EXPANDING PROFILE CARDS
+      ============================== -->
+      <div class="astro-expand-grid">
+
+        @for (
+          p of profiles.slice(0, 3);
+          track p.code;
+          let i = $index
+        ) {
+
+          <article
+            class="astro-expand-card"
+            [class.is-active]="activeProfileIndex === i"
+            (mouseenter)="setActiveProfile(i)"
+            (focusin)="setActiveProfile(i)"
+            (click)="setActiveProfile(i)"
+            (keydown.enter)="setActiveProfile(i)"
+            (keydown.space)="$event.preventDefault(); setActiveProfile(i)"
+            tabindex="0"
+            [attr.aria-label]="
+              (lang === 'ta' ? (p.nameTa || p.name) : p.name)
+              || p.code
+            "
+          >
+
+            <!-- ==========================
+                 LEFT SIDE - PROFILE PHOTO
+            ========================== -->
+            <div class="astro-expand-photo">
+
+<img
+  [src]="p.image || '/assets/matrimony-fallback.jpg'"
+  [alt]="p.image
+    ? t('Profile photo for ', 'சுயவிவரப் படம் ') + (p.name || p.code)
+    : t('Illustrative profile image', 'மாதிரி சுயவிவரப் படம்')"
+  (error)="onPhotoError($event)"
+  loading="lazy"
+  decoding="async"
+/>
+
+
+              <div class="astro-photo-shade"></div>
+
+              <div class="astro-photo-name">
+                {{
+                  lang === 'ta'
+                    ? (p.nameTa || p.name || p.code)
+                    : (p.name || p.code)
+                }}
+              </div>
+
+            </div>
+
+            <!-- ==========================
+                 RIGHT SIDE - PROFILE DETAILS
+            ========================== -->
+            <div class="astro-expand-details">
+
+              <!-- PROFILE CODE -->
+              <span class="astro-profile-id">
+                {{ t('PROFILE', 'சுயவிவரம்') }}
+                #{{ p.code }}
+              </span>
+
+              <!-- PROFILE NAME -->
+              <h3>
+                {{
+                  lang === 'ta'
+                    ? (p.nameTa || p.name || p.code)
+                    : (p.name || p.code)
+                }}
+
+                @if (p.age !== null) {
+                  <span>, {{ p.age }}</span>
+                }
+              </h3>
+
+              <!-- LOCATION -->
+              <div class="astro-profile-location">
+                {{ p.city || p.district || p.state || '—' }}
+              </div>
+
+              <!-- EDUCATION -->
+              <div class="astro-profile-info">
+                <span>
+                  {{ t('Education', 'கல்வி') }}
+                </span>
+
+                <strong>
+                  {{ p.education || '—' }}
+                </strong>
+              </div>
+
+              <!-- PROFESSION -->
+              <div class="astro-profile-info">
+                <span>
+                  {{ t('Profession', 'தொழில்') }}
+                </span>
+
+                <strong>
+                  {{ p.profession || '—' }}
+                </strong>
+              </div>
+
+              <!-- AGE -->
+              <div class="astro-profile-info">
+                <span>
+                  {{ t('Age', 'வயது') }}
+                </span>
+
+                <strong>
+                  @if (p.age !== null) {
+                    {{ p.age }} {{ t('Years', 'வயது') }}
+                  } @else {
+                    —
+                  }
+                </strong>
+              </div>
+
+              <!-- VIEW PROFILE BUTTON -->
+              <a
+                class="astro-view-profile"
+                [routerLink]="['/free-profile', p.code]"
+                (click)="$event.stopPropagation()"
+              >
+                {{ t('View Profile', 'சுயவிவரத்தைக் காண்க') }}
+                <span aria-hidden="true">↗</span>
+              </a>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+      <!-- ==============================
+           SHOW MORE PROFILES
+      ============================== -->
       <div class="home-show-more-wrap">
-        <a class="home-show-more" routerLink="/free-search">
+
+        <a
+          class="home-show-more"
+          routerLink="/free-search"
+        >
           {{ t('Show More Profiles', 'மேலும் சுயவிவரங்களைக் காண்க') }}
           <span aria-hidden="true">→</span>
         </a>
+
       </div>
+
     } @else if (error) {
-      <div class="home-status" role="alert"><p>{{t('Profiles could not be loaded. Please check the connection.','சுயவிவரங்களை ஏற்ற முடியவில்லை. இணைப்பைச் சரிபார்க்கவும்.')}}</p><button type="button" class="home-retry" (click)="load()">{{t('Retry','மீண்டும் முயலவும்')}}</button></div>
+
+      <!-- ==============================
+           ERROR STATE
+      ============================== -->
+      <div class="home-status" role="alert">
+
+        <p>
+          {{
+            t(
+              'Profiles could not be loaded. Please check the connection.',
+              'சுயவிவரங்களை ஏற்ற முடியவில்லை. இணைப்பைச் சரிபார்க்கவும்.'
+            )
+          }}
+        </p>
+
+        <button
+          type="button"
+          class="home-retry"
+          (click)="load()"
+        >
+          {{ t('Retry', 'மீண்டும் முயலவும்') }}
+        </button>
+
+      </div>
+
     } @else {
-      <p class="home-status">{{ t('New approved profiles will appear here when available.', 'புதிய அங்கீகரிக்கப்பட்ட சுயவிவரங்கள் இங்கே தோன்றும்.') }}</p>
+
+      <!-- ==============================
+           EMPTY STATE
+      ============================== -->
+      <p class="home-status">
+        {{
+          t(
+            'New approved profiles will appear here when available.',
+            'புதிய அங்கீகரிக்கப்பட்ட சுயவிவரங்கள் இங்கே தோன்றும்.'
+          )
+        }}
+      </p>
+
       <div class="home-show-more-wrap">
-        <a class="home-show-more" routerLink="/free-search">
+
+        <a
+          class="home-show-more"
+          routerLink="/free-search"
+        >
           {{ t('Open Free Search', 'இலவச தேடலைத் திறக்கவும்') }}
           <span aria-hidden="true">→</span>
         </a>
+
       </div>
+
     }
+
   </div>
 </section>

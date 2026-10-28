@@ -7,3 +7,385 @@
 @media(prefers-reduced-motion:reduce){.home-show-more{transition:none}}
 
 .home-skeleton-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.home-skeleton{border-radius:16px;overflow:hidden;background:#282229;padding-bottom:20px}.home-skeleton div{height:215px;background:linear-gradient(105deg,#2f2930,#55414c,#2f2930);background-size:200% 100%;animation:homeShimmer 1.5s linear infinite}.home-skeleton span{display:block;height:15px;margin:16px 20px 0;border-radius:8px;background:#51414a}.home-skeleton span:last-child{width:60%}@keyframes homeShimmer{to{background-position:-200% 0}}.home-retry{margin-top:14px;min-height:43px;border:1px solid #e4b889;border-radius:10px;background:#842a4a;color:white;font-weight:700;padding:10px 24px;cursor:pointer}@media(max-width:900px){.home-skeleton-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.home-skeleton-grid{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){.home-skeleton div{animation:none}}
+
+
+
+
+/* ============================================
+   ASTRO ALLIANCE EXPANDING PROFILE CARDS
+============================================ */
+
+.astro-expand-grid {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+  height: 420px;
+  margin-top: 32px;
+}
+
+/* CARD */
+
+.astro-expand-card {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+
+  border-radius: 16px;
+  background: #fdf2ee;
+  color: #451c30;
+
+  cursor: pointer;
+
+  transition:
+    flex 550ms cubic-bezier(.2,.8,.2,1),
+    box-shadow 400ms ease;
+}
+
+.astro-expand-card.is-active {
+  flex: 3.1;
+  box-shadow: 0 20px 55px rgba(0,0,0,.22);
+}
+
+/* PHOTO */
+
+.astro-expand-photo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  transition:
+    width 550ms cubic-bezier(.2,.8,.2,1);
+}
+
+.astro-expand-card.is-active
+.astro-expand-photo {
+  width: 43%;
+}
+
+
+.astro-expand-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  transition: transform 650ms ease;
+}
+
+.astro-expand-card.is-active .astro-expand-photo img {
+  transform: scale(1.02);
+}
+
+
+.astro-expand-card.is-active
+.astro-expand-photo img {
+  transform: scale(1.035);
+}
+
+/* PHOTO GRADIENT */
+
+.astro-photo-shade {
+  position: absolute;
+  inset: 40% 0 0;
+
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(22,8,16,.75)
+  );
+
+  pointer-events: none;
+}
+
+/* COLLAPSED CARD NAME */
+
+.astro-photo-name {
+  position: absolute;
+  bottom: 22px;
+  left: 18px;
+  right: 10px;
+
+  font-family: Georgia, serif;
+  font-size: 23px;
+  font-weight: 600;
+  color: #fff;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  transition: opacity 250ms ease;
+}
+
+.astro-expand-card.is-active
+.astro-photo-name {
+  opacity: 0;
+}
+
+/* RIGHT DETAILS PANEL */
+
+.astro-expand-details {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  left: 43%;
+
+  width: 57%;
+
+  padding: 26px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  opacity: 0;
+  transform: translateX(20px);
+
+  pointer-events: none;
+
+  transition:
+    opacity 250ms ease,
+    transform 400ms ease;
+}
+
+.astro-expand-card.is-active
+.astro-expand-details {
+  opacity: 1;
+  transform: translateX(0);
+
+  pointer-events: auto;
+
+  transition-delay: 220ms;
+}
+
+/* PROFILE ID */
+
+.astro-profile-id {
+  font-size: 10px;
+  letter-spacing: 1.3px;
+  font-weight: 700;
+  color: #a16d80;
+
+  text-transform: uppercase;
+}
+
+/* NAME */
+
+.astro-expand-details h3 {
+  margin: 12px 0 8px;
+
+  font-family: Georgia, serif;
+  font-size: clamp(20px, 2.5vw, 32px);
+  font-weight: 600;
+  line-height: 1.2;
+
+  color: #451c30;
+}
+
+/* LOCATION */
+
+.astro-profile-location {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #886e77;
+
+  margin-bottom: 19px;
+}
+
+/* DETAILS ROW */
+
+.astro-profile-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  border-top: 1px solid #ecd8dc;
+
+  padding: 12px 0;
+
+  font-size: 12px;
+  color: #75616a;
+}
+
+.astro-profile-info strong {
+  font-size: 12px;
+  font-weight: 600;
+  color: #451c30;
+
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/* VIEW PROFILE BUTTON */
+
+.astro-view-profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  margin-top: 18px;
+  padding: 14px 16px;
+
+  border-radius: 9px;
+
+  background: #8f3056;
+  color: #fff;
+
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+
+  transition:
+    background 300ms ease,
+    transform 300ms ease;
+}
+
+.astro-view-profile span {
+  font-size: 18px;
+}
+
+.astro-view-profile:hover {
+  background: #63203d;
+  transform: translateY(-2px);
+}
+
+.astro-expand-card:focus-visible {
+  outline: 3px solid #d9a66f;
+  outline-offset: 3px;
+}
+
+/* ============================================
+   TABLET
+============================================ */
+
+@media (max-width: 1000px) {
+
+  .astro-expand-grid {
+    height: 350px;
+    gap: 10px;
+  }
+
+  .astro-expand-card.is-active {
+    flex: 2.5;
+  }
+
+  .astro-expand-card.is-active
+  .astro-expand-photo {
+    width: 40%;
+  }
+
+  .astro-expand-details {
+    left: 40%;
+    width: 60%;
+    padding: 15px;
+  }
+
+  .astro-expand-details h3 {
+    font-size: 22px;
+  }
+
+  .astro-profile-info {
+    padding: 9px 0;
+  }
+}
+
+/* ============================================
+   MOBILE - TAP TO EXPAND
+============================================ */
+
+@media (max-width: 600px) {
+
+  .astro-expand-grid {
+    height: 330px;
+    gap: 6px;
+  }
+
+  .astro-expand-card {
+    border-radius: 10px;
+  }
+
+  .astro-expand-card.is-active {
+    flex: 5.5;
+  }
+
+  .astro-expand-card.is-active
+  .astro-expand-photo {
+    width: 35%;
+  }
+
+  .astro-expand-details {
+    left: 35%;
+    width: 65%;
+    padding: 10px;
+  }
+
+  .astro-expand-details h3 {
+    font-size: 18px;
+    margin: 7px 0;
+  }
+
+  .astro-profile-id {
+    font-size: 9px;
+  }
+
+  .astro-profile-location {
+    font-size: 10px;
+    margin-bottom: 8px;
+  }
+
+  .astro-profile-info {
+    font-size: 10px;
+    padding: 7px 0;
+    gap: 5px;
+  }
+
+  .astro-profile-info strong {
+    font-size: 10px;
+  }
+
+  .astro-photo-name {
+    font-size: 14px;
+    left: 6px;
+    bottom: 10px;
+  }
+
+  .astro-view-profile {
+    margin-top: 10px;
+    padding: 10px 7px;
+    font-size: 10px;
+  }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+  .astro-expand-card,
+  .astro-expand-photo,
+  .astro-expand-photo img,
+  .astro-photo-name,
+  .astro-expand-details,
+  .astro-view-profile {
+    transition: none !important;
+  }
+}
+.astro-expand-photo {
+  background: linear-gradient(
+    145deg,
+    #eee0e3,
+    #bda3ad
+  );
+}
+
+.astro-expand-photo img {
+  color: transparent;
+}

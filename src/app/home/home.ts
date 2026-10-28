@@ -113,27 +113,29 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
         hindu: 'Hindu',
         muslim: 'Muslim'
       },
-      features: {
-        mini: 'Why Choose Us',
-        title: 'Find your special one with confidence',
-        items: [
-          {
-            icon: '✅',
-            title: 'Verified Profiles',
-            text: 'Connect only with genuine and trusted matrimonial profiles.'
-          },
-          {
-            icon: '🔒',
-            title: 'Secure Platform',
-            text: 'Your privacy and profile details are protected with care.'
-          },
-          {
-            icon: '💖',
-            title: 'Perfect Matches',
-            text: 'Find meaningful connections based on your preferences.'
-          }
-        ]
-      },
+      
+features: {
+  mini: 'WHY CHOOSE US',
+  title: 'Find your life partner with confidence',
+  items: [
+    {
+      icon: '👥',
+      title: '1 Lakh+ Profiles',
+      text: 'Explore a wide network of matrimonial profiles.'
+    },
+    {
+      icon: '🏆',
+      title: '10+ Successful Years',
+      text: 'A decade of experience helping people begin their matrimonial journey.'
+    },
+    {
+      icon: '🤝',
+      title: 'Trusted Service',
+      text: 'Personal guidance and friendly support throughout your matchmaking journey.'
+    }
+  ]
+},
+
       welcome: {
         mini: 'Welcome to ASTRO ALLIANCE',
         title: 'Your trusted matrimony partner',
@@ -253,27 +255,28 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
         hindu: 'இந்துவர்',
         muslim: 'முஸ்லிம்'
       },
-      features: {
-        mini: 'எங்களை ஏன் தேர்வு செய்ய வேண்டும்',
-        title: 'நம்பிக்கையுடன் உங்கள் சிறப்பான இணையை கண்டுபிடிக்கவும்',
-        items: [
-          {
-            icon: '✅',
-            title: 'சரிபார்க்கப்பட்ட சுயவிவரங்கள்',
-            text: 'உண்மையான மற்றும் நம்பகமான திருமண சுயவிவரங்களுடன் மட்டும் இணைக.'
-          },
-          {
-            icon: '🔒',
-            title: 'பாதுகாப்பான தளம்',
-            text: 'உங்கள் தனியுரிமை மற்றும் சுயவிவரத் தகவல்கள் பாதுகாப்பாக பராமரிக்கப்படுகின்றன.'
-          },
-          {
-            icon: '💖',
-            title: 'சரியான பொருத்தங்கள்',
-            text: 'உங்கள் விருப்பங்களின் அடிப்படையில் அர்த்தமுள்ள உறவுகளை கண்டறியுங்கள்.'
-          }
-        ]
-      },
+      
+features: {
+  mini: 'ஏன் எங்களைத் தேர்ந்தெடுக்க வேண்டும்?',
+  title: 'நம்பிக்கையுடன் உங்கள் வாழ்க்கைத் துணையைத் தேர்ந்தெடுங்கள்',
+  items: [
+    {
+      icon: '👥',
+      title: '1 லட்சத்திற்கும் மேற்பட்ட சுயவிவரங்கள்',
+      text: 'பரந்த திருமண வரன் சுயவிவரங்களை ஆராயுங்கள்.'
+    },
+    {
+      icon: '🏆',
+      title: '10+ ஆண்டுகள் சிறப்பான சேவை',
+      text: 'திருமண சேவையில் பத்து ஆண்டுகளுக்கும் மேலான அனுபவம்.'
+    },
+    {
+      icon: '🤝',
+      title: 'நம்பகமான சேவை',
+      text: 'உங்கள் திருமணப் பயணத்தின் ஒவ்வொரு நிலையிலும் அன்பான வழிகாட்டுதலும் நட்பான ஆதரவும்.'
+    }
+  ]
+},
       welcome: {
         mini: 'ASTRO ALLIANCE-க்கு வரவேற்கிறோம்',
         title: 'உங்கள் நம்பகமான திருமண துணை',
