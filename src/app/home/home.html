@@ -118,151 +118,534 @@
 
 <app-home-discovery />
 
-<section class="features reveal" [class.tamil-section]="currentLang === 'ta'">
-  <div class="features-bg-shape features-bg-shape-1"></div>
-  <div class="features-bg-shape features-bg-shape-2"></div>
 
-  <div class="section-header reveal">
-    <p>{{ t.features.mini }}</p>
-    <h2>{{ t.features.title }}</h2>
-  </div>
 
-  <div class="feature-grid">
-    <div
-      class="feature-card reveal"
-      *ngFor="let item of t.features.items; let i = index"
-      [class.card-verified]="i === 0"
-      [class.card-secure]="i === 1"
-      [class.card-match]="i === 2"
-    >
-      <div class="feature-card-inner">
-        <div class="feature-top-line"></div>
+<!-- WHY CHOOSE ASTRO ALLIANCE -->
+<section
+  class="astro-promise-section"
+  [class.tamil-section]="currentLang === 'ta'"
+>
+  <div class="astro-promise-container">
 
-        <div class="icon-wrap">
-          <div class="icon-ring"></div>
-          <div class="icon">{{ item.icon }}</div>
-        </div>
+    <!-- TOP HEADER -->
+    <div class="astro-promise-top">
+      <span>
+        {{ currentLang === 'ta'
+          ? 'ஏன் ஆஸ்ட்ரோ அலையன்ஸ்?'
+          : 'WHY CHOOSE ASTRO ALLIANCE' }}
+      </span>
 
-        <h3>{{ item.title }}</h3>
-        <p>{{ item.text }}</p>
-
-        <div class="feature-bottom-glow"></div>
-      </div>
+      <span class="astro-promise-star" aria-hidden="true"></span>
     </div>
-  </div>
-</section>
 
-<section class="welcome reveal" [class.tamil-section]="currentLang === 'ta'">
-  <div class="welcome-slider reveal">
-    <div
-      class="welcome-track"
-      [style.transform]="'translateX(-' + (welcomeCurrentSlide * 100) + '%)'"
-    >
-      <div class="welcome-slide">
-        <img src="assets/caro-01.jpg" alt="Welcome slide 1" />
-      </div>
-      <div class="welcome-slide">
-        <img src="assets/caro-02.jpg" alt="Welcome slide 2" />
-      </div>
-      <div class="welcome-slide">
-        <img src="assets/caro-05.jpg" alt="Welcome slide 3" />
-      </div>
-      <div class="welcome-slide">
-        <img src="assets/caro-06.jpg" alt="Welcome slide 4" />
-      </div>
-    </div>
+    <!-- MAIN CONTENT -->
+    <div class="astro-promise-main">
+
+      <!-- LEFT BURGUNDY PANEL -->
+      
+<!-- LEFT IMAGE SLIDESHOW PANEL -->
+<div class="astro-promise-story astro-promise-slideshow">
+
+  <!-- SIX AUTO-SLIDING IMAGES -->
+
+
+  
+<!-- SIX AUTO-SLIDING IMAGES -->
+<div class="astro-promise-slides" aria-hidden="true">
+
+  <div class="astro-promise-slide">
+    <img src="/assets/promise-1.jpeg" alt="" />
   </div>
 
-  <div class="welcome-right reveal">
-    <p class="mini-title">{{ t.welcome.mini }}</p>
-    <h2>{{ t.welcome.title }}</h2>
-    <p class="welcome-text">{{ t.welcome.text }}</p>
-
-    <div class="stats">
-      <div class="stat-box reveal" *ngFor="let stat of t.welcome.stats">
-        <h3>{{ stat.value }}</h3>
-        <span>{{ stat.label }}</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="moments-section reveal" [class.tamil-section]="currentLang === 'ta'">
-  <div class="section-header reveal">
-    <p>{{ t.moments.mini }}</p>
-    <h2>{{ t.moments.title }}</h2>
+  <div class="astro-promise-slide">
+    <img src="/assets/promise-2.jpeg" alt="" />
   </div>
 
-  <div class="moments-timeline">
-    <div class="timeline-line"></div>
+  <div class="astro-promise-slide">
+    <img src="/assets/promise-3.jpg" alt="" />
+  </div>
 
-    <div
-      class="moment-row reveal"
-      *ngFor="let step of t.moments.steps; let i = index"
-      [class.left]="i % 2 === 0"
-      [class.right]="i % 2 === 1"
-    >
-      <div class="moment-card">
-      <div class="moment-number">
-  <img
-    *ngIf="i === 0"
-    src="assets/step-create-profile.png"
-    class="timeline-img"
-  />
-  <img
-    *ngIf="i === 1"
-    src="assets/step-discover-matches.png"
-    class="timeline-img"
-  />
-  <img
-    *ngIf="i === 2"
-    src="assets/step-send-interest.png"
-    class="timeline-img"
-  />
-  <img
-    *ngIf="i === 3"
-    src="assets/step-couple.png"
-    class="timeline-img"
-  />
+  <div class="astro-promise-slide">
+    <img src="/assets/promise-4.jpg" alt="" />
+  </div>
+
+  <div class="astro-promise-slide">
+    <img src="/assets/promise-5.jpeg" alt="" />
+  </div>
+
+  <div class="astro-promise-slide">
+    <img src="/assets/promise-6.jpg" alt="" />
+  </div>
+
 </div>
 
-        <h3>{{ step.title }}</h3>
-        <p>{{ step.text }}</p>
+  <!-- BURGUNDY GRADIENT FOR READABILITY -->
+  <div class="astro-promise-image-overlay"></div>
+
+  <!-- EXISTING CONTENT -->
+  <span class="astro-story-label">
+    {{ currentLang === 'ta'
+      ? 'நம்பிக்கையும் உறவும்'
+      : 'A STORY OF TRUST & TOGETHERNESS' }}
+  </span>
+
+  <h2>
+    @if (currentLang === 'ta') {
+      உங்கள் சரியான
+      <em>வாழ்க்கைத் துணையை</em>
+      கண்டறிவது முக்கியம்.
+    } @else {
+      Because finding the
+      <em>right person</em>
+      matters.
+    }
+  </h2>
+
+  <p>
+    {{ currentLang === 'ta'
+      ? 'பத்து ஆண்டுகால அனுபவம். தனிப்பட்ட அணுகுமுறை. நம்பிக்கையுடன் தொடங்கும் பயணம்.'
+      : 'A decade of experience. A personal approach. A journey that begins with confidence.' }}
+  </p>
+
+</div>
+
+
+      <!-- RIGHT STATISTICS PANEL -->
+      <div class="astro-promise-stats">
+
+        <!-- STAT 1 -->
+        <div class="astro-promise-stat">
+
+          <div class="astro-stat-number">
+            {{ currentLang === 'ta' ? '1 லட்சம்+' : '1 Lakh+' }}
+          </div>
+
+          <div class="astro-stat-content">
+            <h3>
+              {{ currentLang === 'ta'
+                ? 'திருமண சுயவிவரங்கள்'
+                : 'Matrimonial Profiles' }}
+            </h3>
+
+            <p>
+              {{ currentLang === 'ta'
+                ? 'பரந்த திருமண வரன் சுயவிவரங்களை ஆராயுங்கள்.'
+                : 'Explore a wide network of matrimonial profiles.' }}
+            </p>
+          </div>
+
+          <span class="astro-stat-arrow" aria-hidden="true">↗</span>
+        </div>
+
+        <!-- STAT 2 -->
+        <div class="astro-promise-stat">
+
+          <div class="astro-stat-number">10+</div>
+
+          <div class="astro-stat-content">
+            <h3>
+              {{ currentLang === 'ta'
+                ? 'சிறப்பான ஆண்டுகள்'
+                : 'Successful Years' }}
+            </h3>
+
+            <p>
+              {{ currentLang === 'ta'
+                ? 'திருமணப் பயணத்தைத் தொடங்க உதவும் பத்து ஆண்டுகால அனுபவம்.'
+                : 'A decade of experience helping people begin their matrimonial journey.' }}
+            </p>
+          </div>
+
+          <span class="astro-stat-arrow" aria-hidden="true">↗</span>
+        </div>
+
+        <!-- STAT 3 -->
+        <div class="astro-promise-stat">
+
+          <div class="astro-stat-number astro-trusted-word">
+            {{ currentLang === 'ta' ? 'நம்பிக்கை' : 'Trusted.' }}
+          </div>
+
+          <div class="astro-stat-content">
+            <h3>
+              {{ currentLang === 'ta'
+                ? 'தனிப்பட்ட சேவை'
+                : 'Personal Service' }}
+            </h3>
+
+            <p>
+              {{ currentLang === 'ta'
+                ? 'உங்கள் திருமணப் பயணத்தில் அன்பான வழிகாட்டுதலும் நட்பான ஆதரவும்.'
+                : 'Friendly guidance and support throughout your matchmaking journey.' }}
+            </p>
+          </div>
+
+          <span class="astro-stat-arrow" aria-hidden="true">↗</span>
+        </div>
+
       </div>
     </div>
+
+    <!-- BOTTOM STRIP -->
+    <div class="astro-promise-bottom">
+
+      <span class="astro-promise-quote">
+        {{ currentLang === 'ta'
+          ? 'ஒவ்வொரு அழகான தொடக்கமும் நம்பிக்கையிலிருந்தே தொடங்குகிறது.'
+          : 'Every beautiful beginning starts with trust.' }}
+      </span>
+
+      <span class="astro-promise-brand">
+        ASTRO ALLIANCE ♡
+      </span>
+
+    </div>
+
   </div>
 </section>
 
 
-<!-- Temporary gallery images. NOT verified Astro Alliance customer success stories. -->
-<section class="astro-wedding-stories" aria-labelledby="astro-stories-heading">
-  <div class="astro-stories-inner">
-    <div class="astro-stories-heading">
-      <p class="astro-stories-kicker">{{ currentLang === 'ta' ? 'திருமணக் கொண்டாட்டங்கள்' : 'Wedding inspiration' }}</p>
-      <h2 id="astro-stories-heading">{{ currentLang === 'ta' ? 'மகிழ்ச்சியான தருணங்கள்' : 'Happy Beginnings' }}</h2>
-      <p>{{ currentLang === 'ta' ? 'புதிய வாழ்க்கைப் பயணத்தின் இனிய தருணங்கள்.' : 'Celebrating the beautiful beginning of a new journey together.' }}</p>
+
+
+<!-- ==========================================
+     ASTRO ALLIANCE COMMUNITY DIRECTORY
+========================================== -->
+
+<section
+  class="astro-community-section"
+  [class.tamil-section]="currentLang === 'ta'"
+  aria-labelledby="community-title"
+>
+  <div class="astro-community-container">
+
+    <!-- HEADING -->
+    <div class="astro-community-heading">
+
+      <span class="community-kicker">
+        {{ currentLang === 'ta'
+          ? 'ஆஸ்ட்ரோ அலையன்ஸ் மேட்ரிமோனி'
+          : 'ASTRO ALLIANCE MATRIMONY' }}
+      </span>
+
+      <h2 id="community-title">
+        {{ currentLang === 'ta'
+          ? 'உங்கள் சமூகத்தில் வாழ்க்கைத் துணையைத் தேடுங்கள்'
+          : 'Find your match by community' }}
+      </h2>
+
+      <p>
+        {{ currentLang === 'ta'
+          ? 'உங்கள் விருப்பத்திற்கு ஏற்ற திருமண வரன்களை பல்வேறு சமூகங்களில் கண்டறியுங்கள்.'
+          : 'Discover meaningful matrimonial connections across communities.' }}
+      </p>
+
     </div>
-    <div class="astro-stories-grid">
-      <article class="astro-stories-card" *ngFor="let photo of storyPhotos; trackBy: trackStory">
-        <img [src]="photo.src" [alt]="photo.alt" loading="lazy" decoding="async" width="600" height="700" />
-        <div class="astro-story-info">
-          <span class="astro-story-sample">{{ currentLang === 'ta' ? 'மாதிரிப் புகைப்படம்' : 'Sample photo' }}</span>
-          <h3>{{ currentLang === 'ta' ? photo.captionTa : photo.captionEn }}</h3>
+
+    <!-- SEARCH BAR -->
+    <div class="astro-community-toolbar">
+
+      <div class="community-total">
+        <span class="community-total-dot"></span>
+
+        {{ filteredCommunities.length }}
+
+        {{ currentLang === 'ta'
+          ? 'சமூகங்கள்'
+          : 'Communities' }}
+      </div>
+
+      <div class="community-search-box">
+        <span class="community-search-icon"
+              aria-hidden="true">
+          ⌕
+        </span>
+
+        <input
+          type="search"
+          [placeholder]="currentLang === 'ta'
+            ? 'சமூகத்தைத் தேடுங்கள்...'
+            : 'Search communities...'"
+          [attr.aria-label]="currentLang === 'ta'
+            ? 'சமூகத்தைத் தேடுங்கள்'
+            : 'Search communities'"
+          [value]="communitySearch"
+          (input)="onCommunitySearch($any($event.target).value)"
+        />
+      </div>
+
+    </div>
+
+    <!-- COMMUNITY GRID -->
+    <div class="astro-community-grid">
+
+      @for (
+        community of filteredCommunities;
+        track community.nameEn
+      ) {
+
+        <button
+          type="button"
+          class="astro-community-card"
+          [class.is-selected]="selectedCommunity?.nameEn === community.nameEn"
+          [attr.aria-pressed]="selectedCommunity?.nameEn === community.nameEn"
+          (click)="selectCommunity(community)"
+        >
+
+          <!-- SAME IMAGE FOR ALL 34 CARDS -->
+          <div
+            class="community-card-image"
+            aria-hidden="true"
+          ></div>
+
+          <!-- DARK GRADIENT -->
+          <div
+            class="community-card-overlay"
+            aria-hidden="true"
+          ></div>
+
+          <!-- CARD CONTENT -->
+          <div class="community-card-content">
+
+            <h3 class="community-card-name">
+              {{ currentLang === 'ta'
+                ? community.nameTa
+                : community.nameEn }}
+            </h3>
+
+            <div class="community-card-footer">
+
+              <span class="community-profile-count">
+                {{ community.count | number }}
+
+                {{ currentLang === 'ta'
+                  ? 'சுயவிவரங்கள்'
+                  : 'Profiles' }}
+              </span>
+
+              <span class="community-card-arrow"
+                    aria-hidden="true">
+                ↗
+              </span>
+
+            </div>
+
+          </div>
+
+        </button>
+
+      } @empty {
+
+        <div class="community-empty">
+          {{ currentLang === 'ta'
+            ? 'பொருந்தும் சமூகங்கள் இல்லை.'
+            : 'No matching communities found.' }}
         </div>
-      </article>
+
+      }
+
     </div>
-    <p class="astro-story-note">{{ currentLang === 'ta' ? 'இவை எடுத்துக்காட்டுப் புகைப்படங்கள்; ஆஸ்ட்ரோ அலையன்ஸ் மூலம் திருமணமான தம்பதிகளின் உறுதிப்படுத்தப்பட்ட புகைப்படங்கள் அல்ல.' : 'Illustrative photos only — not verified Astro Alliance marriage success stories.' }}</p>
+
+    <!-- SELECTED COMMUNITY -->
+    <div class="astro-community-bottom">
+
+      <div class="community-selected-info">
+
+        <span>
+          {{ currentLang === 'ta'
+            ? 'தேர்ந்தெடுக்கப்பட்ட சமூகம்'
+            : 'SELECTED COMMUNITY' }}
+        </span>
+
+        <strong>
+          @if (selectedCommunity) {
+
+            {{ currentLang === 'ta'
+              ? selectedCommunity.nameTa
+              : selectedCommunity.nameEn }}
+
+          } @else {
+
+            {{ currentLang === 'ta'
+              ? 'அனைத்து சமூகங்கள்'
+              : 'All Communities' }}
+
+          }
+        </strong>
+
+      </div>
+
+      <a
+        class="community-explore-btn"
+        routerLink="/free-search"
+        [queryParams]="selectedCommunity
+          ? { caste: selectedCommunity.nameEn }
+          : {}"
+      >
+        {{ currentLang === 'ta'
+          ? 'வரன்களைப் பார்க்க'
+          : 'Explore Profiles' }}
+
+        <span aria-hidden="true">↗</span>
+      </a>
+
+    </div>
+
   </div>
 </section>
 
-<section class="cta reveal" [class.tamil-section]="currentLang === 'ta'">
+
+
+
+<!-- ==========================================
+     ASTRO ALLIANCE TESTIMONIALS
+     AUTO SCROLL + INFINITE REPEAT
+========================================== -->
+
+<section
+  class="astro-testimonials-section"
+  [class.tamil-section]="currentLang === 'ta'"
+  aria-labelledby="astro-testimonial-heading"
+>
+  <div class="astro-testimonials-header">
+
+    <span class="astro-testimonials-kicker">
+      {{ currentLang === 'ta'
+        ? '✦ அன்பான வார்த்தைகளும் அழகான பயணங்களும் ✦'
+        : '✦ KIND WORDS & BEAUTIFUL JOURNEYS ✦' }}
+    </span>
+
+    <h2 id="astro-testimonial-heading">
+      @if (currentLang === 'ta') {
+        எங்களைப் பற்றி
+        <em>அவர்கள் கூறுவது.</em>
+      } @else {
+        What people
+        <em>say about us.</em>
+      }
+    </h2>
+
+    <p>
+      {{ currentLang === 'ta'
+        ? 'அர்த்தமுள்ள உறவுகள். இனிய புதிய தொடக்கங்கள்.'
+        : 'Meaningful connections. Memorable beginnings.' }}
+    </p>
+
+  </div>
+
+  <!-- SCROLL WINDOW -->
+  <div class="astro-testimonials-window">
+
+    <div class="astro-testimonials-track">
+
+      <!-- TWO IDENTICAL SETS FOR SEAMLESS LOOP -->
+      @for (copy of [0, 1]; track copy) {
+
+        <div
+          class="astro-testimonials-set"
+          [attr.aria-hidden]="copy === 1 ? 'true' : null"
+        >
+
+          @for (review of testimonials; track review.id) {
+
+            <article class="astro-testimonial-card">
+
+              <!-- PROFILE PHOTO -->
+              <div class="astro-testimonial-person">
+
+                <img
+                  [src]="review.image"
+                  [alt]="currentLang === 'ta'
+                    ? 'மாதிரி சுயவிவரப் படம்'
+                    : 'Illustrative profile photo'"
+                  (error)="onTestimonialImageError($event)"
+                  width="58"
+                  height="58"
+                  loading="lazy"
+                  decoding="async"
+                />
+
+                <div class="astro-testimonial-person-info">
+                  <strong>
+                    {{ currentLang === 'ta'
+                      ? review.nameTa
+                      : review.nameEn }}
+                  </strong>
+
+                  <small>
+                    {{ currentLang === 'ta'
+                      ? 'மாதிரி கருத்து'
+                      : 'Illustrative review' }}
+                  </small>
+                </div>
+
+              </div>
+
+              <!-- SAMPLE STARS -->
+              <div
+                class="astro-testimonial-stars"
+                aria-label="Illustrative five-star graphic"
+              >
+                ★★★★★
+              </div>
+
+              <!-- QUOTE -->
+              <h3 class="astro-testimonial-quote">
+                “{{ currentLang === 'ta'
+                  ? review.quoteTa
+                  : review.quoteEn }}”
+              </h3>
+
+              <!-- REVIEW DESCRIPTION -->
+              <p class="astro-testimonial-description">
+                {{ currentLang === 'ta'
+                  ? review.textTa
+                  : review.textEn }}
+              </p>
+
+              <div class="astro-testimonial-line"></div>
+
+            </article>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+  <p class="astro-testimonials-note">
+    {{ currentLang === 'ta'
+      ? 'இவை வடிவமைப்புக்கான மாதிரி கருத்துகளும் படங்களும் மட்டுமே; உண்மையான வாடிக்கையாளர் மதிப்புரைகள் அல்ல.'
+      : 'Illustrative photos and sample testimonials only — not verified customer reviews.' }}
+  </p>
+
+</section>
+
+
+
+
+
+<!-- FINAL REGISTRATION CTA -->
+<section
+  class="cta"
+  [class.tamil-section]="currentLang === 'ta'"
+>
   <div class="cta-box">
+
     <div class="cta-content">
       <h2>{{ t.cta.title }}</h2>
-      <!-- <p>{{ t.cta.text }}</p> -->
-      <button class="cta-btn" type="button" (click)="goToRegister()">
+
+      <button
+        class="cta-btn"
+        type="button"
+        (click)="goToRegister()"
+      >
         {{ t.cta.button }}
       </button>
     </div>
+
   </div>
 </section>
