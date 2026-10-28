@@ -14,6 +14,14 @@ import { Router, RouterLink } from '@angular/router';
 import { SUCCESS_STORY_PHOTOS, SuccessStoryPhoto } from './success-stories.data';
 import { HomeDiscovery } from './home-discovery/home-discovery';
 
+
+interface MatrimonyCommunity {
+  nameEn: string;
+  nameTa: string;
+  count: number;
+}
+
+
 type ActiveForm = 'none' | 'register' | 'login' | 'match';
 type Language = 'en' | 'ta';
 
@@ -541,4 +549,158 @@ private refreshRevealAnimations(): void {
   private getPrevIndex(current: number, total: number): number {
     return (current - 1 + total) % total;
   }
+
+
+  
+communitySearch = '';
+
+selectedCommunity: MatrimonyCommunity | null = null;
+
+readonly communities: MatrimonyCommunity[] = [
+  { nameEn: 'Chettiar', nameTa: 'செட்டியார்', count: 7107 },
+  { nameEn: 'Nadar', nameTa: 'நாடார்', count: 4604 },
+  { nameEn: 'Naidu', nameTa: 'நாயுடு', count: 4563 },
+  { nameEn: 'Vanniyar', nameTa: 'வன்னியர்', count: 4376 },
+  { nameEn: 'Pillaimar', nameTa: 'பிள்ளைமார்', count: 4312 },
+  { nameEn: 'Viswakarma', nameTa: 'விஸ்வகர்மா', count: 3078 },
+  { nameEn: 'Yadavar', nameTa: 'யாதவர்', count: 2430 },
+  { nameEn: 'Mudaliar', nameTa: 'முதலியார்', count: 2398 },
+  { nameEn: 'Agamudaiyar', nameTa: 'அகமுடையார்', count: 2164 },
+  { nameEn: 'Gounder', nameTa: 'கவுண்டர்', count: 2104 },
+  { nameEn: 'PR', nameTa: 'PR', count: 1975 },
+  { nameEn: 'Maravar', nameTa: 'மறவர்', count: 1658 },
+  { nameEn: 'Kallar', nameTa: 'கள்ளர்', count: 1558 },
+  { nameEn: 'Christian', nameTa: 'கிறிஸ்தவர்', count: 1498 },
+  { nameEn: 'PL', nameTa: 'PL', count: 1260 },
+  { nameEn: 'Muthuraja', nameTa: 'முத்துரையர்', count: 1009 },
+  { nameEn: 'Udayar', nameTa: 'உடையார்', count: 780 },
+  { nameEn: 'Reddiar', nameTa: 'ரெட்டியார்', count: 626 },
+  { nameEn: 'Veerasaivam', nameTa: 'வீரசைவம்', count: 548 },
+  { nameEn: 'Brahmin', nameTa: 'பிராமின்', count: 545 },
+  { nameEn: 'Maruthuvar', nameTa: 'மருத்துவர்', count: 530 },
+  { nameEn: 'Nayakkar', nameTa: 'நாயக்கர்', count: 405 },
+  { nameEn: 'Muslim', nameTa: 'முஸ்லிம்', count: 284 },
+  { nameEn: 'Arunthathiyar', nameTa: 'அருந்ததியர்', count: 263 },
+  { nameEn: 'Vannar', nameTa: 'வண்ணார்', count: 261 },
+  { nameEn: 'Boyer', nameTa: 'போயர்', count: 235 },
+  { nameEn: 'Vellalar', nameTa: 'வேளாளர்', count: 213 },
+  { nameEn: 'Sourashtra', nameTa: 'செளராஷ்டிரா', count: 163 },
+  { nameEn: 'Valluvar', nameTa: 'வள்ளுவர்', count: 111 },
+  { nameEn: 'Nair', nameTa: 'நாயர்', count: 84 },
+  { nameEn: 'Meenavar', nameTa: 'மீனவர்', count: 44 },
+  { nameEn: 'Kuravar', nameTa: 'குறவர்', count: 42 },
+  { nameEn: 'Kshatriya Raju', nameTa: 'சத்திரிய ராஜு', count: 10 },
+  { nameEn: 'Marathi', nameTa: 'மராட்டி', count: 5 }
+];
+
+get filteredCommunities(): MatrimonyCommunity[] {
+  const query = this.communitySearch
+    .trim()
+    .toLocaleLowerCase();
+
+  if (!query) {
+    return this.communities;
+  }
+
+  return this.communities.filter(community =>
+    community.nameEn.toLocaleLowerCase().includes(query) ||
+    community.nameTa.toLocaleLowerCase().includes(query)
+  );
+}
+
+onCommunitySearch(value: string): void {
+  this.communitySearch = value;
+}
+
+selectCommunity(community: MatrimonyCommunity): void {
+  this.selectedCommunity =
+    this.selectedCommunity?.nameEn === community.nameEn
+      ? null
+      : community;
+}
+
+readonly testimonials = [
+  {
+    id: 1,
+    image: '/assets/testimonial-1.jpg',
+    nameEn: 'Sample Member 01',
+    nameTa: 'மாதிரி உறுப்பினர் 01',
+    quoteEn: 'Friendly and welcoming.',
+    quoteTa: 'அன்பான அணுகுமுறை.',
+    textEn:
+      'The team made the experience comfortable with their kind and helpful approach.',
+    textTa:
+      'அன்பான அணுகுமுறையும் உதவிகரமான வழிகாட்டுதலும் இந்த அனுபவத்தை இனிமையாக்கின.'
+  },
+  {
+    id: 2,
+    image: '/assets/testimonial-2.jpg',
+    nameEn: 'Sample Member 02',
+    nameTa: 'மாதிரி உறுப்பினர் 02',
+    quoteEn: 'A thoughtful experience.',
+    quoteTa: 'சிறந்த அனுபவம்.',
+    textEn:
+      'Clear communication and personal attention made the process straightforward.',
+    textTa:
+      'தெளிவான தகவல் தொடர்பும் தனிப்பட்ட கவனிப்பும் பயணத்தை எளிதாக்கின.'
+  },
+  {
+    id: 3,
+    image: '/assets/testimonial-3.jpg',
+    nameEn: 'Sample Member 03',
+    nameTa: 'மாதிரி உறுப்பினர் 03',
+    quoteEn: 'Support at every step.',
+    quoteTa: 'ஒவ்வொரு நிலையிலும் ஆதரவு.',
+    textEn:
+      'A welcoming approach and helpful guidance throughout the journey.',
+    textTa:
+      'ஒவ்வொரு நிலையிலும் அன்பான அணுகுமுறையும் பயனுள்ள வழிகாட்டுதலும் கிடைத்தன.'
+  },
+  {
+    id: 4,
+    image: '/assets/testimonial-4.jpg',
+    nameEn: 'Sample Member 04',
+    nameTa: 'மாதிரி உறுப்பினர் 04',
+    quoteEn: 'A comfortable journey.',
+    quoteTa: 'மனநிறைவான பயணம்.',
+    textEn:
+      'An approachable team and a simple experience made exploring options easier.',
+    textTa:
+      'நட்பான குழுவினரும் எளிய நடைமுறைகளும் தேடலை வசதியாக்கின.'
+  },
+  {
+    id: 5,
+    image: '/assets/testimonial-5.jpg',
+    nameEn: 'Sample Member 05',
+    nameTa: 'மாதிரி உறுப்பினர் 05',
+    quoteEn: 'Personal attention matters.',
+    quoteTa: 'தனிப்பட்ட கவனிப்பு.',
+    textEn:
+      'The friendly support and guidance made the matrimonial search feel more reassuring.',
+    textTa:
+      'நட்பான ஆதரவும் வழிகாட்டுதலும் திருமணத் தேடலில் நம்பிக்கையை அளித்தன.'
+  },
+  {
+    id: 6,
+    image: '/assets/testimonial-6.jpg',
+    nameEn: 'Sample Member 06',
+    nameTa: 'மாதிரி உறுப்பினர் 06',
+    quoteEn: 'Simple and helpful.',
+    quoteTa: 'எளிமையான சேவை.',
+    textEn:
+      'A straightforward experience with thoughtful guidance and clear explanations.',
+    textTa:
+      'எளிய நடைமுறைகளும் தெளிவான விளக்கங்களும் பயனுள்ளதாக இருந்தன.'
+  }
+];
+
+onTestimonialImageError(event: Event): void {
+  const img = event.target as HTMLImageElement;
+  const fallback = '/assets/matrimony-fallback.jpeg';
+
+  if (!img.src.endsWith(fallback)) {
+    img.src = fallback;
+  }
+}
+
 }
