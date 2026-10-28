@@ -1,0 +1,121 @@
+<section class="content-section">
+<p *ngIf="error" role="alert">{{ error }}</p>
+
+  <div class="section-header">
+
+    <div>
+      <h2>Payments</h2>
+      <p>Track all subscription payments</p>
+    </div>
+
+    <button
+      class="refresh-btn"
+      type="button"
+      (click)="refresh()">
+
+      Refresh
+
+    </button>
+
+  </div>
+
+  <div class="search-card">
+
+    <input
+      type="text"
+      placeholder="Search this page…"
+      [(ngModel)]="searchTerm">
+
+  </div>
+
+  <p *ngIf="isLoading">
+    Loading payments...
+  </p>
+
+  <div
+    class="panel-card"
+    *ngIf="!isLoading">
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>User ID</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Transaction ID</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let payment of filteredPayments">
+
+            <td>
+              {{ payment.user_id }}
+            </td>
+
+            <td>
+              ₹{{ payment.amount || 0 }}
+            </td>
+
+            <td>
+              {{ payment.payment_method || '-' }}
+            </td>
+
+            <td>
+              {{ payment.transaction_id || '-' }}
+            </td>
+
+            <td>
+
+              <span
+                class="status"
+                [class.success]="payment.payment_status === 'Paid'"
+                [class.pending]="payment.payment_status === 'Pending'"
+                [class.failed]="payment.payment_status === 'Failed'">
+
+                {{ payment.payment_status || '-' }}
+
+              </span>
+
+            </td>
+
+            <td>
+              {{ payment.created_at | date:'medium' }}
+            </td>
+
+          </tr>
+
+          <tr *ngIf="filteredPayments.length === 0">
+
+            <td
+              colspan="6"
+              class="empty-row">
+
+              No payments found
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+<nav aria-label="Payment pages">
+<button type="button" (click)="changePage(-1)" [disabled]="isLoading || page === 1">Previous</button>
+<span>Page {{ page }} · {{ total }} payments</span>
+<button type="button" (click)="changePage(1)" [disabled]="isLoading || page * 50 >= total">Next</button>
+</nav>
+</section>

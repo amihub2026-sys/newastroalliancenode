@@ -1,0 +1,423 @@
+/* Chart Section */
+
+@media (max-width: 768px) {
+}
+.my-biodata-page {
+  min-height: 100vh;
+  padding: 32px 16px;
+  background: linear-gradient(180deg, #fff7f8 0%, #ffffff 100%);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.page-head {
+  margin-bottom: 24px;
+}
+
+.page-head h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  font-weight: 800;
+  color: #8b1e3f;
+}
+
+.page-head p {
+  margin: 0;
+  color: #666;
+}
+
+.state-card,
+.profile-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 18px 50px rgba(139, 30, 63, 0.08);
+}
+
+.error-card {
+  border-left: 5px solid #d9534f;
+}
+
+.top-section {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.image-wrap {
+  flex-shrink: 0;
+}
+
+.profile-image {
+  width: 170px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 22px;
+  border: 4px solid #f6dbe4;
+  box-shadow: 0 10px 24px rgba(139, 30, 63, 0.08);
+}
+
+.main-info h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  color: #7a1632;
+}
+
+.main-info p {
+  margin: 6px 0;
+  color: #444;
+}
+
+.primary-btn {
+  display: inline-block;
+  margin-top: 14px;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #a91d49, #d54b74);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(169, 29, 73, 0.18);
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.detail-box {
+  background: #fff6f8;
+  border: 1px solid #f7d7e2;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.detail-box h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #a11f47;
+}
+
+.detail-box p {
+  margin: 0;
+  color: #444;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.detail-box.full {
+  grid-column: 1 / -1;
+}
+
+.chart-section {
+  margin-top: 8px;
+  padding: 24px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #fffaf5 0%, #ffffff 100%);
+  border: 1px solid #f2d8c6;
+  box-shadow: 0 14px 34px rgba(140, 77, 23, 0.08);
+}
+
+.section-head {
+  margin-bottom: 22px;
+}
+
+.section-head h2 {
+  margin: 0 0 6px;
+  font-size: 24px;
+  color: #8b1e3f;
+  font-weight: 800;
+}
+
+.section-head p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.double-chart-wrap {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(320px, 1fr));
+  gap: 26px;
+}
+
+.single-chart-card {
+  background: #fff;
+  border: 1px solid #f3e0d4;
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.chart-title {
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: #b42318;
+}
+
+.chart-box {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.chart-box-12 .cell {
+  min-height: 82px;
+  width: 100%;
+  border: 1.5px solid #8f8f8f;
+  background: #fff;
+  padding: 8px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #c62828;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.cell-1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.cell-2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.cell-3 {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.cell-4 {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.cell-5 {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.cell-6 {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+.cell-7 {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.cell-8 {
+  grid-column: 4;
+  grid-row: 3;
+}
+
+.cell-9 {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+.cell-10 {
+  grid-column: 2;
+  grid-row: 4;
+}
+
+.cell-11 {
+  grid-column: 3;
+  grid-row: 4;
+}
+
+.cell-12 {
+  grid-column: 4;
+  grid-row: 4;
+}
+
+.chart-center-label {
+  grid-column: 2 / 4;
+  grid-row: 2 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 38px;
+  font-weight: 800;
+  color: #e53935;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-box.full {
+    grid-column: auto;
+  }
+
+  .profile-image {
+    width: 130px;
+    height: 130px;
+  }
+
+  .main-info h2 {
+    font-size: 24px;
+  }
+
+  .double-chart-wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-center-label {
+    font-size: 28px;
+  }
+
+  .chart-box-12 .cell {
+    min-height: 66px;
+    font-size: 18px;
+    padding: 6px;
+  }
+
+  .chart-section {
+    padding: 16px;
+  }
+}
+.section-card {
+  margin-top: 30px;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 20px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #c2185b;
+  margin-bottom: 8px;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
+  padding: 10px 0;
+  font-size: 15px;
+  background: transparent;
+  color: #333;
+  outline: none;
+  box-shadow: none;
+}
+.field textarea {
+  min-height: 40px;
+  height: 40px;
+  resize: none;
+  overflow: hidden;
+}
+.field.full-width textarea {
+  min-height: 50px;
+  height: auto;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.full-width {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-card {
+    padding: 20px;
+  }
+}
+.gallery-wrap {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.gallery-img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.video-wrap {
+  margin-top: 16px;
+}
+.media-column {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.video-wrap {
+  width: 180px;
+  height: 110px;
+}
+
+.profile-video {
+  width: 180px;
+  height: 110px;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Own Biodata: long Tamil text should wrap instead of widening mobile viewport. */
+.my-biodata-page .profile-card,.my-biodata-page .container{min-width:0;max-width:100%}
+.my-biodata-page .profile-card *{overflow-wrap:anywhere}
+@media(max-width:600px){
+  .my-biodata-page{padding:16px 10px}
+  .my-biodata-page .profile-card,.my-biodata-page .state-card{padding:15px;border-radius:15px}
+  .my-biodata-page .page-head h1{font-size:clamp(1.3rem,5vw,1.8rem)}
+  .my-biodata-page .top-section{flex-direction:column;align-items:stretch;gap:14px}
+  .my-biodata-page .profile-image{width:128px;height:128px}
+  .my-biodata-page .main-info h2{font-size:1.4rem}
+}
+
+/* Read-only own Biodata photo gallery. Whole photo opens in reusable viewer. */
+.own-photo-button,.own-gallery-button { display:block; border:0; background:transparent; padding:0; cursor:zoom-in; border-radius:12px; }
+.own-photo-button { max-width:100%; }
+.own-photo-button .profile-image { object-fit:contain; object-position:center top; background:#f5edf0; max-width:100%; }
+.own-gallery-button:focus-visible,.own-photo-button:focus-visible{outline:3px solid #8a2a52;outline-offset:3px}
+.own-gallery-button .gallery-img{display:block;object-fit:contain;background:#f4e8ed}

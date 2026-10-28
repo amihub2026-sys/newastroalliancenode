@@ -1,0 +1,25 @@
+<main class="aa-success-page">
+  <section class="aa-success-card" aria-live="polite">
+    @if (loading) {
+      <h1>{{isTamil ? 'திட்ட நிலை சரிபார்க்கப்படுகிறது…' : 'Checking membership status…'}}</h1>
+    } @else if (membership) {
+      <div class="aa-success-mark" aria-hidden="true">✓</div>
+      <p class="aa-overline">ASTRO ALLIANCE • MATRIMONY</p>
+      <h1>{{isTamil ? 'உறுப்பினர் திட்டம் வெற்றிகரமாகச் செயல்படுத்தப்பட்டது!' : 'Membership Activated Successfully!'}}</h1>
+      <p class="aa-description">{{isTamil ? 'உங்கள் திட்டம் செயல்பாட்டில் உள்ளது. முழு சுயவிவரங்களைத் திட்ட வரம்பிற்குள் பார்க்கலாம்.' : 'Your membership is active. View full profiles within your plan limits.'}}</p>
+      <div class="aa-plan-row"><span>{{isTamil ? 'உறுப்பினர் திட்டம்' : 'Membership plan'}}</span><strong>{{displayName}}</strong></div>
+      <div class="aa-plan-row"><span>{{isTamil ? 'காலாவதி தேதி' : 'Expires'}}</span><strong>{{membership.end_date | date:'mediumDate'}}</strong></div>
+      @if (membership.payment_mode === 'COMPLIMENTARY_PROMO') {
+        <p class="aa-demo-warning">{{isTamil ? 'அறிமுக உறுப்பினர் சலுகை. கட்டணம் வசூலிக்கப்படவில்லை. Razorpay பின்னர் இணைக்கப்படும்.' : 'Complimentary introductory membership. No payment has been collected. Razorpay will be connected later.'}}</p>
+      }
+      <button type="button" class="aa-view-profile" (click)="viewProfile()" [disabled]="navigating">
+        {{profileId ? (isTamil ? 'முழு சுயவிவரத்தைக் காண்க' : 'View Full Profile') : (isTamil ? 'சுயவிவரங்களைத் தேடுக' : 'Browse Profiles')}} →
+      </button>
+    } @else {
+      <h1>{{isTamil ? 'திட்ட நிலையை உறுதிப்படுத்த இயலவில்லை' : 'Unable to confirm membership'}}</h1>
+      <p class="aa-description">{{error}}</p>
+      <button type="button" class="aa-view-profile" (click)="loadMembership()">{{isTamil ? 'மீண்டும் முயலவும்' : 'Retry'}}</button>
+    }
+    <button type="button" class="aa-return" (click)="backToPlans()" [disabled]="navigating">{{isTamil ? 'திட்டங்களுக்குத் திரும்புக' : 'Back to Plans'}}</button>
+  </section>
+</main>

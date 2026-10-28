@@ -1,0 +1,103 @@
+<section class="plans-page">
+  <section class="plans-hero" *ngIf="!showProfileUnlockBanner">
+    <div class="container">
+      <div class="hero-shell">
+        <div class="hero-badge">{{ tr.hero.miniTitle }}</div>
+
+        <h1>{{ tr.hero.title }}</h1>
+
+        <p class="subtitle">
+          {{ tr.hero.subtitle }}
+        </p>
+
+        <div class="hero-pills">
+          <span>Verified Profiles</span>
+          <span>Premium Visibility</span>
+          <span>Priority Support</span>
+        </div>  
+      </div>
+    </div>
+  </section>
+
+  <section class="unlock-banner" *ngIf="showProfileUnlockBanner">
+    <div class="container">
+      <div class="unlock-card">
+        <div class="unlock-left">
+          <p class="unlock-mini">{{ tr.labels.selectedProfile }}</p>
+          <h2>{{ tr.labels.unlockTitle }}</h2>
+          <p class="unlock-text">{{ tr.labels.unlockText }}</p>
+
+          <div class="locked-profile-box" *ngIf="lockedProfileName || lockedProfileId">
+            <h3>{{ lockedProfileName }}</h3>
+            <span *ngIf="lockedProfileId">
+              {{ tr.labels.profileId }}: {{ lockedProfileId }}
+            </span>
+          </div>
+        </div>
+
+        <div class="unlock-right">
+          <button class="back-btn" type="button" (click)="goBackToProfiles()">
+            {{ tr.labels.backToProfiles }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="plans-section">
+    <div class="container">
+      <div class="section-title">
+        <span class="section-kicker">Membership</span>
+        <h2>{{ tr.section.title }}</h2>
+        <p>{{ tr.section.subtitle }}</p>
+      </div>
+
+      <div class="plan-selection-note" *ngIf="selectedPlanName" role="status"><strong>{{ selectedPlanName }}</strong> — {{currentLang === 'ta' ? 'திட்டம் தேர்வானது; உறுப்பினர் அணுகல் வழங்கப்படவில்லை. நிர்வாகியிடம் செயல்படுத்தக் கோரவும்.' : 'Selected, not activated. Ask the administrator to assign this plan. Basic profiles remain free to view.'}}<button *ngIf="lockedProfileId" type="button" (click)="goToProfile()">{{currentLang === 'ta' ? 'அடிப்படை சுயவிவரத்தைப் பார்க்க' : 'View free basic profile'}} →</button></div>
+      <div class="plans-grid">
+      <div
+  class="plan-card"
+  *ngFor="let plan of plans; let i = index"
+  [ngClass]="'plan-' + i"
+  [class.popular]="plan.popular"
+  [class.disabled-plan]="plan.disabled"
+>
+          <div class="plan-glow"></div>
+
+          <span class="tag" *ngIf="plan.popular">
+            {{ tr.labels.mostPopular }}
+          </span>
+
+          <div class="plan-top">
+            <div class="plan-tier">
+              <span class="tier-dot"></span>
+              <span>{{ getText(plan.name) }}</span>
+            </div>
+
+            <h3 class="plan-name">{{ getText(plan.name) }}</h3>
+            <p class="plan-validity">{{ getText(plan.validity) }}</p>
+          </div>
+
+          <div class="price-wrap">
+            <div class="plan-price">
+              {{ plan.price }}
+              <span>{{ getText(plan.duration) }}</span>
+            </div>
+          </div>
+
+          <ul class="features">
+            <li *ngFor="let feature of getFeatures(plan.features)">
+              {{ feature }}
+            </li>
+          </ul>
+
+         <button
+  class="choose-btn"
+  (click)="selectPlan(plan)"
+  [disabled]="plan.disabled || isSavingPlan">
+            {{ tr.labels.choosePlan }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

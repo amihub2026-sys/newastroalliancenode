@@ -1,0 +1,25 @@
+<main class="aa-member-dashboard"><div class="aa-dashboard-container">
+  <div class="aa-welcome"><div><span>{{t('MY MATRIMONY','என் திருமணச் சேவை')}}</span><h1>{{t('Welcome,','நல்வரவு,')}} {{name}}</h1><p>{{t('Your next meaningful connection starts here.','உங்களுக்கேற்ற வாழ்க்கைத்துணையை இங்கே கண்டறியுங்கள்.')}}</p></div><a routerLink="/my-biodata">{{t('My Biodata','என் சுயவிவரம்')}} →</a></div>
+  <div class="aa-membership-line" aria-live="polite">
+    @if(activeMembership){
+      <span class="aa-plan-active">✓ {{t('Active Plan','செயலில் உள்ள திட்டம்')}}: {{lang === 'ta' ? activeMembership.ta : activeMembership.en}}</span>
+    } @else {
+      <span class="aa-plan-basic">{{t('Basic member access — view approved profiles free','அடிப்படை அணுகல் — அங்கீகரிக்கப்பட்ட சுயவிவரங்களை இலவசமாகப் பார்க்கலாம்')}}</span>
+    }
+    <a routerLink="/plans">{{t('Membership plans','உறுப்பினர் திட்டங்கள்')}} →</a>
+  </div>
+  <section class="aa-dashboard-tools" aria-label="Quick features">
+    <article class="aa-tool aa-voice"><span class="aa-tool-icon">🔊</span><div><h2>{{t('Voice Guide','குரல் வழிகாட்டி')}}</h2><p>{{t('Listen to easy instructions.','எளிய வழிகாட்டுதலைக் கேளுங்கள்.')}}</p></div><div class="aa-voice-buttons"><button type="button" (click)="listen()">{{t('Listen','கேளுங்கள்')}}</button><button type="button" (click)="stop()">{{t('Stop','நிறுத்து')}}</button></div>@if(recordingError){<small>{{t('Audio is temporarily unavailable.','தற்காலிகமாக ஒலி கிடைக்கவில்லை.')}}</small>}</article>
+    <article class="aa-tool aa-new"><span class="aa-tool-icon">♧</span><div><h2>{{t('Newly Joined','புதிதாக இணைந்தவர்கள்')}}</h2><p>{{t('Recently approved matching members','சமீபத்தில் அங்கீகரிக்கப்பட்ட உறுப்பினர்கள்')}}</p></div><a href="#new-members">{{t('See profiles','சுயவிவரங்கள்')}} →</a></article>
+    <article class="aa-tool aa-near"><span class="aa-tool-icon">⌖</span><div><h2>{{t('Nearby Matches','அருகிலுள்ள பொருத்தங்கள்')}}</h2><p>{{currentUser.location||t('Based on your city','உங்கள் நகரத்தின் அடிப்படையில்')}}</p></div><a href="#nearby">{{t('Explore','பார்க்கவும்')}} →</a></article>
+  </section>
+  <section class="aa-daily" aria-labelledby="daily-title"><div class="aa-section-title"><div><span class="aa-gold">✦ {{t('CURATED FOR YOU','உங்களுக்காக')}}</span><h2 id="daily-title">{{t('Your 5 Matches for Today','இன்றைய 5 பொருத்தங்கள்')}}</h2><p>{{t('Only eligible, approved profiles matching your gender preferences.','உங்களுக்கேற்ற அங்கீகரிக்கப்பட்ட சுயவிவரங்கள் மட்டும்.')}}</p></div><a routerLink="/profiles">{{t('All matches','அனைத்தும்')}} →</a></div>
+  @if(loading){<p class="aa-empty" role="status">{{t('Loading profiles…','சுயவிவரங்கள் ஏற்றப்படுகின்றன…')}}</p>}
+  @else if(error){<div class="aa-empty" role="alert"><p>{{t('Could not load profiles. Check the backend connection.','சுயவிவரங்களை ஏற்ற முடியவில்லை. சேவையகத்தைச் சரிபார்க்கவும்.')}}</p><button type="button" class="aa-retry" (click)="loadMatches()">{{t('Try Again','மீண்டும் முயற்சி')}}</button></div>}
+  @else if(!recommended.length){<p class="aa-empty">{{t('No suitable approved profiles are available yet. You can refine your search.','தற்போது பொருத்தமான அங்கீகரிக்கப்பட்ட சுயவிவரங்கள் இல்லை. வேறு தேடலை முயற்சிக்கவும்.')}} <a routerLink="/profiles">{{t('Search profiles','சுயவிவரங்களைத் தேடுக')}}</a></p>}
+  @else {<div class="aa-daily-grid">@for(profile of recommended;track profile.code){<app-public-card [profile]="profile" [compact]="true" />}</div>}
+  </section>
+  <div class="aa-discovery-row"><section id="new-members"><div class="aa-section-title"><h2>{{t('Newly Joined','புதிதாக இணைந்தவர்கள்')}}</h2><a routerLink="/profiles">{{t('See all','அனைத்தும்')}} →</a></div><div class="aa-mini-cards">@for(profile of recentlyJoined;track profile.code){<a [routerLink]="['/free-profile',profile.code]" class="aa-mini"><span>{{profile.code}}</span><small>{{profile.age ? profile.age + ' '+t('yrs','வயது'):t('Approved member','அங்கீகரிக்கப்பட்ட உறுப்பினர்')}}</small></a>}@empty{<p>{{t('No new profiles available.','புதிய சுயவிவரங்கள் இல்லை.')}}</p>}</div></section>
+  <section id="nearby"><div class="aa-section-title"><h2>{{t('Nearby Matches','அருகிலுள்ள பொருத்தங்கள்')}}</h2><a routerLink="/profiles">{{t('See all','அனைத்தும்')}} →</a></div><div class="aa-mini-cards">@for(profile of nearby;track profile.code){<a [routerLink]="['/free-profile',profile.code]" class="aa-mini"><span>{{profile.code}}</span><small>{{profile.city}}</small></a>}@empty{<p>{{t('No nearby matches available yet.','அருகிலுள்ள பொருத்தங்கள் தற்போது இல்லை.')}}</p>}</div></section></div>
+  <section class="aa-activity"><h2>{{t('My Matrimony Activities','என் திருமணச் செயல்பாடுகள்')}}</h2><div class="aa-activity-grid"><a routerLink="/profile-activity" [queryParams]="{tab:'liked'}">♡ {{t('Likes and Shortlist','விருப்பங்கள் மற்றும் சேமிப்புகள்')}} →</a><a routerLink="/sent-interests">➤ {{t('Sent Interests','அனுப்பிய விருப்பங்கள்')}} →</a><a routerLink="/received-interests">✉ {{t('Received Interests','பெற்ற விருப்பங்கள்')}} →</a><a routerLink="/my-biodata">☷ {{t('My Biodata','என் சுயவிவரம்')}} →</a></div></section>
+</div></main>

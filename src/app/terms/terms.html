@@ -1,0 +1,42 @@
+<section class="terms-page">
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="terms-container">
+    <div class="hero-card">
+      <div class="hero-top">
+        <span class="badge">{{ tr.badge }}</span>
+      </div>
+
+      <h1>{{ tr.title }}</h1>
+      <p class="subtitle">{{ tr.subtitle }}</p>
+
+      <div class="highlight-card">
+        <div class="highlight-icon">💖</div>
+        <div class="highlight-content">
+          <h2>{{ tr.highlightTitle }}</h2>
+          <p>{{ tr.highlightText }}</p>
+        </div>
+      </div>
+
+      <a class="back-btn" routerLink="/register">
+        ← {{ tr.backText }}
+      </a>
+    </div>
+
+    <div class="terms-grid">
+      <div
+        class="term-card"
+        *ngFor="let section of tr.sections; let i = index"
+        [style.animationDelay]="(i * 0.08) + 's'"
+      >
+        <div class="term-number">{{ i + 1 }}</div>
+        <div class="term-body">
+          <h3>{{ section.title }}</h3>
+          <p>{{ section.content }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

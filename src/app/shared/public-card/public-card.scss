@@ -1,0 +1,20 @@
+:host{display:block;min-width:0;height:100%}
+.aa-match-card{height:100%;min-width:0;display:flex;flex-direction:column;overflow:hidden;background:#121115;color:#fff;border:1px solid #4d3c44;border-radius:17px;box-shadow:0 12px 28px #21101924;transition:border-color .2s ease}
+.aa-match-card:hover{border-color:#b7896d}
+.aa-match-photo{position:relative;background:#241e25;aspect-ratio:4/4.4;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.aa-match-photo img{width:100%;height:100%;display:block;object-fit:contain;object-position:center top}
+.aa-approved{position:absolute;top:11px;left:11px;z-index:1;padding:6px 10px;border-radius:20px;background:#1e3c31df;color:#fff;font-size:.72rem;font-weight:750;border:1px solid #6b9e7a;backdrop-filter:blur(5px)}
+.aa-member-details{padding:15px 16px 16px;display:flex;flex-direction:column;gap:12px;flex:1;min-width:0}
+.aa-member-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;min-width:0}
+.aa-member-name{color:white;line-height:1.25;font-size:clamp(1.12rem,2vw,1.4rem);font-weight:800;margin:0;overflow-wrap:anywhere;min-width:0}
+.aa-member-code{flex-shrink:0;border-radius:18px;padding:5px 8px;color:#ead0bc;background:#2e2630;font-size:.72rem;font-weight:700}
+.aa-member-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;align-items:start}
+.aa-member-facts>div{min-width:0;display:flex;align-items:flex-start;gap:6px;color:#e9e3e7;font-size:.83rem;line-height:1.5;overflow-wrap:anywhere}
+.aa-member-facts>div>span:first-child{flex:0 0 16px;color:#ecc48c;text-align:center;font-size:.92rem}
+.aa-member-facts>div>span:last-child{min-width:0;overflow-wrap:anywhere}
+.aa-match-actions{margin-top:auto;padding-top:4px}
+.aa-match-actions a{display:flex;justify-content:center;align-items:center;gap:10px;text-decoration:none;text-align:center;background:#842a4a;border:1px solid #b75b7d;border-radius:10px;min-height:46px;padding:8px 12px;color:white;font-size:.9rem;font-weight:800}
+.aa-match-actions a:hover{background:#a4385b}.aa-match-actions a:focus-visible{outline:3px solid #deb56b;outline-offset:3px}
+@media(min-width:601px) and (max-width:1080px){.aa-member-facts{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:440px){.aa-member-details{padding:14px}.aa-match-photo{aspect-ratio:4/4.2}.aa-member-facts{gap:8px}.aa-match-actions a{min-height:48px}}
+@media(prefers-reduced-motion:reduce){.aa-match-card{transition:none}}

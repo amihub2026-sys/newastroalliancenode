@@ -1,0 +1,64 @@
+.admin-users-page {
+  padding: 30px;
+}
+
+.top-section {
+  margin-bottom: 30px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+}
+
+input,
+select {
+  height: 45px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+button {
+  border: none;
+  background: #ff4d8d;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  height: 45px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th,
+td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+th {
+  background: #ff4d8d;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+.error-text {
+  color: red;
+  font-size: 13px;
+  margin-top: 5px;
+}

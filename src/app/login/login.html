@@ -1,0 +1,100 @@
+
+
+<section class="login-page">
+  <div class="login-wrapper">
+    <div class="login-left">
+      <div class="overlay"></div>
+      <div class="left-content">
+        <p class="small-tag">{{ tr.left.tag }}</p>
+        <h1>{{ tr.left.title }}</h1>
+        <p>
+          {{ tr.left.subtitle }}
+        </p>
+
+        <div class="login-points">
+          <div class="point" *ngFor="let p of tr.left.points; let i = index">
+            <span>{{ i === 0 ? '💖' : i === 1 ? '🔒' : '✅' }}</span>
+            <p>{{ p }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-right">
+      <div class="form-card">
+        <p class="form-mini-title">{{ tr.form.miniTitle }}</p>
+        <h2>{{ tr.form.title }}</h2>
+        <p class="form-subtitle">
+          {{ tr.form.subtitle }}
+        </p>
+<!-- 
+        <div class="login-type-switch">
+          <button
+            type="button"
+            class="type-btn"
+            [class.active]="loginType === 'user'"
+            (click)="setLoginType('user')">
+            User Login
+          </button>
+
+          <button
+            type="button"
+            class="type-btn"
+            [class.active]="loginType === 'admin'"
+            (click)="setLoginType('admin')">
+            Admin Login
+          </button>
+        </div> -->
+
+        <form class="login-form" (ngSubmit)="onLogin()">
+          <div class="form-group">
+            <label>
+              {{ loginType === 'admin' ? 'Admin Phone Number' : tr.form.phone }}
+            </label>
+          <input
+  type="text"
+  [placeholder]="loginType === 'admin' ? 'Enter admin number' : tr.form.phonePlaceholder"
+  name="phone"
+  [(ngModel)]="phone"
+  maxlength="10"
+  minlength="10"
+  pattern="[0-9]{10}"
+  #phoneInput="ngModel"
+  required
+/>
+<div class="error-text" *ngIf="phoneInput.invalid && phoneInput.touched">
+  Enter valid 10 digit mobile number
+</div>
+          </div>
+
+          <div class="form-group">
+            <label for="login-dob">{{ tr.form.dob }}</label>
+            <input id="login-dob" type="date" name="dob" [(ngModel)]="dob"
+              autocomplete="bday" [max]="maxDate" required
+              [attr.aria-label]="tr.form.dob" />
+          </div>
+          <button type="submit" class="login-btn" [disabled]="isLoading">
+            {{
+              isLoading
+                ? tr.form.loggingIn
+                : (loginType === 'admin' ? 'Admin Login' : tr.form.loginBtn)
+            }}
+          </button>
+        </form>
+
+        <div class="divider">
+          <span>{{ tr.form.or }}</span>
+        </div>
+
+        <p class="bottom-text" *ngIf="loginType === 'user'">
+          {{ tr.form.registerText }}
+          <a routerLink="/register">{{ tr.form.registerBtn }}</a>
+        </p>
+
+        <p class="bottom-text" *ngIf="loginType === 'admin'">
+          Admin access only
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

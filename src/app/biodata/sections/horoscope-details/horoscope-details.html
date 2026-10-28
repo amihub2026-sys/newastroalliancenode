@@ -1,0 +1,560 @@
+<details class="form-accordion" *ngIf="vm.isAdminBiodataMode() || vm.activeStep === 4" [attr.open]="!vm.isAdminBiodataMode() ? '' : null">
+
+<summary>
+  {{ vm.currentLang === 'ta' ? 'ஜாதக விவரங்கள்' : 'Horoscope Details' }}
+</summary>
+
+<div class="section-card">
+        <div class="section-title-wrap">
+          <h2>{{ vm.tr.sections.horoscopeDetails }}</h2>
+          <p>{{ vm.tr.sections.horoscopeDetailsSub }}</p>
+        </div>
+
+        <div class="form-grid">
+
+
+         <!-- NAKSHATRA -->
+<div class="field" [class.invalid]="vm.isInvalid('nakshatra')">
+  <label>{{ vm.tr.labels.nakshatra }} <span class="required" *ngIf="vm.isHinduReligion()">*</span></label>
+
+  <select [(ngModel)]="vm.formData.nakshatra" name="nakshatra">
+    <option value="">{{ vm.tr.labels.selectNakshatra }}</option>
+<option
+  *ngFor="let n of vm.nakshatraDbList"
+  [value]="n.nameEn">
+  {{
+    vm.currentLang === 'ta'
+      ? (n.nameTa || n.nameEn)
+      : n.nameEn
+  }}
+</option>
+  </select>
+  <div class="error" *ngIf="vm.isInvalid('nakshatra')">
+    
+  {{ vm.tr.labels.required }}
+</div>
+
+</div>
+
+
+
+<!-- PAATHAM -->
+
+<div class="field">
+
+  <label>
+    {{ vm.currentLang === 'ta'
+      ? 'பாதம்'
+      : 'Paatham'
+    }}
+  </label>
+
+<input
+  type="text"
+  [(ngModel)]="vm.formData.paatham"
+  name="paatham"
+>
+
+</div>
+
+     <!-- RASI -->
+<div class="field" [class.invalid]="vm.isInvalid('rasi')">
+  <label>{{ vm.tr.labels.rasi }} <span class="required" *ngIf="vm.isHinduReligion()">*</span></label>
+  <select [(ngModel)]="vm.formData.rasi" name="rasi">
+    <option value="">{{ vm.tr.labels.selectRasi }}</option>
+<option
+  *ngFor="let r of vm.rasiDbList"
+  [value]="r.nameEn">
+  {{
+    vm.currentLang === 'ta'
+      ? (r.nameTa || r.nameEn)
+      : r.nameEn
+  }}
+</option>
+  </select>
+  <div class="error" *ngIf="vm.isInvalid('rasi')">
+  {{ vm.tr.labels.required }}
+</div>
+
+</div>
+<!-- LAGNAM -->
+<div class="field">
+  <label>{{ vm.tr.labels.lagnam }}</label>
+
+  <select [(ngModel)]="vm.formData.lagnam" name="lagnam">
+    <option value="">{{ vm.tr.labels.selectLagnam }}</option>
+<option
+  *ngFor="let l of vm.lagnamDbList"
+  [value]="l.nameEn">
+  {{
+    vm.currentLang === 'ta'
+      ? (l.nameTa || l.nameEn)
+      : l.nameEn
+  }}
+</option>
+  </select>
+
+
+</div>
+
+
+
+
+<div class="field">
+  <label>{{ vm.tr.labels.dhosham }}</label>
+
+  <select [(ngModel)]="vm.formData.dhosham" name="dhosham">
+    <option value="">
+      {{
+        vm.currentLang === 'ta'
+          ? 'தோஷத்தை தேர்வு செய்யவும்'
+          : 'Select Dhosham'
+      }}
+    </option>
+
+<option
+  *ngFor="let d of vm.dhoshamDbList"
+  [value]="d.nameEn">
+  {{
+    vm.currentLang === 'ta'
+      ? (d.nameTa || d.nameEn)
+      : d.nameEn
+  }}
+</option>
+  </select>
+</div>
+
+
+
+
+         <!-- BIRTH PLACE -->
+<div class="field" [class.invalid]="vm.isInvalid('birthPlace')">
+ <label>{{ vm.tr.labels.birthPlace }} <span class="optional">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? '(விருப்பம்)' : '(Optional)' }}</span></label>
+
+<input
+  type="text"
+  [ngModel]="vm.getTypedValue('birthPlace')"
+ (ngModelChange)="vm.setTypedValue('birthPlace', $event)"
+(keypress)="vm.handleTyping($event)"
+  name="birthPlace"
+  [placeholder]="vm.tr.placeholders.birthPlace">
+
+  <!-- <small class="field-error" *ngIf="vm.isInvalid('birthPlace')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small> -->
+</div>
+
+<!-- THISAI IRUPPU -->
+
+<div class="field">
+
+  <label>
+    {{ vm.currentLang === 'ta' ? 'திசை இருப்பு' : 'Thisai Iruppu' }}
+  </label>
+
+<select
+[(ngModel)]="vm.selectedThisaiIruppuId"
+name="thisaiIruppu"
+(change)="vm.onThisaiIruppuChange()">
+    <option value="">
+      {{ vm.currentLang === 'ta' ? 'திசை இருப்பை தேர்வு செய்யவும்' : 'Select Thisai Iruppu' }}
+    </option>
+
+  <option
+  *ngFor="let item of vm.thisaiIruppuList"
+  [value]="item._id"
+>
+  {{
+    vm.currentLang === 'ta'
+      ? (item.nameTa || item.nameEn)
+      : item.nameEn
+  }}
+</option>
+  </select>
+
+</div>
+
+<!-- THISAI -->
+
+<div class="field thisai-iruppu-field">
+
+  <label>
+    {{ vm.currentLang === 'ta' ? 'திசை' : 'Thisai' }}
+  </label>
+
+  <div class="thisai-iruppu-wrap">
+
+    <div class="iruppu-box">
+      <span>{{ vm.currentLang === 'ta' ? 'வ' : 'Y' }}</span>
+     <input
+  type="text"
+  [(ngModel)]="vm.formData.thisaiYear"
+  name="thisaiYear"
+  inputmode="numeric"
+>
+    </div>
+
+    <div class="iruppu-box">
+      <span>{{ vm.currentLang === 'ta' ? 'மா' : 'M' }}</span>
+   <input
+  type="text"
+  [(ngModel)]="vm.formData.thisaiMonth"
+  name="thisaiMonth"
+  inputmode="numeric"
+>
+    </div>
+
+    <div class="iruppu-box">
+      <span>{{ vm.currentLang === 'ta' ? 'நா' : 'D' }}</span>
+     <input
+  type="text"
+  [(ngModel)]="vm.formData.thisaiDay"
+  name="thisaiDay"
+  inputmode="numeric"
+>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+ </div>
+
+        <!-- HOROSCOPE CHART -->
+        <div class="horoscope-chart-card">
+          <div class="chart-top">
+         <div class="chart-top-layout">
+
+  <!-- LEFT SIDE -->
+
+  <div class="chart-hints">
+
+    <h4>
+      Hints to fill up the chart
+    </h4>
+
+    <div class="hint-grid">
+
+      <div
+        class="hint-item"
+        *ngFor="let item of vm.horoscopeHints"
+      >
+
+        <span class="hint-no">
+          {{ item.no }}
+        </span>
+
+        <span class="hint-text">
+          {{ item.label }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE -->
+
+  <div class="chart-example">
+
+    <div class="chart-example-title">
+      Example
+    </div>
+
+    <img
+      src="assets/example_chart.png"
+      alt="Example Horoscope Chart"
+    />
+
+  </div>
+
+</div>
+          </div>
+
+         <div class="double-chart-wrap">
+  <!-- RASI -->
+  <div class="single-chart-block">
+    <div class="chart-box chart-box-12">
+      <div class="chart-cell-wrap cell-1">
+        <textarea
+          [ngModel]="vm.rasiChart[0]"
+        (keydown)="vm.onChartKeydown('rasi', 0, $event)"
+(input)="vm.onChartInput('rasi', 0, $event)"
+          name="rasiChart0"
+          class="cell-input"
+        ></textarea>
+       <!-- <div class="cell-short">{{ vm.rasiChart[0] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-2">
+        <textarea
+          [ngModel]="vm.rasiChart[1]"
+          (keydown)="vm.onChartKeydown('rasi', 1, $event)"
+(input)="vm.onChartInput('rasi', 1, $event)"
+          name="rasiChart1"
+          class="cell-input"
+        ></textarea>
+      <!-- <div class="cell-short">{{ vm.rasiChart[1] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-3">
+        <textarea
+          [ngModel]="vm.rasiChart[2]"
+        
+(keydown)="vm.onChartKeydown('rasi', 2, $event)"
+(input)="vm.onChartInput('rasi', 2, $event)"
+          name="rasiChart2"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.rasiChart[2] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-4">
+        <textarea
+          [ngModel]="vm.rasiChart[3]"
+         (keydown)="vm.onChartKeydown('rasi', 3, $event)"
+(input)="vm.onChartInput('rasi', 3, $event)"
+          name="rasiChart3"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.rasiChart[3] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-5">
+        <textarea
+          [ngModel]="vm.rasiChart[4]"
+          (keydown)="vm.onChartKeydown('rasi', 4, $event)"
+(input)="vm.onChartInput('rasi', 4, $event)"
+          name="rasiChart4"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.rasiChart[4] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-6">
+        <textarea
+          [ngModel]="vm.rasiChart[5]"
+        (keydown)="vm.onChartKeydown('rasi', 5, $event)"
+(input)="vm.onChartInput('rasi', 5, $event)"
+          name="rasiChart5"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.rasiChart[5] }}</div> -->
+      </div>
+
+      <div class="chart-center-label rasi-label">ராசி</div>
+
+      <div class="chart-cell-wrap cell-7">
+        <textarea
+          [ngModel]="vm.rasiChart[6]"
+         (keydown)="vm.onChartKeydown('rasi', 6, $event)"
+(input)="vm.onChartInput('rasi', 6, $event)"
+          name="rasiChart6"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.rasiChart[6] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-8">
+        <textarea
+          [ngModel]="vm.rasiChart[7]"
+         (keydown)="vm.onChartKeydown('rasi', 7, $event)"
+(input)="vm.onChartInput('rasi', 7, $event)"
+          name="rasiChart7"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.rasiChart[7] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-9">
+        <textarea
+          [ngModel]="vm.rasiChart[8]"
+        (keydown)="vm.onChartKeydown('rasi', 8, $event)"
+(input)="vm.onChartInput('rasi', 8, $event)"
+          name="rasiChart8"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.rasiChart[8] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-10">
+        <textarea
+          [ngModel]="vm.rasiChart[9]"
+          
+(keydown)="vm.onChartKeydown('rasi', 9, $event)"
+(input)="vm.onChartInput('rasi', 9, $event)"
+          name="rasiChart9"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.rasiChart[9] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-11">
+        <textarea
+          [ngModel]="vm.rasiChart[10]"
+          (keydown)="vm.onChartKeydown('rasi', 10, $event)"
+(input)="vm.onChartInput('rasi', 10, $event)"
+
+          name="rasiChart10"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.rasiChart[10] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-12">
+        <textarea
+          [ngModel]="vm.rasiChart[11]"
+          (keydown)="vm.onChartKeydown('rasi', 11, $event)"
+(input)="vm.onChartInput('rasi', 11, $event)"
+          name="rasiChart11"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.rasiChart[11] }}</div> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- AMSAM -->
+  <div class="single-chart-block">
+    <div class="chart-box chart-box-12">
+      <div class="chart-cell-wrap cell-1">
+        <textarea
+          [ngModel]="vm.amsamChart[0]"
+(keydown)="vm.onChartKeydown('amsam', 0, $event)"
+(input)="vm.onChartInput('amsam', 0, $event)"
+          name="amsamChart0"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.amsamChart[0] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-2">
+        <textarea
+          [ngModel]="vm.amsamChart[1]"
+         (keydown)="vm.onChartKeydown('amsam', 1, $event)"
+(input)="vm.onChartInput('amsam', 1, $event)"
+          name="amsamChart1"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.amsamChart[1] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-3">
+        <textarea
+          [ngModel]="vm.amsamChart[2]"
+     (keydown)="vm.onChartKeydown('amsam', 2, $event)"
+(input)="vm.onChartInput('amsam', 2, $event)"
+          name="amsamChart2"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.amsamChart[2] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-4">
+        <textarea
+          [ngModel]="vm.amsamChart[3]"
+          (keydown)="vm.onChartKeydown('amsam', 3, $event)"
+(input)="vm.onChartInput('amsam', 3, $event)"
+          name="amsamChart3"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.amsamChart[3] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-5">
+        <textarea
+          [ngModel]="vm.amsamChart[4]"
+ (keydown)="vm.onChartKeydown('amsam', 4, $event)"
+(input)="vm.onChartInput('amsam', 4, $event)"
+          name="amsamChart4"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{vm.amsamChart[4] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-6">
+        <textarea
+          [ngModel]="vm.amsamChart[5]"
+        (keydown)="vm.onChartKeydown('amsam', 5, $event)"
+(input)="vm.onChartInput('amsam', 5, $event)"
+          name="amsamChart5"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.amsamChart[5] }}</div> -->
+      </div>
+
+      <div class="chart-center-label amsam-label">அம்சம்</div>
+
+      <div class="chart-cell-wrap cell-7">
+        <textarea
+          [ngModel]="vm.amsamChart[6]"
+          (keydown)="vm.onChartKeydown('amsam', 6, $event)"
+(input)="vm.onChartInput('amsam', 6, $event)"
+          name="amsamChart6"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{vm.amsamChart[6] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-8">
+        <textarea
+          [ngModel]="vm.amsamChart[7]"
+          (keydown)="vm.onChartKeydown('amsam', 7, $event)"
+(input)="vm.onChartInput('amsam', 7, $event)"
+          name="amsamChart7"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.amsamChart[7] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-9">
+        <textarea
+          [ngModel]="vm.amsamChart[8]"
+          (keydown)="vm.onChartKeydown('amsam', 8, $event)"
+(input)="vm.onChartInput('amsam', 8, $event)"
+          name="amsamChart8"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.amsamChart[8] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-10">
+        <textarea
+          [ngModel]="vm.amsamChart[9]"
+          (keydown)="vm.onChartKeydown('amsam', 9, $event)"
+(input)="vm.onChartInput('amsam', 9, $event)"
+          name="amsamChart9"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.amsamChart[9] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-11">
+        <textarea
+          [ngModel]="vm.amsamChart[10]"
+         (keydown)="vm.onChartKeydown('amsam', 10, $event)"
+(input)="vm.onChartInput('amsam', 10, $event)"
+          name="amsamChart10"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.amsamChart[10] }}</div> -->
+      </div>
+
+      <div class="chart-cell-wrap cell-12">
+        <textarea
+          [ngModel]="vm.amsamChart[11]"
+        (keydown)="vm.onChartKeydown('amsam', 11, $event)"
+(input)="vm.onChartInput('amsam', 11, $event)"
+          name="amsamChart11"
+          class="cell-input"
+        ></textarea>
+        <!-- <div class="cell-short">{{ vm.amsamChart[11] }}</div> -->
+      </div>
+    </div>
+  </div>
+</div>
+        </div>
+      </div>
+</details>

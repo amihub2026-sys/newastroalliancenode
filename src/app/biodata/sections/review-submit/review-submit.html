@@ -1,0 +1,5 @@
+<div class="wizard-review-intro" *ngIf="!vm.isAdminBiodataMode() && vm.activeStep === 7">
+  <h2>{{ vm.currentLang === 'ta' ? 'உங்கள் விவரங்களைச் சரிபார்க்கவும்' : 'Review your details' }}</h2>
+  <p>{{ vm.currentLang === 'ta' ? 'கீழே உள்ள விவரங்கள் சரியாக உள்ளதா எனப் பார்க்கவும். திருத்த வேண்டுமென்றால் முந்தைய படிக்குச் செல்லவும்.' : 'Please check the profile summary below. Go back if anything needs changing.' }}</p>
+  <p><strong>{{ vm.currentLang === 'ta' ? 'பெயர்' : 'Name' }}:</strong> {{ vm.formData.fullName || vm.formDataTa.fullName }} / {{ vm.formDataTa.fullName || vm.formData.fullName }}</p>
+</div>

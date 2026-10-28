@@ -1,0 +1,27 @@
+<article class="aa-match-card" [class.is-compact]="compact">
+  <div class="aa-match-photo">
+    <img [src]="photo" [alt]="t('Profile photo for ','சுயவிவரப் படம் ') + displayName" (error)="onPhotoError($event)" loading="lazy" decoding="async" />
+    <span class="aa-approved">✓ {{t('Approved profile','அங்கீகரிக்கப்பட்ட சுயவிவரம்')}}</span>
+  </div>
+  <div class="aa-member-details">
+    <div class="aa-member-heading">
+      <h3 class="aa-member-name">{{ displayName }}</h3>
+      <span class="aa-member-code">{{profile.code}}</span>
+    </div>
+    <div class="aa-member-facts">
+      @if(profile.age){<div><span>◷</span><span>{{profile.age}} {{t('years','வயது')}}</span></div>}
+      @if(heightLabel){<div><span>↕</span><span>{{heightLabel}}</span></div>}
+      @if(profile.gender){<div><span>♙</span><span>{{profile.gender | publicValue:lang}}</span></div>}
+      @if(profile.maritalStatus){<div><span>♡</span><span>{{profile.maritalStatus | publicValue:lang}}</span></div>}
+      @if(profile.religion){<div><span>✧</span><span>{{profile.religion | publicValue:lang}}</span></div>}
+      @if(profile.caste){<div><span>♧</span><span>{{profile.caste | publicValue:lang}}</span></div>}
+      @if(profile.city || profile.state){<div><span>⌖</span><span>{{(profile.city || profile.state) | publicValue:lang}}</span></div>}
+      @if(profile.nakshatra){<div><span>☆</span><span>{{profile.nakshatra | publicValue:lang}}</span></div>}
+      @if(profile.education){<div><span>▣</span><span>{{profile.education | publicValue:lang}}</span></div>}
+      @if(profile.profession){<div><span>▤</span><span>{{profile.profession | publicValue:lang}}</span></div>}
+    </div>
+    <div class="aa-match-actions">
+      <a [routerLink]="['/free-profile',profile.code]" (click)="rememberSearchPosition()" [queryParams]="returnState ? {s:returnState,source:searchRoute} : null" [attr.aria-label]="t('View basic profile for ','அடிப்படை சுயவிவரத்தைப் பார்க்க ') + (profile.name || profile.code)">{{t('View Profile','சுயவிவரத்தைக் காண்க')}} <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</article>

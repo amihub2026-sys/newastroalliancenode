@@ -1,0 +1,107 @@
+@use './app/biodata/biodata-shared' as biodataFields;
+
+app-biodata {
+  @include biodataFields.styles;
+}
+
+@import '@ng-select/ng-select/themes/default.theme.css';
+
+/* Brand design tokens used by new, component-scoped screens. */
+:root {
+  --aa-brand: #8c2453;
+  --aa-brand-strong: #551631;
+  --aa-text: #271625;
+  --aa-text-muted: #695d65;
+  --aa-surface-warm: #fffaf6;
+  --aa-focus-ring: #e2a71b;
+}
+
+
+.ng-dropdown-panel {
+  z-index: 999999 !important;
+  pointer-events: auto !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  border: 1px solid #edf2f7 !important;
+  box-shadow: 0 14px 34px rgba(16, 24, 40, 0.12) !important;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items {
+  max-height: 260px !important;
+  pointer-events: auto !important;
+}
+
+.ng-dropdown-panel .ng-option {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  padding: 10px 14px !important;
+  font-size: 14px !important;
+}
+
+.ng-dropdown-panel .ng-option.ng-option-marked {
+  background: #fff1f6 !important;
+  color: #e91e63 !important;
+}
+
+.ng-dropdown-panel .ng-option.ng-option-selected {
+  background: #ffe3ed !important;
+  color: #c2185b !important;
+}
+
+.tm-filter-select.ng-select {
+  width: 100%;
+}
+
+.tm-filter-select .ng-select-container {
+  min-height: 48px !important;
+  height: 48px !important;
+  border-radius: 14px !important;
+  border: 1px solid #dbe4f0 !important;
+  background: #fff !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03) !important;
+  align-items: center !important;
+}
+
+.tm-filter-select .ng-value-container {
+  padding-left: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.tm-filter-select .ng-placeholder {
+  color: #667085 !important;
+  font-size: 14px !important;
+  top: auto !important;
+  transform: none !important;
+}
+
+.tm-filter-select .ng-input {
+  top: auto !important;
+}
+
+.tm-filter-select .ng-input input {
+  font-size: 14px !important;
+}
+
+.tm-filter-select .ng-arrow-wrapper,
+.tm-filter-select .ng-clear-wrapper {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.tm-filter-select.ng-select-opened .ng-select-container,
+.tm-filter-select.ng-select-focused .ng-select-container {
+  border-color: #ec407a !important;
+  box-shadow: 0 0 0 4px rgba(236, 64, 122, 0.12) !important;
+}
+@media print {
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  app-root,
+  app-profile-print {
+    display: block !important;
+  }
+}

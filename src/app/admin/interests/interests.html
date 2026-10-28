@@ -1,0 +1,400 @@
+<div class="page">
+
+  <div class="page-header">
+
+    <div>
+
+      <h2>Interest Management</h2>
+
+      <p>
+        Monitor all user interests
+      </p>
+
+    </div>
+
+  </div>
+
+<div class="top-bar">
+
+  <div class="search-box">
+
+    <input
+      type="text"
+     [(ngModel)]="searchTerm"
+(input)="prepareInterestUsers()"
+      placeholder="Search profile name or code">
+
+  </div>
+
+  <div class="stats-card">
+
+    <div class="stat-box">
+      <span>Total Users</span>
+      <h3>{{ filteredInterests.length }}</h3>
+    </div>
+
+    <div class="stat-box">
+      <span>Total Interests</span>
+      <h3>{{ interests.length }}</h3>
+    </div>
+
+  </div>
+
+</div>
+<div class="table-scroll">
+
+<table class="modern-table">
+  <thead>
+
+    <tr>
+
+      <th>User</th>
+
+      <th>Sent</th>
+
+      <th>Received</th>
+
+      <th>Accepted</th>
+
+      <th>Pending</th>
+
+      <th>Rejected</th>
+
+      <th>Action</th>
+
+    </tr>
+
+  </thead>
+
+  <tbody>
+
+ <tr
+  *ngFor="
+    let item of filteredInterests;
+    trackBy: trackByProfile
+  ">
+
+      <td>
+
+        <div class="profile-card">
+
+          <div class="avatar">
+
+            {{
+              item.from_profile?.full_name
+              ?.charAt(0)
+            }}
+
+          </div>
+
+          <div>
+
+            <div class="profile-code">
+              {{ item.from_profile?.profile_code }}
+            </div>
+
+            <div class="profile-name">
+             {{
+  currentLang === 'ta'
+    ? item.from_profile?.full_name_ta ||
+      item.from_profile?.full_name
+    : item.from_profile?.full_name
+}}
+            </div>
+
+          </div>
+
+        </div>
+
+      </td>
+
+      <!-- SENT -->
+
+      <td>
+
+ {{ item.sent }}
+
+      </td>
+
+      <!-- RECEIVED -->
+
+      <td>
+
+{{ item.received }}
+
+      </td>
+
+      <!-- ACCEPTED -->
+
+      <td>
+
+   {{ item.accepted }}
+      </td>
+
+      <!-- PENDING -->
+
+      <td>
+
+{{ item.pending }}
+
+      </td>
+
+      <!-- REJECTED -->
+
+      <td>
+{{ item.rejected }}
+
+      </td>
+
+      <td>
+
+       <button
+  type="button"
+  class="history-btn"
+  (click)="openHistory(item, $event)">
+
+          {{
+  currentLang === 'ta'
+    ? 'வரலாறு'
+    : 'View History'
+}}
+        </button>
+
+      </td>
+
+    </tr>
+
+  </tbody>
+
+</table>
+</div>
+<div
+  #historySection
+  class="history-section"
+  *ngIf="selectedHistory.length > 0">
+  <h3>
+
+    Interest History -
+ {{
+  currentLang === 'ta'
+    ? selectedSender?.full_name_ta ||
+      selectedSender?.full_name
+    : selectedSender?.full_name
+}}
+
+  </h3>
+
+<div class="history-wrapper">
+
+  <div class="history-header">
+
+    <h3>
+
+  {{
+  currentLang === 'ta'
+    ? 'ஆர்வ வரலாறு'
+    : 'Interest History'
+}}
+
+    </h3>
+
+    <div class="selected-user">
+
+    {{
+  currentLang === 'ta'
+    ? selectedSender?.full_name_ta ||
+      selectedSender?.full_name
+    : selectedSender?.full_name
+}}
+
+    </div>
+
+  </div>
+<div class="table-scroll">
+
+  <table class="modern-table">
+
+    <thead>
+
+      <tr>
+
+       <th>
+  {{
+    currentLang === 'ta'
+      ? 'அனுப்பியவர்'
+      : 'Sender'
+  }}
+</th>
+
+<th>
+  {{
+    currentLang === 'ta'
+      ? 'பெற்றவர்'
+      : 'Receiver'
+  }}
+</th>
+
+        <th>
+  {{
+    currentLang === 'ta'
+      ? 'நிலை'
+      : 'Status'
+  }}
+</th>
+
+        <th>
+  {{
+    currentLang === 'ta'
+      ? 'தேதி'
+      : 'Date'
+  }}
+</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+ <tr
+  *ngFor="
+    let item of selectedHistory;
+    trackBy: trackByHistory
+  ">
+       <!-- SENDER -->
+
+<td>
+
+  <div class="profile-card">
+
+    <div class="avatar small">
+
+      {{
+       item.from_profile?.full_name
+        ?.charAt(0)
+      }}
+
+    </div>
+
+    <div>
+
+      <div class="profile-code">
+        {{ item.from_profile?.profile_code }}
+      </div>
+
+      <div class="profile-name">
+        {{
+  currentLang === 'ta'
+    ? item.from_profile?.full_name_ta ||
+     item.from_profile?.full_name
+    : item.from_profile?.full_name
+}}
+      </div>
+
+    </div>
+
+  </div>
+
+</td>
+
+<!-- RECEIVER -->
+
+<td>
+
+  <div class="profile-card">
+
+    <div class="avatar small">
+
+      {{
+       item.to_profile?.full_name
+        ?.charAt(0)
+      }}
+
+    </div>
+
+    <div>
+
+      <div class="profile-code">
+        {{ item.to_profile?.profile_code }}
+      </div>
+
+      <div class="profile-name">
+       {{
+  currentLang === 'ta'
+    ? item.to_profile?.full_name_ta ||
+      item.to_profile?.full_name
+    : item.to_profile?.full_name
+}}
+      </div>
+
+    </div>
+
+  </div>
+
+</td>
+        <td>
+
+<span
+class="status"
+[ngClass]="{
+  pending: (item.status || item.status_code) === 'pending',
+
+  accepted: (item.status || item.status_code) === 'accepted',
+
+  rejected: (item.status || item.status_code) === 'rejected'
+}">
+
+{{
+(item.status || item.status_code) === 'accepted'
+?
+(
+ currentLang === 'ta'
+ ? 'ஏற்றுக்கொள்ளப்பட்டது'
+ : 'Accepted'
+)
+
+:
+
+(item.status || item.status_code) === 'pending'
+?
+(
+ currentLang === 'ta'
+ ? 'நிலுவையில்'
+ : 'Pending'
+)
+
+:
+
+(item.status || item.status_code) === 'rejected'
+?
+(
+ currentLang === 'ta'
+ ? 'நிராகரிக்கப்பட்டது'
+ : 'Rejected'
+)
+
+:
+''
+}}
+
+          </span>
+
+        </td>
+
+        <td>
+
+          {{ item.createdAt | date:'medium' }}
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+</div>
+</div>
+
+</div>
+
+</div>

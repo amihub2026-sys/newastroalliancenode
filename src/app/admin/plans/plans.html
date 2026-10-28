@@ -1,0 +1,219 @@
+<section class="content-section">
+
+  <div class="section-header">
+
+    <div>
+      <h2>
+        {{ txt('Manage Plans', 'திட்டங்களை நிர்வகிக்கவும்') }}
+      </h2>
+
+      <p>
+        {{
+          txt(
+            'View and control matrimony subscription plans',
+            'மேட்ரிமோனி சந்தா திட்டங்களை நிர்வகிக்கவும்'
+          )
+        }}
+      </p>
+    </div>
+
+    <button
+      class="add-btn"
+      type="button"
+      (click)="openAddPlan()">
+      {{ txt('Add Plan', 'திட்டத்தை சேர்க்கவும்') }}
+    </button>
+
+  </div>
+
+  <p *ngIf="isLoading" class="loading-text">
+    {{ txt('Loading plans...', 'திட்டங்கள் ஏற்றப்படுகிறது...') }}
+  </p>
+
+  <div class="plans-grid" *ngIf="!isLoading">
+
+    <div class="plan-card" *ngFor="let plan of plans">
+
+      <div class="plan-top">
+
+        <div>
+          <h3 class="plan-title">
+            {{ plan.planNameEn }}
+          </h3>
+
+          <p class="plan-code">
+            {{ plan.planNameTa }}
+          </p>
+        </div>
+
+        <div class="top-right">
+
+          <span
+            class="status"
+            [class.active]="plan.isActive"
+            [class.inactive]="!plan.isActive">
+            {{
+              plan.isActive
+                ? txt('Active', 'செயலில்')
+                : txt('Inactive', 'செயலற்றது')
+            }}
+          </span>
+
+          <button
+            class="edit-btn"
+            type="button"
+            (click)="editPlan(plan)">
+            {{ txt('Edit', 'திருத்து') }}
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="price-section">
+        <span class="currency">₹</span>
+        <span class="amount">{{ plan.price }}</span>
+      </div>
+
+      <div class="features-box">
+
+        <div class="feature-row">
+          <span>{{ txt('Duration', 'கால அளவு') }}</span>
+          <strong>
+            {{ plan.durationInDays }}
+            {{ txt('Days', 'நாட்கள்') }}
+          </strong>
+        </div>
+
+        <div class="feature-row">
+          <span>{{ txt('Contact Limit', 'தொடர்பு வரம்பு') }}</span>
+          <strong>{{ plan.contactLimit }}</strong>
+        </div>
+
+        <div class="feature-row">
+          <span>{{ txt('Profile Views', 'சுயவிவர பார்வைகள்') }}</span>
+          <strong>{{ plan.profileViewLimit }}</strong>
+        </div>
+
+      </div>
+
+      <div class="card-actions">
+        <button
+          class="toggle-btn"
+          type="button"
+          (click)="deletePlan(plan)">
+          {{ txt('Disable Plan', 'திட்டத்தை முடக்கு') }}
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<div
+  class="modal-overlay"
+  *ngIf="showPlanModal"
+  (click)="showPlanModal = false">
+
+  <div
+    class="plan-modal"
+    (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2>
+        {{
+          editingPlan
+            ? txt('Edit Plan', 'திட்டத்தை திருத்து')
+            : txt('Add Plan', 'திட்டத்தை சேர்')
+        }}
+      </h2>
+    </div>
+
+    <div class="form-grid">
+
+      <input
+        [(ngModel)]="planForm.planNameEn"
+        [placeholder]="txt('Plan Name English', 'திட்ட பெயர் ஆங்கிலம்')" />
+
+      <input
+        [(ngModel)]="planForm.planNameTa"
+        (keypress)="tamilTyping($event)"
+        (input)="syncPlanNameTa($event)"
+        [placeholder]="txt('Plan Name Tamil', 'திட்ட பெயர் தமிழ்')" />
+
+      <input
+        [(ngModel)]="planForm.price"
+        type="number"
+        [placeholder]="txt('Price', 'விலை')" />
+
+      <input
+        [(ngModel)]="planForm.durationInDays"
+        type="number"
+        [placeholder]="txt('Duration Days', 'கால அளவு நாட்கள்')" />
+
+      <input
+        [(ngModel)]="planForm.contactLimit"
+        type="number"
+        [placeholder]="txt('Contact Limit', 'தொடர்பு வரம்பு')" />
+
+      <input
+        [(ngModel)]="planForm.profileViewLimit"
+        type="number"
+        [placeholder]="txt('Profile View Limit', 'சுயவிவர பார்வை வரம்பு')" />
+
+      <textarea
+        [(ngModel)]="planForm.descriptionEn"
+        [placeholder]="txt('Description English', 'விளக்கம் ஆங்கிலம்')">
+      </textarea>
+
+      <textarea
+        [(ngModel)]="planForm.descriptionTa"
+        (keypress)="tamilTyping($event)"
+        (input)="syncDescriptionTa($event)"
+        [placeholder]="txt('Description Tamil', 'விளக்கம் தமிழ்')">
+      </textarea>
+
+      <textarea
+        [(ngModel)]="planForm.featuresEnText"
+        [placeholder]="txt('Features English - one per line', 'அம்சங்கள் ஆங்கிலம் - ஒரு வரிக்கு ஒன்று')">
+      </textarea>
+
+      <textarea
+        [(ngModel)]="planForm.featuresTaText"
+        (keypress)="tamilTyping($event)"
+        (input)="syncFeaturesTa($event)"
+        [placeholder]="txt('Features Tamil - one per line', 'அம்சங்கள் தமிழ் - ஒரு வரிக்கு ஒன்று')">
+      </textarea>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="save-btn"
+        type="button"
+        (click)="savePlan()"
+        [disabled]="isSaving">
+        {{
+          isSaving
+            ? txt('Saving...', 'சேமிக்கிறது...')
+            : editingPlan
+              ? txt('Update Plan', 'திட்டத்தை புதுப்பிக்கவும்')
+              : txt('Save Plan', 'திட்டத்தை சேமிக்கவும்')
+        }}
+      </button>
+
+      <button
+        type="button"
+        class="cancel-btn"
+        (click)="showPlanModal = false">
+        {{ txt('Cancel', 'ரத்து') }}
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

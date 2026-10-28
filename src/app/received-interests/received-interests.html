@@ -1,0 +1,67 @@
+<section class="received-page">
+  <div class="received-container">
+    <h1>Received Interests</h1>
+    <p>COUNT: {{ interests.length }}</p>
+    <p class="sub">People who sent interest to your profile.</p>
+
+   <div class="empty" *ngIf="isLoading && interests.length === 0">
+  Loading interests...
+</div>
+
+    <div class="empty" *ngIf="!isLoading && interests.length === 0">
+      No interests received yet.
+    </div>
+
+    <div class="interest-card" *ngFor="let item of interests">
+    <img
+  class="profile-img"
+  [src]="item.sender?.profile_image_url || 'assets/default-avatar.png'"
+  (error)="onImageError($event)"
+  alt="Profile"
+/>
+
+      <div class="profile-info">
+        <h3>{{ item.sender?.full_name || item.from_user_id }}</h3>
+        <p>
+          {{ item.sender?.age || '-' }} yrs •
+          {{ item.sender?.occupation_text || '-' }}
+        </p>
+        <p>
+          {{ item.sender?.city_text || '-' }},
+          {{ item.sender?.state_text || '-' }}
+        </p>
+        <p>Status: <strong>{{ item.status_code }}</strong></p>
+      </div>
+
+   <div class="actions">
+  <button class="view" (click)="viewProfile(item)">
+    View Profile
+  </button>
+
+  <button
+    class="accept"
+    *ngIf="item.status_code === 'pending'"
+    (click)="updateStatus(item, 'accepted')"
+  >
+    Accept
+  </button>
+
+  <button
+    class="reject"
+    *ngIf="item.status_code === 'pending'"
+    (click)="updateStatus(item, 'rejected')"
+  >
+    Reject
+  </button>
+
+  <span class="status-badge accepted" *ngIf="item.status_code === 'accepted'">
+    Matched ❤️
+  </span>
+
+ <span class="status-badge rejected" *ngIf="item.status_code === 'rejected'">
+  Rejected 💔
+</span>
+</div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,86 @@
+<div class="page">
+
+  <div class="page-header">
+
+    <div>
+
+      <h2>Profile View Tracking</h2>
+
+      <p>
+        Monitor who viewed profiles
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="search-box">
+
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Search by name or profile code">
+
+  </div>
+
+  <table>
+
+    <thead>
+<tr>
+  <th>Viewer</th>
+  <th>Viewed Profile</th>
+  <th>Date & Time</th>
+</tr>
+
+    </thead>
+
+<tbody>
+  <tr *ngFor="let item of filteredViews">
+
+    <td>
+      <div class="profile-info">
+        <img
+          [src]="item.viewer?.profile_image_url || 'assets/default-user.png'"
+          class="profile-img"
+          alt="Viewer">
+
+        <div>
+          <span class="profile-code">
+            {{ item.viewer?.profile_code || '-' }}
+          </span>
+
+          <span>
+            {{ v(item.viewer?.full_name, item.viewer?.full_name_ta) }}
+          </span>
+        </div>
+      </div>
+    </td>
+
+    <td>
+      <div class="profile-info">
+        <img
+          [src]="item.viewed?.profile_image_url || 'assets/default-user.png'"
+          class="profile-img"
+          alt="Viewed">
+
+        <div>
+          <span class="profile-code">
+            {{ item.viewed?.profile_code || '-' }}
+          </span>
+
+          <span>
+            {{ v(item.viewed?.full_name, item.viewed?.full_name_ta) }}
+          </span>
+        </div>
+      </div>
+    </td>
+<td>
+  {{ item.viewedAt | date:'medium' }}
+</td>
+
+  </tr>
+</tbody>
+
+  </table>
+
+</div>

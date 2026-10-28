@@ -1,0 +1,139 @@
+.received-page {
+  min-height: 100vh;
+  padding: 40px 16px;
+  background: linear-gradient(180deg, #fffafc, #fff4f8);
+}
+
+.received-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 24px;
+  color: #6f173d;
+}
+
+.empty {
+  background: #fff;
+  border-radius: 18px;
+  padding: 22px;
+  color: #7b6570;
+  box-shadow: 0 12px 28px rgba(80, 24, 47, 0.08);
+}
+
+.interest-card {
+  background: #fff;
+  border: 1px solid rgba(122, 31, 68, 0.1);
+  border-radius: 22px;
+  padding: 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 14px 32px rgba(80, 24, 47, 0.08);
+}
+
+.profile-img {
+  width: 110px;
+  height: 110px;
+  min-width: 110px;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #f3e8ee;
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-info h3 {
+  margin: 0 0 8px;
+  color: #6f173d;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.profile-info p {
+  margin: 6px 0;
+  color: #5f4a54;
+  font-size: 14px;
+}
+
+.accepted {
+  color: #16a34a;
+}
+
+.rejected {
+  color: #dc2626;
+}
+
+@media (max-width: 640px) {
+  .received-page {
+    padding: 28px 12px;
+  }
+
+  .interest-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-img {
+    width: 100%;
+    height: 220px;
+    min-width: 100%;
+  }
+
+  .profile-info,
+  .actions {
+    width: 100%;
+  }
+}
+.actions {
+  margin-left: auto;
+  min-width: 130px;
+}
+
+.view {
+  width: 100%;
+  background: #6f173d;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(111, 23, 61, 0.18);
+}
+
+.view:hover {
+  background: #4c0d2c;
+}
+
+@media (max-width: 640px) {
+  .actions {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+.status-badge {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.status-badge.accepted,
+.accepted {
+  color: #16a34a;
+}
+
+.status-badge.rejected,
+.rejected {
+  color: #dc2626;
+}
+
+.pending {
+  color: #f59e0b;
+}

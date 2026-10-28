@@ -1,0 +1,100 @@
+<section class="content-section">
+
+  <div class="page-head">
+    <div>
+      <h2>Religion List</h2>
+      <p>Manage religion master records</p>
+    </div>
+
+    <button class="add-btn" (click)="openAddForm()">
+      + Add Religion
+    </button>
+  </div>
+
+  <div class="form-card" *ngIf="showForm">
+    <h3>{{ isEdit ? 'Edit Religion' : 'Add Religion' }}</h3>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Religion Name English</label>
+        <input
+          type="text"
+          [(ngModel)]="formData.nameEn"
+          placeholder="Enter English name">
+      </div>
+
+      <div class="form-group">
+        <label>Religion Name Tamil</label>
+
+     <input
+    type="text"
+    [(ngModel)]="formData.nameTa"
+    (keypress)="tamilTyping($event)"
+    placeholder="தமிழ் பெயர்">
+      </div>
+
+      <div class="form-group">
+  <label>Sort Order</label>
+  <input
+    type="number"
+    [(ngModel)]="formData.sortOrder"
+    placeholder="Enter sort order">
+</div>
+
+      <div class="form-group status-box">
+        <label>
+          <input type="checkbox" [(ngModel)]="formData.isActive">
+          Active
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="save-btn" (click)="saveReligion()" [disabled]="isSaving">
+        {{ isSaving ? 'Saving...' : 'Save' }}
+      </button>
+
+      <button class="cancel-btn" (click)="closeForm()">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <p *ngIf="isLoading">Loading religions...</p>
+
+    <table *ngIf="!isLoading">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>English Name</th>
+          <th>Tamil Name</th>
+          <th>Status</th>
+          <th class="action-col">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let religion of religions; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ religion.nameEn }}</td>
+          <td>{{ religion.nameTa }}</td>
+          <td>
+            <span class="badge" [class.inactive]="!religion.isActive">
+              {{ religion.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button class="edit-btn" (click)="editReligion(religion)">Edit</button>
+            <button class="delete-btn" (click)="deleteReligion(religion._id)">Delete</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="religions.length === 0">
+          <td colspan="5" class="empty">No religions found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>

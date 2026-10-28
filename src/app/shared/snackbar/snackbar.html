@@ -1,0 +1,22 @@
+<div
+  *ngIf="visible"
+  style="
+    position: fixed;
+    top: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2147483647;
+    background: #ef4444;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+    min-width: 280px;
+    max-width: 90vw;
+    text-align: center;
+  "
+>
+  {{ type === 'success' ? '❤' : '⚠' }} {{ message }}
+</div>

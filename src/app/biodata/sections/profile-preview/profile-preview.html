@@ -1,0 +1,190 @@
+<div class="preview-side" *ngIf="vm.isAdminBiodataMode() || vm.activeStep === 7">
+
+  <div class="preview-card">
+
+    <!-- <div class="preview-header">
+
+      <div class="preview-image">
+
+        <img
+          *ngIf="vm.profilePreviewUrl"
+          [src]="vm.profilePreviewUrl"
+        >
+
+      </div>
+
+      <h2>
+        {{ vm.currentLang === 'ta'
+          ? (vm.formDataTa.fullName || vm.formData.fullName)
+          : vm.formData.fullName || 'Your Name'
+        }}
+      </h2>
+
+      <p>
+        {{ vm.formData.age || '--' }} Years
+      </p>
+
+    </div> -->
+
+    <!-- ACCORDION TITLE -->
+
+    <h3 class="accordion-title">
+      {{ vm.currentLang === 'ta' ? 'விவரங்களின் முன்னோட்டம்' : 'Biodata Review' }}
+    </h3>
+
+    <!-- ACCORDION -->
+
+ <div class="preview-full-content">
+
+  <!-- PERSONAL DETAILS -->
+
+  <div class="preview-section">
+
+    <h3>{{ vm.currentLang === 'ta' ? 'தனிப்பட்ட விவரங்கள்' : 'Personal Details' }}</h3>
+
+    <div class="preview-grid">
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'முழுப் பெயர்' : 'Full Name' }}:</strong><span>{{ vm.currentLang === 'ta'
+      ? (vm.formDataTa.fullName || vm.formData.fullName)
+      : vm.formData.fullName || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'பிறந்த தேதி' : 'DOB' }}:</strong><span>{{ vm.formData.dob || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'பிறந்த நேரம்' : 'Birth Time' }}:</strong><span>{{ vm.formData.birthTime || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'வயது' : 'Age' }}:</strong><span>{{ vm.formData.age || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'பாலினம்' : 'Gender' }}:</strong><span>{{ vm.wizardDisplayValue(vm.formData.gender) }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'திருமண நிலை' : 'Marital Status' }}:</strong><span>{{ vm.wizardDisplayValue(vm.formData.maritalStatus) }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'கைபேசி எண்' : 'Mobile' }}:</strong><span>{{ vm.formData.mobile || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'மின்னஞ்சல்' : 'Email' }}:</strong><span>{{ vm.formData.email || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'மதம்' : 'Religion' }}:</strong><span>{{ vm.wizardDisplayValue(vm.formData.religion) }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'சாதி' : 'Caste' }}:</strong><span>{{ vm.wizardDisplayValue(vm.formData.caste) }}</span></p>
+
+    </div>
+
+  </div>
+
+  <!-- FAMILY -->
+
+  <div class="preview-section">
+
+    <h3>{{ vm.currentLang === 'ta' ? 'குடும்ப விவரங்கள்' : 'Family Details' }}</h3>
+
+    <div class="preview-grid">
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'தந்தையின் பெயர்' : 'Father Name' }}:</strong><span>{{ vm.formData.fatherName || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'தாயின் பெயர்' : 'Mother Name' }}:</strong><span>{{ vm.formData.motherName || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'தந்தையின் தொழில்' : 'Father Occupation' }}:</strong><span>{{ vm.formData.fatherOccupation || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'தாயின் தொழில்' : 'Mother Occupation' }}:</strong><span>{{ vm.formData.motherOccupation || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'சொத்துக்கள்' : 'Assets' }}:</strong><span>{{ vm.formData.sothukal || '-' }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'குலதெய்வம்' : 'Family Deity' }}:</strong><span>{{ vm.formData.kuladeivam || '-' }}</span></p>
+<p><strong>{{ vm.currentLang === 'ta' ? 'குடும்ப நிலை' : 'Family Status' }}:</strong><span>{{ vm.formData.kudumbaNilai || '-' }}</span></p>
+    </div>
+
+  </div>
+
+  <!-- EDUCATION -->
+
+  <div class="preview-section">
+
+    <h3>{{ vm.currentLang === 'ta' ? 'கல்வி விவரங்கள்' : 'Education Details' }}</h3>
+
+    <div class="preview-grid">
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'கல்வி' : 'Education' }}:</strong><span>{{ vm.wizardDisplayValue(vm.formData.education) }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'தொழில்' : 'Job' }}:</strong><span>{{ vm.wizardDisplayValue(vm.formData.job) }}</span></p>
+
+      <p><strong>{{ vm.currentLang === 'ta' ? 'நிறுவனம்' : 'Company' }}:</strong><span>{{ vm.formData.company || '-' }}</span></p>
+
+<p>
+  <strong>{{ vm.currentLang === 'ta' ? 'பணியிடம்' : 'Work Place' }}:</strong>
+  <span>{{ vm.formData.workPlace || '-' }}</span>
+</p>
+      <p><strong>{{ vm.currentLang === 'ta' ? 'வருமானம்' : 'Salary' }}:</strong><span>{{ vm.wizardDisplayValue(vm.formData.salary) }}</span></p>
+
+    </div>
+
+  </div>
+
+
+
+<!-- ADDRESS -->
+
+<div class="preview-section">
+
+  <h3>{{ vm.currentLang === 'ta' ? 'முகவரி விவரங்கள்' : 'Address Details' }}</h3>
+
+<div class="preview-grid address-clean-grid">
+
+  <p class="full-address-row">
+    <strong>{{ vm.currentLang === 'ta' ? 'முகவரி' : 'Address' }}:</strong>
+    <span>{{ vm.formData.address || '-' }}</span>
+  </p>
+
+  <p>
+    <strong>{{ vm.currentLang === 'ta' ? 'நாடு' : 'Country' }}:</strong>
+    <span>{{ vm.wizardDisplayValue(vm.formData.country) }}</span>
+  </p>
+
+  <p>
+    <strong>{{ vm.currentLang === 'ta' ? 'மாநிலம்' : 'State' }}:</strong>
+    <span>{{ vm.wizardDisplayValue(vm.formData.state) }}</span>
+  </p>
+
+  <p>
+    <strong>{{ vm.currentLang === 'ta' ? 'நகரம்' : 'City' }}:</strong>
+    <span>{{ vm.wizardDisplayValue(vm.formData.city) }}</span>
+  </p>
+
+  <p>
+    <strong>{{ vm.currentLang === 'ta' ? 'இருப்பிடம்' : 'Current Location' }}:</strong>
+    <span>{{ vm.formData.iruppidam || '-' }}</span>
+  </p>
+
+</div>
+
+</div>
+
+
+
+
+  <!-- Personal review only: never use this content in the public profile API. -->
+  <ng-container *ngIf="!vm.isAdminBiodataMode()">
+    <section class="preview-section" *ngIf="vm.isHinduReligion()">
+      <h3>{{ vm.currentLang === 'ta' ? 'ஜாதக விவரங்கள்' : 'Horoscope Details' }}</h3>
+      <div class="preview-grid">
+        <p><strong>{{ vm.currentLang === 'ta' ? 'ராசி' : 'Rasi' }}</strong><span>{{ vm.getTamilValue('rasi', vm.formData.rasi) || '-' }}</span></p>
+        <p><strong>{{ vm.currentLang === 'ta' ? 'நட்சத்திரம்' : 'Nakshatra' }}</strong><span>{{ vm.getTamilValue('nakshatra', vm.formData.nakshatra) || '-' }}</span></p>
+        <p><strong>{{ vm.currentLang === 'ta' ? 'லக்னம்' : 'Lagnam' }}</strong><span>{{ vm.getTamilValue('lagnam', vm.formData.lagnam) || '-' }}</span></p>
+        <p><strong>{{ vm.currentLang === 'ta' ? 'தோஷம்' : 'Dosham' }}</strong><span>{{ vm.getTamilValue('dhosham', vm.formData.dhosham) || '-' }}</span></p>
+      </div>
+    </section>
+    <section class="preview-section">
+      <h3>{{ vm.currentLang === 'ta' ? 'துணைவர் எதிர்பார்ப்பு' : 'Partner Preferences' }}</h3>
+      <p class="review-paragraph">{{ vm.currentLang === 'ta' ? (vm.formDataTa.partnerExpectation || vm.formData.partnerExpectation || '-') : (vm.formData.partnerExpectation || vm.formDataTa.partnerExpectation || '-') }}</p>
+    </section>
+    <section class="preview-section" *ngIf="vm.profilePreviewUrl || vm.additionalImagePreviews.length">
+      <h3>{{ vm.currentLang === 'ta' ? 'பதிவேற்றிய புகைப்படங்கள்' : 'Uploaded Photos' }}</h3>
+      <div class="review-photos">
+        <img *ngIf="vm.profilePreviewUrl" [src]="vm.profilePreviewUrl" [alt]="vm.currentLang === 'ta' ? 'முக்கிய புகைப்படம்' : 'Main profile photo'" />
+        <img *ngFor="let photo of vm.additionalImagePreviews" [src]="photo" [alt]="vm.currentLang === 'ta' ? 'கூடுதல் புகைப்படம்' : 'Additional profile photo'" />
+      </div>
+    </section>
+  </ng-container>
+</div>
+
+  </div>
+
+</div>

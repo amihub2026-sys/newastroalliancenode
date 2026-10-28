@@ -1,0 +1,1 @@
+This is the Astro Alliance member-facing frontend update. Read `FINAL_RELEASE_NOTES.md` before deployment. Original logo and admin UI preserved. Payments remain disabled until Razorpay is configured. Run `npm ci`, `npm run build`, `npm start`.

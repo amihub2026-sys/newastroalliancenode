@@ -1,0 +1,354 @@
+<details class="form-accordion" *ngIf="vm.isAdminBiodataMode() || vm.activeStep === 1" [attr.open]="!vm.isAdminBiodataMode() ? '' : null">
+
+<summary>
+  {{ vm.currentLang === 'ta' ? 'குடும்ப விவரங்கள்' : 'Family Details' }}
+</summary>
+
+<div class="section-card">
+        <div class="section-title-wrap">
+          <h2>{{ vm.tr.sections.family }}</h2>
+          <p>{{ vm.tr.sections.familySub }}</p>
+        </div>
+
+        <div class="form-grid">
+
+      <ng-container *ngIf="vm.isAdminBiodataMode(); else normalParentFields">
+
+  <div class="field">
+    <label>Father Name Tamil</label>
+   <input
+  type="text"
+  [(ngModel)]="vm.formDataTa.fatherName"
+  (keypress)="vm.tamilKeypress($event)"
+  (input)="vm.onTamilFatherNameInput($event)"
+  name="fatherNameTa"
+  placeholder="தந்தை பெயர்"
+/>
+  </div>
+
+  <div class="field" [class.invalid]="vm.isInvalid('fatherName')">
+    <label>Father Name</label>
+    <input
+      type="text"
+      [(ngModel)]="vm.formData.fatherName"
+      name="fatherName"
+      placeholder="Father name auto fill"
+    
+    >
+  </div>
+
+  <div class="field">
+    <label>Mother Name Tamil</label>
+  <input
+  type="text"
+  [(ngModel)]="vm.formDataTa.motherName"
+  (keypress)="vm.tamilKeypress($event)"
+  (input)="vm.onTamilMotherNameInput($event)"
+  name="motherNameTa"
+  placeholder="தாய் பெயர்"
+/>
+  </div>
+
+  <div class="field" [class.invalid]="vm.isInvalid('motherName')">
+    <label>Mother Name</label>
+    <input
+      type="text"
+      [(ngModel)]="vm.formData.motherName"
+      name="motherName"
+      placeholder="Mother name auto fill"
+    >
+  </div>
+</ng-container>
+<ng-template #normalParentFields>
+  <div class="field">
+    <label for="user-father-name">{{ vm.tr.labels.fatherName }}</label>
+    <input id="user-father-name" type="text" name="userFatherName"
+      [ngModel]="userFamilyName('fatherName')"
+      (ngModelChange)="onUserFamilyNameInput('fatherName', $event)"
+      [attr.lang]="vm.currentLang" [placeholder]="vm.tr.placeholders.fatherName" />
+    <details class="bilingual-correction">
+      <summary>{{ vm.currentLang === 'ta' ? 'ஆங்கில எழுத்தைச் சரிசெய்யவும்' : 'Correct Tamil spelling' }}</summary>
+      <input type="text" name="correctFatherName" [ngModel]="alternateFamilyName('fatherName')"
+        (ngModelChange)="correctAlternateName('fatherName', $event)" [attr.lang]="vm.currentLang === 'en' ? 'ta' : 'en'"
+        [placeholder]="vm.currentLang === 'ta' ? 'Correct English name' : 'தமிழ் பெயரை உள்ளிடவும்'" />
+    </details>
+    <small class="wizard-name-note">{{ vm.currentLang === 'ta' ? 'ஒருமுறை மட்டும் உள்ளிடவும்; மொழி மாறினாலும் பெயர் இருக்கும்.' : 'Enter once; the name stays when you switch languages.' }}</small>
+  </div>
+  <div class="field">
+    <label for="user-mother-name">{{ vm.tr.labels.motherName }}</label>
+    <input id="user-mother-name" type="text" name="userMotherName"
+      [ngModel]="userFamilyName('motherName')"
+      (ngModelChange)="onUserFamilyNameInput('motherName', $event)"
+      [attr.lang]="vm.currentLang" [placeholder]="vm.tr.placeholders.motherName" />
+    <details class="bilingual-correction">
+      <summary>{{ vm.currentLang === 'ta' ? 'ஆங்கில எழுத்தைச் சரிசெய்யவும்' : 'Correct Tamil spelling' }}</summary>
+      <input type="text" name="correctMotherName" [ngModel]="alternateFamilyName('motherName')"
+        (ngModelChange)="correctAlternateName('motherName', $event)" [attr.lang]="vm.currentLang === 'en' ? 'ta' : 'en'"
+        [placeholder]="vm.currentLang === 'ta' ? 'Correct English name' : 'தமிழ் பெயரை உள்ளிடவும்'" />
+    </details>
+  </div>
+</ng-template>
+
+
+
+
+       <!-- FATHER OCCUPATION -->
+<div class="field" [class.invalid]="vm.isInvalid('fatherOccupation')">
+  <label>{{ vm.tr.labels.fatherOccupation }} <span class="optional">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? '(விருப்பம்)' : '(Optional)' }}</span></label>
+ <input
+  type="text"
+  [ngModel]="vm.getTypedValue('fatherOccupation')"
+(ngModelChange)="vm.setTypedValue('fatherOccupation', $event)"
+(keypress)="vm.handleTyping($event)"
+  name="fatherOccupation"
+  [placeholder]="vm.tr.placeholders.fatherOccupation">
+
+  <!-- <small class="field-error" *ngIf="vm.isInvalid('fatherOccupation')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small> -->
+</div>
+
+
+          <div class="field">
+            <label>{{ vm.tr.labels.motherOccupation }}</label>
+           <input
+  type="text"
+  [ngModel]="vm.getTypedValue('motherOccupation')"
+ (ngModelChange)="vm.setTypedValue('motherOccupation', $event)"
+(keypress)="vm.handleTyping($event)"
+  name="motherOccupation"
+  [placeholder]="vm.tr.placeholders.motherOccupation">
+          </div>
+
+         <!-- SIBLINGS -->
+<!-- MARRIED BROTHERS -->
+
+<div class="field">
+
+  <label>
+    {{
+      vm.currentLang === 'ta'
+        ? 'திருமணமான சகோதரர்கள்'
+        : 'Married Brothers'
+    }}
+  </label>
+
+  <input
+    type="number"
+    [(ngModel)]="vm.formData.marriedBrothers"
+    name="marriedBrothers"
+    min="0"
+  >
+
+</div>
+
+<!-- UNMARRIED BROTHERS -->
+
+<div class="field">
+
+  <label>
+    {{
+      vm.currentLang === 'ta'
+        ? 'திருமணம் ஆகாத சகோதரர்கள்'
+        : 'Unmarried Brothers'
+    }}
+  </label>
+
+  <input
+    type="number"
+    [(ngModel)]="vm.formData.unmarriedBrothers"
+    name="unmarriedBrothers"
+    min="0"
+  >
+
+</div>
+
+<!-- MARRIED SISTERS -->
+
+<div class="field">
+
+  <label>
+    {{
+      vm.currentLang === 'ta'
+        ? 'திருமணமான சகோதரிகள்'
+        : 'Married Sisters'
+    }}
+  </label>
+
+  <input
+    type="number"
+    [(ngModel)]="vm.formData.marriedSisters"
+    name="marriedSisters"
+    min="0"
+  >
+
+</div>
+
+<!-- UNMARRIED SISTERS -->
+
+<div class="field">
+
+  <label>
+    {{
+      vm.currentLang === 'ta'
+        ? 'திருமணம் ஆகாத சகோதரிகள்'
+        : 'Unmarried Sisters'
+    }}
+  </label>
+
+  <input
+    type="number"
+    [(ngModel)]="vm.formData.unmarriedSisters"
+    name="unmarriedSisters"
+    min="0"
+  >
+
+</div>
+<!-- KUDUMBA NILAI -->
+
+<div class="field">
+
+  <label>
+    {{ vm.currentLang === 'ta'
+      ? 'குடும்ப நிலை'
+      : 'Kudumba Nilai'
+    }}
+  </label>
+
+<select [(ngModel)]="vm.formData.kudumbaNilaiId" name="kudumbaNilaiId">
+  <option value="">
+    {{ vm.currentLang === 'ta' ? 'குடும்ப நிலையை தேர்வு செய்யவும்' : 'Select Kudumba Nilai' }}
+  </option>
+
+<option *ngFor="let item of vm.kudumbaNilaiList" [value]="item._id">
+  {{
+    vm.currentLang === 'ta'
+      ? (item.nameTa || item.nameEn)
+      : item.nameEn
+  }}
+</option>
+</select>
+
+</div>
+
+  <!-- SOTHUKAL -->
+
+<div class="field">
+
+  <label>
+    {{ vm.currentLang === 'ta'
+      ? 'சொத்துகள்'
+      : 'Sothukal'
+    }}
+  </label>
+<input
+  type="text"
+  [ngModel]="vm.getTypedValue('sothukal')"
+  (ngModelChange)="vm.setTypedValue('sothukal', $event)"
+ (keypress)="vm.handleTyping($event)"
+  name="sothukal"
+>
+
+</div>
+<!-- KULADEIVAM -->
+
+<div class="field">
+
+  <label>
+    {{ vm.currentLang === 'ta'
+      ? 'குலதெய்வம்'
+      : 'Kuladeivam'
+    }}
+  </label>
+
+<input
+  type="text"
+  [ngModel]="vm.getTypedValue('kuladeivam')"
+  (ngModelChange)="vm.setTypedValue('kuladeivam', $event)"
+ (keypress)="vm.handleTyping($event)"
+  name="kuladeivam"
+>
+
+</div>
+
+
+<!-- POORVEGAM -->
+
+<div class="field poorvegam-field">
+  <label>{{ vm.currentLang === 'ta' ? 'பூர்வீகம்' : 'Poorvegam' }}</label>
+
+  <div class="poorvegam-select-wrap">
+<input
+  type="text"
+  [(ngModel)]="vm.poorvegamSearch"
+  name="poorvegamSearch"
+  [placeholder]="vm.currentLang === 'ta'
+    ? 'பூர்வீகத்தை தேடவும் / உள்ளிடவும்'
+    : 'Search / Enter Poorvegam'"
+  autocomplete="off"
+  (focus)="vm.onPoorvegamSearchChange()"
+  (blur)="vm.hidePoorvegamDropdown()"
+  (keypress)="vm.handleTyping($event)"
+  (input)="vm.onPoorvegamSearchChange()"
+>
+
+    <div class="poorvegam-dropdown" *ngIf="vm.showPoorvegamDropdown">
+      <div
+        class="poorvegam-option"
+        *ngFor="let city of vm.filteredPoorvegamList"
+        (mousedown)="vm.selectPoorvegam(city)"
+      >
+        {{ vm.currentLang === 'ta' ? (city.nameTa || city.nameEn) : city.nameEn }}
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- IRUPPIDAM -->
+
+<!-- IRUPPIDAM -->
+
+<div class="field iruppidam-field">
+  <label>
+    {{ vm.currentLang === 'ta' ? 'இருப்பிடம்' : 'Iruppidam' }}
+  </label>
+
+  <div class="iruppidam-select-wrap">
+
+    <input
+      type="text"
+      [(ngModel)]="vm.iruppidamSearch"
+      name="iruppidamSearch"
+      [placeholder]="vm.currentLang === 'ta'
+        ? 'இருப்பிடத்தை தேடவும் / உள்ளிடவும்'
+        : 'Search / Enter Iruppidam'"
+      autocomplete="off"
+      (focus)="vm.onIruppidamSearchChange()"
+      (blur)="vm.hideIruppidamDropdown()"
+      (keypress)="vm.handleTyping($event)"
+      (input)="vm.onIruppidamSearchChange()"
+    />
+
+    <div
+      class="iruppidam-dropdown"
+      *ngIf="vm.showIruppidamDropdown"
+    >
+      <div
+        class="iruppidam-option"
+        *ngFor="let city of vm.filteredIruppidamList"
+        (mousedown)="vm.selectIruppidam(city)"
+      >
+        {{
+          vm.currentLang === 'ta'
+            ? (city.nameTa || city.nameEn)
+            : city.nameEn
+        }}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+        </div>
+      </div>
+      </details>

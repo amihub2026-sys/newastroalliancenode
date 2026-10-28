@@ -1,0 +1,521 @@
+<section class="horoscope-match-page">
+
+  <div class="match-container">
+
+    <!-- PAGE HEADING -->
+    <div class="page-heading">
+      <span class="section-label">திருமண பொருத்தம்</span>
+
+      <h1>Horoscope Matching</h1>
+
+      <p>
+        Enter the bride and groom Nakshatra, Paadam and Rasi
+        to check the 10 traditional Poruthams.
+      </p>
+    </div>
+
+
+    <!-- MATCHING FORM -->
+    <div class="matching-grid">
+
+      <!-- =========================
+           BRIDE
+      ========================== -->
+      <div class="person-card bride-card">
+
+        <div class="card-heading">
+          <span class="person-tag">Bride</span>
+          <h2>மணமகள் விவரங்கள்</h2>
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Bride Nakshatra / நட்சத்திரம்</label>
+
+          <select
+            [(ngModel)]="form.brideNakshatra"
+            name="brideNakshatra"
+          >
+            <option value="">
+              Select Nakshatra
+            </option>
+
+            <option
+              *ngFor="let star of nakshatras"
+              [value]="star"
+            >
+              {{ star }}
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Bride Paadam / பாதம்</label>
+
+          <select
+            [(ngModel)]="form.bridePaadam"
+            name="bridePaadam"
+          >
+            <option [ngValue]="null">
+              Select Paadam
+            </option>
+
+            <option
+              *ngFor="let paadam of paadams"
+              [ngValue]="paadam"
+            >
+              Paadam {{ paadam }}
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Bride Rasi / ராசி</label>
+
+          <select
+            [(ngModel)]="form.brideRasi"
+            name="brideRasi"
+          >
+            <option value="">
+              Select Rasi
+            </option>
+
+            <option
+              *ngFor="let rasi of rasis"
+              [value]="rasi"
+            >
+              {{ rasi }}
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- CENTER -->
+      <div class="match-symbol">
+        <div class="heart-circle">
+          ♥
+        </div>
+
+        <span>10 Porutham</span>
+      </div>
+
+
+      <!-- =========================
+           GROOM
+      ========================== -->
+      <div class="person-card groom-card">
+
+        <div class="card-heading">
+          <span class="person-tag">Groom</span>
+          <h2>மணமகன் விவரங்கள்</h2>
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Groom Nakshatra / நட்சத்திரம்</label>
+
+          <select
+            [(ngModel)]="form.groomNakshatra"
+            name="groomNakshatra"
+          >
+            <option value="">
+              Select Nakshatra
+            </option>
+
+            <option
+              *ngFor="let star of nakshatras"
+              [value]="star"
+            >
+              {{ star }}
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Groom Paadam / பாதம்</label>
+
+          <select
+            [(ngModel)]="form.groomPaadam"
+            name="groomPaadam"
+          >
+            <option [ngValue]="null">
+              Select Paadam
+            </option>
+
+            <option
+              *ngFor="let paadam of paadams"
+              [ngValue]="paadam"
+            >
+              Paadam {{ paadam }}
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Groom Rasi / ராசி</label>
+
+          <select
+            [(ngModel)]="form.groomRasi"
+            name="groomRasi"
+          >
+            <option value="">
+              Select Rasi
+            </option>
+
+            <option
+              *ngFor="let rasi of rasis"
+              [value]="rasi"
+            >
+              {{ rasi }}
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ERROR -->
+    <div
+      class="error-box"
+      *ngIf="errorMessage"
+    >
+      {{ errorMessage }}
+    </div>
+
+
+    <!-- BUTTONS -->
+    <div class="action-buttons">
+
+      <button
+        type="button"
+        class="match-button"
+        (click)="checkMatch()"
+        [disabled]="isLoading"
+      >
+
+        <span *ngIf="!isLoading">
+          Check 10 Porutham
+        </span>
+
+        <span *ngIf="isLoading">
+          Calculating...
+        </span>
+
+      </button>
+
+
+      <button
+        type="button"
+        class="reset-button"
+        (click)="resetForm()"
+        [disabled]="isLoading"
+      >
+        Reset
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         RESULT
+    ========================== -->
+
+    <section
+      class="result-section"
+      *ngIf="result"
+    >
+
+      <div class="result-heading">
+        <span>பொருத்த முடிவு</span>
+        <h2>Horoscope Matching Result</h2>
+      </div>
+
+
+      <!-- SUCCESSFUL CALCULATION -->
+
+      <ng-container *ngIf="result.calculable === true">
+
+
+        <!-- SUMMARY -->
+        <div class="result-summary">
+
+          <div class="score-circle">
+
+            <strong>
+              {{ result.scorePercentage ?? 0 }}%
+            </strong>
+
+            <span>Match</span>
+
+          </div>
+
+
+          <div class="summary-content">
+
+            <h3>
+              {{ result.overallLevel || 'Result' }}
+            </h3>
+
+            <p>
+              {{ result.resultTa }}
+            </p>
+
+            <p class="english-result">
+              {{ result.resultEn }}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="result-stats">
+
+          <div class="stat-card">
+            <strong>
+              {{ result.totalPoruthams }}
+            </strong>
+            <span>Total Poruthams</span>
+          </div>
+
+          <div class="stat-card success">
+            <strong>
+              {{ result.matchedCount }}
+            </strong>
+            <span>Matched</span>
+          </div>
+
+          <div class="stat-card failed">
+            <strong>
+              {{ result.unmatchedCount }}
+            </strong>
+            <span>Not Matched</span>
+          </div>
+
+          <div class="stat-card">
+            <strong>
+              {{ result.score }}
+            </strong>
+            <span>Score</span>
+          </div>
+
+        </div>
+
+
+        <!-- MANUAL REVIEW -->
+
+        <div
+          class="manual-review"
+          *ngIf="result.manualReviewRequired"
+        >
+          <strong>
+            Full Horoscope Review Recommended
+          </strong>
+
+          <p>
+            இந்த பொருத்தத்தில் முக்கியமான ஜாதக நிலை
+            கண்டறியப்பட்டுள்ளது. முழு ஜாதக ஆய்வு
+            பரிந்துரைக்கப்படுகிறது.
+          </p>
+        </div>
+
+
+        <!-- 10 PORUTHAMS -->
+
+        <div class="porutham-heading">
+          <h3>10 Porutham Details</h3>
+          <span>பத்து பொருத்த விவரங்கள்</span>
+        </div>
+
+
+        <div class="porutham-list">
+
+          <div
+            class="porutham-card"
+            *ngFor="let item of result.poruthams"
+            [class.matched]="item.matched"
+            [class.not-matched]="!item.matched"
+            [class.critical]="isCritical(item)"
+          >
+
+            <div class="porutham-status">
+
+              <span
+                class="status-icon"
+                *ngIf="item.matched"
+              >
+                ✓
+              </span>
+
+              <span
+                class="status-icon"
+                *ngIf="!item.matched"
+              >
+                ✕
+              </span>
+
+            </div>
+
+
+            <div class="porutham-content">
+
+              <div class="porutham-title">
+
+                <div>
+                  <h4>
+                    {{ item.nameEn }}
+                  </h4>
+
+                  <span>
+                    {{ item.nameTa }}
+                  </span>
+                </div>
+
+
+                <span
+                  class="status-badge"
+                  [class.success-badge]="item.matched"
+                  [class.failed-badge]="!item.matched"
+                >
+                  {{ item.matched ? 'Matched' : 'Not Matched' }}
+                </span>
+
+              </div>
+
+
+              <p class="result-tamil">
+                {{ item.resultTa }}
+              </p>
+
+
+              <p class="explanation">
+                {{
+                  item.explanationTa ||
+                  item.explanationEn
+                }}
+              </p>
+
+
+              <div
+                class="porutham-meta"
+                *ngIf="item.level || item.code"
+              >
+
+                <span *ngIf="item.level">
+                  Level:
+                  <strong>
+                    {{ item.level }}
+                  </strong>
+                </span>
+
+                <span *ngIf="item.code">
+                  Code:
+                  <strong>
+                    {{ item.code }}
+                  </strong>
+                </span>
+
+              </div>
+
+
+              <div
+                class="critical-warning"
+                *ngIf="isCritical(item)"
+              >
+                ⚠ மேலதிக முழு ஜாதக ஆய்வு பரிந்துரைக்கப்படுகிறது.
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </ng-container>
+
+
+      <!-- CALCULATION REJECTED -->
+
+      <ng-container *ngIf="result.calculable === false">
+
+        <div class="invalid-result">
+
+          <div class="invalid-icon">
+            !
+          </div>
+
+          <h3>
+            Horoscope details cannot be calculated
+          </h3>
+
+          <p>
+            {{
+              result.resultTa ||
+              'கொடுக்கப்பட்ட ஜாதக தகவல்களை சரிபார்க்கவும்.'
+            }}
+          </p>
+
+          <p>
+            {{ result.resultEn }}
+          </p>
+
+
+          <div
+            class="validation-errors"
+            *ngIf="result.validation?.errors?.length"
+          >
+
+            <div
+              class="validation-error"
+              *ngFor="let error of result.validation.errors"
+            >
+
+              <strong>
+                {{ error.messageTa }}
+              </strong>
+
+              <span>
+                {{ error.messageEn }}
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </ng-container>
+
+    </section>
+
+  </div>
+
+</section>

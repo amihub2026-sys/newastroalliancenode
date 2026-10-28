@@ -1,0 +1,146 @@
+<section class="content-section">
+
+  <div class="section-header">
+    <div>
+      <h2>Nakshatra List</h2>
+      <p>Manage nakshatra master data</p>
+    </div>
+
+    <button class="refresh-btn" type="button" (click)="openAdd()">
+      + Add Nakshatra
+    </button>
+  </div>
+
+  <div class="search-card">
+    <input
+      type="text"
+      placeholder="Search nakshatra..."
+      [(ngModel)]="searchTerm">
+  </div>
+
+  <div class="panel-card">
+
+    <p *ngIf="isLoading">Loading nakshatras...</p>
+
+    <div class="table-wrap" *ngIf="!isLoading">
+
+      <table>
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Nakshatra Name</th>
+            <th>Tamil Name</th>
+            <th>Sort Order</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of paginatedNakshatras; let i = index">
+
+            <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+
+           
+
+            <td>{{ item.nameEn }}</td>
+
+            <td>{{ item.nameTa }}</td>
+
+            <td>{{ item.sortOrder }}</td>
+
+            <td>
+              <span class="status" [class.active]="item.isActive">
+                {{ item.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+
+            <td class="action-cell">
+              <button class="edit-btn" type="button" (click)="editNakshatra(item)">
+                Edit
+              </button>
+
+              <button class="block-btn" type="button" (click)="deleteNakshatra(item)">
+                Delete
+              </button>
+            </td>
+
+          </tr>
+
+          <tr *ngIf="paginatedNakshatras.length === 0">
+            <td colspan="6" class="empty-row">
+              No nakshatras found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination" *ngIf="filteredNakshatras.length > itemsPerPage">
+
+        <button type="button" (click)="prevPage()" [disabled]="currentPage === 1">
+          Previous
+        </button>
+
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+        <button type="button" (click)="nextPage()" [disabled]="currentPage === totalPages">
+          Next
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<div class="modal-backdrop" *ngIf="showForm">
+
+  <div class="modal-card">
+
+    <h3>{{ isEdit ? 'Edit Nakshatra' : 'Add Nakshatra' }}</h3>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Nakshatra Name</label>
+        <input type="text" [(ngModel)]="formData.nameEn">
+      </div>
+
+      <div class="form-group">
+        <label>Tamil Name</label>
+        <input
+          type="text"
+          [(ngModel)]="formData.nameTa"
+          (keypress)="tamilTyping($event)">
+      </div>
+
+      <div class="form-group">
+        <label>Sort Order</label>
+        <input type="number" [(ngModel)]="formData.sortOrder">
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button class="cancel-btn" type="button" (click)="closeForm()">
+        Cancel
+      </button>
+
+      <button
+        class="save-btn"
+        type="button"
+        (click)="saveNakshatra()"
+        [disabled]="isSaving">
+
+        {{ isSaving ? 'Saving...' : 'Save' }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

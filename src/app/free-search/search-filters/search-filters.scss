@@ -1,0 +1,31 @@
+:host{display:block;color:#42313b;font-family:inherit}
+.filters-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.eyebrow{margin:0 0 5px;color:#ab3264;font-size:10px;letter-spacing:.15em;font-weight:800}
+h2{font-size:1.2rem;color:#672745;margin:0 0 12px;line-height:1.35}
+.filter-help{font-size:.86rem;color:#755c69;line-height:1.55;padding-bottom:14px;border-bottom:1px solid #f0dee6}
+details{border-bottom:1px solid #f0e2e8;padding:4px 0}
+summary{cursor:pointer;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:800;color:#6f2c4c;padding:10px 0;list-style-position:inside}
+summary::marker{color:#b25479}
+.filter-fields{display:grid;gap:12px;padding:6px 0 18px}
+.filter-fields label{display:grid;gap:6px;font-size:.83rem;font-weight:700;color:#5c3749}
+.filter-fields select{width:100%;max-width:100%;min-width:0;border:1px solid #dccbd3;background:white;border-radius:10px;color:#422b37;padding:10px 11px;min-height:43px;font:inherit;font-size:.91rem}
+.filter-fields select:focus-visible,.nearby-button:focus-visible,button:focus-visible{outline:3px solid #d66e96;outline-offset:2px}
+.filter-fields select:disabled{background:#f5eff1;color:#94858c;cursor:not-allowed}
+.filter-fields small,.helper{font-size:.79rem;line-height:1.5;color:#806a75;margin:0}
+.two-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-width:0}
+.filter-fields label.inline-check{display:flex;align-items:center;gap:10px;min-height:40px;cursor:pointer}
+.inline-check input{width:17px;height:17px;accent-color:#9e3966}
+.nearby-box{display:grid;gap:10px}
+.nearby-button{border:1px solid #e7c5d3;border-radius:10px;background:#fff4f8;color:#84395c;min-height:42px;padding:8px 12px;font-weight:800;cursor:pointer}
+.hobbies-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.filter-fields label.hobby-option{display:flex;gap:7px;align-items:center;font-weight:600;background:#fff9fb;border:1px solid #eedee5;border-radius:10px;padding:9px 7px;min-width:0;line-height:1.3;font-size:.77rem}
+.hobby-option input{width:16px;height:16px;flex:0 0 16px;accent-color:#903256}
+.hobby-option span{overflow-wrap:anywhere}
+.unavailable{opacity:.7}.coming-soon{background:#fff5e7;border:1px solid #f1d9b8;border-radius:10px;padding:12px;line-height:1.55;color:#75573c;font-size:.8rem}
+.new-mark{font-size:.62rem;letter-spacing:.04em;background:#fce2eb;color:#983b61;padding:3px 6px;border-radius:5px}
+.sidebar-footer{display:grid;gap:8px;margin-top:17px}
+.clear-btn,.mobile-apply{border:1px solid #b27b92;border-radius:10px;padding:12px;min-height:44px;font-weight:800;cursor:pointer;background:white;color:#8f3159}
+.mobile-apply{display:none;background:#8f3159;color:white}
+.close-mobile{display:none;border:0;background:#f8e5ec;color:#762e50;border-radius:8px;min-width:42px;min-height:42px}
+@media(max-width:900px){.mobile-apply,.close-mobile{display:block}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}

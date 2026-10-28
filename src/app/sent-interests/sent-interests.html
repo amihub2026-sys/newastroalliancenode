@@ -1,0 +1,59 @@
+<section class="received-page">
+  <div class="received-container">
+    <h1>Sent Interests</h1>
+
+    <div class="empty" *ngIf="isLoading">
+      Loading...
+    </div>
+
+    <div class="empty" *ngIf="!isLoading && interests.length === 0">
+      No interests sent yet.
+    </div>
+
+    <div class="interest-card" *ngFor="let item of interests">
+      <img
+        class="profile-img"
+        [src]="item.receiver?.profile_image_url || 'assets/default-avatar.png'"
+        (error)="onImageError($event)"
+        alt="Profile"
+      />
+
+      <div class="profile-info">
+        <h3>{{ item.receiver?.full_name || item.to_profile_id }}</h3>
+
+        <p>
+          {{ item.receiver?.age || '-' }} yrs •
+          {{ item.receiver?.occupation_text || '-' }}
+        </p>
+
+        <p>
+          {{ item.receiver?.city_text || '-' }},
+          {{ item.receiver?.state_text || '-' }}
+        </p>
+
+    <p>
+  Status:
+  <strong
+    [class.accepted]="item.status_code === 'accepted'"
+    [class.rejected]="item.status_code === 'rejected'"
+    [class.pending]="item.status_code === 'pending'"
+  >
+    {{
+      item.status_code === 'accepted'
+        ? 'Matched ❤️'
+        : item.status_code === 'rejected'
+        ? 'Rejected ❌'
+        : 'Waiting ⏳'
+    }}
+  </strong>
+</p>
+      </div>
+
+      <div class="actions">
+        <button class="view" (click)="viewProfile(item)">
+          View Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

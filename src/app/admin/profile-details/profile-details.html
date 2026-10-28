@@ -1,0 +1,733 @@
+<div class="details-page">
+
+<a class="back-btn" (click)="goBack()">
+  {{ txt('← Back to Profiles', '← சுயவிவரங்களுக்கு திரும்பு') }}
+</a>
+
+<p *ngIf="isLoading">
+
+  {{ txt('Loading profile...', 'சுயவிவரம் ஏற்றப்படுகிறது...') }}
+</p>
+
+<p *ngIf="!isLoading && !profile">
+  {{ txt('Profile not found', 'சுயவிவரம் கிடைக்கவில்லை') }}
+</p>
+  <div class="profile-card" *ngIf="!isLoading && profile">
+
+  <div class="top-section">
+
+  <!-- LEFT -->
+
+  <div class="media-section">
+
+    <!-- MAIN IMAGE -->
+
+    <img
+      class="main-profile-image"
+      [src]="profile.profile_image_url || 'assets/default-avatar.png'"
+      alt="Profile">
+
+    <!-- VIDEO -->
+
+    <div
+      *ngIf="profile.video_url"
+      class="profile-video">
+
+      <video
+        [src]="profile.video_url"
+        controls>
+      </video>
+
+    </div>
+
+    <!-- ADDITIONAL IMAGES -->
+
+    <div
+      class="additional-images"
+      *ngIf="profile.additional_image_urls?.length">
+
+      <img
+        *ngFor="let img of profile.additional_image_urls"
+        [src]="img"
+        alt="Additional Image">
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT -->
+
+  <div class="top-info">
+
+    <h2>
+      {{ v(profile.full_name, profile.full_name_ta) }}
+    </h2>
+
+  <p class="profilecode">
+  {{ profile.profile_code }}
+</p>
+
+
+
+    <span
+      class="status"
+      [class.approved]="profile.profile_status === 'Approved'"
+      [class.pending]="profile.profile_status === 'Pending'"
+      [class.rejected]="profile.profile_status === 'Rejected'"
+      [class.blocked]="profile.profile_status === 'Blocked'"
+      [class.review]="profile.profile_status === 'Under Review'">
+
+      {{ statusText(profile.profile_status || 'Pending') }}
+
+    </span>
+
+    <div class="action-group">
+
+
+
+<button
+  class="pdf-btn"
+  type="button"
+  (click)="showPrintOptions = !showPrintOptions">
+  Print
+</button>
+
+<div
+  class="no-caste-row"
+  *ngIf="profile.no_caste_preference">
+
+  <span class="no-caste-badge">
+    {{ txt('No Caste Restriction', 'ஜாதி தடை இல்லை') }}
+  </span>
+
+</div>
+<div class="print-options" *ngIf="showPrintOptions">
+
+  <button type="button" (click)="goToPrint(false, true)">
+    with Address + Without Photo 
+  </button>
+
+  <button type="button" (click)="goToPrint(true, true)">
+    with Address + With Photo 
+  </button>
+
+  <button type="button" (click)="goToPrint(false, false)">
+    Without Address + Without Photo 
+  </button>
+
+  <button type="button" (click)="goToPrint(true, false)">
+   Without Address + With Photo 
+  </button>
+
+</div>
+
+    </div>
+
+  </div>
+
+</div>
+<div class="profile-tabs">
+  <button
+    type="button"
+    [class.active]="activeTab === 'profile'"
+    (click)="activeTab = 'profile'">
+    MY PROFILE
+  </button>
+
+  <button
+    type="button"
+    [class.active]="activeTab === 'other'"
+    (click)="activeTab = 'other'">
+    OTHER DETAILS
+  </button>
+
+  <button
+    type="button"
+    [class.active]="activeTab === 'package'"
+    (click)="activeTab = 'package'">
+    PACKAGE DETAILS
+  </button>
+  <button
+  type="button"
+  [class.active]="activeTab === 'views'"
+  (click)="activeTab = 'views'">
+  PROFILE VIEW DETAILS
+</button>
+</div>
+<div class="two-side-layout">
+
+ <div class="left-profile-side" *ngIf="activeTab === 'profile'">
+    <div class="tab-title">My Profile</div>
+
+      <div class="info-card">
+       <h3>{{ txt('Basic Details', 'அடிப்படை விவரங்கள்') }}</h3>
+<p>
+  <strong>{{ txt('Gender', 'பாலினம்') }}:</strong>
+ {{ getMasterTamil(masterOptions.genders, profile.gender_text) }}
+</p>
+       <p>
+  <strong>{{ txt('City', 'நகரம்') }}:</strong>
+{{ getMasterTamil(masterOptions.cities, profile.city_text) }}
+</p>
+
+<p>
+  <strong>{{ txt('Religion', 'மதம்') }}:</strong>
+{{ getMasterTamil(masterOptions.religions, profile.religion_text) }}
+</p>
+
+<p>
+  <strong>{{ txt('Caste', 'சாதி') }}:</strong>
+{{ getMasterTamil(masterOptions.castes, profile.caste_text) }}
+</p>
+
+<p>
+  <strong>{{ txt('Education', 'கல்வி') }}:</strong>
+  {{ v(profile.education_text, profile.education_text_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Occupation', 'தொழில்') }}:</strong>
+ {{ v(profile.occupation_text, profile.occupation_text_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Color', 'நிறம்') }}:</strong>
+{{ getMasterTamil(masterOptions.colors, profile.color_text) }}
+</p>
+
+<p>
+  <strong>{{ txt('Sub Caste', 'உட்பிரிவு') }}:</strong>
+  {{ v(profile.sub_caste_text, profile.sub_caste_text_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Marital Status', 'திருமண நிலை') }}:</strong>
+{{ getMasterTamil(masterOptions.maritalStatuses, profile.marital_status_text) }}
+</p>
+<p>
+  <strong>{{ txt('Age', 'வயது') }}:</strong>
+  {{ profile.age || '-' }}
+</p>
+
+<p>
+  <strong>{{ txt('Date of Birth', 'பிறந்த தேதி') }}:</strong>
+  {{ profile.dob || '-' }}
+</p>
+
+<p>
+  <strong>{{ txt('Height', 'உயரம்') }}:</strong>
+  {{ v(profile.height_text, profile.height_text_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Weight', 'எடை') }}:</strong>
+  {{ v(profile.weight_text, profile.weight_text_ta) }}
+</p>
+
+
+<p *ngIf="profile.second_marriage_reason">
+  <strong>{{ txt('Marriage Type', 'இரண்டாம் திருமண காரணம்') }}:</strong>
+  {{ profile.second_marriage_reason }}
+</p>
+<ng-container *ngIf="profile.marital_status_text === 'Second Marriage'">
+
+  <p>
+    <strong>{{ txt('Children', 'குழந்தைகள்') }}:</strong>
+    {{ yesNo(profile.children_status) }}
+  </p>
+
+  <p *ngIf="profile.children_details">
+    <strong>{{ txt('Children Details', 'குழந்தைகள் விவரம்') }}:</strong>
+    {{ v(profile.children_details, profile.children_details_ta) }}
+  </p>
+
+</ng-container>
+<p>
+  <strong>{{ txt('Kalappu Thirumanam', 'கலப்பு திருமணம்') }}:</strong>
+ {{ yesNo(profile.kalappu_thirumanam) }}
+</p>
+
+<p *ngIf="profile.kalappu_thirumanam === 'Yes'">
+  <strong>{{ txt('Kalappu Details', 'கலப்பு திருமணம் விவரம்') }}:</strong>
+  {{ v(profile.kalappu_thirumanam_details, profile.kalappu_thirumanam_details_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Handicap', 'மாற்றுத்திறனாளி') }}:</strong>
+{{ yesNo(profile.handicap_status) }}
+</p>
+
+<p *ngIf="profile.handicap_status === 'Yes'">
+  <strong>{{ txt('Handicap Details', 'விவரம்') }}:</strong>
+  {{ v(profile.handicap_details, profile.handicap_details_ta) }}
+</p>
+
+      </div>
+
+
+
+      <div class="info-card">
+       <h3>{{ txt('Family', 'குடும்பம்') }}</h3>
+
+<p>
+  <strong>{{ txt('Father', 'தந்தை') }}:</strong>
+ {{ v(profile.father_name, profile.father_name_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Mother', 'தாய்') }}:</strong>
+  {{ v(profile.mother_name, profile.mother_name_ta) }}
+</p>
+
+<!-- <p>
+  <strong>{{ txt('Family Status', 'குடும்ப நிலை') }}:</strong>
+ {{ masterText(profile.family_status, profile.family_status_ta) }}
+</p> -->
+<p>
+  <strong>{{ txt('Father Occupation', 'தந்தை தொழில்') }}:</strong>
+  {{ v(profile.father_occupation, profile.father_occupation_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Mother Occupation', 'தாய் தொழில்') }}:</strong>
+  {{ v(profile.mother_occupation, profile.mother_occupation_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Siblings', 'உடன்பிறப்புகள்') }}:</strong>
+  {{ v(profile.siblings_text, profile.siblings_text_ta) }}
+</p>
+<p>
+  <strong>{{ txt('Married Brothers', 'திருமணமான சகோதரர்கள்') }}:</strong>
+  {{ profile.married_brothers || '0' }}
+</p>
+
+<p>
+  <strong>{{ txt('Unmarried Brothers', 'திருமணம் ஆகாத சகோதரர்கள்') }}:</strong>
+  {{ profile.unmarried_brothers || '0' }}
+</p>
+
+<p>
+  <strong>{{ txt('Married Sisters', 'திருமணமான சகோதரிகள்') }}:</strong>
+  {{ profile.married_sisters || '0' }}
+</p>
+
+<p>
+  <strong>{{ txt('Unmarried Sisters', 'திருமணம் ஆகாத சகோதரிகள்') }}:</strong>
+  {{ profile.unmarried_sisters || '0' }}
+</p>
+
+<p>
+  <strong>{{ txt('Kudumba Nilai', 'குடும்ப நிலை') }}:</strong>
+  {{ getMasterTamil(masterOptions.kudumbaNilai, profile.kudumba_nilai) }}
+</p>
+
+<p>
+  <strong>{{ txt('Sothukal', 'சொத்துகள்') }}:</strong>
+  {{ v(profile.sothukal, profile.sothukal_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Kuladeivam', 'குலதெய்வம்') }}:</strong>
+  {{ v(profile.kuladeivam, profile.kuladeivam_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Poorvegam', 'பூர்வீகம்') }}:</strong>
+  {{ v(profile.poorvegam, profile.poorvegam_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Iruppidam', 'இருப்பிடம்') }}:</strong>
+  {{ v(profile.iruppidam, profile.iruppidam_ta) }}
+</p>
+
+      </div>
+
+     <div class="info-card">
+<h3>{{ txt('Contact Details', 'தொடர்பு விவரங்கள்') }}</h3>
+
+<p>
+  <strong>{{ txt('Mobile', 'கைபேசி') }}:</strong>
+  {{ profile.mobile }}
+</p>
+
+<p>
+  <strong>{{ txt('Additional Mobile', 'கூடுதல் கைபேசி') }}:</strong>
+  {{ profile.additional_mobile }}
+</p>
+
+<p>
+  <strong>{{ txt('Email', 'மின்னஞ்சல்') }}:</strong>
+  {{ profile.email }}
+</p>
+</div>
+
+<div class="info-card">
+<h3>{{ txt('Education & Career', 'கல்வி & தொழில்') }}</h3>
+
+<p>
+  <strong>{{ txt('Education', 'கல்வி') }}:</strong>
+ {{ v(profile.education_text, profile.education_text_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Occupation', 'தொழில்') }}:</strong>
+  {{ v(profile.occupation_text, profile.occupation_text_ta) }}
+</p>
+<p>
+  <strong>{{ txt('Work Place', 'பணியிடம்') }}:</strong>
+  {{ v(profile.work_place, profile.work_place_ta) }}
+</p>
+
+
+<p>
+  <strong>{{ txt('Salary', 'சம்பளம்') }}:</strong>
+{{ formatSalary() }}
+</p>
+
+<p>
+  <strong>{{ txt('Company', 'நிறுவனம்') }}:</strong>
+ {{ v(profile.company_name, profile.company_name_ta) }}
+</p>
+</div>
+
+  </div>
+
+<div class="right-profile-side" *ngIf="activeTab === 'other'">
+    <div class="tab-title">Other Details</div>
+
+<div class="info-card">
+<h3>{{ txt('Address Details', 'முகவரி விவரங்கள்') }}</h3>
+
+<p>
+  <strong>{{ txt('City', 'நகரம்') }}:</strong>
+{{ getMasterTamil(masterOptions.cities, profile.city_text) }}
+</p>
+
+<p>
+  <strong>{{ txt('State', 'மாநிலம்') }}:</strong>
+ {{ getMasterTamil(masterOptions.states, profile.state_text) }}
+
+</p>
+
+<p>
+  <strong>{{ txt('Country', 'நாடு') }}:</strong>
+{{ getMasterTamil(masterOptions.countries, profile.country_text) }}
+
+</p>
+
+<p>
+  <strong>{{ txt('Address', 'முகவரி') }}:</strong>
+ {{ v(profile.address_line, profile.address_line_ta) }}
+</p>
+</div>
+     <div class="info-card">
+ <h3>{{ txt('Horoscope', 'ஜாதகம்') }}</h3>
+
+<p>
+  <strong>{{ txt('Rasi', 'ராசி') }}:</strong>
+{{ getMasterTamil(masterOptions.rasis, profile.rasi_text) }}
+
+</p>
+
+<p>
+  <strong>{{ txt('Nakshatra', 'நட்சத்திரம்') }}:</strong>
+{{ getMasterTamil(masterOptions.nakshatras, profile.nakshatra_text) }}
+
+</p>
+
+<p>
+  <strong>{{ txt('Lagnam', 'லக்னம்') }}:</strong>
+ {{ getMasterTamil(masterOptions.lagnams, profile.lagnam_text) }}
+
+</p>
+
+<p>
+ <strong>{{ txt('Dhosham', 'தோஷம்') }}:</strong>
+{{ dhoshamText(profile.dhosham_text) }}
+</p>
+
+<p>
+  <strong>{{ txt('Birth Time', 'பிறந்த நேரம்') }}:</strong>
+  {{ profile.birth_time || '-' }}
+</p>
+
+<p>
+  <strong>{{ txt('Birth Place', 'பிறந்த இடம்') }}:</strong>
+  {{ v(profile.birth_place, profile.birth_place_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Thisai', 'திசை') }}:</strong>
+  {{ v(profile.thisai, profile.thisai_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Thisai Iruppu', 'திசை இருப்பு') }}:</strong>
+ {{ getMasterTamil(masterOptions.thisaiIruppus, profile.thisai_iruppu) }}
+</p>
+
+<p>
+  <strong>{{ txt('Paatham', 'பாதம்') }}:</strong>
+  {{ v(profile.paatham, profile.paatham_ta) }}
+</p>
+
+<p>
+  <strong>{{ txt('Dhisai Balance', 'திசை இருப்பு காலம்') }}:</strong>
+  {{ profile.thisai_year || '0' }} வ
+  {{ profile.thisai_month || '0' }} மா
+  {{ profile.thisai_day || '0' }} நா
+</p>
+
+<div class="horoscope-chart-wrapper">
+
+  <!-- RASI -->
+  <div class="astro-chart">
+
+    <div class="chart-cell pos-0">{{ getRasiChart()[0] || '' }}</div>
+    <div class="chart-cell pos-1">{{ getRasiChart()[1] || '' }}</div>
+    <div class="chart-cell pos-2">{{ getRasiChart()[2] || '' }}</div>
+    <div class="chart-cell pos-3">{{ getRasiChart()[3] || '' }}</div>
+
+    <div class="chart-cell pos-4">{{ getRasiChart()[4] || '' }}</div>
+    <div class="chart-cell pos-5">{{ getRasiChart()[5] || '' }}</div>
+
+    <div class="chart-cell pos-6">{{ getRasiChart()[6] || '' }}</div>
+    <div class="chart-cell pos-7">{{ getRasiChart()[7] || '' }}</div>
+
+    <div class="chart-cell pos-8">{{ getRasiChart()[8] || '' }}</div>
+    <div class="chart-cell pos-9">{{ getRasiChart()[9] || '' }}</div>
+    <div class="chart-cell pos-10">{{ getRasiChart()[10] || '' }}</div>
+    <div class="chart-cell pos-11">{{ getRasiChart()[11] || '' }}</div>
+
+    <div class="chart-center">
+      ராசி
+    </div>
+
+  </div>
+
+
+  <!-- AMSAM -->
+  <div class="astro-chart">
+
+    <div class="chart-cell pos-0">{{ getAmsamChart()[0] || '' }}</div>
+    <div class="chart-cell pos-1">{{ getAmsamChart()[1] || '' }}</div>
+    <div class="chart-cell pos-2">{{ getAmsamChart()[2] || '' }}</div>
+    <div class="chart-cell pos-3">{{ getAmsamChart()[3] || '' }}</div>
+
+    <div class="chart-cell pos-4">{{ getAmsamChart()[4] || '' }}</div>
+    <div class="chart-cell pos-5">{{ getAmsamChart()[5] || '' }}</div>
+
+    <div class="chart-cell pos-6">{{ getAmsamChart()[6] || '' }}</div>
+    <div class="chart-cell pos-7">{{ getAmsamChart()[7] || '' }}</div>
+
+    <div class="chart-cell pos-8">{{ getAmsamChart()[8] || '' }}</div>
+    <div class="chart-cell pos-9">{{ getAmsamChart()[9] || '' }}</div>
+    <div class="chart-cell pos-10">{{ getAmsamChart()[10] || '' }}</div>
+    <div class="chart-cell pos-11">{{ getAmsamChart()[11] || '' }}</div>
+
+    <div class="chart-center">
+      அம்சம்
+    </div>
+
+  </div>
+
+</div>
+</div>
+<div class="info-card">
+
+  <h3>{{ txt('Partner Expectation', 'துணை எதிர்பார்ப்பு') }}</h3>
+
+  <p>
+    {{ v(profile.partner_expectation, profile.partner_expectation_ta) || '-' }}
+  </p>
+
+</div>
+
+    </div>
+     <div class="right-profile-side" *ngIf="activeTab === 'package'">
+
+  <div class="tab-title">Package Details</div>
+
+  <div class="info-card">
+
+    <h3>{{ txt('Package Details', 'தொகுப்பு விவரங்கள்') }}</h3>
+
+    <p>
+      <strong>Package :</strong>
+      {{ profile.package_name || '-' }}
+    </p>
+
+    <p>
+      <strong>Payment Method :</strong>
+      {{ profile.payment_mode || '-' }}
+    </p>
+
+    <p>
+      <strong>Purchased Date :</strong>
+      {{ dateText(profile.purchased_date) }}
+    </p>
+
+    <p>
+      <strong>Expired Date :</strong>
+      {{ dateText(profile.expired_date) }}
+    </p>
+
+<p>
+  <strong>Contact Limit :</strong>
+  {{ profile.limits || 0 }}
+</p>
+
+<p>
+  <strong>Contacts Taken :</strong>
+  {{ profile.contacts_taken || 0 }}
+</p>
+
+<p>
+  <strong>Profile View Limit :</strong>
+  {{ profile.profile_view_limit || 0 }}
+</p>
+
+<p>
+  <strong>Profile Views Used :</strong>
+  {{ profile.views_count || 0 }}
+</p>
+
+  </div>
+
+</div>
+<div class="right-profile-side" *ngIf="activeTab === 'views'">
+
+  <div class="tab-title">
+    Profile View Details
+  </div>
+
+  <div class="info-card">
+
+    <h3>
+      This User Viewed Profiles
+    </h3>
+
+
+    <p>
+      <strong>
+        Total Profile Views :
+      </strong>
+
+      {{ profileViewList.length }}
+    </p>
+
+
+    <div *ngIf="profileViewList.length === 0">
+
+      No profile views found
+
+    </div>
+
+
+    <table *ngIf="profileViewList.length">
+
+      <thead>
+        <tr>
+
+          <th>
+            Viewer Profile ID
+          </th>
+
+          <th>
+            Viewer Name
+          </th>
+
+          <th>
+            Viewed Date & Time
+          </th>
+          
+          <th>Action</th>
+
+
+        </tr>
+      </thead>
+
+
+      <tbody>
+
+
+        <tr
+        *ngFor="let item of profileViewList">
+
+
+          <td>
+
+            {{ item.profile_code || '-' }}
+
+          </td>
+
+
+          <td>
+
+            {{ 
+              v(
+                item.name,
+                item.name_ta
+              )
+            }}
+
+          </td>
+
+
+          <td>
+
+            {{ 
+              item.viewedAt 
+              | date:'medium'
+            }}
+
+          </td>
+
+<td>
+
+<button
+  class="view-btn"
+  type="button"
+  (click)="openViewedProfile(item.profile_id)">
+
+  View Profile
+
+</button>
+
+</td>
+
+
+        </tr>
+
+
+      </tbody>
+
+
+    </table>
+
+
+  </div>
+
+
+</div>
+</div>
+
+<!-- <div class="info-card full-width-card">
+
+  <h3>{{ txt('About Me', 'என்னை பற்றி') }}</h3>
+
+  <p>
+    {{ v(profile.about_me, profile.about_me_ta) || '-' }}
+  </p>
+
+</div> -->
+
+
+
+
+  </div>
+
+</div>
+

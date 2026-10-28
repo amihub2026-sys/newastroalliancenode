@@ -1,0 +1,214 @@
+<section class="content-section">
+
+  <div class="section-header">
+    <div>
+     <h2>
+  {{ txt('Subscriptions', 'சந்தாக்கள்') }}
+</h2>
+      <p>
+  {{
+    txt(
+      'Track active and expired user subscriptions',
+      'செயலில் உள்ள மற்றும் காலாவதியான சந்தாக்கள்'
+    )
+  }}
+</p>
+    </div>
+
+    <button class="refresh-btn" type="button" (click)="refresh()">
+    {{ txt('Refresh', 'புதுப்பிக்கவும்') }}
+    </button>
+  </div>
+
+  <div class="search-card">
+    <input
+      type="text"
+     placeholder="Search by profile id, payment mode, plan name, plan code..."
+      [(ngModel)]="searchTerm"
+(ngModelChange)="currentPage = 1">
+  </div>
+
+  <p *ngIf="isLoading">Loading subscriptions...</p>
+
+  <div class="panel-card" *ngIf="!isLoading">
+   <!-- Top Scrollbar -->
+<div
+  class="table-scroll-top"
+  #topScroll
+  (scroll)="bottomScroll.scrollLeft = topScroll.scrollLeft">
+
+  <div class="table-scroll-width"></div>
+</div>
+<!-- Table -->
+<div
+  class="table-wrap"
+  #bottomScroll
+  (scroll)="topScroll.scrollLeft = bottomScroll.scrollLeft">
+  <table>
+<thead>
+
+  <tr>
+
+    
+<th>{{ txt('Profile ID', 'சுயவிவர ID') }}</th>
+
+<th>{{ txt('Payment Mode', 'கட்டண முறை') }}</th>
+
+<th>{{ txt('Assigned By', 'சேர்த்தவர்') }}</th>
+
+<th>{{ txt('Plan', 'திட்டம்') }}</th>
+
+    <th>{{ txt('Name', 'பெயர்') }}</th>
+
+    <th>{{ txt('Price', 'விலை') }}</th>
+
+    <th>{{ txt('Duration', 'கால அளவு') }}</th>
+
+    <th>{{ txt('Start Date', 'தொடக்க தேதி') }}</th>
+
+    <th>{{ txt('End Date', 'முடிவு தேதி') }}</th>
+<th>{{ txt('Total Contacts', 'மொத்த தொடர்புகள்') }}</th>
+
+<th>{{ txt('Contacts Used', 'பயன்படுத்திய தொடர்புகள்') }}</th>
+
+<th>{{ txt('Remaining Contacts', 'மீதமுள்ள தொடர்புகள்') }}</th>
+
+    <th>{{ txt('Status', 'நிலை') }}</th>
+
+    <th>{{ txt('Action', 'செயல்') }}</th>
+
+  </tr>
+
+</thead>
+
+        <tbody>
+<tr *ngFor="let item of paginatedSubscriptions">
+
+
+<td>
+{{ item.profile_code || '-' }}
+</td>
+
+<td>
+  {{ item.payment_mode || '-' }}
+</td>
+<td>
+  {{ item.assigned_by === 'admin'
+    ? txt('Admin', 'நிர்வாகி')
+    : txt('User', 'பயனர்') }}
+</td>
+  <td>
+    {{ item.plan_name || '-' }}
+  </td>
+
+ <td>
+  {{ currentLang === 'ta' ? (item.full_name_ta || item.full_name) : item.full_name }}
+</td>
+
+  <td>
+   ₹{{ item.price || 0 }}
+  </td>
+
+  <td>
+{{ item.duration_days || 0 }}
+{{ txt('Days', 'நாட்கள்') }}
+  </td>
+
+  <td>
+    {{ item.start_date | date:'mediumDate' }}
+  </td>
+
+  <td>
+    {{ item.end_date | date:'mediumDate' }}
+  </td>
+<td>
+  {{ item.total_contacts_allowed || 0 }}
+</td>
+
+<td>
+  {{ item.contacts_used || 0 }}
+</td>
+
+<td>
+  {{ (item.total_contacts_allowed || 0) - (item.contacts_used || 0) }}
+</td>
+  <td>
+
+    <span
+      class="status"
+      [class.active]="item.is_active"
+      [class.expired]="!item.is_active">
+
+   {{
+  item.is_active
+    ? txt('Active', 'செயலில்')
+    : txt('Expired', 'காலாவதியானது')
+}}
+
+    </span>
+
+  </td>
+
+  <td>
+<button
+  class="action-btn"
+  type="button"
+  (click)="toggleSubscription(item)">
+
+  {{
+    item.is_active
+      ? txt('Deactivate', 'முடக்கு')
+      : txt('Activate', 'இயக்கு')
+  }}
+
+</button>
+  </td>
+
+</tr>
+
+          <tr *ngIf="filteredSubscriptions.length === 0">
+     <td colspan="14" class="empty-row">
+              No subscriptions found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <div
+  class="pagination"
+  *ngIf="filteredSubscriptions.length > itemsPerPage">
+
+  <button
+    type="button"
+   (click)="prevPage()"
+    [disabled]="currentPage === 1">
+
+   {{ txt('Previous', 'முந்தைய') }}
+
+  </button>
+
+  <span>
+
+   {{ txt('Page', 'பக்கம்') }}
+{{ currentPage }}
+
+{{ txt('of', 'இல்') }}
+
+{{ totalPages }}
+
+  </span>
+
+  <button
+    type="button"
+    (click)="nextPage()"
+    [disabled]="currentPage === totalPages">
+
+    {{ txt('Next', 'அடுத்து') }}
+
+  </button>
+
+</div>
+    </div>
+  
+
+</section>

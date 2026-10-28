@@ -1,0 +1,187 @@
+<div class="biodata-page" [class.user-biodata-wizard]="!isAdminBiodataMode()" [class.review-stage]="!isAdminBiodataMode() && activeStep === 7">
+  <div class="biodata-container">
+
+<div class="biodata-layout">
+    <div class="top-banner">
+      <div>
+        <h1>{{ tr.banner.title }}</h1>
+        <p>{{ tr.banner.subtitle }}</p>
+      </div>
+      <div class="banner-badge">{{ tr.banner.badge }}</div>
+    </div>
+
+<div class="form-side">
+  <header id="biodata-wizard-heading" class="user-wizard-heading" *ngIf="!isAdminBiodataMode()">
+    <div class="wizard-heading-row">
+      <div>
+        <span class="wizard-eyebrow">ASTRO ALLIANCE</span>
+        <h1>{{ currentLang === 'ta' ? 'திருமணச் சுயவிவரத்தை உருவாக்கவும்' : 'Create your matrimony profile' }}</h1>
+        <p>{{ currentLang === 'ta' ? 'ஒவ்வொரு பகுதியாகப் பூர்த்தி செய்யலாம். மீண்டும் முதல் பக்கத்திலிருந்து தொடங்க வேண்டியதில்லை.' : 'Just one section at a time. Your answers stay as you go back and forth.' }}</p>
+      </div>
+      <div class="wizard-language" role="group" [attr.aria-label]="currentLang === 'ta' ? 'மொழியைத் தேர்வு செய்யவும்' : 'Choose language'">
+        <button type="button" [class.selected]="currentLang === 'en'" [attr.aria-pressed]="currentLang === 'en'" (click)="setWizardLanguage('en')">English</button>
+        <button type="button" [class.selected]="currentLang === 'ta'" [attr.aria-pressed]="currentLang === 'ta'" (click)="setWizardLanguage('ta')">தமிழ்</button>
+      </div>
+    </div>
+    <!-- Decorative, step-specific wedding backgrounds. User wizard only. -->
+    <div class="wizard-couple-banner" [attr.data-step]="activeStep + 1">
+      <div class="wizard-photo-copy">
+        <span class="wizard-photo-eyebrow">{{ currentLang === 'ta' ? 'உங்கள் புதிய தொடக்கம்' : 'A new beginning' }}</span>
+        <h2>{{ selectedWizardStep[currentLang] }}</h2>
+        <p>{{ currentLang === 'ta' ? selectedWizardStep.helpTa : selectedWizardStep.helpEn }}</p>
+      </div>
+    </div>
+    <div class="wizard-voice-guide" aria-label="Voice guidance">
+      <span>🔊 {{ currentLang === 'ta' ? 'குரல் வழிகாட்டி' : 'Voice Guide' }}</span>
+      <button type="button" (click)="listenToStep()">{{ currentLang === 'ta' ? 'கேளுங்கள்' : 'Listen' }}</button>
+      <button type="button" (click)="stopStepAudio()">{{ currentLang === 'ta' ? 'நிறுத்து' : 'Stop' }}</button>
+      <small *ngIf="guideAudioError">{{ currentLang === 'ta' ? 'ஒலியை இயக்க முடியவில்லை.' : 'Audio could not be played.' }}</small>
+    </div>
+    <div class="wizard-progress-label">
+      <strong>{{ currentLang === 'ta' ? 'படி' : 'Step' }} {{ activeStep + 1 }} / {{ wizardSteps.length }}</strong>
+      <span>{{ selectedWizardStep[currentLang] }}</span>
+    </div>
+    <div class="wizard-progress-track" role="progressbar" [attr.aria-valuenow]="activeStep + 1" aria-valuemin="1" [attr.aria-valuemax]="wizardSteps.length" [attr.aria-label]="currentLang === 'ta' ? 'சுயவிவர முன்னேற்றம்' : 'Profile progress'">
+      <div class="wizard-progress-fill" [style.width.%]="(activeStep+1)*100/wizardSteps.length"></div>
+    </div>
+    <nav class="wizard-step-links" [attr.aria-label]="currentLang === 'ta' ? 'படிகள்' : 'Steps'">
+      <button *ngFor="let step of wizardSteps; index as i" type="button" [class.active]="i===activeStep" [class.completed]="activeStep > i" [disabled]="i > activeStep" [attr.aria-current]="i===activeStep ? 'step' : null" (click)="editWizardStep(i)">
+        <span class="wizard-step-number">{{ activeStep > i ? '✓' : i + 1 }}</span>
+        <span class="wizard-step-name">{{ step[currentLang] }}</span>
+      </button>
+    </nav>
+  </header>
+
+
+
+  <ng-container *ngIf="isAdminBiodataMode() || activeStep === 6">
+  <app-media-upload
+  [currentLang]="currentLang"
+  [tr]="tr"
+  [profilePreviewUrl]="profilePreviewUrl"
+  [additionalImages]="additionalImages"
+  [additionalImagePreviews]="additionalImagePreviews"
+  [selectedVideo]="selectedVideo"
+  [videoPreviewUrl]="videoPreviewUrl"
+  (profileImageChange)="onProfileImageChange($event)"
+  (additionalImagesChange)="onAdditionalImagesChange($event)"
+  (videoChange)="onVideoChange($event)"
+  (removeProfileImage)="removeProfileImage()"
+  (clearAdditionalImages)="clearAdditionalImages()"
+  (removeVideo)="removeVideo()"
+  (removeAdditionalImage)="removeAdditionalImage($event)">
+</app-media-upload>
+  </ng-container>
+
+<form (ngSubmit)="onSubmit()" #biodataForm="ngForm" novalidate>
+
+      <!-- PERSONAL DETAILS -->
+ <app-biodata-personal-details [vm]="this"></app-biodata-personal-details>
+
+
+      <!-- FAMILY -->
+     <!-- FAMILY -->
+
+<app-biodata-family-details [vm]="this"></app-biodata-family-details>
+
+
+    <!-- EDUCATION -->
+
+<app-biodata-education-career [vm]="this"></app-biodata-education-career>
+
+      <!-- ADDRESS -->
+
+
+<app-biodata-location-details [vm]="this"></app-biodata-location-details>
+
+ <!-- HOROSCOPE DETAILS + CHART -->
+
+<app-biodata-horoscope-details [vm]="this"></app-biodata-horoscope-details>
+
+     <!-- HOROSCOPE UPLOAD -->
+<div class="section-card" *ngIf="isAdminBiodataMode()">
+        <div class="section-title-wrap">
+          <h2>{{ tr.sections.horoscopeUpload }}</h2>
+          <p>{{ tr.sections.horoscopeUploadSub }}</p>
+        </div>
+
+        <div class="horoscope-upload-area" [class.invalid-upload]="isInvalid('horoscopeFile')">
+          <div class="upload-panel">
+            <label class="upload-btn wide-btn">
+              {{ tr.labels.selectHoroscope }}
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png,.pdf"
+                (change)="onHoroscopeFileChange($event)"
+                hidden
+              />
+
+            </label>
+
+<button
+  *ngIf="isAdminBiodataMode()"
+  type="button"
+  class="extract-btn"
+  (click)="extractHoroscopeData()"
+  [disabled]="isExtracting"
+>
+  {{ isExtracting ? tr.labels.extracting : tr.labels.autoFill }}
+</button>
+
+            <div class="file-note" *ngIf="selectedHoroscopeFile">
+              {{ tr.labels.selected }}: {{ selectedHoroscopeFile.name }}
+            </div>
+
+          </div>
+
+          <div class="horoscope-preview" *ngIf="horoscopePreviewUrl">
+            <img [src]="horoscopePreviewUrl" alt="Horoscope Preview">
+          </div>
+        </div>
+      </div>
+
+
+     <app-biodata-partner-preferences [vm]="this"></app-biodata-partner-preferences>
+<app-biodata-review-submit [vm]="this"></app-biodata-review-submit>
+<div class="wizard-actions" *ngIf="!isAdminBiodataMode()">
+  <button type="button" class="wizard-back" (click)="previousWizardStep()" [disabled]="activeStep === 0 || isSaving">
+    ← {{ currentLang === 'ta' ? 'முந்தையது' : 'Back' }}
+  </button>
+  <button *ngIf="activeStep < wizardSteps.length - 1" type="button" class="wizard-next" (click)="nextWizardStep()" [disabled]="isSaving">
+    {{ currentLang === 'ta' ? 'அடுத்து' : 'Next' }} →
+  </button>
+</div>
+<div class="submit-wrap" *ngIf="isAdminBiodataMode() || activeStep === 7">
+
+<button
+  type="submit"
+  class="submit-btn"
+  [disabled]="isSaving"
+>
+
+  {{
+    isSaving
+      ? tr.labels.saving
+      : (
+          isEditMode
+            ? (currentLang === 'ta'
+                ? 'பயோடேட்டாவை புதுப்பிக்கவும்'
+                : 'Update Biodata')
+            : (currentLang === 'ta'
+                ? 'பயோடேட்டாவை சமர்ப்பிக்கவும்'
+                : 'Submit Biodata')
+        )
+  }}
+
+</button>
+
+</div>
+    </form>
+    </div>
+
+<!-- LIVE PREVIEW -->
+
+<app-biodata-profile-preview [vm]="this"></app-biodata-profile-preview>
+</div>
+  </div>
+</div>

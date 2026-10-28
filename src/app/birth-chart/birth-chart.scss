@@ -1,0 +1,481 @@
+.birth-chart-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #fff7fb 0%, #fffdfd 45%, #f7f4ff 100%);
+}
+
+.birth-chart-container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.page-heading {
+  text-align: center;
+  margin-bottom: 32px;
+
+  span {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: 800;
+    color: #b12b68;
+    letter-spacing: 0.5px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 36px;
+    line-height: 1.2;
+    color: #24162a;
+    font-weight: 900;
+  }
+
+  p {
+    max-width: 720px;
+    margin: 12px auto 0;
+    color: #6d6070;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+}
+
+.birth-form {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #eadce5;
+  border-radius: 24px;
+  padding: 26px;
+  margin-bottom: 22px;
+  box-shadow: 0 14px 38px rgba(46, 20, 37, 0.08);
+
+  h2 {
+    margin: 0 0 22px;
+    font-size: 22px;
+    color: #3b1e32;
+    font-weight: 900;
+  }
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #4a3443;
+  }
+
+  input {
+    width: 100%;
+    height: 52px;
+    padding: 0 16px;
+    border: 1px solid #ddcbd6;
+    border-radius: 14px;
+    background: #fff;
+    color: #281c25;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s ease;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: #c43c79;
+      box-shadow: 0 0 0 4px rgba(196, 60, 121, 0.1);
+    }
+  }
+}
+
+.place-loading {
+  padding: 8px 4px 0;
+  font-size: 13px;
+  color: #8b6e7c;
+}
+
+.place-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e3d3dd;
+  border-radius: 14px;
+  box-shadow: 0 14px 30px rgba(49, 27, 40, 0.14);
+}
+
+.place-option {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #f0e7ec;
+  background: #fff;
+  padding: 13px 15px;
+  text-align: left;
+  color: #392734;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:hover {
+    background: #fff1f7;
+  }
+}
+
+.calculate-btn {
+  display: block;
+  width: 100%;
+  min-height: 56px;
+  margin: 26px 0;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #b62967, #e44987);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(182, 41, 103, 0.24);
+  transition: 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+.error-message {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #fff2f2;
+  border: 1px solid #ffcaca;
+  color: #a82222;
+  font-weight: 700;
+}
+
+.birth-result {
+  margin-top: 34px;
+  background: #fff;
+  border: 1px solid #eadce5;
+  border-radius: 26px;
+  padding: 28px;
+  box-shadow: 0 16px 42px rgba(46, 20, 37, 0.09);
+
+  > h2 {
+    margin: 0 0 24px;
+    text-align: center;
+    color: #331f2c;
+    font-size: 28px;
+    font-weight: 900;
+  }
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.result-card {
+  padding: 18px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #fff8fb, #ffffff);
+  border: 1px solid #eadce5;
+
+  span {
+    display: block;
+    color: #76616c;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  strong {
+    display: block;
+    color: #341d2d;
+    font-size: 18px;
+    font-weight: 900;
+    word-break: break-word;
+  }
+}
+
+.person-birth-details {
+  margin-top: 32px;
+
+  h3 {
+    margin: 0 0 18px;
+    color: #422438;
+    font-size: 22px;
+    font-weight: 900;
+  }
+}
+
+.horoscope-chart-section {
+  margin-top: 34px;
+
+  h3 {
+    margin: 0 0 18px;
+    text-align: center;
+    color: #3e2135;
+    font-size: 22px;
+    font-weight: 900;
+  }
+}
+
+.horoscope-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(90px, 1fr));
+  grid-template-rows: repeat(4, minmax(95px, auto));
+  gap: 0;
+  max-width: 720px;
+  margin: 0 auto;
+  border: 2px solid #a74170;
+  background: #fff;
+}
+
+.house,
+.chart-center {
+  min-height: 105px;
+  padding: 9px;
+  box-sizing: border-box;
+  border: 1px solid #d8b3c4;
+  background: #fffdfa;
+}
+
+.house {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  > strong {
+    font-size: 12px;
+    color: #ae3d70;
+  }
+
+  > span {
+    font-size: 13px;
+    color: #3c2733;
+    font-weight: 800;
+  }
+
+  > small {
+    display: block;
+    font-size: 12px;
+    line-height: 1.35;
+    color: #6d4a5c;
+    font-weight: 700;
+  }
+}
+
+.chart-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(135deg, #fff3f8, #fffafb);
+
+  strong {
+    font-size: 17px;
+    color: #a42660;
+    margin-bottom: 6px;
+  }
+
+  span {
+    font-size: 13px;
+    color: #4c3340;
+    font-weight: 800;
+  }
+
+  small {
+    margin-top: 5px;
+    color: #705a65;
+    font-size: 12px;
+  }
+}
+
+/*
+  SOUTH INDIAN STYLE POSITIONING
+*/
+
+.h12 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.h1 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.h2 {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.h3 {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.h11 {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.chart-center {
+  grid-column: 2 / 4;
+  grid-row: 2 / 4;
+}
+
+.h4 {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+.h10 {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.h5 {
+  grid-column: 4;
+  grid-row: 3;
+}
+
+.h9 {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+.h8 {
+  grid-column: 2;
+  grid-row: 4;
+}
+
+.h7 {
+  grid-column: 3;
+  grid-row: 4;
+}
+
+.h6 {
+  grid-column: 4;
+  grid-row: 4;
+}
+
+/*
+  The HTML currently contains a second chart-center block.
+  Hide it so the main center occupies the correct 2x2 area.
+*/
+.chart-center-bottom {
+  display: none;
+}
+
+.explanation-section {
+  margin-top: 38px;
+
+  h3 {
+    margin: 24px 0 12px;
+    color: #3a2431;
+    font-size: 21px;
+    font-weight: 900;
+  }
+}
+
+.explanation-text {
+  margin: 0;
+  padding: 20px;
+  border-radius: 18px;
+  border: 1px solid #eadce5;
+  background: #fffafc;
+  color: #4d3a45;
+  font-size: 14px;
+  line-height: 1.85;
+
+  /*
+    Important:
+    your backend explanation contains \n line breaks.
+  */
+  white-space: pre-line;
+}
+
+@media (min-width: 768px) {
+  .birth-form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px 20px;
+
+    h2 {
+      grid-column: 1 / -1;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .birth-chart-page {
+    padding: 24px 12px;
+  }
+
+  .page-heading {
+    h1 {
+      font-size: 28px;
+    }
+  }
+
+  .birth-form,
+  .birth-result {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .horoscope-grid {
+    grid-template-columns: repeat(4, minmax(64px, 1fr));
+    grid-template-rows: repeat(4, minmax(82px, auto));
+  }
+
+  .house,
+  .chart-center {
+    min-height: 86px;
+    padding: 6px;
+  }
+
+  .house {
+    > span {
+      font-size: 11px;
+    }
+
+    > small {
+      font-size: 10px;
+    }
+  }
+
+  .chart-center {
+    strong {
+      font-size: 14px;
+    }
+
+    span,
+    small {
+      font-size: 10px;
+    }
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+}

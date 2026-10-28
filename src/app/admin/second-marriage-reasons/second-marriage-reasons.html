@@ -1,0 +1,214 @@
+<section class="content-section">
+
+  <div class="page-head">
+    <div>
+      <h2>Second Marriage Reason List</h2>
+      <p>Manage second marriage reason master records</p>
+    </div>
+
+    <button class="add-btn" (click)="openAddForm()">
+      + Add Reason
+    </button>
+  </div>
+
+
+  <div class="form-card" *ngIf="showForm">
+
+    <h3>
+      {{ isEdit ? 'Edit Reason' : 'Add Reason' }}
+    </h3>
+
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Reason Name English</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.nameEn"
+          placeholder="Enter English name">
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Reason Name Tamil</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.nameTa"
+          (keypress)="tamilTyping($event)"
+          placeholder="தமிழ் பெயர்">
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Sort Order</label>
+
+        <input
+          type="number"
+          [(ngModel)]="formData.sortOrder">
+
+      </div>
+
+
+      <div class="form-group status-box">
+
+        <label>
+          <input 
+          type="checkbox"
+          [(ngModel)]="formData.isActive">
+
+          Active
+
+        </label>
+
+      </div>
+
+
+    </div>
+
+
+
+    <div class="form-actions">
+
+      <button 
+      class="save-btn"
+      (click)="saveReason()"
+      [disabled]="isSaving">
+
+        {{ isSaving ? 'Saving...' : 'Save' }}
+
+      </button>
+
+
+
+      <button 
+      class="cancel-btn"
+      (click)="closeForm()">
+
+        Cancel
+
+      </button>
+
+
+    </div>
+
+
+  </div>
+
+
+
+  <div class="table-card">
+
+
+    <p *ngIf="isLoading">
+      Loading reasons...
+    </p>
+
+
+
+    <table *ngIf="!isLoading">
+
+
+      <thead>
+
+        <tr>
+
+          <th>S.No</th>
+
+          <th>English Name</th>
+
+          <th>Tamil Name</th>
+
+          <th>Status</th>
+
+          <th>Action</th>
+
+        </tr>
+
+      </thead>
+
+
+
+      <tbody>
+
+
+        <tr *ngFor="let reason of reasons; let i=index">
+
+
+          <td>
+            {{i+1}}
+          </td>
+
+
+          <td>
+            {{reason.nameEn}}
+          </td>
+
+
+          <td>
+            {{reason.nameTa}}
+          </td>
+
+
+          <td>
+
+            <span 
+            class="badge"
+            [class.inactive]="!reason.isActive">
+
+              {{reason.isActive ? 'Active':'Inactive'}}
+
+            </span>
+
+          </td>
+
+
+          <td class="actions">
+
+
+            <button
+            class="edit-btn"
+            (click)="editReason(reason)">
+              Edit
+            </button>
+
+
+            <button
+            class="delete-btn"
+            (click)="deleteReason(reason._id)">
+              Delete
+            </button>
+
+
+          </td>
+
+
+        </tr>
+
+
+
+        <tr *ngIf="reasons.length===0">
+
+          <td colspan="5" class="empty">
+            No reasons found
+          </td>
+
+        </tr>
+
+
+
+      </tbody>
+
+
+    </table>
+
+
+  </div>
+
+
+</section>

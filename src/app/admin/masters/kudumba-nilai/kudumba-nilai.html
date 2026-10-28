@@ -1,0 +1,158 @@
+<section class="content-section">
+
+  <div class="page-head">
+    <div>
+      <h2>Kudumba Nilai List</h2>
+      <p>Manage Kudumba Nilai master records</p>
+    </div>
+
+    <button class="add-btn" (click)="openAddForm()">
+      + Add Kudumba Nilai
+    </button>
+  </div>
+
+  <div class="form-card" *ngIf="showForm">
+
+    <h3>{{ isEdit ? 'Edit Kudumba Nilai' : 'Add Kudumba Nilai' }}</h3>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>English Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.nameEn"
+          placeholder="Enter English name">
+      </div>
+
+      <div class="form-group">
+        <label>Tamil Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="formData.nameTa"
+          (keypress)="tamilTyping($event)"
+          placeholder="தமிழ் பெயர்">
+      </div>
+
+      <div class="form-group">
+        <label>Sort Order</label>
+
+        <input
+          type="number"
+          [(ngModel)]="formData.sortOrder">
+      </div>
+
+      <div class="form-group status-box">
+        <label>
+          <input
+            type="checkbox"
+            [(ngModel)]="formData.isActive">
+
+          Active
+        </label>
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+
+      <button
+        class="save-btn"
+        (click)="saveKudumbaNilai()"
+        [disabled]="isSaving">
+
+        {{ isSaving ? 'Saving...' : 'Save' }}
+
+      </button>
+
+      <button
+        class="cancel-btn"
+        (click)="closeForm()">
+
+        Cancel
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="table-card">
+
+    <p *ngIf="isLoading">
+      Loading Kudumba Nilai...
+    </p>
+
+    <table *ngIf="!isLoading">
+
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>English</th>
+          <th>Tamil</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let item of kudumbaNilaiList; let i=index">
+
+          <td>{{ i + 1 }}</td>
+
+          <td>{{ item.nameEn }}</td>
+
+          <td>{{ item.nameTa }}</td>
+
+          <td>
+
+            <span
+              class="badge"
+              [class.inactive]="!item.isActive">
+
+              {{ item.isActive ? 'Active' : 'Inactive' }}
+
+            </span>
+
+          </td>
+
+          <td>
+
+            <button
+              class="edit-btn"
+              (click)="editKudumbaNilai(item)">
+
+              Edit
+
+            </button>
+
+            <button
+              class="delete-btn"
+              (click)="deleteKudumbaNilai(item._id)">
+
+              Delete
+
+            </button>
+
+          </td>
+
+        </tr>
+
+        <tr *ngIf="kudumbaNilaiList.length===0">
+
+          <td colspan="5" class="empty">
+            No records found
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>

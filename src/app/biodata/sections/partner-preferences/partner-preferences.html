@@ -1,0 +1,50 @@
+<!-- ABOUT & PARTNER EXPECTATION -->
+<div class="section-card" *ngIf="vm.isAdminBiodataMode() || vm.activeStep === 5">
+  <div class="section-title-wrap">
+    <h2>{{ vm.currentLang === 'ta' ? 'என்னை பற்றி & துணைவர் எதிர்பார்ப்பு' : 'About & Partner Expectation' }}</h2>
+    <p>{{ vm.currentLang === 'ta' ? 'உங்களைப் பற்றியும் எதிர்பார்ப்புகளையும் எழுதுங்கள்' : 'Tell something about yourself and your expectations' }}</p>
+  </div>
+
+  <div class="form-grid">
+    <!-- <div class="field full-width">
+      <label>{{ vm.currentLang === 'ta' ? 'என்னை பற்றி' : 'About Me' }}</label>
+      <textarea
+        [ngModel]="vm.currentLang === 'ta' ? (vm.formDataTa.aboutMe || vm.formData.aboutMe) : vm.formData.aboutMe"
+      (ngModelChange)="vm.setTypedValue('aboutMe', $event)"
+        name="aboutMe"
+        rows="4"
+        [placeholder]="vm.currentLang === 'ta' ? 'உங்களை பற்றி எழுதுங்கள்...' : 'Write about yourself...'"
+      ></textarea>
+    </div> -->
+
+    <div class="field full-width">
+      <label>{{ vm.currentLang === 'ta' ? 'எதிர்பார்ப்பு' : 'Expectation' }}</label>
+      <textarea
+        [ngModel]="vm.currentLang === 'ta' ? (vm.formDataTa.partnerExpectation || vm.formData.partnerExpectation) : vm.formData.partnerExpectation"
+        (ngModelChange)="vm.setTypedValue('partnerExpectation', $event)"
+(keypress)="vm.handleTyping($event)"
+        name="partnerExpectation"
+        rows="4"
+        [placeholder]="vm.currentLang === 'ta' ? 'எதிர்பார்க்கும் துணையை பற்றி எழுதுங்கள்...' : 'Describe your expected partner...'"
+      ></textarea>
+
+    </div>
+    <div class="field full-width no-caste-field">
+  <label>
+    {{ vm.currentLang === 'ta' ? 'ஜாதி தடை இல்லை' : 'No Caste Restriction' }}
+  </label>
+
+  <label class="no-caste-check">
+    <input
+      type="checkbox"
+      [(ngModel)]="vm.formData.noCastePreference"
+      name="noCastePreference"
+    >
+
+    <span>
+      {{ vm.currentLang === 'ta' ? 'ஜாதி தடை இல்லை' : 'No caste preference' }}
+    </span>
+  </label>
+</div>
+  </div>
+</div>

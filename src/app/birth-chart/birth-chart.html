@@ -1,0 +1,772 @@
+<section class="birth-chart-page">
+
+  <div class="birth-chart-container">
+
+    <!-- PAGE HEADING -->
+    <div class="page-heading">
+      <span>ஜாதக கணிப்பு</span>
+
+      <h1>Horoscope Compatibility</h1>
+
+      <p>
+        Enter Bride and Groom birth details to calculate
+        Rasi, Nakshatra, Paadam, Lagnam and horoscope compatibility.
+      </p>
+    </div>
+
+
+    <!-- ==========================================
+         BRIDE DETAILS
+    =========================================== -->
+    <div class="birth-form">
+
+      <h2>Bride Details / மணமகள் விவரங்கள்</h2>
+
+      <div class="form-group">
+        <label>Date of Birth / பிறந்த தேதி</label>
+
+        <input
+          type="date"
+          [(ngModel)]="brideForm.dateOfBirth"
+          name="brideDateOfBirth"
+        >
+      </div>
+
+
+      <div class="form-group">
+        <label>Birth Time / பிறந்த நேரம்</label>
+
+        <input
+          type="time"
+          [(ngModel)]="brideForm.timeOfBirth"
+          name="brideTimeOfBirth"
+        >
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Birth Place / பிறந்த இடம்</label>
+
+        <input
+          type="text"
+          [(ngModel)]="brideForm.placeOfBirth"
+          name="bridePlaceOfBirth"
+          placeholder="Example: Madurai"
+          autocomplete="off"
+          (input)="searchBridePlace()"
+        >
+
+        <div
+          class="place-loading"
+          *ngIf="bridePlaceLoading"
+        >
+          Searching...
+        </div>
+
+        <div
+          class="place-results"
+          *ngIf="bridePlaceResults.length > 0"
+        >
+
+          <button
+            type="button"
+            class="place-option"
+            *ngFor="let place of bridePlaceResults"
+            (click)="selectBridePlace(place)"
+          >
+            {{ place.name }} — {{ place.countryCode }}
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         GROOM DETAILS
+    =========================================== -->
+    <div class="birth-form">
+
+      <h2>Groom Details / மணமகன் விவரங்கள்</h2>
+
+      <div class="form-group">
+        <label>Date of Birth / பிறந்த தேதி</label>
+
+        <input
+          type="date"
+          [(ngModel)]="groomForm.dateOfBirth"
+          name="groomDateOfBirth"
+        >
+      </div>
+
+
+      <div class="form-group">
+        <label>Birth Time / பிறந்த நேரம்</label>
+
+        <input
+          type="time"
+          [(ngModel)]="groomForm.timeOfBirth"
+          name="groomTimeOfBirth"
+        >
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Birth Place / பிறந்த இடம்</label>
+
+        <input
+          type="text"
+          [(ngModel)]="groomForm.placeOfBirth"
+          name="groomPlaceOfBirth"
+          placeholder="Example: Aruppukkottai"
+          autocomplete="off"
+          (input)="searchGroomPlace()"
+        >
+
+        <div
+          class="place-loading"
+          *ngIf="groomPlaceLoading"
+        >
+          Searching...
+        </div>
+
+        <div
+          class="place-results"
+          *ngIf="groomPlaceResults.length > 0"
+        >
+
+          <button
+            type="button"
+            class="place-option"
+            *ngFor="let place of groomPlaceResults"
+            (click)="selectGroomPlace(place)"
+          >
+            {{ place.name }} — {{ place.countryCode }}
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         CHECK BUTTON
+    =========================================== -->
+    <button
+      type="button"
+      class="calculate-btn"
+      (click)="calculateBirthChart()"
+      [disabled]="isLoading"
+    >
+      {{
+        isLoading
+          ? 'Checking Compatibility...'
+          : 'Check Horoscope Compatibility / ஜாதக பொருத்தம் பார்க்க'
+      }}
+    </button>
+
+
+    <!-- ERROR -->
+    <div
+      class="error-message"
+      *ngIf="errorMessage"
+    >
+      {{ errorMessage }}
+    </div>
+
+
+    <!-- ==========================================
+         RESULT
+    =========================================== -->
+    <section
+      class="birth-result"
+      *ngIf="result"
+    >
+
+      <h2>
+        Horoscope Compatibility Result /
+        ஜாதக பொருத்த முடிவு
+      </h2>
+
+
+      <!-- RESULT SUMMARY -->
+      <div class="result-grid">
+
+        <div class="result-card">
+          <span>
+            Final Verdict / இறுதி முடிவு
+          </span>
+
+          <strong>
+            {{ result?.verdict }}
+          </strong>
+        </div>
+
+
+        <div class="result-card">
+          <span>
+            Confidence / நம்பக நிலை
+          </span>
+
+          <strong>
+            {{ result?.confidence }}
+          </strong>
+        </div>
+
+
+        <div class="result-card">
+          <span>
+            Supportive Factors / சாதக அம்சங்கள்
+          </span>
+
+          <strong>
+            {{ result?.counts?.strengths }}
+          </strong>
+        </div>
+
+
+        <div class="result-card">
+          <span>
+            Cautionary Factors / கவனிக்க வேண்டியவை
+          </span>
+
+          <strong>
+            {{ result?.counts?.concerns }}
+          </strong>
+        </div>
+
+
+        <div class="result-card">
+          <span>
+            Review Flags / கூடுதல் ஆய்வு
+          </span>
+
+          <strong>
+            {{ result?.counts?.reviewFlags }}
+          </strong>
+        </div>
+
+      </div>
+
+
+      <!-- ==========================================
+           BRIDE BASIC DETAILS
+      =========================================== -->
+      <div
+        class="person-birth-details"
+        *ngIf="result?.bride?.birthDetails"
+      >
+
+        <h3>
+          Bride Horoscope /
+          மணமகள் ஜாதகம்
+        </h3>
+
+        <div class="result-grid">
+
+          <div class="result-card">
+            <span>Rasi / ராசி</span>
+
+            <strong>
+              {{ result?.bride?.birthDetails?.rasi }}
+            </strong>
+          </div>
+
+
+          <div class="result-card">
+            <span>Nakshatra / நட்சத்திரம்</span>
+
+            <strong>
+              {{ result?.bride?.birthDetails?.nakshatra }}
+            </strong>
+          </div>
+
+
+          <div class="result-card">
+            <span>Paadam / பாதம்</span>
+
+            <strong>
+              {{ result?.bride?.birthDetails?.paadam }}
+            </strong>
+          </div>
+
+
+          <div class="result-card">
+            <span>Lagnam / லக்னம்</span>
+
+            <strong>
+              {{ result?.bride?.birthDetails?.lagnam }}
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==========================================
+           ALL 4 HOROSCOPE BOXES
+      =========================================== -->
+      <div class="all-horoscope-charts">
+
+        <div
+          class="horoscope-chart-section"
+          *ngFor="let chart of chartSections"
+        >
+
+          <h3>
+            {{ chart.title }}
+          </h3>
+
+
+          <!-- SOUTH INDIAN HOROSCOPE BOX -->
+          <div class="horoscope-grid">
+
+
+            <!-- HOUSE 12 -->
+            <div class="house h12">
+
+              <strong>12</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    12
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    12
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- HOUSE 1 -->
+            <div class="house h1">
+
+              <strong>1</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    1
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    1
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- HOUSE 2 -->
+            <div class="house h2">
+
+              <strong>2</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    2
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    2
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- HOUSE 3 -->
+            <div class="house h3">
+
+              <strong>3</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    3
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    3
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- HOUSE 11 -->
+            <div class="house h11">
+
+              <strong>11</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    11
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    11
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- CENTER -->
+            <div class="chart-center">
+
+              <strong>
+                {{ chart.centerTitle }}
+              </strong>
+
+              <span>
+                Lagnam:
+                {{ chart.lagnam }}
+              </span>
+
+            </div>
+
+
+            <!-- HOUSE 4 -->
+            <div class="house h4">
+
+              <strong>4</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    4
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    4
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- HOUSE 10 -->
+            <div class="house h10">
+
+              <strong>10</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    10
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    10
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- HOUSE 5 -->
+            <div class="house h5">
+
+              <strong>5</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    5
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    5
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- HOUSE 9 -->
+            <div class="house h9">
+
+              <strong>9</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    9
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    9
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- HOUSE 8 -->
+            <div class="house h8">
+
+              <strong>8</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    8
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    8
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- HOUSE 7 -->
+            <div class="house h7">
+
+              <strong>7</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    7
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    7
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+
+            <!-- HOUSE 6 -->
+            <div class="house h6">
+
+              <strong>6</strong>
+
+              <span>
+                {{
+                  getHouse(
+                    chart.houses,
+                    6
+                  )?.rasi
+                }}
+              </span>
+
+              <small
+                *ngFor="
+                  let graha of getHouse(
+                    chart.houses,
+                    6
+                  )?.grahas
+                "
+              >
+                {{ graha.name }}
+              </small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==========================================
+           GROOM BASIC DETAILS
+      =========================================== -->
+      <div
+        class="person-birth-details"
+        *ngIf="result?.groom?.birthDetails"
+      >
+
+        <h3>
+          Groom Horoscope /
+          மணமகன் ஜாதகம்
+        </h3>
+
+        <div class="result-grid">
+
+          <div class="result-card">
+            <span>Rasi / ராசி</span>
+
+            <strong>
+              {{ result?.groom?.birthDetails?.rasi }}
+            </strong>
+          </div>
+
+
+          <div class="result-card">
+            <span>Nakshatra / நட்சத்திரம்</span>
+
+            <strong>
+              {{ result?.groom?.birthDetails?.nakshatra }}
+            </strong>
+          </div>
+
+
+          <div class="result-card">
+            <span>Paadam / பாதம்</span>
+
+            <strong>
+              {{ result?.groom?.birthDetails?.paadam }}
+            </strong>
+          </div>
+
+
+          <div class="result-card">
+            <span>Lagnam / லக்னம்</span>
+
+            <strong>
+              {{ result?.groom?.birthDetails?.lagnam }}
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==========================================
+           EXPLANATIONS
+      =========================================== -->
+      <div class="explanation-section">
+
+        <h3>
+          English Explanation
+        </h3>
+
+        <p class="explanation-text">
+          {{ result?.explanation?.en }}
+        </p>
+
+
+        <h3>
+          தமிழ் விளக்கம்
+        </h3>
+
+        <p class="explanation-text">
+          {{ result?.explanation?.ta }}
+        </p>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</section>

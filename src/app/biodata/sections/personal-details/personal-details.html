@@ -1,0 +1,681 @@
+<details class="form-accordion" *ngIf="vm.isAdminBiodataMode() || vm.activeStep === 0" open>
+
+<summary>
+  {{ vm.currentLang === 'ta' ? 'தனிப்பட்ட விவரங்கள்' : 'Personal Details' }}
+</summary>
+
+<div class="section-card">
+        <div class="section-title-wrap">
+          <h2>{{ vm.tr.sections.personal }}</h2>
+          <p>{{ vm.tr.sections.personalSub }}</p>
+        </div>
+
+        <div class="form-grid">
+
+
+    <ng-container *ngIf="vm.isAdminBiodataMode(); else normalNameFields">
+
+  <div class="field">
+    <label>Tamil Name</label>
+ <input
+  type="text"
+  [ngModel]="vm.formDataTa.fullName"
+  (keypress)="vm.tamilKeypress($event)"
+  (input)="vm.onTamilNameInput($event)"
+  name="fullNameTa"
+  placeholder="தமிழ் பெயர்"
+>
+  </div>
+
+  <div class="field" [class.invalid]="vm.isInvalid('fullName')">
+    <label>Full Name <span class="required">*</span></label>
+    <input
+      type="text"
+      [(ngModel)]="vm.formData.fullName"
+      name="fullName"
+      placeholder="English name auto fill"
+    >
+    <small class="field-error" *ngIf="vm.isInvalid('fullName')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+  </div>
+
+</ng-container>
+
+<ng-template #normalNameFields>
+  <div class="field full-width" [class.invalid]="vm.isInvalid('fullName')">
+    <label for="user-profile-name">{{ vm.tr.labels.fullName }} <span class="required">*</span></label>
+    <input id="user-profile-name" type="text" [ngModel]="vm.nameInActiveLanguage"
+      (ngModelChange)="vm.onUserNameInput($event)" name="fullNameUser"
+      [attr.lang]="vm.currentLang" autocomplete="name"
+      [placeholder]="vm.currentLang === 'ta' ? 'பெயரை உள்ளிடவும் (எ.கா., தாமரை செல்வி)' : 'Enter name (e.g., Thamarai Selvi)'" />
+    <small class="field-error" *ngIf="vm.isInvalid('fullName')">{{ vm.tr.labels.required }}</small>
+    <div class="wizard-name-hint" *ngIf="vm.nameInActiveLanguage">
+      <span>{{ vm.currentLang === 'ta' ? 'பிற மொழியில் பெயர் (பரிந்துரை)' : 'Name in Tamil (suggestion)' }}:</span>
+      <strong>{{ vm.alternateNameSuggestion || (vm.currentLang === 'ta' ? 'ஆங்கில எழுத்தைச் சரிபார்க்கவும்' : 'Tamil spelling not available') }}</strong>
+      <button type="button" (click)="vm.showAlternateSpelling = !vm.showAlternateSpelling">
+        {{ vm.currentLang === 'ta' ? 'எழுத்தைத் திருத்தவும்' : 'Correct spelling' }}
+      </button>
+    </div>
+    <div *ngIf="vm.showAlternateSpelling" class="wizard-correction">
+      <label for="alternate-profile-name">{{ vm.currentLang === 'ta' ? 'ஆங்கிலப் பெயரைச் சரிசெய்யவும்' : 'Correct Tamil spelling' }}</label>
+      <input id="alternate-profile-name" name="alternateNameCorrection" type="text"
+        [ngModel]="vm.alternateNameSuggestion" (ngModelChange)="vm.setAlternateNameSpelling($event)" />
+    </div>
+    <small class="wizard-name-note">{{ vm.currentLang === 'ta' ? 'பெயரின் எழுத்துப்பிழையைச் சரிபார்க்கவும். பெயரை ஒருமுறை மட்டும் உள்ளிடினால் போதும்.' : 'Names are transliterated, not translated. Please check the suggested spelling; enter your name only once.' }}</small>
+  <small class="wizard-name-warning" *ngIf="vm.nameNeedsReview && vm.currentLang === 'en'">Tamil spelling is not confirmed. Please use “Correct spelling” to enter the correct Tamil name.</small>
+  </div>
+</ng-template>
+
+
+         <div class="field" [class.invalid]="vm.isInvalid('gender')">
+  <label>{{ vm.tr.labels.gender }} <span class="required">*</span></label>
+<select
+  [(ngModel)]="vm.formData.gender"
+  name="gender">
+
+  <option value="">{{ vm.tr.labels.selectGender }}</option>
+
+  <option
+    *ngFor="let g of vm.genderList"
+    [value]="g.nameEn">
+    {{
+      vm.currentLang === 'ta'
+        ? (g.nameTa || g.nameEn)
+        : g.nameEn
+    }}
+  </option>
+</select>
+            <small class="field-error" *ngIf="vm.isInvalid('gender')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+          </div>
+
+        <!-- DOB -->
+<div class="field" [class.invalid]="vm.isInvalid('dob')">
+  <label>{{ vm.tr.labels.dob }} <span class="required">*</span></label>
+
+  <!-- DESKTOP -->
+  <input
+    class="desktop-dob"
+    type="date"
+    [(ngModel)]="vm.formData.dob"
+    name="dob"
+    (change)="vm.onDobChange()"
+    [max]="vm.maxDobDate"
+    [disabled]="!vm.isAdminCreated && vm.isEditMode"
+  >
+
+  <!-- MOBILE -->
+  <div class="mobile-dob-wrap">
+
+    <input
+      class="mobile-dob"
+      type="text"
+      placeholder="dd-mm-yyyy"
+      [ngModel]="vm.mobileDobText"
+      name="dobMobile"
+      (ngModelChange)="vm.mobileDobText = $event"
+      inputmode="numeric"
+      maxlength="10"
+(input)="
+  vm.formatDob($event);
+  vm.checkAdminDuplicate();
+"
+      
+    >
+
+    <input
+      #mobileDatePicker
+      type="date"
+      class="real-date-picker"
+      [max]="vm.maxDobDate"
+      (change)="vm.onMobileDatePick($event)"
+    >
+
+    <button
+      type="button"
+      class="calendar-btn"
+      (click)="mobileDatePicker.showPicker()">
+      📅
+    </button>
+
+  </div>
+
+  <small class="field-error" *ngIf="vm.isInvalid('dob')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+</div>
+         <!-- BIRTH TIME -->
+<div class="field" [class.invalid]="vm.isInvalid('birthTime')">
+  <label>{{ vm.tr.labels.birthTime }} <span class="optional">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? '(விருப்பம்)' : '(Optional)' }}</span></label>
+
+<div class="birth-time-wrap">
+
+  <input
+    class="birth-time-input"
+    type="text"
+    [(ngModel)]="vm.formData.birthTime"
+    name="birthTime"
+    placeholder="10:30 AM"
+    (input)="vm.formatBirthTime($event)"
+  >
+
+  <input
+    #birthTimePicker
+    type="time"
+    class="real-time-picker"
+    (change)="vm.onBirthTimePick($event)"
+  >
+
+  <button
+    type="button"
+    class="time-btn"
+    (click)="birthTimePicker.showPicker()">
+    🕘
+  </button>
+
+</div>
+
+  <!-- <small class="field-error" *ngIf="vm.isInvalid('birthTime')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small> -->
+</div>
+
+          <div class="field">
+            <label>{{ vm.tr.labels.age }}</label>
+            <input type="text" [(ngModel)]="vm.formData.age" name="age" [placeholder]="vm.tr.labels.agePlaceholder" readonly>
+          </div>
+
+        <!-- MARITAL STATUS -->
+<div class="field" [class.invalid]="vm.isInvalid('maritalStatus')">
+  <label>{{ vm.tr.labels.maritalStatus }} <span class="required">*</span></label>
+  <select [(ngModel)]="vm.formData.maritalStatus" name="maritalStatus">
+    <option value="">{{ vm.tr.labels.selectStatus }}</option>
+<option
+  *ngFor="let status of vm.maritalStatusList"
+  [value]="status.nameEn">
+
+  {{
+    vm.currentLang === 'ta'
+      ? (status.nameTa || status.nameEn)
+      : status.nameEn
+  }}
+
+</option>
+  </select>
+  <small class="field-error" *ngIf="vm.isInvalid('maritalStatus')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+</div>
+
+<div class="field" *ngIf="vm.formData.maritalStatus === 'Second Marriage'">
+  <label>
+    {{ vm.currentLang === 'ta' ? 'மறுமணத்திற்கான காரணம்' : 'Marriage Type' }}
+  </label>
+
+  <select
+    [(ngModel)]="vm.formData.secondMarriageReason"
+    name="secondMarriageReason"
+  >
+    <option value="">
+      {{ vm.currentLang === 'ta' ? 'தேர்வு செய்யவும்' : 'Select' }}
+    </option>
+
+<option
+  *ngFor="let reason of vm.secondMarriageReasonList"
+  [value]="reason.nameEn">
+
+  {{
+    vm.currentLang === 'ta'
+      ? (reason.nameTa || reason.nameEn)
+      : reason.nameEn
+  }}
+
+</option>
+  </select>
+</div>
+<!-- CHILDREN STATUS -->
+
+<div
+  class="field"
+  *ngIf="
+   vm.formData.secondMarriageReason === 'Divorced' ||
+vm.formData.secondMarriageReason === 'Widowed'
+  "
+>
+
+  <label>
+    {{ vm.tr.labels.children }}
+  </label>
+
+  <select
+    [(ngModel)]="vm.formData.childrenStatus"
+    name="childrenStatus"
+  >
+
+    <option value="No">
+  {{ vm.currentLang === 'ta' ? 'இல்லை' : 'No' }}
+</option>
+
+<option value="Yes">
+  {{ vm.currentLang === 'ta' ? 'ஆம்' : 'Yes' }}
+</option>
+
+  </select>
+
+</div>
+
+<!-- CHILDREN COUNT -->
+
+<!-- CHILDREN DETAILS -->
+
+<div
+  class="field"
+  *ngIf="vm.formData.childrenStatus === 'Yes'"
+>
+  <label>
+    {{ vm.currentLang === 'ta'
+      ? 'குழந்தைகள் விவரம்'
+      : 'Children Details'
+    }}
+  </label>
+
+  <textarea
+    [ngModel]="vm.getTypedValue('childrenDetails')"
+    (ngModelChange)="vm.setTypedValue('childrenDetails', $event)"
+(keypress)="vm.handleTyping($event)"
+    name="childrenDetails"
+    rows="3"
+    [placeholder]="vm.currentLang === 'ta'
+      ? 'குழந்தைகள் விவரத்தை உள்ளிடவும்'
+      : 'Enter children details'"
+  ></textarea>
+</div>
+<!-- KALAPPU THIRUMANAM -->
+
+<div class="field">
+
+  <label>
+    {{ vm.currentLang === 'ta'
+      ? 'கலப்பு திருமணம்'
+      : 'Kalappu Thirumanam'
+    }}
+  </label>
+
+  <select
+    [(ngModel)]="vm.formData.kalappuThirumanam"
+    name="kalappuThirumanam"
+  >
+
+    <option value="No">
+      {{ vm.currentLang === 'ta' ? 'இல்லை' : 'No' }}
+    </option>
+
+    <option value="Yes">
+      {{ vm.currentLang === 'ta' ? 'ஆம்' : 'Yes' }}
+    </option>
+
+  </select>
+
+</div>
+<!-- KALAPPU THIRUMANAM DETAILS -->
+
+<div
+  class="field"
+  *ngIf="vm.formData.kalappuThirumanam === 'Yes'"
+>
+
+  <label>
+    {{ vm.currentLang === 'ta'
+      ? 'கலப்பு திருமணம் விவரம்'
+      : 'Kalappu Thirumanam Details'
+    }}
+  </label>
+
+  <input
+  type="text"
+  [ngModel]="vm.getTypedValue('kalappuThirumanamDetails')"
+  (ngModelChange)="vm.setTypedValue('kalappuThirumanamDetails', $event)"
+(keypress)="vm.handleTyping($event)"
+  name="kalappuThirumanamDetails"
+>
+
+</div>
+<!-- HANDICAP -->
+
+<div class="field">
+
+  <label>
+    {{ vm.tr.labels.handicap }}
+  </label>
+
+  <select
+    [(ngModel)]="vm.formData.handicapStatus"
+    name="handicapStatus"
+  >
+
+<option value="No">
+  {{ vm.currentLang === 'ta' ? 'இல்லை' : 'No' }}
+</option>
+
+<option value="Yes">
+  {{ vm.currentLang === 'ta' ? 'ஆம்' : 'Yes' }}
+</option>
+
+  </select>
+
+</div>
+
+<!-- HANDICAP DETAILS -->
+
+<div
+  class="field"
+  *ngIf="vm.formData.handicapStatus === 'Yes'"
+>
+
+  <label>
+    {{ vm.tr.labels.handicapDetails }}
+  </label>
+
+  <input
+    type="text"
+    [ngModel]="vm.getTypedValue('handicapDetails')"
+   (ngModelChange)="vm.setTypedValue('handicapDetails', $event)"
+(keypress)="vm.handleTyping($event)"
+    name="handicapDetails"
+  >
+
+</div>
+<!-- MOBILE -->
+<div class="field" [class.invalid]="vm.isInvalid('mobile')">
+  <label>{{ vm.tr.labels.mobile }} <span class="required">*</span></label>
+<input
+  type="text"
+
+  [value]="vm.formData.mobile"
+
+  (input)="
+    vm.formData.mobile =
+    ($any($event.target).value || '')
+      .replace(/[^0-9]/g, '')
+      .substring(0,10);
+
+    $any($event.target).value =
+    vm.formData.mobile;
+    vm.checkAdminDuplicate();
+  "
+
+  name="mobile"
+
+  maxlength="10"
+
+  inputmode="numeric"
+
+  autocomplete="off"
+
+  placeholder="Enter 10 digit mobile number"
+
+  [class.invalid]="
+    vm.formData.mobile &&
+    !/^[6-9]\d{9}$/.test(vm.formData.mobile)
+  "
+  [disabled]="!vm.isAdminCreated && vm.isEditMode"
+>
+
+
+<small
+  class="field-error"
+
+  *ngIf="
+    vm.formData.mobile &&
+    !/^[6-9]\d{9}$/.test(vm.formData.mobile)
+  "
+>
+
+  {{
+    vm.currentLang === 'ta'
+      ? 'சரியான 10 இலக்க மொபைல் எண்ணை உள்ளிடவும்'
+      : 'Enter valid 10 digit mobile number'
+  }}
+
+</small>
+<small
+  class="field-error"
+  *ngIf="vm.duplicateProfileExists"
+>
+  {{
+    vm.currentLang === 'ta'
+      ? 'இந்த மொபைல் எண்ணில் ஏற்கனவே சுயவிவரம் உள்ளது'
+      : 'Profile already exists with this mobile number'
+  }}
+</small>
+  <small class="field-error" *ngIf="vm.isInvalid('mobile')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+</div>
+
+<div class="field additional-phone-field">
+
+  <label>
+    {{ vm.tr.labels.additionalMobile }}
+  </label>
+
+  <div class="additional-phone-wrapper">
+
+    <div
+   *ngFor="
+  let mobile of vm.formData.additionalMobile;
+  let i = index;
+  trackBy: vm.trackByIndex
+"
+      class="additional-mobile-row"
+    >
+
+<input
+  type="text"
+
+  [(ngModel)]="vm.formData.additionalMobile[i]"
+
+  (ngModelChange)="
+    vm.formData.additionalMobile[i] =
+    ($event || '')
+      .replace(/[^0-9]/g, '')
+      .substring(0,10)
+  "
+
+  [name]="'additionalMobile' + i"
+
+  maxlength="10"
+
+  inputmode="numeric"
+
+  autocomplete="off"
+
+  placeholder="Enter 10 digit mobile number"
+
+  [class.invalid]="
+    vm.formData.additionalMobile[i] &&
+    !/^[6-9]\d{9}$/.test(
+      vm.formData.additionalMobile[i]
+    )
+  "
+>
+<small
+  class="field-error"
+
+  *ngIf="
+    vm.formData.additionalMobile[i] &&
+    !/^[6-9]\d{9}$/.test(
+      vm.formData.additionalMobile[i]
+    )
+  "
+>
+
+  {{
+    vm.currentLang === 'ta'
+      ? 'சரியான மொபைல் எண்ணை உள்ளிடவும்'
+      : 'Enter valid mobile number'
+  }}
+
+</small>
+
+    <button
+  type="button"
+  class="remove-btn"
+  (click)="vm.removeAdditionalMobile(i)"
+>
+  Remove
+</button>
+
+    </div>
+
+    <button
+      type="button"
+      class="add-mobile-btn"
+      (click)="vm.addAdditionalMobile()"
+    >
+      + Add Number
+    </button>
+
+  </div>
+
+</div>
+          <!-- EMAIL -->
+<div class="field" [class.invalid]="vm.isInvalid('email')">
+  <label>{{ vm.tr.labels.email }} <span class="optional">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? '(விருப்பம்)' : '(Optional)' }}</span></label>
+  <input type="email" [(ngModel)]="vm.formData.email" name="email" [placeholder]="vm.tr.placeholders.email">
+  <!-- <small class="field-error" *ngIf="vm.isInvalid('email')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small> -->
+</div>
+
+<!-- HEIGHT -->
+<div class="field">
+  <label>{{ vm.tr.labels.height }} <span class="optional">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? '(விருப்பம்)' : '(Optional)' }}</span></label>
+
+  <input
+    type="text"
+    [(ngModel)]="vm.formData.height"
+    name="height"
+    [placeholder]="vm.tr.placeholders.height"
+  >
+
+</div>
+ <!-- WEIGHT -->
+<div class="field">
+  <label>{{ vm.tr.labels.weight }} <span class="optional">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? '(விருப்பம்)' : '(Optional)' }}</span></label>
+
+  <input
+    type="text"
+    [(ngModel)]="vm.formData.weight"
+    name="weight"
+    [placeholder]="vm.tr.placeholders.weight"
+  >
+
+</div>
+<!-- COLOR -->
+<div class="field">
+
+  <label>
+    {{ vm.currentLang === 'ta'
+      ? 'நிறம்'
+      : 'Color'
+    }}
+  </label>
+
+ <select [(ngModel)]="vm.formData.colorId" name="colorId">
+  <option value="">
+    {{ vm.currentLang === 'ta' ? 'நிறத்தை தேர்வு செய்யவும்' : 'Select Color' }}
+  </option>
+
+<option *ngFor="let color of vm.colorList" [value]="color._id">
+  {{
+    vm.currentLang === 'ta'
+      ? (color.nameTa || color.nameEn)
+      : color.nameEn
+  }}
+</option>
+</select>
+
+</div>
+
+          <!-- RELIGION -->
+<div class="field" [class.invalid]="vm.isInvalid('religion')">
+  <label>{{ vm.tr.labels.religion }} <span class="required">*</span></label>
+
+<select
+  [(ngModel)]="vm.selectedReligionId"
+  name="religionId"
+  (ngModelChange)="vm.onReligionChange()">
+
+   <option value="">
+  {{ vm.currentLang === 'ta' ? 'மதத்தை தேர்வு செய்யவும்' : 'Select Religion' }}
+</option>
+
+<option
+  *ngFor="let religion of vm.religionList"
+  [value]="religion._id">
+  {{
+    vm.currentLang === 'ta'
+      ? (religion.nameTa || religion.nameEn)
+      : religion.nameEn
+  }}
+</option>
+
+  </select>
+
+  <small class="field-error" *ngIf="vm.isInvalid('religion')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+</div>
+
+<div class="field caste-field" [class.invalid]="vm.isInvalid('caste')">
+  <label>{{ vm.tr.labels.caste }} <span class="required">*</span></label>
+
+  <div class="caste-select-wrap">
+ <input
+  type="text"
+  [(ngModel)]="vm.casteSearch"
+  name="casteSearch"
+  [placeholder]="vm.currentLang === 'ta' ? 'ஜாதியை தேடவும் / உள்ளிடவும்' : 'Search / Enter caste'"
+  autocomplete="off"
+  (focus)="vm.onCasteSearchChange()"
+  (blur)="vm.hideCasteDropdown()"
+  (keypress)="vm.handleTyping($event)"
+  (input)="vm.onCasteSearchChange()"
+>
+
+    <div class="caste-dropdown" *ngIf="vm.showCasteDropdown">
+      <div
+        class="caste-option"
+        *ngFor="let caste of vm.filteredCasteList"
+        (mousedown)="vm.selectCaste(caste)"
+      >
+        {{
+          vm.currentLang === 'ta'
+            ? (caste.nameTa || caste.nameEn)
+            : caste.nameEn
+        }}
+      </div>
+    </div>
+  </div>
+
+  <small class="field-error" *ngIf="vm.isInvalid('caste')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+</div>
+
+<!-- SUB CASTE -->
+
+<div class="field">
+
+  <label>
+    {{ vm.tr.labels.subCaste }}
+  </label>
+
+  <input
+    type="text"
+    [ngModel]="vm.getTypedValue('subCaste')"
+    (ngModelChange)="vm.setTypedValue('subCaste', $event)"
+(keypress)="vm.handleTyping($event)"
+    name="subCaste"
+  >
+
+</div>
+
+  <div class="field">
+           <label>{{ vm.tr.labels.gothram }} <span class="optional">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? '(விருப்பம்)' : '(Optional)' }}</span></label>
+           <input
+  type="text"
+  [ngModel]="vm.getTypedValue('gothram')"
+  (ngModelChange)="vm.setTypedValue('gothram', $event)"
+(keypress)="vm.handleTyping($event)"
+  name="gothram"
+  [placeholder]="vm.tr.placeholders.gothram">
+          </div>
+        </div>
+      </div>
+</details>

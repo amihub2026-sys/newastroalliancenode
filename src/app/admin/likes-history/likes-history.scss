@@ -1,0 +1,199 @@
+.content-section {
+  padding: 24px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.section-header p {
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 15px;
+}
+.content-section > .section-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.panel-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f5f5f5;
+}
+
+th,
+td {
+  padding: 20px;
+}
+
+thead th {
+  text-align: center;
+  font-weight: 700;
+}
+
+tbody td:not(:first-child) {
+  text-align: center;
+}
+tbody td:first-child {
+  text-align: left;
+}
+tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+thead th:first-child {
+  text-align: center;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.code {
+  color: #7c3aed;
+  font-weight: 700;
+}
+
+.name {
+  margin-top: 4px;
+}
+
+.view-btn {
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.history-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999;
+}
+
+.history-card {
+  background: white;
+  width: 90%;
+  max-width: 700px;
+  border-radius: 20px;
+  padding: 24px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+
+  border: none;
+  background: #eee;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.history-item {
+  padding: 16px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.history-item small {
+  color: gray;
+}
+
+@media (max-width: 768px) {
+  th,
+  td {
+    padding: 12px;
+  }
+
+  .history-card {
+    width: 95%;
+    padding: 18px;
+  }
+}
+
+.pagination-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+
+  margin-top: 24px;
+}
+
+.pagination-wrap button {
+  border: none;
+
+  padding: 10px 18px;
+
+  border-radius: 10px;
+
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+
+  color: white;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+.pagination-wrap button:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.pagination-wrap span {
+  font-weight: 600;
+}
+.history-popup,
+.history-card,
+.view-btn {
+  pointer-events: auto;
+
+  user-select: none;
+}

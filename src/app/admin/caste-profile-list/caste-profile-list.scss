@@ -1,0 +1,190 @@
+.content-section {
+  padding: 30px;
+  background: #fff7fb;
+  min-height: 100vh;
+}
+
+.section-header {
+  margin-bottom: 25px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.section-header p {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 15px;
+}
+
+/* MAIN CARD */
+
+.panel-card {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+/* GENDER TITLE */
+
+.gender-title {
+  margin: 25px 0 15px;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  color: #7c1d5a;
+}
+
+/* TABLE WRAPPER */
+
+.table-wrap {
+  width: 100%;
+
+  overflow-x: auto;
+
+  margin-bottom: 35px;
+}
+
+/* TABLE */
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  background: white;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+thead {
+  background: #ffe8f1;
+}
+
+thead th {
+  padding: 14px 16px;
+
+  text-align: left;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #111827;
+}
+
+tbody td {
+  padding: 14px 16px;
+
+  border-bottom: 1px solid #f1e4eb;
+
+  font-size: 14px;
+
+  color: #374151;
+}
+
+tbody tr:hover {
+  background: #fff7fb;
+}
+
+/* EMPTY */
+
+.empty-row {
+  text-align: center;
+
+  padding: 25px;
+
+  color: #9ca3af;
+
+  font-weight: 600;
+}
+
+/* STATUS */
+
+td:last-child {
+  font-weight: 600;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+  .content-section {
+    padding: 15px;
+  }
+
+  .section-header h2 {
+    font-size: 22px;
+  }
+
+  .panel-card {
+    padding: 15px;
+  }
+
+  .gender-title {
+    font-size: 18px;
+  }
+
+  table {
+    min-width: 750px;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+}
+.accordion-title {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  background: #ffe4ef;
+
+  padding: 15px 20px;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  margin-top: 20px;
+
+  color: #8b1d5c;
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  transition: 0.3s;
+}
+
+.accordion-title:hover {
+  background: #fbcfe8;
+}
+
+.accordion-body {
+  animation: slide 0.3s ease;
+}
+
+@keyframes slide {
+  from {
+    opacity: 0;
+
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,99 @@
+<section class="content-section">
+
+  <div class="page-head">
+    <div>
+      <h2>Marital Status List</h2>
+      <p>Manage marital status master records</p>
+    </div>
+
+    <button class="add-btn" (click)="openAddForm()">
+      + Add Marital Status
+    </button>
+  </div>
+
+  <div class="form-card" *ngIf="showForm">
+    <h3>{{ isEdit ? 'Edit Marital Status' : 'Add Marital Status' }}</h3>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Marital Status English</label>
+        <input
+          type="text"
+          [(ngModel)]="formData.nameEn"
+          placeholder="Enter English name">
+      </div>
+
+      <div class="form-group">
+        <label>Marital Status Tamil</label>
+        <input
+          type="text"
+          [(ngModel)]="formData.nameTa"
+          (keypress)="tamilTyping($event)"
+          placeholder="தமிழ் பெயர்">
+      </div>
+
+      <div class="form-group">
+        <label>Sort Order</label>
+        <input
+          type="number"
+          [(ngModel)]="formData.sortOrder"
+          placeholder="Enter sort order">
+      </div>
+
+      <div class="form-group status-box">
+        <label>
+          <input type="checkbox" [(ngModel)]="formData.isActive">
+          Active
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="save-btn" (click)="saveMaritalStatus()" [disabled]="isSaving">
+        {{ isSaving ? 'Saving...' : 'Save' }}
+      </button>
+
+      <button class="cancel-btn" (click)="closeForm()">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <p *ngIf="isLoading">Loading marital statuses...</p>
+
+    <table *ngIf="!isLoading">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>English Name</th>
+          <th>Tamil Name</th>
+          <th>Status</th>
+          <th class="action-col">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let status of statuses; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ status.nameEn }}</td>
+          <td>{{ status.nameTa }}</td>
+          <td>
+            <span class="badge" [class.inactive]="!status.isActive">
+              {{ status.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button class="edit-btn" (click)="editMaritalStatus(status)">Edit</button>
+            <button class="delete-btn" (click)="deleteMaritalStatus(status._id)">Delete</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="statuses.length === 0">
+          <td colspan="5" class="empty">No marital statuses found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>

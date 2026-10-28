@@ -1,0 +1,845 @@
+<section class="profile-view-page">
+  <div class="container" *ngIf="isLoading">
+    <p>{{ currentLang === 'ta' ? 'சுயவிவரம் ஏற்றப்படுகிறது...' : 'Loading profile...' }}</p>
+  </div>
+
+  <div class="container" *ngIf="!isLoading && profile as p">
+
+ <div class="top-actions">
+
+  <span class="plan-chip" *ngIf="unlocked && selectedPlan">
+    {{ selectedPlan }}
+  </span>
+
+</div>
+
+<div class="profile-layout" [class.with-plan]="unlocked" [class.without-plan]="!unlocked">
+
+  <!-- LEFT SIDE -->
+  <div class="left-column">
+
+  
+  <div class="profile-photo-wrap">
+    <button type="button" class="profile-image-card aa-photo-click" (click)="openPhoto()" [attr.aria-label]="currentLang === 'ta' ? 'முழு புகைப்படம் பார்க்க' : 'View full photo'">
+      <img [src]="p.profileImage" [alt]="getText(p.fullName)" />
+    </button>
+
+    <button
+      class="see-full-photo-btn"
+      type="button"
+      (click)="openPhoto()"
+    >
+     {{ currentLang === 'ta' ? 'முழு புகைப்படம் பார்க்க' : 'See Full Photo' }}
+    </button>
+
+
+<div class="left-media-section no-pdf">
+
+  <!-- ADDITIONAL PHOTOS -->
+  <div class="side-gallery" *ngIf="p.galleryImages.length">
+    <h3>
+      {{ currentLang === 'ta' ? 'கூடுதல் புகைப்படங்கள்' : 'Additional Photos' }}
+    </h3>
+
+    <div class="side-gallery-grid">
+      <button type="button" class="aa-gallery-item" *ngFor="let img of p.galleryImages | slice:0:4" (click)="openPhoto(img)" [attr.aria-label]="currentLang === 'ta' ? 'கூடுதல் படம் பார்க்க' : 'View additional photo'">
+        <img [src]="img" alt="Additional photo" loading="lazy" />
+      </button>
+    </div>
+
+    <button
+      type="button"
+      class="side-action-btn"
+      (click)="openAdditionalPhotos()"
+    >
+      {{
+        currentLang === 'ta'
+          ? 'அனைத்து புகைப்படங்கள் பார்க்க'
+          : 'See Additional Photos (' + p.galleryImages.length + ')'
+      }}
+    </button>
+  </div>
+
+  <!-- VIDEO -->
+  <div class="side-video" *ngIf="p.videoUrl">
+    <h3>
+      {{ currentLang === 'ta' ? 'சுயவிவர வீடியோ' : 'Profile Video' }}
+    </h3>
+
+    <div class="video-thumb" (click)="openVideoPopup()">
+      <video [src]="p.videoUrl" muted playsinline></video>
+      <div class="play-overlay">▶</div>
+    </div>
+
+    <button
+      type="button"
+      class="side-action-btn"
+      (click)="openVideoPopup()"
+    >
+      {{ currentLang === 'ta' ? 'முழு வீடியோ பார்க்க' : 'Watch Full Video' }}
+    </button>
+  </div>
+
+</div>
+</div>
+
+</div> <!-- LEFT COLUMN END -->
+
+<!-- RIGHT SIDE -->
+<div class="right-column">
+
+ <app-photo-lightbox *ngIf="openFullPhoto" [images]="permittedPhotos" [index]="currentGalleryIndex" [lang]="currentLang" (closed)="closePhoto()" />
+
+  <div class="full-photo-popup" *ngIf="openGalleryPopup" role="dialog" aria-modal="true">
+    <button class="close-photo-btn" type="button" (click)="closeAdditionalPhotos()" [attr.aria-label]="currentLang === 'ta' ? 'மூடு' : 'Close'">×</button>
+    <div class="gallery-popup-grid">
+      <button type="button" class="aa-gallery-item" *ngFor="let img of p.galleryImages" (click)="openPhotoFromGallery(img)">
+        <img [src]="img" alt="Additional photo" loading="lazy" />
+      </button>
+    </div>
+  </div>
+<div class="full-photo-popup" *ngIf="openVideoFull">
+
+  <button
+    class="close-photo-btn"
+    type="button"
+    (click)="closeVideoPopup()"
+  >
+    ×
+  </button>
+
+  <video
+    class="popup-video"
+    [src]="p.videoUrl"
+    controls
+    autoplay
+  ></video>
+
+</div>
+  <div class="profile-main-card">
+<div class="hero-top">
+  <div>
+
+    <div class="pdf-company-header">
+
+      <div class="pdf-top-contact">
+        <p>Email: support@astroalliance.in</p>
+        <p>Contact: +91 9876543210</p>
+        <p>Website: www.astroalliance.in</p>
+      </div>
+
+      <h2>Astro Alliance</h2>
+
+    </div>
+
+    <h1>{{ getText(p.fullName) }}</h1>
+        <p class="hero-sub">
+          {{ p.age }} yrs • {{ getCategoryText(p.gender) }} • {{ getCategoryText(p.job) }}
+        </p>
+        <p class="hero-location">
+          {{ fullLocation }}
+        </p>
+      </div>
+
+      <span class="verified-badge">{{ currentLang === 'ta' ? 'சரிபார்க்கப்பட்டது' : 'Verified' }}</span>
+    </div>
+
+    <p class="about-text">
+    {{
+  getText(p.about) ||
+  (currentLang === 'ta'
+    ? 'சுயவிவர சுருக்கம் சேர்க்கப்படவில்லை.'
+    : 'No profile summary added yet.')
+}}
+    </p>
+
+    <div class="quick-info">
+      <div class="info-pill" *ngIf="getText(p.maritalStatus)">{{ getCategoryText(p.maritalStatus) }}</div>
+      <div class="info-pill" *ngIf="getText(p.religion)">{{ getCategoryText(p.religion) }}</div>
+      <div class="info-pill" *ngIf="getText(p.caste)">{{ getCategoryText(p.caste) }}</div>
+      <div class="info-pill" *ngIf="getText(p.education)">{{ getCategoryText(p.education) }}</div>
+      <div class="info-pill" *ngIf="p.height">{{ p.height }}</div>
+    </div>
+
+    <div class="hero-actions">
+
+<div class="interest-block">
+
+<button
+  class="primary-btn"
+  class="primary-btn"
+  [class.success-btn]="alreadySent"
+  [disabled]="alreadySent"
+  (click)="sendInterest()"
+
+>
+  {{
+    alreadySent
+      ? (currentLang === 'ta'
+          ? 'ஆர்வம் அனுப்பப்பட்டது'
+          : 'Interest Sent')
+      : (currentLang === 'ta'
+          ? 'ஆர்வம் அனுப்பு'
+          : 'Send Interest')
+  }}
+</button>
+
+<div
+  class="interest-status-text"
+  *ngIf="alreadySent"
+  [style.color]="
+    interestStatus === 'accepted'
+      ? '#16a34a'
+      : interestStatus === 'rejected'
+      ? '#dc2626'
+      : '#f59e0b'
+  "
+>
+{{
+  interestStatus === 'accepted'
+    ? (currentLang === 'ta'
+        ? '❤️ வாழ்த்துகள்! உங்கள் ஆர்வம் ஏற்றுக்கொள்ளப்பட்டது.'
+        : '❤️ Congratulations! Your interest was accepted.')
+
+    : interestStatus === 'rejected'
+    ? (currentLang === 'ta'
+        ? '💔 மன்னிக்கவும்! உங்கள் ஆர்வம் நிராகரிக்கப்பட்டது.'
+        : '💔 Sorry! Your interest was rejected.')
+
+    : (currentLang === 'ta'
+        ? '⏳ உங்கள் ஆர்வ கோரிக்கை பதிலுக்காக காத்திருக்கிறது.'
+        : '⏳ Your interest request is waiting for response.')
+}}
+
+</div>
+
+</div>
+
+
+
+ <button
+  class="secondary-btn"
+  [class.success-btn]="alreadyShortlisted"
+  [disabled]="alreadyShortlisted"
+  *ngIf="unlocked"
+  type="button"
+  (click)="shortlistProfile()"
+>
+  {{
+    alreadyShortlisted
+      ? (currentLang === 'ta' ? 'பிடித்ததில் சேர்க்கப்பட்டது' : 'Shortlisted')
+      : (currentLang === 'ta' ? 'பிடித்ததில் சேர்' : 'Shortlist')
+  }}
+</button>
+      <!-- <button class="secondary-btn" *ngIf="unlocked" type="button">Chat Now</button> -->
+      <button class="locked-btn" *ngIf="!unlocked" type="button" (click)="goToLoginOrRegister()">
+        {{ currentLang === 'ta' ? 'முழு சுயவிவரம் திறக்கவும்' : 'Unlock Full Profile' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+   
+
+<div class="details-grid profile-image-style-details">
+
+      <div class="detail-card">
+        <h2>
+  {{ currentLang === 'ta'
+    ? 'தனிப்பட்ட விவரங்கள்'
+    : 'Personal Details'
+  }}
+</h2>
+        <div class="detail-list">
+          <div><span>
+  {{ currentLang === 'ta' ? 'சுயவிவர ஐடி' : 'Profile ID' }}
+</span><strong>{{ p.id || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'முழு பெயர்' : 'Full Name' }}
+</span><strong>{{ getText(p.fullName) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'பாலினம்' : 'Gender' }}
+</span><strong>{{ getCategoryText(p.gender) || '-' }}</strong></div>
+   <div>
+  <span>
+    {{ currentLang === 'ta' ? 'பிறந்த தேதி' : 'Date of Birth' }}
+  </span>
+
+  <strong>{{ p.dob || '-' }}</strong>
+</div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'வயது' : 'Age' }}
+</span><strong>{{ p.age || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'திருமண நிலை' : 'Marital Status' }}
+</span><strong>{{ getCategoryText(p.maritalStatus) || '-' }}</strong></div>
+<div *ngIf="isPreviouslyMarried(p.maritalStatus)">
+  <span>{{ currentLang === 'ta' ? 'குழந்தைகள்' : 'Children' }}</span>
+<strong>{{ yesNo(p.childrenStatus) }}</strong>
+</div>
+
+<div *ngIf="isYes(p.childrenStatus)">
+  <span>{{ currentLang === 'ta' ? 'குழந்தைகள் விவரம்' : 'Children Details' }}</span>
+  <strong>{{ p.childrenDetails || '-' }}</strong>
+</div>
+
+<div>
+  <span>{{ currentLang === 'ta' ? 'கலப்பு திருமணம்' : 'Kalappu Thirumanam' }}</span>
+  <strong>{{ yesNo(p.kalappuThirumanam) }}</strong>
+</div>
+
+<div *ngIf="isYes(p.kalappuThirumanam)">
+  <span>{{ currentLang === 'ta' ? 'கலப்பு திருமணம் விவரம்' : 'Kalappu Thirumanam Details' }}</span>
+  <strong>{{ getText(p.kalappuThirumanamDetails) || '-' }}</strong>
+</div>
+
+<div>
+  <span>{{ currentLang === 'ta' ? 'மாற்றுத்திறனாளி' : 'Handicap' }}</span>
+ <strong>{{ yesNo(p.handicapStatus) }}</strong>
+</div>
+
+<div *ngIf="isYes(p.handicapStatus)">
+  <span>{{ currentLang === 'ta' ? 'மாற்றுத்திறனாளி விவரம்' : 'Handicap Details' }}</span>
+  <strong>{{ getText(p.handicapDetails) || '-' }}</strong>
+</div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'உயரம்' : 'Height' }}
+</span><strong>{{ p.height || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'எடை' : 'Weight' }}
+</span><strong>{{ p.weight || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'மதம்' : 'Religion' }}
+</span><strong>{{ getCategoryText(p.religion) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'ஜாதி' : 'Caste' }}
+</span><strong>{{ getCategoryText(p.caste) || '-' }}</strong></div>
+<div>
+  <span>{{ currentLang === 'ta' ? 'உப ஜாதி' : 'Sub Caste' }}</span>
+  <strong>{{ getText(p.subCaste) || '-' }}</strong>
+</div>
+        </div>
+      </div>
+
+
+ <div class="detail-card">
+        <h2>
+  {{ currentLang === 'ta'
+    ? 'குடும்ப விவரங்கள்'
+    : 'Family Details'
+  }}
+</h2>
+        <div class="detail-list">
+          <div><span>
+  {{ currentLang === 'ta' ? 'தந்தை பெயர்' : 'Father Name' }}
+</span><strong>{{ getText(p.fatherName) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'தாய் பெயர்' : 'Mother Name' }}
+</span><strong>{{ getText(p.motherName) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta'
+    ? 'தந்தை தொழில்'
+    : 'Father Occupation'
+  }}
+</span><strong>{{ getText(p.fatherOccupation) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta'
+    ? 'தாய் தொழில்'
+    : 'Mother Occupation'
+  }}
+</span><strong>{{ getText(p.motherOccupation) || '-' }}</strong></div>
+          <!-- <div><span>
+  {{ currentLang === 'ta' ? 'உடன்பிறப்புகள்' : 'Siblings' }}
+</span>
+<strong>{{ getText(p.siblings) || '-' }}</strong>
+</div> -->
+<div>
+  <span>{{ currentLang === 'ta' ? 'திருமணமான சகோதரர்கள்' : 'Married Brothers' }}</span>
+  <strong>{{ p.marriedBrothers || '-' }}</strong>
+</div>
+
+<div>
+  <span>{{ currentLang === 'ta' ? 'திருமணம் ஆகாத சகோதரர்கள்' : 'Unmarried Brothers' }}</span>
+  <strong>{{ p.unmarriedBrothers || '-' }}</strong>
+</div>
+
+<div>
+  <span>{{ currentLang === 'ta' ? 'திருமணமான சகோதரிகள்' : 'Married Sisters' }}</span>
+  <strong>{{ p.marriedSisters || '-' }}</strong>
+</div>
+
+<div>
+  <span>{{ currentLang === 'ta' ? 'திருமணம் ஆகாத சகோதரிகள்' : 'Unmarried Sisters' }}</span>
+  <strong>{{ p.unmarriedSisters || '-' }}</strong>
+</div>
+
+<div>
+  <span>{{ currentLang === 'ta' ? 'குடும்ப நிலை' : 'Kudumba Nilai' }}</span>
+  <strong>{{ getText(p.kudumbaNilai) || '-' }}</strong>
+</div>
+
+<div>
+  <span>{{ currentLang === 'ta' ? 'பூர்வீகம்' : 'Poorvegam' }}</span>
+  <strong>{{ getText(p.poorvegam) || '-' }}</strong>
+</div>
+
+<div>
+  <span>{{ currentLang === 'ta' ? 'இருப்பிடம்' : 'Iruppidam' }}</span>
+  <strong>{{ getText(p.iruppidam) || '-' }}</strong>
+</div>
+        </div>
+      </div>
+
+     
+
+      <div class="detail-card">
+       <h2>
+  {{ currentLang === 'ta'
+    ? 'ஜாதக விவரங்கள்'
+    : 'Horoscope Details'
+  }}
+</h2>
+        <div class="detail-list">
+          <div><span>
+  {{ currentLang === 'ta' ? 'ராசி' : 'Rasi' }}
+</span><strong>{{ getCategoryText(p.rasi) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'நட்சத்திரம்' : 'Nakshatra' }}
+</span>
+<strong>{{ getCategoryText(p.nakshatra) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'லக்னம்' : 'Lagnam' }}
+</span><strong>{{ getCategoryText(p.lagnam) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'கோத்திரம்' : 'Gothram' }}
+</span><strong>{{ getText(p.gothram) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'தோஷம்' : 'Dhosham' }}
+</span><strong>{{ getCategoryText(p.dhosham) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'பிறந்த நேரம்' : 'Birth Time' }}
+</span><strong>{{ p.birthTime || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'பிறந்த இடம்' : 'Birth Place' }}
+</span><strong>{{ getText(p.birthPlace) || '-' }}</strong></div>
+<!-- THISAI -->
+
+<div>
+  <span>
+    {{ currentLang === 'ta' ? 'திசை' : 'Thisai' }}
+  </span>
+
+  <strong>
+    {{ getText(p.thisai) || '-' }}
+  </strong>
+</div>
+
+<!-- THISAI IRUPPU -->
+
+<div>
+  <span>
+    {{ currentLang === 'ta'
+      ? 'திசை இருப்பு'
+      : 'Thisai Iruppu'
+    }}
+  </span>
+
+  <strong>
+    {{ getText(p.thisaiIruppu) || '-' }}
+  </strong>
+</div>
+
+<!-- PAATHAM -->
+
+<div>
+  <span>
+    {{ currentLang === 'ta'
+      ? 'பாதம்'
+      : 'Paatham'
+    }}
+  </span>
+
+  <strong>
+    {{ getText(p.paatham) || '-' }}
+  </strong>
+</div>
+
+<!-- SOTHUKAL -->
+
+<div>
+  <span>
+    {{ currentLang === 'ta'
+      ? 'சொத்துகள்'
+      : 'Sothukal'
+    }}
+  </span>
+
+  <strong>
+    {{ getText(p.sothukal) || '-' }}
+  </strong>
+</div>
+
+<!-- KULADEIVAM -->
+
+<div>
+  <span>
+    {{ currentLang === 'ta'
+      ? 'குலதெய்வம்'
+      : 'Kuladeivam'
+    }}
+  </span>
+
+  <strong>
+    {{ getText(p.kuladeivam) || '-' }}
+  </strong>
+</div>
+
+        </div>
+      </div>
+
+      <div class="detail-card">
+      <h2>
+  {{ currentLang === 'ta'
+    ? 'கல்வி மற்றும் தொழில்'
+    : 'Education & Career'
+  }}
+</h2>
+        <div class="detail-list">
+          <div><span>
+  {{ currentLang === 'ta' ? 'கல்வி' : 'Education' }}
+</span><strong>{{ getCategoryText(p.education) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'தொழில்' : 'Occupation' }}
+</span><strong>{{ getCategoryText(p.job) || '-' }}</strong></div>
+          <div>
+  <span>
+  {{ currentLang === 'ta' ? 'நிறுவனம்' : 'Company' }}
+</span>
+<strong *ngIf="unlocked">{{ getText(p.company) || '-' }}</strong>
+  <strong *ngIf="!unlocked" class="premium-heart" (click)="goToLoginOrRegister()">
+  💖
+</strong>
+</div>
+<div>
+  <span>{{ currentLang === 'ta' ? 'பணியிடம்' : 'Work Place' }}</span>
+  <strong *ngIf="unlocked">{{ getText(p.workPlace) || '-' }}</strong>
+  <strong *ngIf="!unlocked" class="premium-heart" (click)="goToLoginOrRegister()">💖</strong>
+</div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'சம்பளம்' : 'Salary' }}
+</span><strong>{{ p.salary || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'நகரம்' : 'City' }}
+</span><strong>{{ getCategoryText(p.city) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'மாநிலம்' : 'State' }}
+</span><strong>{{ getCategoryText(p.state) || '-' }}</strong></div>
+          <div><span>
+  {{ currentLang === 'ta' ? 'நாடு' : 'Country' }}
+</span><strong>{{ getCategoryText(p.country) || '-' }}</strong></div>
+        </div>
+      </div>
+
+      <div class="detail-card">
+  <h2>{{ currentLang === 'ta' ? 'முகவரி விவரங்கள்' : 'Address Details' }}</h2>
+
+<div *ngIf="unlocked" class="detail-list">
+  <div>
+    <span>{{ currentLang === 'ta' ? 'முகவரி' : 'Address' }}</span>
+
+<strong>
+  {{ getText(p.address) || '-' }}
+</strong>
+  </div>
+
+  <div><span>{{ currentLang === 'ta' ? 'நகரம்' : 'City' }}</span><strong>{{ getCategoryText(p.city) || '-' }}</strong></div>
+  <div><span>{{ currentLang === 'ta' ? 'மாநிலம்' : 'State' }}</span><strong>{{ getCategoryText(p.state) || '-' }}</strong></div>
+  <div><span>{{ currentLang === 'ta' ? 'நாடு' : 'Country' }}</span><strong>{{ getCategoryText(p.country) || '-' }}</strong></div>
+</div>
+
+ <div *ngIf="!unlocked" class="premium-lock-box">
+  <div class="lock-icon">💖</div>
+  {{ currentLang === 'ta' ? 'முகவரி மறைக்கப்பட்டுள்ளது' : 'Address Hidden' }}
+  <p>{{
+  currentLang === 'ta'
+    ? 'முழு முகவரி விவரங்களை பார்க்க உங்கள் திட்டத்தை மேம்படுத்தவும்.'
+    : 'Upgrade your plan to view full address details securely.'
+}}</p>
+  <button class="unlock-premium-btn" (click)="goToLoginOrRegister()">
+    {{ currentLang === 'ta' ? 'இப்போது திறக்கவும்' : 'Unlock Now' }}
+  </button>
+</div>
+</div>
+     <div class="detail-card contact-card">
+      <h2>
+  {{ currentLang === 'ta'
+    ? 'தொடர்பு விவரங்கள்'
+    : 'Contact Details'
+  }}
+</h2>
+
+<div *ngIf="contactUnlocked" class="detail-list">
+
+  <div>
+    <span>{{ currentLang === 'ta' ? 'மொபைல்' : 'Mobile' }}</span>
+<strong>
+  {{ p.mobile || '-' }}
+</strong>
+  </div>
+
+  <div>
+    <span>{{ currentLang === 'ta' ? 'கூடுதல் மொபைல்' : 'Additional Mobile' }}</span>
+<strong>
+  {{ p.additionalMobile || '-' }}
+</strong>
+  </div>
+
+  <div>
+    <span>{{ currentLang === 'ta' ? 'மின்னஞ்சல்' : 'Email' }}</span>
+<strong>
+  {{ p.email || '-' }}
+</strong>
+  </div>
+
+</div>
+
+       <div *ngIf="!contactUnlocked" class="premium-lock-box">
+  <div class="lock-icon">💖</div>
+  <h3>{{ currentLang === 'ta' ? 'தொடர்பு விவரங்கள் பூட்டப்பட்டுள்ளது' : 'Contact Details Locked' }}</h3>
+  <p>{{
+  currentLang === 'ta'
+    ? 'தொலைபேசி எண் மற்றும் மின்னஞ்சலை பார்க்க திட்டத்தை மேம்படுத்தவும்.'
+    : 'Use one contact credit to view phone number and email.'
+}}</p>
+  <button class="unlock-premium-btn" (click)="unlockContact()" [disabled]="unlockingContact">
+    {{ currentLang === 'ta' ? 'திட்டங்களை பார்க்க' : 'Unlock contact' }}
+  </button>
+</div>
+      </div>
+
+      <div class="detail-card">
+        <h2>{{ currentLang === 'ta' ? 'ஜாதக பொருத்தம்' : 'Astrology Match' }}</h2>
+
+        <div *ngIf="astroMatch; else noAstroMatch" class="astro-match-box">
+        <div class="astro-score">
+  ⭐
+  {{
+    astroMatch?.score || 0
+  }} / 36
+</div>
+
+          <div class="astro-message" *ngIf="astroMatch?.message?.description">
+  {{ astroMatch?.message?.description }}
+</div>
+
+          <div class="astro-sub" *ngIf="astroMatch?.guna_milan">
+           {{
+  currentLang === 'ta'
+    ? 'குண மிலான் அடிப்படையிலான பொருத்த மதிப்பெண்'
+    : 'Compatibility Score based on Guna Milan'
+}}
+          </div>
+        </div>
+
+        <ng-template #noAstroMatch>
+          <div class="detail-list">
+            <div>
+              <span>{{ currentLang === 'ta' ? 'நிலை' : 'Status' }}</span>
+             <strong>
+  {{
+    currentLang === 'ta'
+      ? 'ஜாதக பொருத்தம் கிடைக்கவில்லை'
+      : 'Astrology match not available'
+  }}
+</strong>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+      
+ <div class="detail-card">
+      <!-- <h2>{{ currentLang === 'ta' ? 'என்னை பற்றி' : 'About Me' }}</h2>
+      <p class="about-text">
+      {{ getText(p.about) || (currentLang === 'ta' ? 'என்னை பற்றி சேர்க்கப்படவில்லை.' : 'No about me added yet.') }}
+      </p> -->
+
+      <h2 style="margin-top: 24px;">{{ currentLang === 'ta' ? 'துணை எதிர்பார்ப்பு' : 'Partner Expectation' }}</h2>
+      
+      <p class="about-text">
+       {{ getText(p.partnerExpectation) || (currentLang === 'ta' ? 'துணை எதிர்பார்ப்பு சேர்க்கப்படவில்லை.' : 'No partner expectation added yet.') }}
+      </p>
+      <div class="detail-list" style="margin-top: 14px;">
+  <div>
+    <span>
+      {{ currentLang === 'ta' ? 'ஜாதி தடை இல்லை' : 'No Caste Restriction' }}
+    </span>
+
+    <strong>
+      {{
+        p.noCastePreference
+          ? (currentLang === 'ta' ? 'ஆம்' : 'Yes')
+          : (currentLang === 'ta' ? 'இல்லை' : 'No')
+      }}
+    </strong>
+  </div>
+</div>
+    </div>
+
+   <div class="detail-card" *ngIf="p.horoscopeImage">
+
+  <h2>{{ currentLang === 'ta' ? 'ஜாதக முன்னோட்டம்' : 'Horoscope Preview' }}</h2>
+
+  <!-- UNLOCKED -->
+  <div *ngIf="unlocked">
+
+    <button
+      *ngIf="!showHoroscope"
+      class="unlock-premium-btn"
+      (click)="showHoroscope = true"
+    >
+     {{ currentLang === 'ta' ? 'ஜாதகத்தை பார்க்க' : 'View Horoscope' }}
+    </button>
+
+    <div *ngIf="showHoroscope" class="horoscope-preview-card">
+      <img [src]="p.horoscopeImage" alt="Horoscope Preview" />
+
+   <!-- <div class="download-btn-wrap">
+  <a
+    class="download-btn"
+    [href]="p.horoscopeImage"
+    download
+    target="_blank"
+  >
+    {{ currentLang === 'ta' ? 'ஜாதகத்தை பதிவிறக்கு' : 'Download Horoscope' }}
+  </a>
+</div> -->
+    </div>
+
+  </div>
+
+  <!-- LOCKED -->
+  <div *ngIf="!unlocked" class="premium-lock-box">
+    <div class="lock-icon">💖</div>
+    <h3>{{ currentLang === 'ta' ? 'ஜாதகம் பூட்டப்பட்டுள்ளது' : 'Horoscope Locked' }}</h3>
+    <p>{{
+  currentLang === 'ta'
+    ? 'ஜாதகத்தை பார்க்க மேம்படுத்தவும்.'
+    : 'Upgrade to view horoscope.'
+}}</p>
+    <button class="unlock-premium-btn" (click)="goToLoginOrRegister()">
+      {{ currentLang === 'ta' ? 'இப்போது திறக்கவும்' : 'Unlock Now' }}
+    </button>
+  </div>
+
+</div>
+
+      <div class="detail-card full-width">
+        <h2>{{ currentLang === 'ta' ? 'ஜாதக கட்டங்கள்' : 'Horoscope Charts' }}</h2>
+ <div *ngIf="unlocked">
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h3 class="chart-title">ராசி</h3>
+
+            <div class="chart-box chart-box-12">
+              <div class="cell cell-1">{{ getPlanetShort(p.rasiChart[0]) }}</div>
+              <div class="cell cell-2">{{ getPlanetShort(p.rasiChart[1]) }}</div>
+              <div class="cell cell-3">{{ getPlanetShort(p.rasiChart[2]) }}</div>
+              <div class="cell cell-4">{{ getPlanetShort(p.rasiChart[3]) }}</div>
+
+              <div class="cell cell-5">{{ getPlanetShort(p.rasiChart[4]) }}</div>
+              <div class="cell cell-6">{{ getPlanetShort(p.rasiChart[5]) }}</div>
+
+              <div class="chart-center-label">ராசி</div>
+
+              <div class="cell cell-7">{{ getPlanetShort(p.rasiChart[6]) }}</div>
+              <div class="cell cell-8">{{ getPlanetShort(p.rasiChart[7]) }}</div>
+
+              <div class="cell cell-9">{{ getPlanetShort(p.rasiChart[8]) }}</div>
+              <div class="cell cell-10">{{ getPlanetShort(p.rasiChart[9]) }}</div>
+              <div class="cell cell-11">{{ getPlanetShort(p.rasiChart[10]) }}</div>
+              <div class="cell cell-12">{{ getPlanetShort(p.rasiChart[11]) }}</div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3 class="chart-title">அம்சம்</h3>
+
+            <div class="chart-box chart-box-12">
+              <div class="cell cell-1">{{ getPlanetShort(p.amsamChart[0]) }}</div>
+              <div class="cell cell-2">{{ getPlanetShort(p.amsamChart[1]) }}</div>
+              <div class="cell cell-3">{{ getPlanetShort(p.amsamChart[2]) }}</div>
+              <div class="cell cell-4">{{ getPlanetShort(p.amsamChart[3]) }}</div>
+
+              <div class="cell cell-5">{{ getPlanetShort(p.amsamChart[4]) }}</div>
+              <div class="cell cell-6">{{ getPlanetShort(p.amsamChart[5]) }}</div>
+
+              <div class="chart-center-label">அம்சம்</div>
+
+              <div class="cell cell-7">{{ getPlanetShort(p.amsamChart[6]) }}</div>
+              <div class="cell cell-8">{{ getPlanetShort(p.amsamChart[7]) }}</div>
+
+              <div class="cell cell-9">{{ getPlanetShort(p.amsamChart[8]) }}</div>
+              <div class="cell cell-10">{{ getPlanetShort(p.amsamChart[9]) }}</div>
+              <div class="cell cell-11">{{ getPlanetShort(p.amsamChart[10]) }}</div>
+              <div class="cell cell-12">{{ getPlanetShort(p.amsamChart[11]) }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+     <div *ngIf="!unlocked" class="premium-lock-box">
+ <div class="lock-icon">💖</div>
+ <h3>{{ currentLang === 'ta' ? 'ஜாதகம் பூட்டப்பட்டுள்ளது' : 'Horoscope Locked' }}</h3>
+  <p>{{
+  currentLang === 'ta'
+    ? 'பிரீமியம் உறுப்பினர்கள் முழு ஜாதக கட்டங்களையும் பொருத்தத்தையும் பார்க்கலாம்.'
+    : 'Premium members can view full horoscope charts and compatibility.'
+}}</p>
+  <button class="unlock-premium-btn" (click)="goToLoginOrRegister()">
+    {{ currentLang === 'ta' ? 'ஜாதகத்தை திறக்கவும்' : 'Unlock Horoscope' }}
+  </button>
+</div>
+      </div>
+       
+ 
+  <div class="top-action-buttons">
+
+    <button
+      class="back-btn"
+      type="button"
+      (click)="goBack()"
+    >
+      {{
+        currentLang === 'ta'
+          ? '← சுயவிவரங்களுக்கு திரும்பு'
+          : '← Back to Profiles'
+      }}
+    </button>
+
+    <!-- <button
+      *ngIf="unlocked"
+      type="button"
+      class="secondary-btn download-profile-btn"
+      (click)="downloadProfile()"
+    
+    >
+      {{
+        currentLang === 'ta'
+          ? 'சுயவிவரம் பதிவிறக்கு'
+          : 'Download Profile'
+      }}
+    </button> -->
+
+  </div>
+
+
+</div> <!-- DETAILS GRID END -->
+
+</div> <!-- RIGHT COLUMN END -->
+
+</div> <!-- PROFILE LAYOUT END -->
+
+<div class="container" *ngIf="!isLoading && !profile">
+  <p>{{ currentLang === 'ta' ? 'சுயவிவரம் கிடைக்கவில்லை.' : 'Profile not found.' }}</p>
+</div>
+
+</section>

@@ -1,0 +1,84 @@
+<section class="content-section">
+
+  <div class="page-head">
+    <div>
+      <h2>Color List</h2>
+      <p>Manage color master records</p>
+    </div>
+
+    <button class="add-btn" (click)="openAddForm()">+ Add Color</button>
+  </div>
+
+  <div class="form-card" *ngIf="showForm">
+    <h3>{{ isEdit ? 'Edit Color' : 'Add Color' }}</h3>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Color English</label>
+        <input type="text" [(ngModel)]="formData.nameEn" placeholder="Enter English name">
+      </div>
+
+      <div class="form-group">
+        <label>Color Tamil</label>
+        <input type="text" [(ngModel)]="formData.nameTa" (keypress)="tamilTyping($event)" placeholder="தமிழ் பெயர்">
+      </div>
+
+      <div class="form-group">
+        <label>Sort Order</label>
+        <input type="number" [(ngModel)]="formData.sortOrder">
+      </div>
+
+      <div class="form-group status-box">
+        <label>
+          <input type="checkbox" [(ngModel)]="formData.isActive">
+          Active
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="save-btn" (click)="saveColor()" [disabled]="isSaving">
+        {{ isSaving ? 'Saving...' : 'Save' }}
+      </button>
+      <button class="cancel-btn" (click)="closeForm()">Cancel</button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <p *ngIf="isLoading">Loading colors...</p>
+
+    <table *ngIf="!isLoading">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>English Name</th>
+          <th>Tamil Name</th>
+          <th>Status</th>
+          <th class="action-col">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let color of colors; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ color.nameEn }}</td>
+          <td>{{ color.nameTa }}</td>
+          <td>
+            <span class="badge" [class.inactive]="!color.isActive">
+              {{ color.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button class="edit-btn" (click)="editColor(color)">Edit</button>
+            <button class="delete-btn" (click)="deleteColor(color._id)">Delete</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="colors.length === 0">
+          <td colspan="5" class="empty">No colors found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>

@@ -1,0 +1,30 @@
+<div class="settings-page">
+
+  <div class="page-header">
+    <h2>⚙ Settings</h2>
+    <p>Manage Admin Preferences</p>
+  </div>
+
+  <div class="setting-card">
+
+    <div class="setting-info">
+      <h3>Tanglish Typing</h3>
+      <p>
+        Enable English → Tamil typing for Admin Biodata Entry
+      </p>
+    </div>
+
+    <label class="switch">
+
+      <input
+        type="checkbox"
+        [checked]="tanglishEnabled"
+        (change)="toggleTanglish($event)">
+
+      <span class="slider"></span>
+
+    </label>
+
+  </div>
+
+</div>

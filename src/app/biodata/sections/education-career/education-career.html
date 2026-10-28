@@ -1,0 +1,89 @@
+<details class="form-accordion" *ngIf="vm.isAdminBiodataMode() || vm.activeStep === 2" [attr.open]="!vm.isAdminBiodataMode() ? '' : null">
+<summary>
+  {{ vm.currentLang === 'ta' ? 'கல்வி விவரங்கள்' : 'Education Details' }}
+</summary>
+<div class="section-card">
+        <div class="section-title-wrap">
+          <h2>{{ vm.tr.sections.education }}</h2>
+          <p>{{ vm.tr.sections.educationSub }}</p>
+        </div>
+
+        <div class="form-grid">
+      <!-- EDUCATION -->
+<div class="field" [class.invalid]="vm.isInvalid('education')">
+  <label>{{ vm.tr.labels.education }} <span class="required">*</span></label>
+
+<input
+  type="text"
+  [(ngModel)]="vm.formData.education"
+  name="education"
+  [placeholder]="vm.currentLang === 'ta'
+      ? 'கல்வியை உள்ளிடவும்'
+      : 'Enter education'"
+>
+
+  <small class="field-error" *ngIf="vm.isInvalid('education')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+</div>
+<!-- JOB -->
+<div class="field" [class.invalid]="vm.isInvalid('job')">
+  <label>{{ vm.tr.labels.occupation }} <span class="optional">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? '(விருப்பம்)' : '(Optional)' }}</span></label>
+
+<input
+  type="text"
+  [ngModel]="vm.getTypedValue('job')"
+  (ngModelChange)="vm.setTypedValue('job', $event)"
+  name="job"
+  [placeholder]="vm.currentLang === 'ta'
+      ? 'தொழிலை உள்ளிடவும்'
+      : 'Enter occupation'"
+  (keypress)="vm.handleTyping($event)"
+>
+</div>
+
+        <!-- COMPANY -->
+<div class="field" [class.invalid]="vm.isInvalid('company')">
+ <label>{{ vm.tr.labels.company }} <span class="optional">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? '(விருப்பம்)' : '(Optional)' }}</span></label>
+  <input
+  type="text"
+  [ngModel]="vm.getTypedValue('company')"
+(ngModelChange)="vm.setTypedValue('company', $event)"
+(keypress)="vm.handleTyping($event)"
+  name="company"
+  [placeholder]="vm.tr.placeholders.company">
+
+  <!-- <small class="field-error" *ngIf="vm.isInvalid('company')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small> -->
+</div>
+<!-- WORK PLACE -->
+<div class="field">
+  <label>
+    {{ vm.currentLang === 'ta'
+      ? 'பணியிடம்'
+      : 'Work Place'
+    }}
+    <span class="optional">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? '(விருப்பம்)' : '(Optional)' }}</span>
+  </label>
+
+  <input
+    type="text"
+    [ngModel]="vm.getTypedValue('workPlace')"
+    (ngModelChange)="vm.setTypedValue('workPlace', $event)"
+(keypress)="vm.handleTyping($event)"
+    name="workPlace"
+    [placeholder]="vm.tr.placeholders.workPlace"
+  >
+</div>
+         <!-- SALARY -->
+<div class="field" [class.invalid]="vm.isInvalid('salary')">
+  <label>{{ vm.tr.labels.salary }} </label>
+<input
+  type="text"
+  [ngModel]="vm.getTypedValue('salary')"
+  (ngModelChange)="vm.setTypedValue('salary', $event)"
+  (keypress)="vm.handleTyping($event)"
+  name="salary"
+  [placeholder]="vm.tr.placeholders.salary">
+
+</div>
+        </div>
+      </div>
+</details>

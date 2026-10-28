@@ -1,0 +1,140 @@
+<details class="form-accordion" *ngIf="vm.isAdminBiodataMode() || vm.activeStep === 3" [attr.open]="!vm.isAdminBiodataMode() ? '' : null">
+
+<summary>
+  {{ vm.currentLang === 'ta' ? 'முகவரி விவரங்கள்' : 'Address Details' }}
+</summary>
+
+<div class="section-card">
+        <div class="section-title-wrap">
+          <h2>{{ vm.tr.sections.address }}</h2>
+          <p>{{ vm.tr.sections.addressSub }}</p>
+        </div>
+
+        <div class="form-grid">
+          <div class="field full-width" [class.invalid]="vm.isInvalid('address')">
+  <label>{{ vm.tr.labels.address }} <span class="required">*</span></label>
+<textarea
+  [ngModel]="vm.getTypedValue('address')"
+  (ngModelChange)="vm.setTypedValue('address', $event)"
+  (keypress)="vm.currentLang === 'ta' ? vm.tamilKeypress($event) : null"
+  name="address"
+  rows="4"
+  [placeholder]="vm.tr.placeholders.address">
+</textarea>
+  <small class="field-error" *ngIf="vm.isInvalid('address')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+</div>
+
+
+<!-- COUNTRY -->
+<!-- COUNTRY -->
+<div class="field country-field" [class.invalid]="vm.isInvalid('country')">
+  <label>{{ vm.tr.labels.country }} <span class="required">*</span></label>
+
+  <div class="country-select-wrap">
+    <input
+      type="text"
+      [(ngModel)]="vm.countrySearch"
+      name="countrySearch"
+      [placeholder]="vm.currentLang === 'ta' ? 'நாட்டை தேடவும் / உள்ளிடவும்' : 'Search / Enter country'"
+      autocomplete="off"
+      (focus)="vm.onCountrySearchChange()"
+      (blur)="vm.hideCountryDropdown()"
+      (keypress)="vm.handleTyping($event)"
+      (input)="vm.onCountrySearchChange()"
+    >
+
+    <div class="country-dropdown" *ngIf="vm.showCountryDropdown">
+      <div
+        class="country-option"
+        *ngFor="let country of vm.filteredCountryList"
+        (mousedown)="vm.selectCountry(country)"
+      >
+        {{
+          vm.currentLang === 'ta'
+            ? (country.nameTa || country.nameEn)
+            : country.nameEn
+        }}
+      </div>
+    </div>
+  </div>
+
+  <small class="field-error" *ngIf="vm.isInvalid('country')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+</div>
+
+<!-- STATE -->
+<!-- STATE -->
+<div class="field state-field" [class.invalid]="vm.isInvalid('state')">
+  <label>{{ vm.tr.labels.state }} <span class="required">*</span></label>
+
+  <div class="state-select-wrap">
+    <input
+      type="text"
+      [(ngModel)]="vm.stateSearch"
+      name="stateSearch"
+      [placeholder]="vm.currentLang === 'ta' ? 'மாநிலத்தை தேடவும் / உள்ளிடவும்' : 'Search / Enter state'"
+      autocomplete="off"
+      (focus)="vm.onStateSearchChange()"
+      (blur)="vm.hideStateDropdown()"
+      (keypress)="vm.handleTyping($event)"
+      (input)="vm.onStateSearchChange()"
+    >
+
+    <div class="state-dropdown" *ngIf="vm.showStateDropdown">
+      <div
+        class="state-option"
+        *ngFor="let state of vm.filteredStateList"
+        (mousedown)="vm.selectState(state)"
+      >
+        {{
+          vm.currentLang === 'ta'
+            ? (state.nameTa || state.nameEn)
+            : state.nameEn
+        }}
+      </div>
+    </div>
+  </div>
+
+  <small class="field-error" *ngIf="vm.isInvalid('state')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+</div>
+
+<!-- CITY -->
+<!-- CITY -->
+<div class="field city-field" [class.invalid]="vm.isInvalid('city')">
+  <label>{{ vm.tr.labels.city }} <span class="required">*</span></label>
+
+  <div class="city-select-wrap">
+    <input
+      type="text"
+      [(ngModel)]="vm.citySearch"
+      name="citySearch"
+      [placeholder]="vm.currentLang === 'ta' ? 'மாவட்டத்தை தேடவும் / உள்ளிடவும்' : 'Search / Enter district'"
+      autocomplete="off"
+      (focus)="vm.onCitySearchChange()"
+      (blur)="vm.hideCityDropdown()"
+      (keypress)="vm.handleTyping($event)"
+      (input)="vm.onCitySearchChange()"
+    >
+
+    <div class="city-dropdown" *ngIf="vm.showCityDropdown">
+      <div
+        class="city-option"
+        *ngFor="let city of vm.filteredCityList"
+        (mousedown)="vm.selectCity(city)"
+      >
+        {{
+          vm.currentLang === 'ta'
+            ? (city.nameTa || city.nameEn)
+            : city.nameEn
+        }}
+      </div>
+    </div>
+  </div>
+
+  <small class="field-error" *ngIf="vm.isInvalid('city')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+</div>
+
+<!-- iruppidam-field -->
+
+        </div>
+      </div>
+</details>

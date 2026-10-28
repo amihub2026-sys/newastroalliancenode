@@ -1,0 +1,191 @@
+<section class="contact-page">
+
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="contact-container">
+
+    <!-- HEADER -->
+
+    <div class="contact-hero">
+
+      <span class="badge">
+        {{ tr.badge }}
+      </span>
+
+      <h1>
+        {{ tr.title }}
+      </h1>
+
+      <p class="subtitle">
+        {{ tr.subtitle }}
+      </p>
+
+    </div>
+
+
+    <!-- CONTACT CARDS -->
+
+    <div class="contact-grid">
+
+      <!-- PHONE -->
+
+      <a
+        class="contact-card"
+        href="tel:+919042111424"
+      >
+
+        <div class="contact-icon">
+          ☎
+        </div>
+
+        <div class="contact-info">
+
+          <h2>
+            {{ tr.phoneTitle }}
+          </h2>
+
+          <p>
+            {{ tr.phoneText }}
+          </p>
+
+          <strong>
+            {{ tr.phone }}
+          </strong>
+
+        </div>
+
+      </a>
+
+
+      <!-- EMAIL -->
+
+      <a
+        class="contact-card"
+        href="mailto:astroalliance7@gmail.com"
+      >
+
+        <div class="contact-icon">
+          ✉
+        </div>
+
+        <div class="contact-info">
+
+          <h2>
+            {{ tr.emailTitle }}
+          </h2>
+
+          <p>
+            {{ tr.emailText }}
+          </p>
+
+          <strong>
+            {{ tr.email }}
+          </strong>
+
+        </div>
+
+      </a>
+
+
+      <!-- LOCATION -->
+
+      <div class="contact-card">
+
+        <div class="contact-icon">
+          📍
+        </div>
+
+        <div class="contact-info">
+
+          <h2>
+            {{ tr.locationTitle }}
+          </h2>
+
+          <p>
+            {{ tr.locationText }}
+          </p>
+
+          <strong>
+            {{ tr.location }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SUPPORT -->
+
+    <div class="support-card">
+
+      <div class="support-heading">
+
+        <div class="support-icon">
+          💖
+        </div>
+
+        <h2>
+          {{ tr.supportTitle }}
+        </h2>
+
+      </div>
+
+      <div class="support-list">
+
+        <div
+          class="support-item"
+          *ngFor="let item of tr.supportItems"
+        >
+
+          <span class="check">
+            ✓
+          </span>
+
+          <span>
+            {{ item }}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- BOTTOM LINKS -->
+
+    <div class="legal-links">
+
+      <a routerLink="/privacy-policy">
+        {{ tr.privacyText }}
+      </a>
+
+      <span>•</span>
+
+      <a routerLink="/terms">
+        {{ tr.termsText }}
+      </a>
+
+    </div>
+
+
+    <!-- BACK -->
+
+    <div class="back-wrapper">
+
+      <a
+        routerLink="/"
+        class="back-btn"
+      >
+        ← {{ tr.backText }}
+      </a>
+
+    </div>
+
+  </div>
+
+</section>

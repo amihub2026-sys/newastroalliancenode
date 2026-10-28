@@ -1,0 +1,249 @@
+:host {
+  display: block;
+}
+
+.section-card {
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 4px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  box-shadow: none;
+}
+
+.section-title-wrap {
+  display: none;
+}
+
+.profile-card {
+  padding-top: 0;
+}
+
+.profile-upload-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  flex-wrap: nowrap;
+  margin-bottom: 10px;
+}
+
+.profile-preview {
+  width: 120px;
+  height: 150px;
+  border: 1px solid #d5d5d5;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.empty-avatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 14px;
+  text-align: center;
+  padding: 10px;
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upload-btn,
+.remove-btn {
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 2px;
+  transition: 0.2s;
+}
+
+.upload-btn {
+  background: #d81b60;
+  color: #fff;
+  min-height: 44px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-btn:hover {
+  background: #c2185b;
+}
+
+.remove-btn {
+  background: #757575;
+  color: #fff;
+  padding: 10px 18px;
+}
+
+.camera-btn {
+  background: #ad1457;
+}
+
+.upload-note {
+  color: #666;
+  font-size: 13px;
+}
+
+.media-upload-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.media-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.media-sub-title {
+  width: 100%;
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #d81b60;
+}
+
+.media-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.media-thumb {
+  position: relative;
+  height: 120px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+
+.media-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumb-remove {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: red;
+  color: #fff;
+  cursor: pointer;
+}
+
+.video-preview video {
+  width: 100%;
+  max-width: 350px;
+  border: 1px solid #ccc;
+  background: #000;
+}
+
+.form-accordion {
+  margin-bottom: 20px;
+  border-radius: 18px;
+  overflow: visible !important;
+  border: 1px solid #eee;
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.form-accordion summary {
+  padding: 20px;
+  background: #fff5f8;
+  color: #d81b60;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  list-style: none;
+}
+
+.form-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.form-accordion summary::after {
+  content: '+';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 30px;
+}
+
+.form-accordion[open] summary::after {
+  content: '−';
+}
+
+.form-accordion .section-card {
+  margin-bottom: 0;
+  border: none;
+  box-shadow: none;
+}
+
+@media (max-width: 600px) {
+  .form-accordion summary {
+    padding: 16px 18px !important;
+    font-size: 16px !important;
+  }
+
+  .section-card {
+    padding: 12px !important;
+  }
+
+  .profile-upload-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .media-actions {
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .media-actions .upload-btn {
+    width: 100% !important;
+    min-height: 42px !important;
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+  }
+
+  .upload-btn,
+  .remove-btn {
+    width: 100%;
+  }
+
+  .profile-preview {
+    width: 130px !important;
+    height: 160px !important;
+    margin: auto !important;
+  }
+
+  .profile-actions {
+    width: 100% !important;
+  }
+}

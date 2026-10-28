@@ -1,0 +1,1410 @@
+.details-page {
+  display: block;
+}
+
+.back-btn {
+  display: inline-flex;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: #e91e63;
+  font-weight: 700;
+}
+
+.top-section img {
+  width: 140px;
+  height: 140px;
+  border-radius: 24px;
+  object-fit: cover;
+}
+
+.top-info h2 {
+  margin: 0;
+}
+
+.top-info p {
+  margin: 8px 0;
+}
+
+.info-card {
+  background: #fff1f6;
+}
+
+.info-card h3 {
+  margin-top: 0;
+}
+
+.status {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.status.approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status.rejected,
+.status.blocked {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status.review {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.action-group button {
+  font-weight: 700;
+}
+
+.approve-btn {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.review-btn {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.reject-btn {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.block-btn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+@media (max-width: 900px) {
+  .top-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.pdf-btn {
+  background: linear-gradient(135deg, #111827, #374151);
+  color: #fff;
+}
+/* =========================================
+   ASTRO PDF
+========================================= */
+
+.astro-pdf {
+  position: fixed;
+  left: -99999px;
+  top: 0;
+
+  background: #ffffff;
+  color: #111827;
+
+  font-family: 'Noto Sans Tamil', Arial, sans-serif;
+}
+
+/* HEADER */
+
+.astro-header {
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-center {
+  flex: 1;
+}
+
+.header-center h2 {
+  color: #111827;
+}
+
+.header-center p,
+.header-center span {
+  display: block;
+}
+
+/* BODY */
+
+.astro-column strong {
+  color: #166534;
+}
+
+/* FOOTER */
+
+.astro-footer {
+  border-top: 2px solid #166534;
+  text-align: center;
+}
+
+.astro-footer p {
+  font-weight: 700;
+}
+/* =========================================
+   FINAL TAMIL HOROSCOPE
+========================================= */
+
+.horoscope-chart-wrapper,
+.astro-chart-section {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+/* MAIN CHART */
+
+.astro-chart {
+  width: 282px;
+}
+
+/* ROW */
+
+/* BOX */
+.chart-cell {
+  width: 68px;
+  height: 68px;
+  border: 2px solid #166534;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #065f46;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+/* SIDE BOX */
+
+.side-cell {
+  height: 136px;
+}
+/* CENTER */
+
+.chart-center {
+  width: 136px;
+  height: 136px;
+  border-top: 2px solid #166534;
+  border-bottom: 2px solid #166534;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 34px;
+  font-weight: 800;
+  color: #1d4ed8;
+  background: #fff;
+  overflow: hidden;
+  line-height: 1;
+  box-sizing: border-box;
+}
+.chart-row {
+  display: flex;
+  width: 100%;
+}
+/* PDF */
+@media (max-width: 768px) {
+  .horoscope-chart-wrapper {
+    justify-content: center;
+  }
+
+  .astro-chart {
+    width: 280px;
+  }
+
+  .chart-cell {
+    width: 70px;
+    height: 70px;
+    font-size: 14px;
+  }
+
+  .side-cell {
+    height: 140px;
+  }
+
+  .chart-center {
+    width: 140px;
+    height: 140px;
+    font-size: 32px;
+  }
+}
+
+.full-width-card {
+  grid-column: 1/-1;
+}
+.top-section {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.media-section {
+  max-width: 100%;
+}
+
+.main-profile-image {
+  display: block;
+}
+
+.profile-video {
+  margin-top: 20px;
+}
+
+.profile-video video {
+  width: 140px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 18px;
+  display: block;
+}
+.additional-images {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.additional-images img {
+  width: 85px;
+  height: 85px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.top-info {
+  flex: 1;
+  min-width: 300px;
+}
+
+.top-info h2 {
+  font-weight: 700;
+}
+
+.top-info p {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.action-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.action-group button {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 14px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+@media (max-width: 991px) {
+  .top-section {
+    flex-direction: column;
+  }
+
+  .media-section {
+    width: 100%;
+  }
+
+  .main-profile-image {
+    height: auto;
+  }
+
+  .top-info {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .top-info h2 {
+    font-size: 32px;
+  }
+}
+.pdf-btn.photo {
+  background: linear-gradient(135deg, #166534, #22c55e);
+  color: #fff;
+}
+
+.astro-pdf {
+  width: 1120px;
+  padding: 24px 34px;
+}
+
+.astro-header {
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  align-items: center;
+  border-bottom: 3px solid #166534;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.logo-side {
+  font-size: 34px;
+  text-align: center;
+}
+
+.header-center h1 {
+  margin: 0;
+  font-size: 34px;
+  color: #166534;
+  font-weight: 800;
+}
+
+.header-center h2 {
+  margin: 6px 0 3px;
+  font-size: 24px;
+}
+
+.header-center p,
+.header-center span {
+  margin: 2px 0;
+  font-size: 13px;
+}
+
+.astro-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 46px;
+  margin-top: 10px;
+}
+
+.astro-column p {
+  margin: 6px 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.astro-chart-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  margin-top: 18px;
+}
+
+.astro-pdf .astro-chart {
+  width: 300px;
+}
+
+.astro-pdf .chart-cell {
+  width: 75px;
+  height: 75px;
+  font-size: 13px;
+}
+
+.astro-pdf .side-cell {
+  height: 150px;
+}
+
+.astro-pdf .chart-center {
+  width: 150px;
+  height: 150px;
+  font-size: 34px;
+}
+
+.astro-footer {
+  margin-top: 18px;
+  padding-top: 10px;
+}
+
+.astro-footer p {
+  margin: 4px 0;
+  font-size: 13px;
+}
+.header-photo {
+  width: 110px !important;
+  height: 140px !important;
+  border: 3px solid #166534 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  background: #fff !important;
+}
+
+.header-photo .pdf-photo-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: white !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  #biodataPdf,
+  #biodataPdf * {
+    visibility: visible !important;
+  }
+
+  #biodataPdf {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+
+    padding: 8mm 12mm !important;
+    margin: 0 !important;
+
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-after: avoid !important;
+    break-before: avoid !important;
+  }
+
+  .details-page,
+  .profile-card,
+  .back-btn {
+    display: none !important;
+  }
+  #biodataPdf .astro-chart {
+    width: 250px !important;
+  }
+
+  #biodataPdf .chart-cell {
+    width: 62px !important;
+    height: 62px !important;
+    font-size: 11px !important;
+  }
+
+  #biodataPdf .side-cell {
+    height: 124px !important;
+  }
+
+  #biodataPdf .chart-center {
+    width: 124px !important;
+    height: 124px !important;
+    font-size: 30px !important;
+  }
+
+  #biodataPdf .astro-column p {
+    margin: 4px 0 !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+  }
+
+  #biodataPdf .astro-footer {
+    margin-top: 8px !important;
+  }
+}
+/* SINGLE FORM VIEW FIX */
+
+.profile-card {
+  background: #ffffff;
+  border-radius: 24px;
+}
+
+.top-section {
+  display: grid !important;
+  grid-template-columns: 260px 1fr;
+  gap: 28px;
+  align-items: flex-start;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f3c6d8;
+}
+
+.media-section {
+  width: 100% !important;
+}
+
+.main-profile-image {
+  width: 100% !important;
+  height: 300px !important;
+  object-fit: cover;
+  object-position: top center !important;
+  border-radius: 18px;
+}
+
+.top-info {
+  padding-top: 0 !important;
+}
+
+.top-info h2 {
+  font-size: 30px !important;
+  margin-bottom: 8px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+
+  background: #fff;
+  border-radius: 18px;
+}
+
+.info-card {
+  background: transparent !important;
+  border-radius: 0 !important;
+
+  border-right: none !important;
+}
+
+.full-width-card {
+  max-width: 1100px;
+
+  background: transparent !important;
+  border: none !important;
+
+  border-bottom: 1px solid #f3c6d8 !important;
+  border-radius: 0 !important;
+
+  box-shadow: none !important;
+}
+
+.profile-card > .full-width-card:last-child {
+  border-radius: 0 0 18px 18px;
+}
+
+.action-group {
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  .profile-card {
+    padding: 18px;
+  }
+
+  .top-section {
+    grid-template-columns: 1fr;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-card {
+    border-right: none;
+  }
+
+  .main-profile-image {
+    height: auto !important;
+  }
+}
+.pdf-corner-photo {
+  position: absolute;
+  top: 52mm;
+  right: 14mm;
+
+  width: 120px;
+  height: 145px;
+
+  border: 3px solid #166534;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  z-index: 10;
+}
+
+.pdf-corner-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* REMOVE BLANK SPACE FINAL FIX */
+
+.details-grid {
+  display: block !important;
+  padding: 0 !important;
+}
+
+.info-card {
+  width: 100% !important;
+  display: block !important;
+  margin: 0 !important;
+  border-bottom: 1px solid #f3c6d8 !important;
+
+  min-height: auto !important;
+  height: auto !important;
+}
+
+.horoscope-chart-wrapper {
+
+  margin-top: 14px !important;
+  margin-bottom: 0 !important;
+}
+
+.full-width-card {
+  margin: 0 !important;
+}
+
+.info-card h3 {
+  margin-bottom: 10px !important;
+}
+.astro-body {
+  padding-right: 130px;
+}
+.action-group {
+  position: relative;
+}
+.print-options {
+  position: absolute;
+  top: 58px;
+  left: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  background: linear-gradient(135deg, #fff0f6, #ffe4ec);
+  padding: 16px;
+
+  border-radius: 20px;
+
+  border: 2px solid #f9a8d4;
+
+  box-shadow: 0 12px 30px rgba(236, 72, 153, 0.18);
+
+  z-index: 999;
+  min-width: 300px;
+}
+.print-options button {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+
+  padding: 13px 16px;
+
+  font-weight: 700;
+  font-size: 14px;
+
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: #fff;
+
+  text-align: left;
+
+  transition: 0.25s ease;
+}
+
+.print-options button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(236, 72, 153, 0.28);
+}
+.logo-side {
+  width: 90px !important;
+  min-width: 90px !important;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+}
+
+.vinagar-logo {
+  width: 98px !important;
+  height: 98px !important;
+
+  object-fit: contain !important;
+
+  background: transparent !important;
+
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+
+  box-shadow: none !important;
+
+  display: block;
+}
+
+.logo-side span {
+  font-size: 10px;
+  font-weight: 700;
+  color: #166534;
+  text-align: center;
+  line-height: 1.2;
+}
+@media print {
+  .vinagar-logo {
+    width: 90px !important;
+    height: 90px !important;
+    max-width: 90px !important;
+    max-height: 90px !important;
+
+    object-fit: contain !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  .logo-side {
+    width: 110px !important;
+    min-width: 110px !important;
+    height: 100px !important;
+    overflow: hidden !important;
+  }
+}
+/* MAKE PAGE LIKE EXISTING WEBSITE */
+
+.profile-card {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 18px 28px !important;
+  background: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: block !important;
+}
+
+.two-side-layout {
+  width: 100% !important;
+}
+
+.left-profile-side {
+  width: 100% !important;
+  background: #fff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+}
+
+.tab-title {
+  background: linear-gradient(135deg, #b544c6, #9c27b0) !important;
+  color: #fff !important;
+  padding: 14px 18px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+}
+
+.info-card {
+  background: #fff !important;
+  border: none !important;
+  padding: 16px 18px !important;
+  box-shadow: none !important;
+}
+
+.info-card h3 {
+  display: block !important;
+  color: #e91e63 !important;
+  font-size: 20px !important;
+  font-weight: 200 !important;
+  margin: 0 0 15px 0 !important;
+  border-bottom: 1px solid #f3c6d8 !important;
+  padding-bottom: 10px !important;
+}
+
+.info-card p {
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  align-items: start !important;
+}
+
+.info-card strong {
+  width: auto !important;
+  min-width: 0 !important;
+  display: block !important;
+  color: #111 !important;
+}
+.profile-tabs {
+  display: flex;
+  background: #3f51b5;
+  margin-bottom: 20px;
+}
+
+.profile-tabs button {
+  border: none;
+  background: #3f51b5;
+  color: white;
+  padding: 14px 32px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-tabs button.active {
+  background: #2f43b5;
+  border: 2px solid #111827;
+  border-bottom: 3px solid #e91e63;
+}
+
+.two-side-layout {
+  display: block !important;
+}
+
+.left-profile-side,
+.right-profile-side {
+  width: 100% !important;
+  overflow: hidden !important;
+}
+.info-card {
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+/* FINAL LABEL FIX */
+
+.info-card p {
+  display: grid !important;
+  grid-template-columns: 320px 1fr !important;
+  gap: 10px !important;
+  margin: 4px 0 !important;
+}
+
+.info-card strong {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  font-weight: 700 !important;
+}
+.no-caste-row {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.no-caste-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 18px;
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.25);
+}
+.profile-tabs button {
+  flex: 1;
+  white-space: nowrap;
+}
+
+.viewer-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.viewer-card img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.viewer-card h4 {
+  margin: 0 0 8px;
+  color: #3f51b5;
+}
+
+.viewer-card p {
+  display: block !important;
+  margin: 4px 0 !important;
+}
+.viewed-profile-codes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 14px;
+  align-items: center;
+}
+
+.viewed-profile-codes strong {
+  color: #111;
+  font-size: 15px;
+}
+
+.viewed-profile-codes span {
+  background: #eef2ff;
+  color: #3f51b5;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 14px;
+}
+.viewer-card {
+  cursor: pointer;
+}
+/* ===============================
+   FINAL MOBILE VIEW FIX
+================================ */
+@media (max-width: 768px) {
+  .details-page {
+    padding: 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .back-btn {
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .profile-card {
+    width: 100% !important;
+    padding: 12px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .top-section {
+    display: block !important;
+    padding-bottom: 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .media-section {
+    width: 100% !important;
+  }
+
+  .main-profile-image {
+    width: 100% !important;
+    height: 320px !important;
+    object-fit: cover !important;
+    object-position: top center !important;
+    border-radius: 14px !important;
+  }
+
+  .profile-video video {
+    width: 100% !important;
+    height: 260px !important;
+  }
+
+  .additional-images {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .additional-images img {
+    width: 100% !important;
+    height: 90px !important;
+  }
+
+  .top-info {
+    width: 100% !important;
+    min-width: 100% !important;
+    padding-top: 14px !important;
+  }
+
+  .top-info h2 {
+    font-size: 24px !important;
+    line-height: 1.2 !important;
+  }
+
+  .top-info p {
+    font-size: 15px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .status {
+    font-size: 12px !important;
+    padding: 7px 12px !important;
+  }
+
+  .action-group {
+    width: 100% !important;
+    display: block !important;
+    margin-top: 14px !important;
+  }
+
+  .action-group button,
+  .pdf-btn {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+    padding: 12px !important;
+    font-size: 14px !important;
+  }
+
+  .print-options {
+    position: static !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    box-sizing: border-box !important;
+    margin-top: 10px !important;
+  }
+
+  .profile-tabs {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+    background: transparent !important;
+    margin-bottom: 14px !important;
+  }
+
+  .profile-tabs button {
+    width: 100% !important;
+    padding: 12px 8px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+    background: #3f51b5 !important;
+  }
+
+  .profile-tabs button.active {
+    background: #e91e63 !important;
+    border: none !important;
+  }
+
+  .left-profile-side,
+  .right-profile-side {
+    width: 100% !important;
+    border-radius: 10px !important;
+  }
+
+  .tab-title {
+    font-size: 15px !important;
+    padding: 12px !important;
+  }
+
+  .info-card {
+    padding: 14px 12px !important;
+  }
+
+  .info-card h3 {
+    font-size: 18px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .info-card p {
+    display: block !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    margin: 10px 0 !important;
+  }
+
+  .info-card strong {
+    display: block !important;
+    margin-bottom: 3px !important;
+    white-space: normal !important;
+  }
+
+  .horoscope-chart-wrapper {
+    display: block !important;
+    overflow-x: auto !important;
+  }
+
+  .astro-chart {
+    margin: 0 auto 16px auto !important;
+  }
+
+  .viewer-card {
+    display: block !important;
+    padding: 12px !important;
+  }
+
+  .viewer-card img {
+    width: 64px !important;
+    height: 64px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .viewer-card h4 {
+    font-size: 16px !important;
+  }
+
+  .viewer-card p {
+    display: block !important;
+    font-size: 13px !important;
+  }
+}
+.profilecode {
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  color: #e91e63 !important;
+  margin: 10px 0 !important;
+  letter-spacing: 1px;
+}
+/* =====================================
+   PROFILE VIEW DETAILS TABLE
+===================================== */
+
+.right-profile-side .info-card table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.right-profile-side .info-card table thead {
+  background: #3f51b5;
+  color: #fff;
+}
+
+.right-profile-side .info-card table th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.right-profile-side .info-card table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f3c6d8;
+  font-size: 14px;
+  color: #333;
+}
+
+.right-profile-side .info-card table tbody tr:hover {
+  background: #fff1f6;
+}
+
+/* Profile ID */
+
+.right-profile-side .info-card table td:first-child {
+  color: #e91e63;
+  font-weight: 700;
+}
+
+/* Date */
+
+.right-profile-side .info-card table td:nth-child(3) {
+  color: #555;
+}
+
+/* View Profile Button */
+
+.view-btn {
+  border: none;
+  background: linear-gradient(135deg, #ec4899, #db2777);
+
+  color: white;
+
+  padding: 7px 14px;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+.view-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 18px rgba(236, 72, 153, 0.25);
+}
+
+/* Total Count */
+
+.right-profile-side .info-card > p strong {
+  color: #111;
+}
+
+/* Empty text */
+
+.right-profile-side .info-card div {
+  color: #64748b;
+  padding: 10px 0;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .right-profile-side .info-card table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .right-profile-side .info-card table th,
+  .right-profile-side .info-card table td {
+    padding: 10px;
+
+    font-size: 12px;
+  }
+}
+/* =========================================================
+   FINAL PROFILE HOROSCOPE 12 BOX FIX
+   ========================================================= */
+
+.horoscope-chart-wrapper {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  gap: 24px !important;
+  flex-wrap: wrap !important;
+}
+
+/* 4 x 4 horoscope */
+
+.horoscope-chart-wrapper .astro-chart {
+  width: 280px !important;
+  height: 280px !important;
+
+  display: grid !important;
+
+  grid-template-columns: repeat(4, 70px) !important;
+  grid-template-rows: repeat(4, 70px) !important;
+
+  position: relative !important;
+}
+
+/* Common cells */
+
+.horoscope-chart-wrapper .chart-cell {
+  width: auto !important;
+  height: auto !important;
+
+  border: 1.5px solid #999 !important;
+
+  background: #fff !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  box-sizing: border-box !important;
+
+  text-align: center !important;
+
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+
+  color: #000 !important;
+
+  padding: 3px !important;
+
+  overflow-wrap: anywhere !important;
+}
+
+/* TOP */
+
+.horoscope-chart-wrapper .pos-0 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.horoscope-chart-wrapper .pos-1 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.horoscope-chart-wrapper .pos-2 {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.horoscope-chart-wrapper .pos-3 {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+/* SECOND */
+
+.horoscope-chart-wrapper .pos-4 {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.horoscope-chart-wrapper .pos-5 {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+/* THIRD */
+
+.horoscope-chart-wrapper .pos-6 {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.horoscope-chart-wrapper .pos-7 {
+  grid-column: 4;
+  grid-row: 3;
+}
+
+/* BOTTOM */
+
+.horoscope-chart-wrapper .pos-8 {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+.horoscope-chart-wrapper .pos-9 {
+  grid-column: 2;
+  grid-row: 4;
+}
+
+.horoscope-chart-wrapper .pos-10 {
+  grid-column: 3;
+  grid-row: 4;
+}
+
+.horoscope-chart-wrapper .pos-11 {
+  grid-column: 4;
+  grid-row: 4;
+}
+
+/* CENTER */
+
+.horoscope-chart-wrapper .chart-center {
+  grid-column: 2 / 4 !important;
+  grid-row: 2 / 4 !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  border: none !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: #fff !important;
+
+  color: #e91e63 !important;
+
+  font-size: 42px !important;
+  font-weight: 900 !important;
+
+  text-align: center !important;
+}

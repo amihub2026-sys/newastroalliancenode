@@ -1,0 +1,48 @@
+/** Public-search contract and pure filter-engine tests. No API or test data in production. */
+const fs=require('node:fs');
+const path=require('node:path');
+const os=require('node:os');
+const cp=require('node:child_process');
+const assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..');
+const temp=fs.mkdtempSync(path.join(os.tmpdir(),'astro-public-search-'));
+const source=path.join(root,'src/app/free-search/models/search.models.ts');
+const tsLocal=path.join(root,'node_modules/typescript/bin/tsc');
+const command=fs.existsSync(tsLocal)?process.execPath:(process.platform==='win32'?'tsc.cmd':'tsc');
+const argv=fs.existsSync(tsLocal)?[tsLocal]:[];
+const typesDir=path.join(temp,'isolated-types');fs.mkdirSync(typesDir,{recursive:true});
+const args=[...argv,source,'--target','ES2022','--module','commonjs','--strict','--skipLibCheck','--typeRoots',typesDir,'--outDir',temp];
+try {
+  const compile=cp.spawnSync(command,args,{encoding:'utf8'});
+  assert.equal(compile.status,0,`TypeScript compile failed: ${compile.stderr||compile.stdout}`);
+  const emitted = path.join(temp,'app','free-search','models','search.models.js');
+  const m=require(fs.existsSync(emitted)?emitted:path.join(temp,'search.models.js')); 
+  const base={profile_status:'approved',is_published:true,profile_code:'AA105',age:27,gender_text:'Female',city_text:'Madurai',religion_text:'Hindu',caste_text:'Nadar',state_text:'Tamil Nadu',education_text:'B.E.',occupation_text:'Engineer',rasi_text:'Rishabam',nakshatra_text:'Rohini',profile_image_url:'/uploads/member.jpg',hobbies_public:['Music','Travel'],mobile:'9840012345',email:'private@example.org'};
+  assert.equal(m.toPublicProfile({...base,profile_status:'pending'},'http://localhost:5000'),null);
+  assert.equal(m.toPublicProfile({...base,is_published:false},'http://localhost:5000'),null);
+  const p=m.toPublicProfile(base,'http://localhost:5000');
+  assert.ok(p);assert.equal(p.code,'AA105');assert.equal(p.image,'http://localhost:5000/uploads/member.jpg');
+  assert.equal('email' in p,false);assert.equal('mobile' in p,false);assert.equal(p.name,'');
+  assert.equal(m.sharedHobbyCount(p,['Travel','Cooking']),1);
+  const filters={...m.EMPTY_FILTERS,hobbies:[]};
+  assert.equal(m.matchesProfile(p,filters,'Madurai',null),true);
+  assert.equal(m.matchesProfile(p,filters,'AA105',null),true);
+  assert.equal(m.matchesProfile(p,{...filters,city:'Chennai'},'',null),false);
+  assert.equal(m.matchesProfile(p,{...filters,city:'Madurai',ageFrom:26,ageTo:29},'',null),true);
+  assert.equal(m.matchesProfile(p,{...filters,ageFrom:28},'',null),false);
+  assert.equal(m.matchesProfile(p,{...filters,photoOnly:true},'',null),true);
+  assert.equal(m.matchesProfile({...p,image:''},{...filters,photoOnly:true},'',null),false);
+  assert.equal(m.matchesProfile(p,{...filters,rasi:'Rishabam'},'',null),true);
+  assert.equal(m.matchesProfile(p,{...filters,hobbies:['Cooking'],sharedHobbiesOnly:true},'',null),false);
+  assert.equal(m.matchesProfile(p,{...filters,hobbies:['Travel'],sharedHobbiesOnly:true},'',null),true);
+  assert.equal(m.matchesProfile(p,{...filters,nearbyKm:20},'',null),false);
+  assert.ok(m.greatCircleKm(9.9252,78.1198,9.9252,78.1198)<.01);
+  assert.ok(m.makeOptions([p]).religion.includes('Hindu'));
+  assert.equal(m.countFilters({...filters,gender:'Female',photoOnly:true,hobbies:['Travel']}),3);
+  const html=fs.readFileSync(path.join(root,'src/app/free-search/free-search.html'),'utf8');
+  const filter=fs.readFileSync(path.join(root,'src/app/free-search/search-filters/search-filters.html'),'utf8');
+  for(const key of ['mobile','email','dob','full_name','user_id'])assert.ok(!html.includes('profile.'+key),`private field in public HTML: ${key}`);
+  for(const key of ['Basic details','Religion & community','Location','Education & career','Horoscope','Family preferences','Lifestyle','Hobby Match'])assert.ok(filter.includes(key));
+  assert.ok(html.includes('app-public-search-filters'));
+  console.log('PASS: approved/published records only, safe public projection, filters, hobby scoring, location filtering, responsive filter template, and eight filter groups');
+} finally {fs.rmSync(temp,{force:true,recursive:true});}

@@ -1,0 +1,152 @@
+.received-page {
+  min-height: 100vh;
+  padding: 40px 16px;
+  background: linear-gradient(180deg, #fffafc, #fff4f8);
+}
+
+.received-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0;
+  color: #6f173d;
+}
+
+.sub {
+  color: #7b6570;
+  margin-bottom: 24px;
+}
+
+.empty {
+  background: #fff;
+  border-radius: 18px;
+  padding: 22px;
+  color: #7b6570;
+  box-shadow: 0 12px 28px rgba(80, 24, 47, 0.08);
+}
+
+.interest-card {
+  background: #fff;
+  border: 1px solid rgba(122, 31, 68, 0.1);
+  border-radius: 22px;
+  padding: 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 14px 32px rgba(80, 24, 47, 0.08);
+  overflow: hidden;
+}
+
+.profile-img {
+  width: 110px;
+  height: 110px;
+  min-width: 110px;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #f3e8ee;
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.interest-card h3 {
+  margin: 0 0 8px;
+  color: #6f173d;
+  font-size: 20px;
+  font-weight: 800;
+  word-break: break-word;
+}
+
+.interest-card p {
+  margin: 6px 0;
+  color: #5f4a54;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+  min-width: 120px;
+}
+
+.actions button {
+  border: none;
+  border-radius: 12px;
+  padding: 11px 16px;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.view {
+  background: #6f173d;
+}
+
+.accept {
+  background: #16a34a;
+}
+
+.reject {
+  background: #dc2626;
+}
+
+@media (max-width: 640px) {
+  .received-page {
+    padding: 28px 12px;
+  }
+
+  .interest-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .profile-img {
+    width: 100%;
+    height: 220px;
+    min-width: 100%;
+    border-radius: 16px;
+  }
+
+  .profile-info {
+    width: 100%;
+  }
+
+  .actions {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .actions button {
+    flex: 1;
+  }
+}
+.status-badge {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.status-badge.accepted,
+.accepted {
+  color: #16a34a;
+}
+
+.status-badge.rejected,
+.rejected {
+  color: #dc2626;
+}
+
+.pending {
+  color: #f59e0b;
+}

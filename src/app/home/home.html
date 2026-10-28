@@ -1,0 +1,268 @@
+<section class="hero" [class.tamil-mode]="currentLang === 'ta'">
+  <div
+    class="hero-slide"
+    [class.active]="currentSlide === 0"
+    style="background-image: url('/assets/caro-02.jpg');"
+  >
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        {{ t.hero[0].title1 }} <span>{{ t.hero[0].title2 }}</span>
+      </h1>
+      <div class="hero-buttons astro-legacy-actions">
+        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="hero-slide"
+    [class.active]="currentSlide === 1"
+    style="background-image: url('/assets/caro-01.jpg');"
+  >
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        {{ t.hero[1].title1 }} <span>{{ t.hero[1].title2 }}</span>
+      </h1>
+      <div class="hero-buttons astro-legacy-actions">
+        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="hero-slide"
+    [class.active]="currentSlide === 2"
+    style="background-image: url('/assets/caro-06.jpg');"
+  >
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        {{ t.hero[2].title1 }} <span>{{ t.hero[2].title2 }}</span>
+      </h1>
+      <div class="hero-buttons astro-legacy-actions">
+        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="hero-slide"
+    [class.active]="currentSlide === 3"
+    style="background-image: url('/assets/caro-05.jpg');">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        {{ t.hero[3].title1 }} <span>{{ t.hero[3].title2 }}</span>
+      </h1>
+      <div class="hero-buttons astro-legacy-actions">
+        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
+      </div>
+    </div>
+  </div>
+<div
+  class="hero-slide"
+  [class.active]="currentSlide === 4"
+  style="background-image: url('/assets/caro-07.jpg');"
+>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <h1 class="hero-title">
+      {{ t.hero[0].title1 }}
+      <span>{{ t.hero[0].title2 }}</span>
+    </h1>
+      <div class="hero-buttons astro-legacy-actions">
+        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
+      </div>
+  </div>
+</div>
+
+<div
+  class="hero-slide"
+  [class.active]="currentSlide === 5"
+  style="background-image: url('/assets/caro-08.jpg');"
+>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <h1 class="hero-title">
+      {{ t.hero[1].title1 }}
+      <span>{{ t.hero[1].title2 }}</span>
+    </h1>
+      <div class="hero-buttons astro-legacy-actions">
+        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
+      </div>
+  </div>
+</div>
+
+  <button class="carousel-arrow prev" (click)="prevSlide()" type="button">&#10094;</button>
+  <button class="carousel-arrow next" (click)="nextSlide()" type="button">&#10095;</button>
+
+  <div class="carousel-dots">
+    <span class="dot" [class.active]="currentSlide === 0" (click)="goToSlide(0)"></span>
+    <span class="dot" [class.active]="currentSlide === 1" (click)="goToSlide(1)"></span>
+    <span class="dot" [class.active]="currentSlide === 2" (click)="goToSlide(2)"></span>
+    <span class="dot" [class.active]="currentSlide === 3" (click)="goToSlide(3)"></span>
+    <span class="dot" [class.active]="currentSlide === 4" (click)="goToSlide(4)"></span>
+    <span class="dot" [class.active]="currentSlide === 5" (click)="goToSlide(5)"></span>
+  </div>
+</section>
+
+<app-home-discovery />
+
+<section class="features reveal" [class.tamil-section]="currentLang === 'ta'">
+  <div class="features-bg-shape features-bg-shape-1"></div>
+  <div class="features-bg-shape features-bg-shape-2"></div>
+
+  <div class="section-header reveal">
+    <p>{{ t.features.mini }}</p>
+    <h2>{{ t.features.title }}</h2>
+  </div>
+
+  <div class="feature-grid">
+    <div
+      class="feature-card reveal"
+      *ngFor="let item of t.features.items; let i = index"
+      [class.card-verified]="i === 0"
+      [class.card-secure]="i === 1"
+      [class.card-match]="i === 2"
+    >
+      <div class="feature-card-inner">
+        <div class="feature-top-line"></div>
+
+        <div class="icon-wrap">
+          <div class="icon-ring"></div>
+          <div class="icon">{{ item.icon }}</div>
+        </div>
+
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.text }}</p>
+
+        <div class="feature-bottom-glow"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="welcome reveal" [class.tamil-section]="currentLang === 'ta'">
+  <div class="welcome-slider reveal">
+    <div
+      class="welcome-track"
+      [style.transform]="'translateX(-' + (welcomeCurrentSlide * 100) + '%)'"
+    >
+      <div class="welcome-slide">
+        <img src="assets/caro-01.jpg" alt="Welcome slide 1" />
+      </div>
+      <div class="welcome-slide">
+        <img src="assets/caro-02.jpg" alt="Welcome slide 2" />
+      </div>
+      <div class="welcome-slide">
+        <img src="assets/caro-05.jpg" alt="Welcome slide 3" />
+      </div>
+      <div class="welcome-slide">
+        <img src="assets/caro-06.jpg" alt="Welcome slide 4" />
+      </div>
+    </div>
+  </div>
+
+  <div class="welcome-right reveal">
+    <p class="mini-title">{{ t.welcome.mini }}</p>
+    <h2>{{ t.welcome.title }}</h2>
+    <p class="welcome-text">{{ t.welcome.text }}</p>
+
+    <div class="stats">
+      <div class="stat-box reveal" *ngFor="let stat of t.welcome.stats">
+        <h3>{{ stat.value }}</h3>
+        <span>{{ stat.label }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="moments-section reveal" [class.tamil-section]="currentLang === 'ta'">
+  <div class="section-header reveal">
+    <p>{{ t.moments.mini }}</p>
+    <h2>{{ t.moments.title }}</h2>
+  </div>
+
+  <div class="moments-timeline">
+    <div class="timeline-line"></div>
+
+    <div
+      class="moment-row reveal"
+      *ngFor="let step of t.moments.steps; let i = index"
+      [class.left]="i % 2 === 0"
+      [class.right]="i % 2 === 1"
+    >
+      <div class="moment-card">
+      <div class="moment-number">
+  <img
+    *ngIf="i === 0"
+    src="assets/step-create-profile.png"
+    class="timeline-img"
+  />
+  <img
+    *ngIf="i === 1"
+    src="assets/step-discover-matches.png"
+    class="timeline-img"
+  />
+  <img
+    *ngIf="i === 2"
+    src="assets/step-send-interest.png"
+    class="timeline-img"
+  />
+  <img
+    *ngIf="i === 3"
+    src="assets/step-couple.png"
+    class="timeline-img"
+  />
+</div>
+
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.text }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Temporary gallery images. NOT verified Astro Alliance customer success stories. -->
+<section class="astro-wedding-stories" aria-labelledby="astro-stories-heading">
+  <div class="astro-stories-inner">
+    <div class="astro-stories-heading">
+      <p class="astro-stories-kicker">{{ currentLang === 'ta' ? 'திருமணக் கொண்டாட்டங்கள்' : 'Wedding inspiration' }}</p>
+      <h2 id="astro-stories-heading">{{ currentLang === 'ta' ? 'மகிழ்ச்சியான தருணங்கள்' : 'Happy Beginnings' }}</h2>
+      <p>{{ currentLang === 'ta' ? 'புதிய வாழ்க்கைப் பயணத்தின் இனிய தருணங்கள்.' : 'Celebrating the beautiful beginning of a new journey together.' }}</p>
+    </div>
+    <div class="astro-stories-grid">
+      <article class="astro-stories-card" *ngFor="let photo of storyPhotos; trackBy: trackStory">
+        <img [src]="photo.src" [alt]="photo.alt" loading="lazy" decoding="async" width="600" height="700" />
+        <div class="astro-story-info">
+          <span class="astro-story-sample">{{ currentLang === 'ta' ? 'மாதிரிப் புகைப்படம்' : 'Sample photo' }}</span>
+          <h3>{{ currentLang === 'ta' ? photo.captionTa : photo.captionEn }}</h3>
+        </div>
+      </article>
+    </div>
+    <p class="astro-story-note">{{ currentLang === 'ta' ? 'இவை எடுத்துக்காட்டுப் புகைப்படங்கள்; ஆஸ்ட்ரோ அலையன்ஸ் மூலம் திருமணமான தம்பதிகளின் உறுதிப்படுத்தப்பட்ட புகைப்படங்கள் அல்ல.' : 'Illustrative photos only — not verified Astro Alliance marriage success stories.' }}</p>
+  </div>
+</section>
+
+<section class="cta reveal" [class.tamil-section]="currentLang === 'ta'">
+  <div class="cta-box">
+    <div class="cta-content">
+      <h2>{{ t.cta.title }}</h2>
+      <!-- <p>{{ t.cta.text }}</p> -->
+      <button class="cta-btn" type="button" (click)="goToRegister()">
+        {{ t.cta.button }}
+      </button>
+    </div>
+  </div>
+</section>

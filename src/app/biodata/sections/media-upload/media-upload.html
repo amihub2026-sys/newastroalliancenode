@@ -1,0 +1,128 @@
+       <!-- MEDIA UPLOAD -->
+
+<details class="form-accordion" open>
+
+<summary>
+  {{ currentLang === 'ta' ? 'படங்கள் & வீடியோக்கள்' : 'Images & Videos' }}
+</summary>
+
+<div class="section-card profile-card">
+        <div class="section-title-wrap">
+          <h2>{{ tr.sections.profilePhoto }}</h2>
+          <p>{{ tr.sections.profilePhotoSub }}</p>
+        </div>
+
+        <div class="profile-upload-box">
+          <div class="profile-preview">
+            <img
+              *ngIf="profilePreviewUrl; else emptyProfile"
+              [src]="profilePreviewUrl"
+              alt="Profile Preview"
+            />
+            <ng-template #emptyProfile>
+              <div class="empty-avatar">{{ tr.labels.uploadPhoto }}</div>
+            </ng-template>
+          </div>
+
+          <div class="profile-actions">
+            <label class="upload-btn">
+              {{ tr.labels.chooseImage }}
+              <input
+                type="file"
+                accept="image/*"
+               (change)="onProfileChange($event)"
+                hidden
+              />
+            </label>
+<label class="upload-btn camera-btn">
+  📷 Open Camera
+  <input
+    type="file"
+    accept="image/*"
+    capture="environment"
+  (change)="onProfileChange($event)"
+    hidden
+  />
+</label>
+            <button
+              type="button"
+              class="remove-btn"
+              *ngIf="profilePreviewUrl"
+              (click)="removeProfileImage.emit()"
+            >
+              {{ tr.labels.remove }}
+            </button>
+
+            <span class="upload-note">{{ tr.labels.uploadNote }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADDITIONAL IMAGES + VIDEO -->
+      <div class="section-card">
+        <div class="section-title-wrap">
+          <h2>{{ tr.sections.gallery }}</h2>
+          <p>{{ tr.sections.gallerySub }}</p>
+        </div>
+
+        <div class="media-upload-wrap">
+          <div class="media-actions">
+            <h4 class="media-sub-title">
+  Additional Images & Video
+</h4>
+            <label class="upload-btn">
+              {{ tr.labels.chooseImages }}
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                (change)="onAdditionalChange($event)"
+                hidden
+              />
+            </label>
+
+            <label class="upload-btn">
+              {{ tr.labels.chooseVideo }}
+              <input
+                type="file"
+                accept="video/*"
+              (change)="onVideoFileChange($event)"
+                hidden
+              />
+            </label>
+
+            <button
+              type="button"
+              class="remove-btn"
+              *ngIf="additionalImages.length > 0"
+              (click)="clearAdditionalImages.emit()"
+            >
+              {{ tr.labels.removeAll }}
+            </button>
+
+            <button
+              type="button"
+              class="remove-btn"
+              *ngIf="selectedVideo"
+              (click)="removeVideo.emit()"
+            >
+              {{ tr.labels.remove }}
+            </button>
+
+            <span class="upload-note">{{ tr.labels.imageNote }}</span>
+            <span class="upload-note">{{ tr.labels.videoNote }}</span>
+          </div>
+
+          <div class="media-preview-grid" *ngIf="additionalImagePreviews.length > 0">
+            <div class="media-thumb" *ngFor="let img of additionalImagePreviews; let i = index">
+              <img [src]="img" alt="Additional Image" />
+              <button type="button" class="thumb-remove" (click)="removeAdditionalImage.emit(i)">×</button>
+            </div>
+          </div>
+
+          <div class="video-preview" *ngIf="videoPreviewUrl">
+            <video [src]="videoPreviewUrl" controls></video>
+          </div>
+        </div>
+      </div>
+</details>

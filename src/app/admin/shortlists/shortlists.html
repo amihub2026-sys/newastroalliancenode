@@ -1,0 +1,340 @@
+<div class="page">
+
+  <div class="page-header">
+
+    <div>
+
+     <h2>
+  {{
+    currentLang === 'ta'
+      ? 'ஷார்ட்லிஸ்ட் நிர்வாகம்'
+      : 'Shortlist Management'
+  }}
+</h2>
+
+      <p>
+       {{
+  currentLang === 'ta'
+    ? 'அனைத்து ஷார்ட்லிஸ்ட் செயல்பாடுகளையும் கண்காணிக்கவும்'
+    : 'Monitor all shortlist activities'
+}}
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="top-bar">
+
+    <div class="search-box">
+
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="filterShortlists()"
+       [placeholder]="
+  currentLang === 'ta'
+    ? 'சுயவிவரத்தை தேடவும்'
+    : 'Search profile'
+">
+
+    </div>
+
+  </div>
+
+  <div class="table-scroll">
+
+    <table class="modern-table">
+
+      <thead>
+
+        <tr>
+
+          <th>
+  {{
+    currentLang === 'ta'
+      ? 'பயனர்'
+      : 'User'
+  }}
+</th>
+
+          <th>
+  {{
+    currentLang === 'ta'
+      ? 'அனுப்பியது'
+      : 'Sent'
+  }}
+</th>
+
+         <th>
+  {{
+    currentLang === 'ta'
+      ? 'பெற்றது'
+      : 'Received'
+  }}
+</th>
+
+        <th>
+  {{
+    currentLang === 'ta'
+      ? 'செயல்'
+      : 'Action'
+  }}
+</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let item of filteredShortlists">
+
+          <td>
+
+            <div class="profile-card">
+
+              <div class="avatar">
+
+                {{
+                  item.from_profile?.full_name
+                  ?.charAt(0)
+                }}
+
+              </div>
+
+              <div>
+
+                <div class="profile-code">
+                  {{ item.from_profile?.profile_code }}
+                </div>
+
+                <div class="profile-name">
+                 {{
+  currentLang === 'ta'
+    ? item.from_profile?.full_name_ta ||
+item.from_profile?.full_name
+    : item.from_profile?.full_name
+}}
+                </div>
+
+              </div>
+
+            </div>
+
+          </td>
+
+          <!-- SENT -->
+
+          <td>
+
+            {{
+shortlists.filter(s =>
+
+  s.from_profile?.profile_code ===
+  item.from_profile?.profile_code
+
+).length
+            }}
+
+          </td>
+
+          <!-- RECEIVED -->
+
+          <td>
+
+            {{
+ shortlists.filter(s =>
+
+  s.to_profile?.profile_code ===
+  item.from_profile?.profile_code
+
+).length
+            }}
+
+          </td>
+
+          <td>
+
+          <button
+  type="button"
+  class="history-btn"
+  (click)="openHistory(item, $event)"
+>
+  {{
+    currentLang === 'ta'
+      ? 'வரலாறு'
+      : 'View History'
+  }}
+</button>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- HISTORY -->
+
+  <div
+    class="history-wrapper"
+    *ngIf="selectedHistory.length > 0">
+
+    <div class="history-header">
+
+      <h3>
+
+       {{
+  currentLang === 'ta'
+    ? 'ஷார்ட்லிஸ்ட் வரலாறு'
+    : 'Shortlist History'
+}}
+
+      </h3>
+
+      <div class="selected-user">
+
+        {{
+  currentLang === 'ta'
+    ? selectedUser?.from_profile?.full_name_ta ||
+selectedUser?.from_profile?.full_name
+    : selectedUser?.from_profile?.full_name
+}}
+
+      </div>
+
+    </div>
+
+    <div class="table-scroll">
+
+      <table class="modern-table">
+
+        <thead>
+
+          <tr>
+
+           <th>
+  {{
+    currentLang === 'ta'
+      ? 'அனுப்பியவர்'
+      : 'Sender'
+  }}
+</th>
+
+           <th>
+  {{
+    currentLang === 'ta'
+      ? 'பெற்றவர்'
+      : 'Receiver'
+  }}
+</th>
+
+            <th>
+  {{
+    currentLang === 'ta'
+      ? 'தேதி'
+      : 'Date'
+  }}
+</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let item of selectedHistory">
+
+            <!-- SENDER -->
+
+            <td>
+
+              <div class="profile-card">
+
+                <div class="avatar small">
+
+                  {{
+                    item.from_profile?.full_name
+                    ?.charAt(0)
+                  }}
+
+                </div>
+
+                <div>
+
+                  <div class="profile-code">
+                    {{ item.from_profile?.profile_code }}
+                  </div>
+
+                  <div class="profile-name">
+                   {{
+  currentLang === 'ta'
+    ? item.from_profile?.full_name_ta ||
+      item.from_profile?.full_name
+    : item.from_profile?.full_name
+}}
+                  </div>
+
+                </div>
+
+              </div>
+
+            </td>
+
+            <!-- RECEIVER -->
+
+            <td>
+
+              <div class="profile-card">
+
+                <div class="avatar small">
+
+                  {{
+                    item.to_profile?.full_name
+                    ?.charAt(0)
+                  }}
+
+                </div>
+
+                <div>
+
+                  <div class="profile-code">
+                   {{ item.to_profile?.profile_code || item.profile_id }}
+                  </div>
+
+                  <div class="profile-name">
+                   {{
+  currentLang === 'ta'
+    ? item.to_profile?.full_name_ta ||
+      item.to_profile?.full_name ||
+      'சுயவிவரம் கிடைக்கவில்லை'
+    : item.to_profile?.full_name ||
+      'Profile Not Found'
+}}
+                  </div>
+
+                </div>
+
+              </div>
+
+            </td>
+
+            <td>
+
+              {{ item.createdAt | date:'medium' }}
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

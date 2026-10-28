@@ -1,0 +1,754 @@
+:host {
+  display: block;
+  background: #fff;
+}
+.print-page {
+  width: 210mm;
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 4mm;
+  border: 2px solid #008000;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+}
+.print-header {
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  align-items: center;
+  text-align: center;
+  border-bottom: 4px double #111;
+  padding: 4px 0 6px;
+  margin-bottom: 8px;
+}
+
+.center-title h1 {
+  font-size: 30px;
+  margin: 0;
+  color: #008000;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.center-title p,
+.center-title h4,
+.god-text {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #008000;
+  font-weight: 800;
+}
+
+.print-photo-section {
+  text-align: right;
+}
+
+.print-photo-section img {
+  object-position: top center !important;
+}
+.print-photo-section {
+  margin-right: 8px !important;
+}
+
+.two-column {
+  display: flex;
+  border-bottom: 2px solid #008000;
+
+  flex: 0 0 auto !important;
+}
+.column {
+  width: 50%;
+}
+
+.column p {
+  display: grid;
+  color: #0000aa;
+  align-items: start;
+}
+
+.column strong {
+  color: #008000;
+  font-weight: 900;
+  overflow: visible;
+  display: block;
+}
+.column p span,
+.astro-details-row p span,
+.contact-section p span {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.expectation-line {
+  color: #0000aa;
+  font-size: 14px;
+  margin: 6px 0;
+}
+
+.expectation-line strong {
+  color: #008000;
+  font-weight: 900;
+}
+
+.chart-row {
+  display: flex !important;
+}
+
+.chart-cell {
+  border: 1.5px solid #008000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #0000aa !important;
+  font-weight: 800 !important;
+  font-size: 15px !important;
+  box-sizing: border-box !important;
+}
+
+.chart-center {
+  border-top: 1.5px solid #008000 !important;
+  border-bottom: 1.5px solid #008000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #0000aa !important;
+  font-weight: 900 !important;
+}
+
+h3 {
+  color: #008000;
+  font-size: 22px;
+  margin: 8px 0 4px;
+  font-weight: 900;
+}
+
+.print-page > p {
+  color: #0000aa;
+  font-size: 14px;
+  margin: 0 0 5px;
+}
+
+.print-page > p strong {
+  color: #008000;
+  font-weight: 900;
+}
+
+hr {
+  display: none;
+}
+.chart-section {
+
+  page-break-inside: auto !important;
+  break-inside: auto !important;
+  page-break-after: auto !important;
+  break-after: auto !important;
+}
+
+.chart-cell {
+  width: 70px !important;
+  height: 48px !important;
+}
+
+.side-cell {
+  height: 96px !important;
+}
+
+.chart-center {
+  width: 140px !important;
+  height: 96px !important;
+  font-size: 28px !important;
+}
+
+h3 {
+  page-break-after: avoid !important;
+}
+
+.print-page {
+  page-break-inside: auto !important;
+}
+.contact-section h3 {
+  margin: 4px 0 3px !important;
+  font-size: 18px !important;
+}
+
+.contact-section p {
+  display: grid;
+  font-size: 12px !important;
+  color: #0000aa;
+}
+.contact-section {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  padding-top: 0 !important;
+}
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 5mm;
+  }
+
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  .print-page {
+    width: 200mm !important;
+    max-width: 200mm !important;
+    min-height: 287mm !important;
+    margin: 0 auto !important;
+    padding: 4mm !important;
+    border: 2px solid #008000 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .mobile-pdf-btn,
+  .print-loading {
+    display: none !important;
+  }
+}
+.astro-details-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  border-bottom: 2px solid #008000;
+}
+
+.astro-details-row p {
+  display: grid;
+  font-size: 13px;
+  color: #0000aa;
+}
+.astro-details-row strong {
+  width: auto;
+  min-width: auto;
+  color: #008000;
+  font-weight: 900;
+}
+.reg-no {
+  white-space: nowrap;
+  display: inline-block;
+}
+.photo-date-row {
+  position: absolute;
+  top: 95px;
+  right: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  gap: 4px;
+  z-index: 10;
+}
+
+.reg-date {
+  color: #0000aa;
+  font-size: 13px;
+  white-space: nowrap;
+  text-align: right;
+  margin-bottom: 4px;
+}
+.reg-date strong {
+  color: #008000;
+  font-weight: 900;
+}
+.chart-section {
+  margin-top: 6px !important;
+}
+/* FINAL FIX: keep labels in one line */
+
+.column strong {
+  white-space: nowrap !important;
+  font-size: 12px !important;
+}
+
+.astro-details-row strong {
+  white-space: nowrap !important;
+}
+
+.contact-section strong {
+  white-space: nowrap !important;
+}
+
+/* FINAL A4 PRINT FIX */
+
+.two-column {
+  padding-bottom: 6px !important;
+}
+
+.column:first-child {
+  width: 48% !important;
+}
+
+.column:last-child {
+  width: 52% !important;
+}
+
+.column p {
+  font-size: 13px !important;
+}
+
+.column p strong {
+  font-weight: 900 !important;
+}
+
+.print-photo-section {
+  float: right !important;
+  width: 120px !important;
+  margin: 0 0 6px 10px !important;
+}
+
+.print-photo-section img {
+  width: 120px !important;
+  height: 150px !important;
+  object-fit: cover !important;
+  border: 2px solid #008000 !important;
+}
+
+.reg-line strong,
+.reg-line span {
+  display: inline !important;
+  white-space: nowrap !important;
+}
+
+.reg-date-label {
+  margin-left: 4px !important;
+}
+
+.astro-details-row {
+  margin-top: 6px !important;
+  padding: 6px 0 !important;
+}
+
+.astro-details-row p {
+  margin-bottom: 5px !important;
+}
+
+.chart-section {
+  page-break-before: auto !important;
+  break-before: auto !important;
+}
+
+.contact-section {
+  margin-top: 6px !important;
+}
+
+.contact-section p {
+  margin-bottom: 5px !important;
+}
+
+/* ALL FIELDS LIKE EXPECTATION STYLE */
+.column p {
+  display: block !important;
+}
+
+.column p strong {
+  display: inline !important;
+  white-space: nowrap !important;
+  color: #008000 !important;
+}
+
+.column p span {
+  display: inline !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  color: #0000aa !important;
+}
+.reg-code {
+  white-space: nowrap !important;
+  display: inline-block !important;
+}
+.reg-line {
+  display: block !important;
+  width: 100% !important;
+  line-height: 1 !important;
+  margin: 0 0 3px !important;
+}
+
+.reg-item {
+  display: inline !important;
+  margin-right: 2px !important;
+}
+
+.reg-item strong {
+  display: inline !important;
+  white-space: nowrap !important;
+}
+/* SINGLE PAGE FIX */
+
+.column p {
+  margin: 0 0 6px !important;
+  line-height: 1.3 !important;
+}
+
+.astro-details-row p {
+  margin: 0 0 6px !important;
+  line-height: 1.3 !important;
+}
+
+.contact-section p {
+  margin: 0 0 4px !important;
+  line-height: 1.25 !important;
+}
+.chart-section {
+  padding-bottom: 4px !important;
+}
+
+@media screen {
+  .print-page {
+    overflow: visible !important;
+  }
+}
+/* FINAL FIELD SPACE FIX */
+
+.column p,
+.astro-details-row p,
+.contact-section p {
+  margin-bottom: 7px !important;
+  line-height: 1.45 !important;
+}
+
+.column p {
+  grid-template-columns: 170px 1fr !important;
+  column-gap: 10px !important;
+}
+
+.astro-details-row p {
+  grid-template-columns: 150px 1fr !important;
+  column-gap: 10px !important;
+}
+
+.contact-section p {
+  grid-template-columns: 130px 1fr !important;
+  column-gap: 10px !important;
+}
+
+.column p strong,
+.astro-details-row p strong,
+.contact-section p strong {
+  letter-spacing: 0.2px !important;
+}
+
+.two-column {
+  gap: 22px !important;
+}
+
+.column:first-child,
+.column:last-child {
+  width: 50% !important;
+}
+.reg-line {
+  display: flex !important;
+  align-items: center !important;
+  gap: 25px !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+  margin-bottom: 8px !important;
+}
+
+.reg-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  white-space: nowrap !important;
+}
+
+.reg-item strong {
+  color: #008000 !important;
+  font-weight: 900 !important;
+}
+
+.reg-item {
+  color: #0000aa !important;
+}
+.print-footer-note {
+  margin-top: 6px !important;
+  border-top: 2px solid #008000;
+  padding-top: 4px;
+
+  color: #008000;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.header-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-side img {
+  width: 55px;
+  height: auto;
+  margin-top: 2px;
+}
+
+.side-text {
+  color: #008000;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.om-text {
+  color: #008000;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.sub-title {
+  color: #008000;
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 2px;
+}
+
+.website {
+  margin: 0;
+  color: #008000;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.address {
+  margin: 2px 0;
+  color: #008000;
+  font-size: 12px;
+  font-weight: 700;
+}
+.main-title {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: #008000 !important;
+  margin: 0 !important;
+  line-height: 1.05 !important;
+}
+.left-god {
+  width: 95px !important;
+  height: auto !important;
+}
+
+.mobile-pdf-btn {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .mobile-pdf-btn {
+    display: block !important;
+    width: 90%;
+    margin: 18px auto;
+    padding: 13px 16px;
+    background: #008000;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  .print-page {
+    display: none !important;
+  }
+}
+/* =========================================================
+   FINAL HOROSCOPE 12-BOX FIX
+   ========================================================= */
+
+.chart-section {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 24px !important;
+
+  width: 100% !important;
+
+  margin: 6px 0 !important;
+  padding: 6px 0 10px !important;
+
+  border-bottom: 2px solid #008000 !important;
+}
+
+/* 4 × 4 SOUTH INDIAN HOROSCOPE */
+
+.astro-chart {
+  width: 280px !important;
+  height: 192px !important;
+
+  display: grid !important;
+
+  grid-template-columns: repeat(4, 70px) !important;
+
+  grid-template-rows: repeat(4, 48px) !important;
+
+  position: relative !important;
+}
+
+/* COMMON HOROSCOPE CELL */
+
+.astro-chart .chart-cell {
+  width: auto !important;
+  height: auto !important;
+
+  min-width: 0 !important;
+  min-height: 0 !important;
+
+  box-sizing: border-box !important;
+
+  border: 1.5px solid #008000 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  text-align: center !important;
+
+  color: #0000aa !important;
+
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+
+  padding: 2px !important;
+
+  white-space: normal !important;
+
+  overflow-wrap: anywhere !important;
+}
+
+/* =========================================
+   CORRECT HOROSCOPE ARRAY POSITION MAPPING
+   ========================================= */
+
+/* TOP ROW */
+
+.astro-chart .pos-0 {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+}
+
+.astro-chart .pos-1 {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+}
+
+.astro-chart .pos-2 {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+}
+
+.astro-chart .pos-3 {
+  grid-column: 4 !important;
+  grid-row: 1 !important;
+}
+
+/* SECOND ROW */
+
+.astro-chart .pos-4 {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+}
+
+.astro-chart .pos-5 {
+  grid-column: 4 !important;
+  grid-row: 2 !important;
+}
+
+/* THIRD ROW */
+
+.astro-chart .pos-6 {
+  grid-column: 1 !important;
+  grid-row: 3 !important;
+}
+
+.astro-chart .pos-7 {
+  grid-column: 4 !important;
+  grid-row: 3 !important;
+}
+
+/* BOTTOM ROW */
+
+.astro-chart .pos-8 {
+  grid-column: 1 !important;
+  grid-row: 4 !important;
+}
+
+.astro-chart .pos-9 {
+  grid-column: 2 !important;
+  grid-row: 4 !important;
+}
+
+.astro-chart .pos-10 {
+  grid-column: 3 !important;
+  grid-row: 4 !important;
+}
+
+.astro-chart .pos-11 {
+  grid-column: 4 !important;
+  grid-row: 4 !important;
+}
+
+/* =========================================================
+   CENTER 2 × 2
+   ========================================================= */
+
+.astro-chart .chart-center {
+  grid-column: 2 / 4 !important;
+  grid-row: 2 / 4 !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  box-sizing: border-box !important;
+
+  border: 1.5px solid #008000 !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  text-align: center !important;
+
+  color: #0000aa !important;
+
+  font-size: 34px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+
+  padding: 4px !important;
+
+  white-space: nowrap !important;
+}
+
+/* =========================================================
+   CENTER LOGO
+   ========================================================= */
+
+.chart-logo {
+  width: 80px !important;
+
+  flex: 0 0 80px !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.chart-logo img {
+  width: 70px !important;
+  max-width: 70px !important;
+
+  height: auto !important;
+
+  object-fit: contain !important;
+}

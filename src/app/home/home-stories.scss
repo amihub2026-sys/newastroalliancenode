@@ -1,0 +1,21 @@
+
+/* Intentional additions to the original Astro Alliance homepage only. */
+.astro-legacy-actions { display:flex; flex-wrap:wrap; gap:14px; margin-top:24px; }
+.astro-legacy-actions a { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; min-height:48px; padding:10px 25px; border-radius:30px; font-weight:700; transition:transform .2s ease, box-shadow .2s ease; }
+.astro-legacy-actions a:hover { transform:translateY(-2px); }
+.astro-wedding-stories { padding: clamp(54px,7vw,105px) 20px; background:#fff9f7; color:#421c30; }
+.astro-stories-inner { max-width:1200px; margin:auto; }
+.astro-stories-heading { text-align:center; margin-bottom:34px; }
+.astro-stories-kicker { text-transform:uppercase; letter-spacing:.18em; font-size:.78rem; color:#a73d67; font-weight:750; }
+.astro-stories-heading h2 { font-size:clamp(2rem,3.5vw,3rem); margin:12px 0; color:#621c3f; }
+.astro-stories-heading p { color:#735d67; font-size:1.05rem; }
+.astro-stories-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+.astro-stories-card { min-width:0; background:white; overflow:hidden; border-radius:20px; box-shadow:0 14px 34px rgba(79,19,43,.10); }
+.astro-stories-card img { width:100%; height:320px; display:block; object-fit:cover; object-position:center 30%; }
+.astro-story-info { padding:15px 18px 20px; }
+.astro-story-sample { display:inline-block; font-size:.75rem; font-weight:700; color:#944c6d; background:#f8e9f0; border-radius:99px; padding:5px 12px; margin-bottom:9px; }
+.astro-story-info h3 { margin:0; font-size:1.1rem; font-weight:700; color:#55203b; }
+.astro-story-note { text-align:center; color:#796873; font-size:.85rem; margin:22px auto 0; max-width:750px; }
+@media(max-width:760px){.astro-stories-grid{grid-template-columns:1fr 1fr}.astro-stories-card img{height:245px}.astro-legacy-actions a{font-size:.9rem}}
+@media(max-width:520px){.astro-stories-grid{grid-template-columns:1fr}.astro-stories-card img{height:285px}.astro-legacy-actions{gap:8px}.astro-legacy-actions a{width:100%;min-height:48px}}
+@media(prefers-reduced-motion:reduce){.astro-legacy-actions a{transition:none}}

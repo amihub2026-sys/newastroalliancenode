@@ -1,0 +1,338 @@
+<section class="content-section">
+
+  <div class="section-header">
+    <h2>
+  {{ txt('Likes History', 'லைக் வரலாறு') }}
+</h2>
+   <p>
+  {{ txt(
+    'User like activity history',
+    'பயனர் லைக் செயல்பாட்டு வரலாறு'
+  ) }}
+</p>
+  </div>
+
+  <div class="panel-card">
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+           <th>{{ txt('User', 'பயனர்') }}</th>
+
+<th>{{ txt('Sent', 'அனுப்பியது') }}</th>
+
+<th>{{ txt('Received', 'பெற்றது') }}</th>
+
+<th>{{ txt('Action', 'செயல்') }}</th>
+          </tr>
+        </thead>
+
+<tbody>
+
+  <ng-container *ngFor="let user of users">
+
+    <!-- USER ROW -->
+
+    <tr>
+
+      <td class="user-cell">
+
+        <img
+          [src]="user.profile_image_url || 'assets/default-avatar.png'"
+          class="avatar"
+        >
+
+        <div>
+
+          <div class="code">
+            {{ user.profile_code }}
+          </div>
+
+          <div class="name">
+            {{
+              v(
+                user.full_name,
+                user.full_name_ta
+              )
+            }}
+          </div>
+
+        </div>
+
+      </td>
+
+      <td>
+        {{ user.sent }}
+      </td>
+
+      <td>
+        {{ user.received }}
+      </td>
+
+      <td>
+
+        <button
+          type="button"
+          class="view-btn"
+          (click)="viewHistory(user)"
+        >
+
+          {{
+            selectedUser?.profile_id === user.profile_id
+              ? txt('Hide', 'மூடு')
+              : txt('View History', 'வரலாறு')
+          }}
+
+        </button>
+
+      </td>
+
+    </tr>
+
+
+
+  </ng-container>
+
+</tbody>
+
+      </table>
+
+      <div class="pagination-wrap">
+
+  <button
+    (click)="previousPage()"
+    [disabled]="currentPage === 1"
+  >
+    Previous
+  </button>
+
+  <span>
+    Page {{ currentPage }} / {{ totalPages }}
+  </span>
+
+  <button
+    (click)="nextPage()"
+    [disabled]="currentPage === totalPages"
+  >
+    Next
+  </button>
+
+</div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- HISTORY SECTION -->
+
+<div
+  class="history-wrapper"
+ *ngIf="selectedUser"
+>
+
+  <div class="panel-card">
+
+    <div class="section-header">
+
+      <h2>
+
+        {{
+          txt(
+            'Liked Profiles',
+            'லைக் செய்யப்பட்ட பயனர்கள்'
+          )
+        }}
+
+      </h2>
+
+      <p>
+
+        {{
+          v(
+            selectedUser?.full_name,
+            selectedUser?.full_name_ta
+          )
+        }}
+
+      </p>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              {{
+                txt(
+                  'Profile ID',
+                  'சுயவிவர ஐடி'
+                )
+              }}
+            </th>
+
+            <th>
+              {{
+                txt(
+                  'Name',
+                  'பெயர்'
+                )
+              }}
+            </th>
+
+            <th>
+              {{
+                txt(
+                  'Date',
+                  'தேதி'
+                )
+              }}
+            </th>
+
+          </tr>
+
+        </thead>
+
+     <tbody>
+
+  <tr
+    *ngFor="let item of selectedHistory; trackBy: trackByLike"
+  >
+
+<td>
+ {{ item.profile_code || '-' }}
+</td>
+
+    <td>
+{{
+ v(
+ item.name,
+ item.name_ta
+ )
+}}
+    </td>
+
+    <td>
+      {{
+        item.createdAt
+          | date:'medium'
+      }}
+    </td>
+
+  </tr>
+
+</tbody>
+
+      </table>
+  </div>
+    </div>
+
+      <!-- LIKED THIS USER -->
+
+<div
+  class="panel-card mt-4"
+  *ngIf="usersWhoLiked.length > 0"
+>
+
+  <div class="section-header">
+
+    <h2>
+
+      {{
+        txt(
+          'Liked This User',
+          'இந்த பயனரை லைக் செய்தவர்கள்'
+        )
+      }}
+
+    </h2>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>
+            {{
+              txt(
+                'Profile ID',
+                'சுயவிவர ஐடி'
+              )
+            }}
+          </th>
+
+          <th>
+            {{
+              txt(
+                'Name',
+                'பெயர்'
+              )
+            }}
+          </th>
+
+          <th>
+            {{
+              txt(
+                'Date',
+                'தேதி'
+              )
+            }}
+          </th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let item of usersWhoLiked"
+        >
+
+          <td>
+           {{ item?.profile_code || '-' }}
+          </td>
+
+          <td>
+            {{
+              v(
+               item.name,
+item.name_ta
+              )
+            }}
+          </td>
+
+          <td>
+            {{
+item.createdAt
+              | date:'medium'
+            }}
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+
+</div>

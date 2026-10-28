@@ -1,0 +1,29 @@
+<div class="admin-shell">
+  <aside class="admin-sidebar" id="admin-navigation" [class.is-open]="sidebarOpen" aria-label="Administration navigation">
+    <div class="sidebar-brand"><span class="brand-symbol" aria-hidden="true">♡</span><div><strong>ASTRO ALLIANCE</strong><small>ADMIN WORKSPACE</small></div></div>
+    <div class="administrator"><span class="avatar" aria-hidden="true">{{ adminName.slice(0,1).toUpperCase() }}</span><div><strong>{{ adminName }}</strong><small>Administrator</small></div></div>
+    <nav aria-label="Admin modules">
+      @for (group of groups; track group.title) {
+      <div class="nav-group">
+        <p class="group-title">{{ group.title }}</p>
+        @for (item of group.items; track item.path) {
+          @if (!item.ownerOnly || isOwner) {
+          <a class="nav-item" [routerLink]="item.path" [queryParams]="item.path === '/admin/create-biodata' ? {adminCreate: 'true'} : null" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeSidebar()">
+            <span class="menu-icon" aria-hidden="true">{{ item.icon }}</span><span>{{ item.label }}</span>
+          </a>
+          }
+        }
+      </div>
+      }
+    </nav>
+    <button class="sidebar-signout" type="button" (click)="logoutAdmin()"><span aria-hidden="true">↪</span> Sign out</button>
+  </aside>
+  @if (sidebarOpen) { <button type="button" class="nav-backdrop" aria-label="Close navigation" (click)="closeSidebar()"></button> }
+  <div class="admin-body">
+    <header class="admin-topbar">
+      <div class="topbar-start"><button type="button" class="mobile-toggle" (click)="toggleSidebar()" [attr.aria-expanded]="sidebarOpen" aria-controls="admin-navigation" aria-label="Toggle admin menu">☰</button><div><small>Astro Alliance</small><strong>Management console</strong></div></div>
+      <div class="topbar-end"><div class="language-switcher"><button type="button" (click)="changeLanguage('en')" [class.selected]="currentLang === 'en'" aria-label="English">EN</button><button type="button" (click)="changeLanguage('ta')" [class.selected]="currentLang === 'ta'" aria-label="Tamil">தமிழ்</button></div><span class="topbar-avatar" aria-hidden="true">{{ adminName.slice(0,1).toUpperCase() }}</span></div>
+    </header>
+    <main id="admin-main" class="admin-content"><router-outlet></router-outlet></main>
+  </div>
+</div>

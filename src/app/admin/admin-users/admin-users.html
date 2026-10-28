@@ -1,0 +1,65 @@
+<section class="admin-users-page">
+  <h1>Admin management</h1>
+  <p>Owner access is required to manage administrator accounts.</p>
+  <p *ngIf="error" role="alert">{{ error }}</p>
+  <form class="form-grid" #adminForm="ngForm" (ngSubmit)="addAdmin()">
+    <label
+      >Name <input name="name" [(ngModel)]="name" required maxlength="100" autocomplete="name"
+    /></label>
+    <label
+      >Email <input name="email" type="email" [(ngModel)]="email" required email autocomplete="off"
+    /></label>
+    <label
+      >Temporary password
+      <input
+        name="password"
+        type="password"
+        [(ngModel)]="password"
+        required
+        minlength="12"
+        maxlength="72"
+        autocomplete="new-password"
+    /></label>
+    <label
+      >Role
+      <select name="role" [(ngModel)]="role">
+        <option value="admin">Admin</option>
+        <option value="super_admin">Owner</option>
+      </select></label
+    >
+    <button type="submit" [disabled]="busy || adminForm.invalid">
+      {{ busy ? 'Saving…' : 'Add admin' }}
+    </button>
+  </form>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let admin of admins">
+        <td>{{ admin.name }}</td>
+        <td>{{ admin.email }}</td>
+        <td>{{ admin.role }}</td>
+        <td>{{ admin.isActive ? 'Active' : 'Disabled' }}</td>
+        <td>
+          <button
+            type="button"
+            [disabled]="busy || !admin.isActive"
+            (click)="deleteAdmin(admin._id)"
+          >
+            Disable
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="!admins.length">
+        <td colspan="5">No managed admin accounts.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

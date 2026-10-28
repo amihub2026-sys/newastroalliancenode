@@ -1,0 +1,20 @@
+<section class="import-workspace" aria-labelledby="import-title">
+  <div class="page-heading"><div><p class="eyebrow">Admin / Profiles</p><h1 id="import-title">Bulk profile import</h1><p>Bring multiple <strong>new</strong> matrimony profiles into the approval queue without entering each one manually.</p></div><a class="back-link" href="/admin/profiles">← Manage profiles</a></div>
+  <div class="import-warning"><span aria-hidden="true">ⓘ</span><p><strong>Existing data is protected.</strong> This tool adds new profiles only. It skips phone numbers already registered and does not migrate previous profile IDs, subscriptions or photo files.</p></div>
+  <div class="import-grid"><div class="upload-panel"><div class="panel-title"><span class="step-badge">1</span><div><h2>Select your file</h2><p>JSON file, up to 100 profiles per batch, maximum 900 KB</p></div></div>
+    <label class="file-drop" for="profiles-file"><span class="upload-icon" aria-hidden="true">⇧</span><strong>{{ filename || 'Choose a profile JSON file' }}</strong><small>Only JSON. Files are not saved until you confirm the import.</small><span class="choose-file">Choose file</span></label>
+    <input id="profiles-file" type="file" accept=".json,application/json" (change)="selectFile($event)" [disabled]="busy" aria-describedby="upload-help" />
+    <p id="upload-help" class="field-help">Missing names, invalid dates, and repeated mobile numbers are checked during preview.</p>
+    <button class="template-btn" type="button" (click)="downloadTemplate()">↓ Download example JSON</button>
+  </div>
+  <div class="checklist-panel"><div class="panel-title"><span class="step-badge">2</span><div><h2>Preview and confirm</h2><p>Check all rows before saving anything</p></div></div><ol class="checklist"><li>Upload a JSON array of profile objects</li><li>Run preview to validate each profile</li><li>Fix errors and import eligible profiles</li><li>Review imported profiles in the admin approval queue</li></ol>
+    <div class="buttons"><button type="button" class="button-secondary" (click)="submit(false)" [disabled]="busy || !profiles.length">{{ busy ? 'Processing…' : 'Preview profiles' }}</button><button type="button" class="button-primary" (click)="submit(true)" [disabled]="busy || !canImport">Import eligible profiles →</button></div>
+  </div></div>
+  @if (error) { <div class="alert-error" role="alert">{{ error }}</div> }
+  @if (message) { <p class="feedback" aria-live="polite">{{ message }}</p> }
+  @if (rows.length) {
+    <section class="results-panel" aria-labelledby="preview-title"><div class="results-heading"><div><h2 id="preview-title">{{ imported ? 'Import results' : 'Import preview' }}</h2><p>{{ rows.length }} profiles checked</p></div><div class="result-totals"><span class="ready">{{ counts.ready }} ready</span><span class="skip">{{ counts.skip }} skipped</span><span class="error">{{ counts.error }} errors</span>@if(imported){<span class="done">{{ counts.imported }} imported</span>}</div></div>
+      <div class="table-scroll"><table><thead><tr><th scope="col">Row</th><th scope="col">Status</th><th scope="col">Details</th></tr></thead><tbody>@for (row of rows; track row.row) {<tr><td>{{ row.row }}</td><td><span class="status" [class]="row.status">{{ row.status }}</span></td><td>{{ row.message }}</td></tr>}</tbody></table></div>
+    </section>
+  }
+</section>

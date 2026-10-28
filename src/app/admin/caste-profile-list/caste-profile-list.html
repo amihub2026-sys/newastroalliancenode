@@ -1,0 +1,397 @@
+<section class="content-section">
+
+  <div class="section-header">
+    <div>
+<h2>
+{{ currentLang === 'ta' ? 'ஜாதி சுயவிவரங்கள்' : 'Caste Profiles' }}
+</h2>
+
+<p>
+{{ currentLang === 'ta'
+? 'இந்த ஜாதியின் கீழ் உள்ள சுயவிவரங்கள்'
+: 'Profiles listed under this caste'
+}}
+</p>
+    </div>
+  </div>
+
+
+  <div class="panel-card">
+
+    <p *ngIf="isLoading">
+      {{
+currentLang === 'ta'
+? 'சுயவிவரங்கள் ஏற்றப்படுகிறது...'
+: 'Loading profiles...'
+}}
+    </p>
+
+
+    <div *ngIf="!isLoading">
+
+
+      <!-- MALE PROFILES -->
+
+<h3
+class="gender-title accordion-title"
+(click)="toggleSection('male')">
+
+  <span>
+   {{
+currentLang === 'ta'
+? 'ஆண் சுயவிவரங்கள்'
+: 'Male Profiles'
+}}
+({{ maleProfiles.length }})
+  </span>
+
+  <span>
+    {{openSection === 'male' ? '▲':'▼'}}
+  </span>
+
+</h3>
+
+
+      <div 
+class="accordion-body"
+*ngIf="openSection === 'male'">
+
+<div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+<th>{{currentLang==='ta'?'எண்':'S.No'}}</th>
+
+<th>
+{{currentLang==='ta'?'சுயவிவர குறியீடு':'Profile Code'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'பெயர்':'Name'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'பாலினம்':'Gender'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'வயது':'Age'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'தொலைபேசி':'Mobile'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'நகரம்':'City'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'நிலை':'Status'}}
+</th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            <tr
+              *ngFor="
+              let profile of malePaginatedProfiles;
+              let i=index
+              ">
+
+
+              <td>{{i+1}}</td>
+
+
+              <td>
+                {{profile.profileCode || '-'}}
+              </td>
+
+
+              <td>
+                {{
+currentLang === 'ta'
+?
+(profile.basic?.fullName?.ta || profile.basic?.fullName?.en)
+:
+(profile.basic?.fullName?.en || '-')
+}}
+              </td>
+
+
+              <td>
+                {{
+currentLang === 'ta'
+?
+(profile.basic?.gender?.ta || profile.basic?.gender)
+:
+(profile.basic?.gender?.en || profile.basic?.gender)
+}}
+              </td>
+
+
+              <td>
+                {{profile.basic?.age || '-'}}
+              </td>
+
+
+              <td>
+                {{profile.basic?.mobile || '-'}}
+              </td>
+
+
+              <td>
+                {{
+currentLang === 'ta'
+?
+(profile.address?.city?.ta || profile.address?.city?.en || '-')
+:
+(profile.address?.city?.en || profile.address?.city || '-')
+}}
+              </td>
+
+
+              <td>
+                {{
+currentLang === 'ta'
+?
+(
+profile.profileStatus === 'approved'
+? 'அனுமதிக்கப்பட்டது'
+:
+profile.profileStatus === 'pending'
+? 'நிலுவையில்'
+:
+'நிராகரிக்கப்பட்டது'
+)
+:
+profile.profileStatus
+}}
+              </td>
+
+
+            </tr>
+
+
+            <tr *ngIf="maleProfiles.length === 0">
+
+<td colspan="8" class="empty-row">
+
+{{
+currentLang === 'ta'
+? 'ஆண் சுயவிவரங்கள் இல்லை'
+: 'No male profiles found'
+}}
+
+</td>
+
+            </tr>
+
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+</div>
+
+
+
+      <!-- FEMALE PROFILES -->
+
+
+   <h3
+class="gender-title accordion-title"
+(click)="toggleSection('female')">
+
+<span>
+ {{
+currentLang === 'ta'
+? 'பெண் சுயவிவரங்கள்'
+: 'Female Profiles'
+}}
+({{ femaleProfiles.length }})
+</span>
+
+<span>
+ {{openSection === 'female' ? '▲':'▼'}}
+</span>
+
+</h3>
+
+
+
+      <div 
+class="accordion-body"
+*ngIf="openSection === 'female'">
+
+<div class="table-wrap">
+
+        <table>
+
+
+          <thead>
+
+            <tr>
+
+<th>{{currentLang==='ta'?'எண்':'S.No'}}</th>
+
+<th>
+{{currentLang==='ta'?'சுயவிவர குறியீடு':'Profile Code'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'பெயர்':'Name'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'பாலினம்':'Gender'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'வயது':'Age'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'தொலைபேசி':'Mobile'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'நகரம்':'City'}}
+</th>
+
+<th>
+{{currentLang==='ta'?'நிலை':'Status'}}
+</th>
+
+            </tr>
+
+          </thead>
+
+
+
+          <tbody>
+
+
+            <tr
+            *ngFor="
+           let profile of femalePaginatedProfiles;
+            let i=index
+            ">
+
+
+              <td>{{i+1}}</td>
+
+
+              <td>
+                {{profile.profileCode || '-'}}
+              </td>
+
+
+              <td>
+               {{
+currentLang === 'ta'
+?
+(profile.basic?.fullName?.ta || profile.basic?.fullName?.en)
+:
+(profile.basic?.fullName?.en || '-')
+}}
+              </td>
+
+
+              <td>
+{{
+currentLang === 'ta'
+?
+(profile.basic?.gender?.ta || profile.basic?.gender?.en)
+:
+(profile.basic?.gender?.en || profile.basic?.gender)
+}}         </td>
+
+
+              <td>
+                {{profile.basic?.age || '-'}}
+              </td>
+
+
+              <td>
+                {{profile.basic?.mobile || '-'}}
+              </td>
+
+
+              <td>
+               {{
+currentLang === 'ta'
+?
+(profile.address?.city?.ta || profile.address?.city?.en || '-')
+:
+(profile.address?.city?.en || profile.address?.city || '-')
+}}
+              </td>
+
+
+              <td>
+               {{
+currentLang === 'ta'
+?
+(
+profile.profileStatus === 'approved'
+? 'அனுமதிக்கப்பட்டது'
+:
+profile.profileStatus === 'pending'
+? 'நிலுவையில்'
+:
+'நிராகரிக்கப்பட்டது'
+)
+:
+profile.profileStatus
+}}
+              </td>
+
+
+            </tr>
+
+
+
+            <tr *ngIf="femaleProfiles.length === 0">
+
+<td colspan="8" class="empty-row">
+
+{{
+currentLang === 'ta'
+? 'பெண் சுயவிவரங்கள் இல்லை'
+: 'No female profiles found'
+}}
+
+</td>
+
+            </tr>
+
+
+
+          </tbody>
+
+
+        </table>
+</div>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</section>

@@ -1,0 +1,104 @@
+<section class="content-section">
+
+  <p *ngIf="isLoading">Loading dashboard...</p>
+
+  <div class="stats-grid" *ngIf="!isLoading">
+
+    <div class="stat-card pink">
+     <h3>{{ txt('Total Profiles', 'மொத்த சுயவிவரங்கள்') }}</h3>
+      <h2>{{ stats.totalProfiles }}</h2>
+    </div>
+
+    <div class="stat-card purple">
+      <h3>{{ txt('Male Profiles', 'ஆண் சுயவிவரங்கள்') }}</h3>
+
+      <h2>{{ stats.maleProfiles }}</h2>
+    </div>
+
+    <div class="stat-card gold">
+     <h3>{{ txt('Female Profiles', 'பெண் சுயவிவரங்கள்') }}</h3>
+
+      <h2>{{ stats.femaleProfiles }}</h2>
+    </div>
+
+    <div class="stat-card green">
+    <h3>{{ txt('Active Subscriptions', 'செயலில் உள்ள சந்தாக்கள்') }}</h3>
+      <h2>{{ stats.activeSubscriptions }}</h2>
+    </div>
+
+    <div class="stat-card blue">
+  <h3>{{ txt('Today Revenue', 'இன்றைய வருமானம்') }}</h3>
+  <h2>₹{{ stats.todayRevenue }}</h2>
+</div>
+
+<div class="stat-card orange">
+  <h3>{{ txt('This Week Revenue', 'இந்த வார வருமானம்') }}</h3>
+  <h2>₹{{ stats.weekRevenue }}</h2>
+</div>
+
+<div class="stat-card violet">
+  <h3>{{ txt('This Month Revenue', 'இந்த மாத வருமானம்') }}</h3>
+  <h2>₹{{ stats.monthRevenue }}</h2>
+</div>
+
+<div class="stat-card dark">
+  <h3>{{ txt('Total Revenue', 'மொத்த வருமானம்') }}</h3>
+  <h2>₹{{ stats.totalRevenue }}</h2>
+</div>
+
+  </div>
+
+  <div class="panel-card" *ngIf="!isLoading">
+
+    <div class="panel-head">
+     <h3>{{ txt('Recent Profiles', 'சமீபத்திய சுயவிவரங்கள்') }}</h3>
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+           <th>{{ txt('Profile Code', 'சுயவிவர குறியீடு') }}</th>
+
+           <th>{{ txt('Name', 'பெயர்') }}</th>
+
+            <th>{{ txt('Gender', 'பாலினம்') }}</th>
+
+           <th>{{ txt('City', 'நகரம்') }}</th>
+
+           <th>{{ txt('Joined', 'சேர்ந்த தேதி') }}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let profile of recentProfiles">
+            <td>{{ profile.profile_code }}</td>
+         <td>
+  {{ v(
+      profile.full_name,
+      profile.full_name_ta
+  ) }}
+</td>
+          <td>{{ genderText(profile.gender_text) }}</td>
+          <td>{{ cityText(profile.city_text) }}</td>
+            <td>{{ profile.created_at | date:'mediumDate' }}</td>
+          </tr>
+
+          <tr *ngIf="recentProfiles.length === 0">
+            <td colspan="5" class="empty-row">
+           {{ txt('No profiles found', 'சுயவிவரங்கள் இல்லை') }}
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>

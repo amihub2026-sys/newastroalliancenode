@@ -1,0 +1,90 @@
+<section class="content-section">
+
+  <div class="section-header">
+    <div>
+      <h2>Assign Package</h2>
+      <p>Choose a package for selected profile</p>
+    </div>
+
+    <button type="button" (click)="router.navigate(['/admin/profiles'])">
+      Back
+    </button>
+  </div>
+
+  <div class="selected-profile-box">
+    <h3>Selected Profile</h3>
+    <p>Profile Code: {{ profileCode || '-' }}</p>
+  </div>
+
+
+  <p *ngIf="isLoading">Loading plans...</p>
+ 
+
+  <div class="plans-grid" *ngIf="!isLoading">
+
+    <div class="plan-card" *ngFor="let plan of plans">
+
+      <h3>{{ plan.planNameEn }}</h3>
+
+      <h2>₹{{ plan.price || 0 }}</h2>
+
+      <p>{{ plan.durationInDays || 0 }} Days</p>
+
+      <ul>
+        <li>{{ plan.contactLimit || 0 }} Contacts</li>
+        <li>{{ plan.profileViewLimit || 0 }} Profile Views</li>
+      </ul>
+
+    <button
+  type="button"
+  (click)="askPaymentMode(plan)"
+  [disabled]="isAssigning">
+
+  {{ isAssigning ? 'Assigning...' : 'Assign Package' }}
+
+</button>
+
+    </div>
+
+  </div>
+<div class="payment-popup-backdrop" *ngIf="showPaymentPopup">
+
+  <div class="payment-popup">
+
+    <h3>Select Payment Mode</h3>
+
+    <p>
+      Package:
+      <strong>{{ selectedPlan?.planNameEn }}</strong>
+    </p>
+
+    <select [(ngModel)]="paymentMode">
+      <option
+        *ngFor="let mode of paymentModes"
+        [value]="mode">
+
+        {{ mode }}
+
+      </option>
+    </select>
+
+    <div class="popup-actions">
+      <button
+        type="button"
+        class="cancel-btn"
+        (click)="closePaymentPopup()">
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="confirm-btn"
+        (click)="confirmPaymentMode()">
+        Confirm & Assign
+      </button>
+    </div>
+
+  </div>
+
+</div>
+</section>

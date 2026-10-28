@@ -1,0 +1,166 @@
+.content-section {
+  display: block;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(233, 30, 99, 0.08);
+  border: 1px solid #fce7f3;
+}
+
+.stat-card h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.stat-card h2 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.pink {
+  border-top: 4px solid #ec4899;
+}
+
+.purple {
+  border-top: 4px solid #8b5cf6;
+}
+
+.gold {
+  border-top: 4px solid #f59e0b;
+}
+
+.green {
+  border-top: 4px solid #10b981;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 20px;
+}
+
+.panel-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(233, 30, 99, 0.08);
+  border: 1px solid #fce7f3;
+}
+
+.panel-head {
+  margin-bottom: 18px;
+}
+
+.panel-head h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  text-align: left;
+  padding: 14px 12px;
+  background: #fff1f6;
+  color: #be185d;
+  font-size: 13px;
+}
+
+tbody td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #fce7f3;
+  font-size: 14px;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.quick-actions button {
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  background: linear-gradient(135deg, #e91e63, #ff4f87);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.quick-actions button:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1200px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.blue {
+  border-top: 4px solid #0ea5e9;
+}
+
+.orange {
+  border-top: 4px solid #f97316;
+}
+
+.violet {
+  border-top: 4px solid #7c3aed;
+}
+
+.dark {
+  border-top: 4px solid #0f172a;
+}

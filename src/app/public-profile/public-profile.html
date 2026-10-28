@@ -1,0 +1,37 @@
+<main class="aa-preview-page"><div class="aa-preview-container">
+  <a [routerLink]="backRoute" [queryParams]="returnState ? {s:returnState} : null" class="aa-back">← {{t('Back to Free Search','இலவச தேடலுக்குத் திரும்புக')}}</a>
+  @if(loading){<div class="aa-message" role="status">{{t('Loading profile…','சுயவிவரம் ஏற்றப்படுகிறது…')}}</div>}
+  @else if(error){<div class="aa-message" role="alert">
+      <h2>{{t('Could not load this profile','இந்தச் சுயவிவரத்தை ஏற்ற முடியவில்லை')}}</h2>
+      <p>{{ errorKind === 'timeout' ? t('The server is taking too long.','சேவையகம் பதிலளிக்க அதிக நேரம் எடுக்கிறது.') :
+        t('Check the backend connection and try again.','பின்தள இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.') }}</p>
+      <button type="button" class="aa-retry" (click)="retry()">{{t('Try Again','மீண்டும் முயற்சிக்கவும்')}}</button>
+    </div>}
+  @else if(!profile){<div class="aa-message">{{t('This approved profile is not available.','இந்த அங்கீகரிக்கப்பட்ட சுயவிவரம் கிடைக்கவில்லை.')}}</div>}
+  @else {
+    <div class="aa-preview-heading"><div><span class="aa-eyebrow">{{t('MATRIMONY PROFILE','திருமண சுயவிவரம்')}}</span><h1>{{displayName}}</h1><p class="aa-id-label">{{t('Profile ID','சுயவிவர எண்')}}: {{profile.code}}</p><p>{{t('Basic profile — free to view, no plan required','அடிப்படை சுயவிவரம் — திட்டமின்றி இலவசமாகப் பார்க்கலாம்')}}</p></div><span class="aa-approval">✓ {{t('Approved','அங்கீகரிக்கப்பட்டது')}}</span></div>
+    <div class="aa-preview-grid">
+      <aside class="aa-preview-photo"><button type="button" class="aa-open-photo" (click)="openPhoto()" [attr.aria-label]="t('View full photo','முழு புகைப்படம் பார்க்க')"><img [src]="profile.image || avatar" [alt]="t('Profile image','சுயவிவரப் படம்')" (error)="onImageError($event)" /><span class="aa-photo-zoom">{{t('View full photo','முழு படம் பார்க்க')}} ⤢</span></button><div class="aa-photo-label">{{profile.code}}</div></aside>
+      <section class="aa-preview-info">
+        <h2>{{t('Basic Details','அடிப்படை விவரங்கள்')}}</h2>
+        <div class="aa-info-grid">
+          @if(profile.age){<div><small>{{t('Age','வயது')}}</small><strong>{{profile.age}}</strong></div>}
+          @if(profile.gender){<div><small>{{t('Gender','பாலினம்')}}</small><strong>{{profile.gender | publicValue:lang}}</strong></div>}
+          @if(profile.heightCm){<div><small>{{t('Height','உயரம்')}}</small><strong>{{profile.heightCm}} cm</strong></div>}
+          @if(profile.maritalStatus){<div><small>{{t('Marital Status','திருமண நிலை')}}</small><strong>{{profile.maritalStatus | publicValue:lang}}</strong></div>}
+          @if(profile.religion){<div><small>{{t('Religion','மதம்')}}</small><strong>{{profile.religion | publicValue:lang}}</strong></div>}
+          @if(profile.caste){<div><small>{{t('Community','சமூகம்')}}</small><strong>{{profile.caste | publicValue:lang}}</strong></div>}
+          @if(profile.city){<div><small>{{t('City','நகரம்')}}</small><strong>{{profile.city | publicValue:lang}}</strong></div>}
+          @if(profile.district){<div><small>{{t('District','மாவட்டம்')}}</small><strong>{{profile.district | publicValue:lang}}</strong></div>}
+          @if(profile.state){<div><small>{{t('State','மாநிலம்')}}</small><strong>{{profile.state | publicValue:lang}}</strong></div>}
+          @if(profile.nakshatra){<div><small>{{t('Star','நட்சத்திரம்')}}</small><strong>{{profile.nakshatra | publicValue:lang}}</strong></div>}
+          @if(profile.education){<div><small>{{t('Education','கல்வி')}}</small><strong>{{profile.education | publicValue:lang}}</strong></div>}
+          @if(profile.profession){<div><small>{{t('Occupation','தொழில்')}}</small><strong>{{profile.profession | publicValue:lang}}</strong></div>}
+        </div>
+        <div class="aa-privacy-note">🔒 {{t('Private information is never displayed on free profiles.','இலவச சுயவிவரங்களில் தனிப்பட்ட தகவல்கள் காட்டப்படாது.')}}</div>
+      </section>
+    </div>
+    <section class="aa-locked"><div class="aa-lock-icon">♜</div><div><h2>{{t('More details are protected','கூடுதல் விவரங்கள் பாதுகாக்கப்பட்டுள்ளன')}}</h2><p>{{t('Family details, contact information, horoscope and additional photos require an eligible membership plan and privacy permission.','குடும்ப விவரங்கள், தொடர்புத் தகவல்கள், ஜாதகம் மற்றும் கூடுதல் படங்களைப் பார்க்கத் தகுதியான உறுப்பினர் திட்டமும் தனியுரிமை அனுமதியும் தேவை.')}}</p></div><div class="aa-locked-actions"><a [routerLink]="loggedIn ? '/plans' : '/register'" [queryParams]="loggedIn ? {from: 'profiles', profileId: profile.code, profileName: profile.name} : null">{{loggedIn?t('View plans','திட்டங்களைப் பார்க்கவும்'):t('Register to continue','தொடர பதிவு செய்க')}} →</a>@if(loggedIn){<a routerLink="/profile-view" [queryParams]="{profileId: profile.code}">{{t('Open full profile (plan required)','முழு சுயவிவரம் (திட்டம் தேவை)')}} →</a>}</div></section>
+  }
+  @if(lightboxOpen){<app-photo-lightbox [images]="publicPhotos" [lang]="lang" (closed)="lightboxOpen=false"/>}
+</div></main>

@@ -1,0 +1,18 @@
+<div class="aa-lightbox" role="dialog" aria-modal="true" [attr.aria-label]="lang === 'ta' ? 'முழு புகைப்படம்' : 'Full photo viewer'" (click)="close()">
+  <div class="aa-lightbox-toolbar" (click)="$event.stopPropagation()">
+    <span>{{ index + 1 }} / {{ images.length }}</span>
+    <button type="button" class="aa-lightbox-close" (click)="close()" [attr.aria-label]="lang === 'ta' ? 'மூடு' : 'Close photo'">✕</button>
+  </div>
+  <div class="aa-lightbox-stage" (click)="$event.stopPropagation()">
+    @if (images.length > 1) {
+      <button type="button" class="aa-lightbox-arrow" (click)="previous()" [attr.aria-label]="lang === 'ta' ? 'முந்தைய படம்' : 'Previous photo'">‹</button>
+    }
+    @if (current) {
+      <img [src]="current" [alt]="lang === 'ta' ? 'சுயவிவரத்தின் முழு புகைப்படம்' : 'Full member photo'" (error)="onImageError($event)" (load)="onImageLoad($event)" />
+    }
+    @if (images.length > 1) {
+      <button type="button" class="aa-lightbox-arrow" (click)="next()" [attr.aria-label]="lang === 'ta' ? 'அடுத்த படம்' : 'Next photo'">›</button>
+    }
+  </div>
+  <div class="aa-lightbox-help" aria-hidden="true">{{ lang === 'ta' ? 'மூட வெளியே தட்டவும்' : 'Tap outside to close' }}</div>
+</div>

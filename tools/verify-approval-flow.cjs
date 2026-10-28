@@ -1,0 +1,17 @@
+const fs=require('node:fs'); const path=require('node:path');const assert=require('node:assert/strict');
+const app=path.join(__dirname,'../src/app'); const f=p=>fs.readFileSync(path.join(app,p),'utf8');
+const home=f('home/home.html'), reg=f('register/register.ts'), login=f('login/login.ts');
+const publicTs=f('free-search/free-search.ts'), publicHtml=f('free-search/free-search.html');
+assert.equal((home.match(/astro-legacy-actions/g)||[]).length,6);
+assert.ok(home.includes('astro-wedding-stories'));assert.ok(home.includes('Sample photo'));
+assert.ok(publicTs.includes('apiUrl}/profile'));assert.ok(f('free-search/models/search.models.ts').includes("p['profile_status'] !== 'approved'"));
+for(const field of ['full_name','email','mobile','dob','user_id'])assert.ok(!publicHtml.includes('profile.'+field),'public template contains forbidden '+field);
+assert.ok(reg.includes("this.authService.saveUserSession(res.data)"));assert.ok(reg.includes("['/biodata']"));
+assert.ok(login.includes("profile?.profileStatus === 'approved'"));assert.ok(login.includes('this.authService.logout()'));
+assert.match(f('core/auth.guard.ts'), /firstValueFrom\(auth\.getUserFlowStatus\(\)\.pipe\(timeout/);
+assert.ok(f('core/auth.guard.ts').includes("path === '/my-biodata'"), 'own Biodata must open without waiting for an approval check');
+assert.ok(f('app.routes.ts').includes("path: 'free-search'"));
+assert.ok(f('home/home.ts').includes("'./home-stories.scss'"));
+assert.ok(f('app.html').includes("'/free-search'"));
+assert.ok(f('biodata/biodata.html').includes('app-biodata-family-details'));
+console.log('PASS: restored homepage, sample gallery, free-search whitelist UI, Biodata-first onboarding session, separate Biodata components, and public navigation');

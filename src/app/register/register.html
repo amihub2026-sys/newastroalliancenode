@@ -1,0 +1,278 @@
+<section class="register-page">
+  <div class="register-wrapper">
+    <div class="register-left">
+      <div class="overlay"></div>
+      <div class="left-content">
+        <p class="small-tag">{{ tr.left.tag }}</p>
+        <h1>{{ tr.left.title }}</h1>
+        <p>
+          {{ tr.left.subtitle }}
+        </p>
+
+        <div class="register-points">
+          <div class="point" *ngFor="let point of tr.left.points; let i = index">
+            <span>{{ i === 0 ? '💍' : i === 1 ? '🔒' : '❤️' }}</span>
+            <p>{{ point }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="register-right">
+      <div class="form-card">
+        <p class="form-mini-title">{{ tr.form.miniTitle }}</p>
+        <h2>{{ tr.form.title }}</h2>
+        <p class="form-subtitle">
+          {{ tr.form.subtitle }}
+        </p>
+
+        <form class="register-form" (ngSubmit)="onRegister()">
+          <div class="form-row">
+            <div class="form-group full-width">
+              <label>{{ tr.form.firstName }} <span class="required-star">*</span></label>
+<input
+  type="text"
+  [placeholder]="tr.form.firstNamePlaceholder"
+  [(ngModel)]="firstName"
+  name="firstName"
+  (keypress)="handleTyping($event)"
+/>
+            </div>
+             <div class="form-group">
+              <label>{{ tr.form.phone }} <span class="required-star">*</span></label>
+<input
+  type="text"
+  maxlength="10"
+  inputmode="numeric"
+  [placeholder]="tr.form.phonePlaceholder"
+  [(ngModel)]="phone"
+  name="phone"
+  (keypress)="allowOnlyNumbers($event)"
+  (paste)="blockInvalidPaste($event)"
+/>
+            </div>
+<!-- 
+            <div class="form-group">
+              <label>{{ tr.form.lastName }}</label>
+              <input
+                type="text"
+                [placeholder]="tr.form.lastNamePlaceholder"
+                [(ngModel)]="lastName"
+                name="lastName"
+              />
+            </div> -->
+          </div>
+          <div class="form-row">
+           <div class="form-group">
+  <label>
+    {{ tr.form.email }}
+    <span class="optional-text">(Optional)</span>
+  </label>
+
+  <input
+    type="email"
+    [placeholder]="tr.form.emailPlaceholder"
+    [(ngModel)]="email"
+    name="email"
+  />
+</div>
+
+         <div class="form-group">
+
+  <label>{{ tr.form.profileFor }} <span class="required-star">*</span></label>
+
+  <select
+  [(ngModel)]="profileFor"
+  name="profileFor"
+  (ngModelChange)="onProfileForChange($event)">
+
+    <option value="">
+      {{ tr.form.profileForPlaceholder }}
+    </option>
+
+    <option value="Self">
+      {{ tr.form.self }}
+    </option>
+
+    <option value="Daughter">
+      {{ tr.form.daughter }}
+    </option>
+
+    <option value="Son">
+      {{ tr.form.son }}
+    </option>
+
+    <option value="Sister">
+      {{ tr.form.sister }}
+    </option>
+
+    <option value="Brother">
+      {{ tr.form.brother }}
+    </option>
+
+    <option value="Relative">
+      {{ tr.form.relative }}
+    </option>
+
+    <option value="Friend">
+      {{ tr.form.friend }}
+    </option>
+
+  </select>
+
+</div>  
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>{{ tr.form.gender }} <span class="required-star">*</span></label>
+              <select [(ngModel)]="gender" name="gender">
+                <option value="">{{ tr.form.genderPlaceholder }}</option>
+<option value="Male">
+  {{ currentLang === 'ta' ? 'ஆண்' : 'Male' }}
+</option>
+
+<option value="Female">
+  {{ currentLang === 'ta' ? 'பெண்' : 'Female' }}
+</option>
+              </select>
+            </div>
+
+  <div class="form-group ">
+            <label>{{ tr.form.religion }} <span class="required-star">*</span></label>
+         <select [(ngModel)]="religion" name="religion">
+
+  <option value="">
+    {{ tr.form.religionPlaceholder }}
+  </option>
+
+  <option
+    *ngFor="let religion of religionList"
+    [value]="religion.religion_name">
+
+    {{
+      currentLang === 'ta'
+        ? (religion.religion_name_ta || religion.religion_name)
+        : religion.religion_name
+    }}
+
+  </option>
+
+</select>
+          </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+            <label>{{ dobLabel }} <span class="required-star">*</span></label>
+<!-- DESKTOP DOB -->
+
+<input
+  class="dob-input desktop-dob"
+  type="date"
+  [(ngModel)]="dob"
+  name="dob"
+  [max]="maxDate"
+  (input)="calculateAge()"
+  (change)="calculateAge()"
+/>
+
+<!-- MOBILE DOB -->
+<div class="mobile-dob-wrap">
+
+  <input
+    class="dob-input mobile-dob"
+    type="text"
+    placeholder="dd-mm-yyyy"
+    [(ngModel)]="dob"
+    name="dobMobile"
+    inputmode="numeric"
+    maxlength="10"
+    (input)="formatDob($event)"
+  />
+
+  <input
+    #mobileDatePicker
+    type="date"
+    class="real-date-picker"
+    [max]="maxDate"
+    (change)="onMobileDatePick($event)"
+  />
+
+  <button
+    type="button"
+    class="calendar-btn"
+    (click)="mobileDatePicker.showPicker()">
+
+    📅
+
+  </button>
+
+</div>
+            </div>
+
+               <div class="form-group">
+  <label>{{ tr.form.age }}</label>
+
+  <input
+    type="number"
+    [placeholder]="tr.form.agePlaceholder"
+    [(ngModel)]="age"
+    name="age"
+    readonly
+    class="readonly-age"
+  />
+</div>
+
+
+          </div>
+
+         
+
+          <div class="form-group full-width">
+            <label>{{ tr.form.location }}</label>
+<input
+  type="text"
+  [placeholder]="tr.form.locationPlaceholder"
+  [(ngModel)]="location"
+  name="location"
+  (keypress)="handleTyping($event)"
+/>
+          </div>
+
+        <label class="terms-check">
+  <input
+    type="checkbox"
+    [(ngModel)]="acceptedTerms"
+    name="acceptedTerms"
+    (change)="onTermsChange()"
+  />
+  <span>{{ tr.form.terms }}</span>
+</label>
+
+<div class="terms-popup-backdrop" *ngIf="showTermsPopup">
+  <div class="terms-popup">
+    <h3>{{ tr.termsPopup.title }}</h3>
+
+    <p>{{ tr.termsPopup.message1 }}</p>
+    <p>{{ tr.termsPopup.message2 }}</p>
+
+    <button type="button" (click)="closeTermsPopup()">
+      {{ tr.termsPopup.okButton }}
+    </button>
+  </div>
+</div>
+
+          <button type="submit" class="register-btn" [disabled]="isLoading">
+            {{ isLoading ? tr.form.creating : tr.form.button }}
+          </button>
+        </form>
+
+        <p class="bottom-text">
+          {{ tr.form.bottomText }}
+          <a routerLink="/login">{{ tr.form.loginNow }}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
