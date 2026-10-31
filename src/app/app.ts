@@ -28,11 +28,15 @@ imports: [
   SnackbarComponent
 ],
   templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  styleUrls: [
+  './app.scss',
+  './app.responsive.scss'
+]
 })
 export class App {
     private platformId = inject(PLATFORM_ID);
   private router = inject(Router);
+  mobileProfileChoiceOpen = false;
   private snackbar = inject(SnackbarService);
   private http = inject(HttpClient);
   private readonly auth = inject(AuthService);
@@ -481,4 +485,20 @@ async checkProfileStatus(){
     this.closeMenu();
     this.router.navigate(['/login']);
   }
+
+  
+openMobileNotifications(): void {
+  if (!this.isLoggedIn) {
+    return;
+  }
+
+  if (this.mobileAccountStage === 'approved') {
+    this.openReceivedInterests();
+  } else if (this.mobileAccountStage === 'pending') {
+    this.goToPage('/approval-pending');
+  } else {
+    this.goToPage('/biodata');
+  }
+}
+
 }

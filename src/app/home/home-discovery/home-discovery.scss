@@ -1,391 +1,335 @@
-:host{display:block}.home-discovery{background:linear-gradient(120deg,#101013,#1d141b);padding:67px 19px 74px;color:#fff}.home-discovery-inner{max-width:1250px;margin:auto}.home-discovery header{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:25px}.home-discovery header span{color:#e6b97e;font-size:.72rem;font-weight:850;letter-spacing:.14em}.home-discovery h2{color:#fff4e5;font:600 clamp(1.8rem,3.2vw,2.6rem) Georgia,serif;margin:8px 0}.home-discovery p{color:#d5c8cb;line-height:1.6;margin:0}.home-discovery header>a{color:#ebbf8a;white-space:nowrap;font-weight:850;text-decoration:none}.home-profile-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}.home-status{padding:25px;border-radius:12px;border:1px solid #54434c}@media(max-width:900px){.home-profile-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.home-profile-grid{grid-template-columns:minmax(0,1fr);gap:14px}.home-discovery{padding:42px 10px}.home-discovery header{display:block}.home-discovery header>a{display:inline-block;margin-top:12px}.home-discovery h2{font-size:1.55rem}}@media(max-width:350px){.home-profile-grid{grid-template-columns:1fr}}
-.home-show-more-wrap{display:flex;justify-content:center;margin-top:28px}
-.home-show-more{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:12px 24px;border:1px solid #c66b88;border-radius:12px;background:#842a4a;color:#fff;font-size:1rem;font-weight:800;text-decoration:none;transition:background-color .2s ease}
-.home-show-more:hover{background:#a33960;color:#fff}
-.home-show-more:focus-visible{outline:3px solid #e8c590;outline-offset:4px}
-@media(max-width:520px){.home-show-more-wrap{margin-top:22px}.home-show-more{width:100%;min-height:50px}}
-@media(prefers-reduced-motion:reduce){.home-show-more{transition:none}}
+/* Astro Alliance — Home Discovery | Base / desktop styles only */
+:host { display: block; }
 
-.home-skeleton-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.home-skeleton{border-radius:16px;overflow:hidden;background:#282229;padding-bottom:20px}.home-skeleton div{height:215px;background:linear-gradient(105deg,#2f2930,#55414c,#2f2930);background-size:200% 100%;animation:homeShimmer 1.5s linear infinite}.home-skeleton span{display:block;height:15px;margin:16px 20px 0;border-radius:8px;background:#51414a}.home-skeleton span:last-child{width:60%}@keyframes homeShimmer{to{background-position:-200% 0}}.home-retry{margin-top:14px;min-height:43px;border:1px solid #e4b889;border-radius:10px;background:#842a4a;color:white;font-weight:700;padding:10px 24px;cursor:pointer}@media(max-width:900px){.home-skeleton-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.home-skeleton-grid{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){.home-skeleton div{animation:none}}
-
-
-
-
-/* ============================================
-   ASTRO ALLIANCE EXPANDING PROFILE CARDS
-============================================ */
-
-.astro-expand-grid {
+.home-discovery {
+  background: linear-gradient(120deg, #101013, #1d141b);
+  padding: 67px 19px 74px;
+  color: #fff;
+}
+.home-discovery-inner { width: 100%; max-width: 1250px; margin: 0 auto; }
+.home-discovery header {
   display: flex;
-  width: 100%;
-  gap: 12px;
-  height: 420px;
-  margin-top: 32px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+.home-discovery header > div { min-width: 0; }
+.home-discovery header div > span {
+  color: #e6b97e;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+}
+.home-discovery header h2 {
+  color: #fff4e5;
+  font: 600 clamp(1.8rem, 3.2vw, 2.6rem) Georgia, serif;
+  margin: 8px 0;
+}
+.home-discovery header p { color: #d5c8cb; line-height: 1.6; margin: 0; }
+.home-discovery header > a {
+  color: #ebbf8a;
+  white-space: nowrap;
+  font-weight: 800;
+  text-decoration: none;
+}
+.home-discovery header > a:hover { color: #fff0d8; }
+
+/* Loading and status */
+.home-skeleton-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.home-skeleton { border-radius: 16px; overflow: hidden; background: #282229; padding-bottom: 20px; }
+.home-skeleton > div {
+  height: 215px;
+  background: linear-gradient(105deg, #2f2930, #55414c, #2f2930);
+  background-size: 200% 100%;
+  animation: homeShimmer 1.5s linear infinite;
+}
+.home-skeleton > span { display: block; height: 15px; margin: 16px 20px 0; border-radius: 8px; background: #51414a; }
+.home-skeleton > span:last-child { width: 60%; }
+@keyframes homeShimmer { to { background-position: -200% 0; } }
+.home-status { padding: 25px; border-radius: 12px; border: 1px solid #54434c; color: #e9d9df; }
+.home-retry {
+  margin-top: 14px;
+  min-height: 43px;
+  border: 1px solid #e4b889;
+  border-radius: 10px;
+  background: #842a4a;
+  color: #fff;
+  font-weight: 700;
+  padding: 10px 24px;
+  cursor: pointer;
 }
 
-/* CARD */
-
+/* Desktop expanding profiles */
+.astro-expand-grid {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+  height: 420px;
+  margin-top: 32px;
+  overflow: hidden;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+}
 .astro-expand-card {
   position: relative;
-  flex: 1;
+  display: flex;
+  flex: 1 1 0;
   min-width: 0;
   height: 100%;
-  display: flex;
   overflow: hidden;
-
+  isolation: isolate;
   border-radius: 16px;
   background: #fdf2ee;
   color: #451c30;
-
   cursor: pointer;
-
-  transition:
-    flex 550ms cubic-bezier(.2,.8,.2,1),
-    box-shadow 400ms ease;
+  opacity: 1;
+  visibility: visible;
+  transition: flex 550ms cubic-bezier(.2, .8, .2, 1), box-shadow 350ms ease;
 }
-
 .astro-expand-card.is-active {
-  flex: 3.1;
-  box-shadow: 0 20px 55px rgba(0,0,0,.22);
+  flex: 3.1 1 0;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .22);
 }
-
-/* PHOTO */
+.astro-expand-card:focus-visible { outline: 3px solid #d9a66f; outline-offset: -3px; }
 
 .astro-expand-photo {
   position: relative;
+  display: block;
   width: 100%;
   height: 100%;
-  flex-shrink: 0;
+  flex: 0 0 100%;
+  min-width: 0;
   overflow: hidden;
-
-  transition:
-    width 550ms cubic-bezier(.2,.8,.2,1);
+  background: linear-gradient(145deg, #eee0e3, #bda3ad);
+  transition: flex-basis 550ms cubic-bezier(.2, .8, .2, 1);
 }
-
-.astro-expand-card.is-active
-.astro-expand-photo {
-  width: 43%;
-}
-
-
+.astro-expand-card.is-active .astro-expand-photo { flex: 0 0 65%; width: 65%; }
 .astro-expand-photo img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 20%;
-  transition: transform 650ms ease;
+  color: transparent;
 }
-
-.astro-expand-card.is-active .astro-expand-photo img {
-  transform: scale(1.02);
-}
-
-
-.astro-expand-card.is-active
-.astro-expand-photo img {
-  transform: scale(1.035);
-}
-
-/* PHOTO GRADIENT */
-
 .astro-photo-shade {
   position: absolute;
   inset: 40% 0 0;
-
-  background: linear-gradient(
-    180deg,
-    transparent,
-    rgba(22,8,16,.75)
-  );
-
+  background: linear-gradient(180deg, transparent, rgba(22, 8, 16, .75));
   pointer-events: none;
 }
-
-/* COLLAPSED CARD NAME */
-
 .astro-photo-name {
   position: absolute;
-  bottom: 22px;
   left: 18px;
   right: 10px;
-
-  font-family: Georgia, serif;
-  font-size: 23px;
-  font-weight: 600;
-  color: #fff;
-
+  bottom: 22px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
-  transition: opacity 250ms ease;
+  color: #fff;
+  font: 600 23px Georgia, serif;
 }
+.astro-expand-card.is-active .astro-photo-name { opacity: 0; }
 
-.astro-expand-card.is-active
-.astro-photo-name {
-  opacity: 0;
-}
-
-/* RIGHT DETAILS PANEL */
-
+/* Desktop detail panel: exists in HTML, visible only for expanded card */
 .astro-expand-details {
-  position: absolute;
-
-  top: 0;
-  bottom: 0;
-  left: 43%;
-
-  width: 57%;
-
-  padding: 26px;
-
+  display: none;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  padding: 25px 22px;
+  box-sizing: border-box;
+  background: #fff5f1;
+  color: #451c30;
+}
+.astro-expand-card.is-active .astro-expand-details {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-
-  box-sizing: border-box;
-
-  opacity: 0;
-  transform: translateX(20px);
-
-  pointer-events: none;
-
-  transition:
-    opacity 250ms ease,
-    transform 400ms ease;
 }
-
-.astro-expand-card.is-active
-.astro-expand-details {
-  opacity: 1;
-  transform: translateX(0);
-
-  pointer-events: auto;
-
-  transition-delay: 220ms;
-}
-
-/* PROFILE ID */
-
-.astro-profile-id {
-  font-size: 10px;
-  letter-spacing: 1.3px;
-  font-weight: 700;
-  color: #a16d80;
-
-  text-transform: uppercase;
-}
-
-/* NAME */
-
+.astro-profile-id { color: #a16d80; font-size: 10px; letter-spacing: 1.3px; font-weight: 700; text-transform: uppercase; }
 .astro-expand-details h3 {
   margin: 12px 0 8px;
-
-  font-family: Georgia, serif;
-  font-size: clamp(20px, 2.5vw, 32px);
-  font-weight: 600;
-  line-height: 1.2;
-
   color: #451c30;
-}
-
-/* LOCATION */
-
-.astro-profile-location {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #886e77;
-
-  margin-bottom: 19px;
-}
-
-/* DETAILS ROW */
-
-.astro-profile-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-
-  border-top: 1px solid #ecd8dc;
-
-  padding: 12px 0;
-
-  font-size: 12px;
-  color: #75616a;
-}
-
-.astro-profile-info strong {
-  font-size: 12px;
-  font-weight: 600;
-  color: #451c30;
-
-  text-align: right;
+  font: 600 clamp(19px, 2.1vw, 31px)/1.17 Georgia, serif;
   overflow-wrap: anywhere;
 }
-
-/* VIEW PROFILE BUTTON */
-
+.astro-profile-location { margin-bottom: 18px; color: #886e77; font-size: 13px; line-height: 1.5; }
+.astro-profile-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid #ecd8dc;
+  padding: 12px 0;
+  color: #75616a;
+  font-size: 12px;
+}
+.astro-profile-info strong { color: #451c30; font-size: 12px; font-weight: 600; text-align: right; overflow-wrap: anywhere; }
 .astro-view-profile {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-
-  margin-top: 18px;
+  margin-top: auto;
   padding: 14px 16px;
-
   border-radius: 9px;
-
   background: #8f3056;
   color: #fff;
-
   text-decoration: none;
   font-size: 13px;
   font-weight: 600;
-
-  transition:
-    background 300ms ease,
-    transform 300ms ease;
+  transition: background-color .2s ease;
 }
+.astro-view-profile:hover { background: #63203d; }
+.astro-view-profile span { font-size: 18px; }
 
-.astro-view-profile span {
-  font-size: 18px;
+/* Mobile elements are hidden by default; responsive stylesheet enables them */
+.astro-mobile-profile-overlay,
+.astro-mobile-carousel-controls { display: none; }
+
+/* Show more */
+.home-show-more-wrap { display: flex; justify-content: center; margin-top: 28px; }
+.home-show-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: 1px solid #c66b88;
+  border-radius: 12px;
+  background: #842a4a;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background-color .2s ease;
 }
+.home-show-more:hover { background: #a33960; color: #fff; }
+.home-show-more:focus-visible { outline: 3px solid #e8c590; outline-offset: 4px; }
+/* Shared template: filters are mobile only, desktop expanding layout unchanged */
+@media(min-width:881px){.discovery-filters{display:none!important}}
 
-.astro-view-profile:hover {
-  background: #63203d;
-  transform: translateY(-2px);
-}
-
-.astro-expand-card:focus-visible {
-  outline: 3px solid #d9a66f;
-  outline-offset: 3px;
-}
-
-/* ============================================
-   TABLET
-============================================ */
-
-@media (max-width: 1000px) {
-
+/* ======================================================
+   DESKTOP: ONE CONSOLIDATED EXPANDING-CARD DESIGN
+   Even 12px gaps; active photo 65%, glass panel 35%.
+   Photo wrapper (.astro-expand-photo) is the flex item.
+   This block replaces earlier conflicting desktop overrides.
+====================================================== */
+@media (min-width: 881px) {
   .astro-expand-grid {
-    height: 350px;
-    gap: 10px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 12px;
+    height: 420px;
+    overflow: hidden;
   }
 
-  .astro-expand-card.is-active {
-    flex: 2.5;
+  /* Allow the carousel to distribute the available space,
+     instead of reserving an extra fixed-width grid slot. */
+  .astro-expand-grid > .astro-expand-card {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+    transform: none;
+    overflow: hidden;
+    border-radius: 18px;
   }
 
-  .astro-expand-card.is-active
-  .astro-expand-photo {
-    width: 40%;
+  .astro-expand-grid > .astro-expand-card.is-active {
+    flex: 3.1 1 0;
+    background: transparent;
+    box-shadow: 0 20px 55px rgba(0,0,0,.22);
   }
 
-  .astro-expand-details {
-    left: 40%;
-    width: 60%;
-    padding: 15px;
-  }
-
-  .astro-expand-details h3 {
-    font-size: 22px;
-  }
-
-  .astro-profile-info {
-    padding: 9px 0;
-  }
-}
-
-/* ============================================
-   MOBILE - TAP TO EXPAND
-============================================ */
-
-@media (max-width: 600px) {
-
-  .astro-expand-grid {
-    height: 330px;
-    gap: 6px;
-  }
-
-  .astro-expand-card {
-    border-radius: 10px;
-  }
-
-  .astro-expand-card.is-active {
-    flex: 5.5;
-  }
-
-  .astro-expand-card.is-active
-  .astro-expand-photo {
-    width: 35%;
-  }
-
-  .astro-expand-details {
-    left: 35%;
+  .astro-expand-card.is-active .astro-expand-photo {
+    flex: 0 0 65%;
     width: 65%;
-    padding: 10px;
+    min-width: 0;
+    height: 100%;
   }
 
-  .astro-expand-details h3 {
-    font-size: 18px;
-    margin: 7px 0;
+  .astro-expand-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
   }
 
-  .astro-profile-id {
-    font-size: 9px;
+  .astro-expand-card.is-active .astro-expand-details {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex: 0 0 35%;
+    flex-direction: column;
+    width: 35%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: 20px 12px;
+    box-sizing: border-box;
+    overflow: hidden;
+    color: #fff;
+    background: linear-gradient(145deg,rgba(71,35,57,.88),rgba(40,22,37,.94));
+    backdrop-filter: blur(18px) saturate(135%);
+    -webkit-backdrop-filter: blur(18px) saturate(135%);
+    border: 1px solid rgba(255,255,255,.20);
+    border-radius: 0 18px 18px 0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
   }
 
-  .astro-profile-location {
+  .astro-expand-card.is-active .astro-profile-id {
+    color: #fff;
     font-size: 10px;
-    margin-bottom: 8px;
+    letter-spacing: 1.1px;
   }
 
-  .astro-profile-info {
-    font-size: 10px;
-    padding: 7px 0;
-    gap: 5px;
+  .astro-expand-card.is-active .astro-expand-details h3 {
+    margin: 10px 0 6px;
+    color: #fff;
+    font: 700 clamp(18px,1.6vw,24px)/1.15 Georgia,serif;
+    overflow-wrap: anywhere;
   }
 
-  .astro-profile-info strong {
-    font-size: 10px;
+  .astro-expand-card.is-active .astro-profile-location {
+    margin-bottom: 14px;
+    color: #fff;
+    font-size: 12px;
   }
 
-  .astro-photo-name {
-    font-size: 14px;
-    left: 6px;
-    bottom: 10px;
+  .astro-expand-card.is-active .astro-profile-info {
+    gap: 6px;
+    padding: 10px 0;
+    border-color: rgba(255,255,255,.20);
+    color: #fff;
+    font-size: 11px;
   }
 
-  .astro-view-profile {
-    margin-top: 10px;
-    padding: 10px 7px;
-    font-size: 10px;
+  .astro-expand-card.is-active .astro-profile-info strong {
+    color: #fff;
+    font-size: 11px;
   }
-}
 
-/* ACCESSIBILITY */
-
-@media (prefers-reduced-motion: reduce) {
-  .astro-expand-card,
-  .astro-expand-photo,
-  .astro-expand-photo img,
-  .astro-photo-name,
-  .astro-expand-details,
-  .astro-view-profile {
-    transition: none !important;
+  .astro-expand-card.is-active .astro-view-profile {
+    width: 100%;
+    margin-top: auto;
+    padding: 13px 12px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255,255,255,.20);
+    border-radius: 12px;
+    background: #912953;
+    color: #fff;
+    font-size: 12px;
   }
-}
-.astro-expand-photo {
-  background: linear-gradient(
-    145deg,
-    #eee0e3,
-    #bda3ad
-  );
-}
 
-.astro-expand-photo img {
-  color: transparent;
+  .astro-expand-card.is-active .astro-view-profile:hover {
+    background: #aa3867;
+  }
 }

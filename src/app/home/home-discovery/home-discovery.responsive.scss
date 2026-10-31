@@ -1,0 +1,72 @@
+/* This file ONLY affects widths up to 880px. Desktop expanding cards remain in home-discovery.scss. */
+@media(max-width:880px){
+ :host{display:block;min-width:0}
+ :host *{box-sizing:border-box}
+ .home-discovery{background:#fffaf6!important;color:#6f1537!important;padding:24px 12px 32px!important;overflow:hidden!important}
+ .home-discovery-inner{max-width:100%;min-width:0}
+ .home-discovery header{display:flex!important;align-items:center!important;gap:10px!important;margin:0 0 13px!important}
+ .home-discovery header>div{min-width:0;flex:1}
+ .home-discovery header div>span,.home-discovery header p{display:none!important}
+ .home-discovery header h2{margin:0!important;font:700 clamp(18px,5vw,24px)/1.12 Georgia,serif!important;letter-spacing:-.5px;color:#791438!important}
+ .home-discovery header>a{flex:none!important;color:#80163a!important;font:700 11px Arial,sans-serif!important;white-space:nowrap!important}
+ .discovery-filters{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 13px}
+ .discovery-filters button{min-width:0;min-height:36px;border:1px solid #eee1e2;border-radius:25px;background:#f6f1ef;color:#583247;font:500 12px Arial,sans-serif}
+ .discovery-filters button.active{background:#8c0b3d;color:#fff;border-color:#8c0b3d}
+ .astro-expand-grid.astro-mobile-stack{position:relative!important;display:block!important;width:100%!important;height:430px!important;min-height:430px!important;margin:0!important;padding:0!important;overflow:hidden!important;background:#ecdfdd;border-radius:13px;touch-action:pan-y}
+ .astro-expand-grid .astro-expand-card{position:absolute!important;inset:0!important;display:none!important;min-width:0!important;width:100%!important;height:100%!important;max-width:none!important;min-height:0!important;margin:0!important;padding:0!important;flex:none!important;opacity:0!important;visibility:hidden!important;transform:none!important;border-radius:13px!important;overflow:hidden!important;box-shadow:none!important}
+ .astro-expand-grid .astro-expand-card.is-active{display:block!important;opacity:1!important;visibility:visible!important;z-index:2}
+ .astro-expand-grid .astro-expand-photo,.astro-expand-grid .astro-expand-card.is-active .astro-expand-photo{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;flex:none!important;overflow:hidden!important}
+ .astro-expand-photo img{width:100%!important;height:100%!important;display:block;object-fit:cover!important;object-position:center 16%!important}
+ .astro-photo-shade{position:absolute!important;inset:25% 0 0!important;background:linear-gradient(transparent 20%,rgba(52,8,27,.1) 45%,rgba(79,6,34,.92) 100%)!important}
+ .astro-photo-name,.astro-expand-details,.astro-expand-card.is-active .astro-expand-details{display:none!important}
+ .astro-expand-grid .astro-mobile-profile-overlay{position:absolute!important;z-index:5;inset:0!important;display:flex!important;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:5px;width:100%;padding:14px 15px!important;border:0!important;background:linear-gradient(0deg,#5b082b 0%,rgba(77,5,33,.73) 28%,transparent 56%);color:#fff!important;box-shadow:none!important}
+ .astro-mobile-approved{position:absolute;top:12px;right:12px;background:#35b969;color:#fff;border-radius:20px;padding:6px 10px;font:700 10px Arial,sans-serif}
+ .astro-mobile-profile-code{color:#fff0e9;font:500 12px Arial,sans-serif;letter-spacing:0!important}
+ .astro-mobile-profile-overlay h3{margin:0!important;padding:0!important;color:#fff!important;font:700 25px/1.1 Georgia,serif!important;white-space:normal!important;word-break:normal!important}
+ .astro-mobile-profile-meta{display:flex;flex-direction:column;gap:4px;width:100%;color:#fff!important;font:12px/1.35 Arial,sans-serif}
+ .astro-mobile-profile-meta span{display:block;min-width:0;white-space:normal;overflow-wrap:anywhere;color:#fff!important}
+ .astro-mobile-profile-hint{margin-top:10px;align-self:flex-end;background:linear-gradient(100deg,#fff1d4,#f8cb8f);padding:11px 13px;border-radius:14px;color:#711b39!important;font:700 12px Arial,sans-serif}
+ .astro-mobile-carousel-controls{display:flex!important;justify-content:center;align-items:center;margin:15px 0 0!important}
+ .astro-mobile-dots{display:flex;align-items:center;justify-content:center;gap:7px}
+ .astro-mobile-dot{width:8px;height:8px;padding:0;border:0;border-radius:20px;background:#e4ced5}
+ .astro-mobile-dot.active{background:#8c0b3d;width:10px;height:10px}
+ .astro-mobile-navigation,.home-show-more-wrap{display:none!important}
+ .home-skeleton-grid{grid-template-columns:1fr!important}.home-skeleton:nth-child(n+2){display:none}
+ .home-status{border-color:#f0dce3!important;color:#782443!important;background:#fff}
+ /* RECOMMENDATIONS: two cards side-by-side with horizontal page changes */
+ .recommendations-mode .astro-expand-grid.recommended-grid{display:flex!important;gap:9px!important;height:355px!important;min-height:355px!important;border-radius:0!important;background:transparent!important;overflow:hidden!important}
+ .recommendations-mode .recommended-grid .astro-expand-card{position:relative!important;inset:auto!important;display:none!important;width:calc((100% - 9px)/2)!important;flex:0 0 calc((100% - 9px)/2)!important;height:100%!important;min-width:0!important;border-radius:12px!important;opacity:0!important;visibility:hidden!important}
+ .recommendations-mode .recommended-grid .astro-expand-card.is-active,.recommendations-mode .recommended-grid .astro-expand-card.is-next{display:block!important;opacity:1!important;visibility:visible!important;z-index:2}
+ .recommendations-mode .astro-mobile-profile-overlay{padding:10px 10px 12px!important}
+ .recommendations-mode .astro-mobile-profile-overlay h3{font-size:20px!important}
+ .recommendations-mode .astro-mobile-profile-meta{font-size:10px!important}
+ .recommendations-mode .astro-mobile-profile-hint{font-size:10px!important;padding:9px!important;align-self:stretch!important;text-align:center!important}
+ .recommendations-mode .astro-mobile-approved{font-size:9px;padding:5px 7px;right:5px;top:5px}
+}
+@media(max-width:375px){.home-discovery{padding-left:9px!important;padding-right:9px!important}.home-discovery header h2{font-size:18px!important}.astro-expand-grid.astro-mobile-stack{height:405px!important;min-height:405px!important}}
+
+
+@media (max-width: 880px) {
+  .astro-expand-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .astro-expand-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center top;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 0;
+  }
+
+  .astro-mobile-profile-overlay {
+    position: absolute;
+    z-index: 2;
+  }
+}

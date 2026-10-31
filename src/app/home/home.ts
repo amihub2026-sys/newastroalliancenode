@@ -11,8 +11,11 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { SUCCESS_STORY_PHOTOS, SuccessStoryPhoto } from './success-stories.data';
 import { HomeDiscovery } from './home-discovery/home-discovery';
+import { finalize, timeout } from 'rxjs';
 
 
 interface MatrimonyCommunity {
@@ -30,12 +33,28 @@ type Language = 'en' | 'ta';
   standalone: true,
   imports: [CommonModule, RouterLink, HomeDiscovery],
   templateUrl: './home.html',
-  styleUrls: ['./home.scss', './home-stories.scss']
+  styleUrls: [
+  './home.scss',
+  
+  './home.responsive.scss'
+]
 })
 export class Home implements OnInit, AfterViewInit, OnDestroy {
+
+  
+  // ==========================================
+  // COMMUNITY COUNTS
+  // ==========================================
+  communitySearch = '';
+
+  communityCounts: Record<string, number> = {};
+
+  communityCountsLoading = false;
+
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
   private router = inject(Router);
+  private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
 
   activeForm: ActiveForm = 'none';
@@ -350,19 +369,71 @@ features: {
     private readonly elementRef: ElementRef<HTMLElement>
   ) {}
 
-  ngOnInit(): void {
-    if (!this.isBrowser) return;
 
-    const savedLang = localStorage.getItem('tm_language') as Language | null;
-    if (savedLang === 'en' || savedLang === 'ta') {
-      this.currentLang = savedLang;
+  /** Expected backend endpoint: GET /public/community-counts
+   * Returns { counts: { "Nadar": 12, "Chettiar": 8 } }.
+   * Must aggregate ALL approved + published profiles server-side.
+   */
+  
+
+loadCommunityCounts(): void {
+  this.communityCountsLoading = true;
+
+  const url =
+    `${environment.apiUrl}/profile/community-counts`;
+
+  this.http.get<{
+    success: boolean;
+    counts: Record<string, number>;
+  }>(url).subscribe({
+    next: (response) => {
+      console.log("Community counts:", response);
+
+      this.communityCounts = response.counts ?? {};
+      this.communityCountsLoading = false;
+      this.cdr.markForCheck();
+    },
+    error: (error) => {
+      console.error("Community counts error:", error);
+      this.communityCounts = {};
+      this.communityCountsLoading = false;
+      this.cdr.markForCheck();
     }
+  });
+}
 
-    window.addEventListener('app-language-changed', this.handleLanguageChange);
-    this.startHeroSlider();
-    this.startWelcomeSlider();
-    this.setupVisibilityHandling();
+getCommunityCount(name: string): number {
+  return this.communityCounts[name.trim().toLowerCase()] ?? 0;
+}
+
+
+  
+ngOnInit(): void {
+
+  if (!this.isBrowser) {
+    return;
   }
+
+  const savedLang =
+    localStorage.getItem('tm_language') as Language | null;
+
+  if (savedLang === 'en' || savedLang === 'ta') {
+    this.currentLang = savedLang;
+  }
+
+  window.addEventListener(
+    'app-language-changed',
+    this.handleLanguageChange
+  );
+
+  this.startHeroSlider();
+  this.startWelcomeSlider();
+  this.setupVisibilityHandling();
+
+  // Load real community counts once
+  this.loadCommunityCounts();
+}
+
 
   ngAfterViewInit(): void {
     if (!this.isBrowser) return;
@@ -478,7 +549,7 @@ private readonly handleLanguageChange = (event: Event): void => {
     
 
     const revealElements =
-      this.elementRef.nativeElement.querySelectorAll<HTMLElement>('.reveal');
+      (this.elementRef.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('.reveal');
 
     if (!revealElements.length) return;
 
@@ -509,7 +580,7 @@ private refreshRevealAnimations(): void {
   this.destroyRevealObserver();
 
   const revealElements =
-    this.elementRef.nativeElement.querySelectorAll<HTMLElement>('.reveal');
+    (this.elementRef.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('.reveal');
 
   revealElements.forEach((element) => {
     element.classList.add('active');
@@ -552,7 +623,49 @@ private refreshRevealAnimations(): void {
 
 
   
-communitySearch = '';
+
+showAllDesktopCommunities = false;
+showAllMobileCommunities = false;
+
+get visibleCommunities(): MatrimonyCommunity[] {
+  const communities = this.filteredCommunities;
+
+  // Show all matching results while searching
+  if (this.communitySearch.trim()) {
+    return communities;
+  }
+
+  // Server-side rendering: use the collapsed desktop count
+  if (!this.isBrowser) {
+    return communities.slice(0, 12);
+  }
+
+  // Desktop: 4 columns × 3 rows
+  if (window.innerWidth > 880) {
+    return this.showAllDesktopCommunities
+      ? communities
+      : communities.slice(0, 12);
+  }
+
+  // Mobile: 3 columns × 2 rows
+  return this.showAllMobileCommunities
+    ? communities
+    : communities.slice(0, 6);
+}
+
+toggleDesktopCommunities(): void {
+  this.showAllDesktopCommunities =
+    !this.showAllDesktopCommunities;
+}
+
+toggleMobileCommunities(): void {
+  this.showAllMobileCommunities =
+    !this.showAllMobileCommunities;
+}
+
+
+
+
 
 selectedCommunity: MatrimonyCommunity | null = null;
 
