@@ -1,51 +1,512 @@
+
 <main class="free-search-page">
+
+  <!-- ==========================================
+       PAGE HEADER
+  ========================================== -->
+
   <header class="search-hero">
-    <span class="hero-eyebrow">{{text('ASTRO ALLIANCE MATRIMONY','ஆஸ்ட்ரோ அலையன்ஸ் திருமணச் சேவை')}}</span>
-    <h1>{{memberMode ? text('Find Your Match','உங்களுக்கேற்ற வாழ்க்கைத்துணையைத் தேடுக') : text('Find a meaningful connection','உங்களுக்கேற்ற வாழ்க்கைத்துணையைக் கண்டறியுங்கள்')}}</h1>
-    <p>{{memberMode ? text('See approved profiles matched to your account. Basic details are free; private details require an eligible plan.','உங்கள் கணக்கிற்கு ஏற்ற அங்கீகரிக்கப்பட்ட சுயவிவரங்களைக் காண்க. அடிப்படை விவரங்கள் இலவசம்; தனிப்பட்ட விவரங்களுக்குத் தகுதியான திட்டம் தேவை.') : text('Search approved profiles for free. No registration needed to view basic details.','அங்கீகரிக்கப்பட்ட சுயவிவரங்களின் அடிப்படை விவரங்களைப் பதிவின்றி இலவசமாகத் தேடலாம்.')}}</p>
+
+    <span class="hero-eyebrow">
+      {{ text(
+        'ASTRO ALLIANCE MATRIMONY',
+        'ஆஸ்ட்ரோ அலையன்ஸ் திருமணச் சேவை'
+      ) }}
+    </span>
+
+    <h1>
+      {{ memberMode
+        ? text(
+            'Find Your Match',
+            'உங்களுக்கேற்ற வாழ்க்கைத்துணையைத் தேடுக'
+          )
+        : text(
+            'Find a meaningful connection',
+            'உங்களுக்கேற்ற வாழ்க்கைத்துணையைக் கண்டறியுங்கள்'
+          )
+      }}
+    </h1>
+
+    <p>
+      {{ memberMode
+        ? text(
+            'See approved profiles matched to your account. Basic details are free; private details require an eligible plan.',
+            'உங்கள் கணக்கிற்கு ஏற்ற அங்கீகரிக்கப்பட்ட சுயவிவரங்களைக் காண்க. அடிப்படை விவரங்கள் இலவசம்; தனிப்பட்ட விவரங்களுக்குத் தகுதியான திட்டம் தேவை.'
+          )
+        : text(
+            'Search approved profiles for free. No registration needed to view basic details.',
+            'அங்கீகரிக்கப்பட்ட சுயவிவரங்களின் அடிப்படை விவரங்களைப் பதிவின்றி இலவசமாகத் தேடலாம்.'
+          )
+      }}
+    </p>
+
   </header>
 
+
+  <!-- ==========================================
+       SEARCH TOOLBAR
+  ========================================== -->
+
   <div class="search-toolbar" role="search">
-    <label class="keyword-field"><span>{{text('Profile ID or keyword','சுயவிவர எண் அல்லது தேடல் சொல்')}}</span>
-      <input type="search" [ngModel]="search" (ngModelChange)="search=$event;onSearchChange()" [placeholder]="text('Search by ID, education, job, location...','எண், கல்வி, வேலை, ஊர்...')" autocomplete="off"/>
+
+    <!-- KEYWORD SEARCH -->
+    <label class="keyword-field">
+
+      <span>
+        {{ text(
+          'Profile ID or keyword',
+          'சுயவிவர எண் அல்லது தேடல் சொல்'
+        ) }}
+      </span>
+
+      <input
+        type="search"
+        [ngModel]="search"
+        (ngModelChange)="search = $event; onSearchChange()"
+        [placeholder]="text(
+          'Search by ID, education, job, location...',
+          'எண், கல்வி, வேலை, ஊர்...'
+        )"
+        autocomplete="off"
+      />
+
     </label>
-    <label class="sort-field"><span>{{text('Sort results','வரிசைப்படுத்து')}}</span>
-      <select [(ngModel)]="sortBy" (ngModelChange)="onSortChange()">
-        <option value="recent">{{text('Recently updated','சமீபத்தில் புதுப்பிக்கப்பட்டவை')}}</option>
-        <option value="ageAsc">{{text('Age: low to high','வயது: குறைவு முதல்')}}</option>
-        <option value="ageDesc">{{text('Age: high to low','வயது: அதிகம் முதல்')}}</option>
-        @if(hasHobbies){<option value="hobbies">{{text('Most shared hobbies','அதிகம் பொருந்தும் விருப்பங்கள்')}}</option>}
+
+
+    <!-- SORT RESULTS -->
+    <label class="sort-field">
+
+      <span>
+        {{ text(
+          'Sort results',
+          'வரிசைப்படுத்து'
+        ) }}
+      </span>
+
+      <select
+        [(ngModel)]="sortBy"
+        (ngModelChange)="onSortChange()"
+      >
+
+        <option value="recent">
+          {{ text(
+            'Recently updated',
+            'சமீபத்தில் புதுப்பிக்கப்பட்டவை'
+          ) }}
+        </option>
+
+        <option value="ageAsc">
+          {{ text(
+            'Age: low to high',
+            'வயது: குறைவு முதல்'
+          ) }}
+        </option>
+
+        <option value="ageDesc">
+          {{ text(
+            'Age: high to low',
+            'வயது: அதிகம் முதல்'
+          ) }}
+        </option>
+
+        @if (hasHobbies) {
+          <option value="hobbies">
+            {{ text(
+              'Most shared hobbies',
+              'அதிகம் பொருந்தும் விருப்பங்கள்'
+            ) }}
+          </option>
+        }
+
       </select>
+
     </label>
-    <button type="button" class="mobile-filters" [attr.aria-expanded]="mobileFilterOpen" (click)="mobileFilterOpen=!mobileFilterOpen">☷ {{text('Filters','வடிகட்டிகள்')}} @if(activeFilters){<span>({{activeFilters}})</span>}</button>
-    <button type="button" class="reset-button" (click)="reset()">{{text('Clear all','அனைத்தையும் நீக்கு')}}</button>
+
+
+    <!-- MOBILE FILTER BUTTON -->
+    <button
+      type="button"
+      class="mobile-filters"
+      [attr.aria-expanded]="mobileFilterOpen"
+      (click)="mobileFilterOpen = !mobileFilterOpen"
+    >
+      ☷ {{ text('Filters', 'வடிகட்டிகள்') }}
+
+      @if (activeFilters) {
+        <span>({{ activeFilters }})</span>
+      }
+
+    </button>
+
+
+    <!-- RESET -->
+    <button
+      type="button"
+      class="reset-button"
+      (click)="reset()"
+    >
+      {{ text('Clear all', 'அனைத்தையும் நீக்கு') }}
+    </button>
+
   </div>
+
+
+  <!-- ==========================================
+       SEARCH LAYOUT
+  ========================================== -->
 
   <div class="search-layout">
-    @if(mobileFilterOpen){<button class="mobile-backdrop" type="button" [attr.aria-label]="text('Close filters','மூடுக')" (click)="mobileFilterOpen=false"></button>}
-    <aside class="filters-column" [class.mobile-open]="mobileFilterOpen" [attr.aria-label]="text('Search filters','தேடல் வடிகட்டிகள்')">
-      <app-public-search-filters [lang]="lang" [filters]="filters" [options]="options" [facetProfiles]="profiles" [hasHobbies]="hasHobbies" [hasHeights]="hasHeights" [nearbyReady]="nearPosition !== null" [nearbyError]="nearbyError" (filtersChange)="changeFilters($event)" (nearbyRequested)="enableNearby()" (closeRequested)="mobileFilterOpen=false"/>
+
+
+    <!-- MOBILE BACKDROP -->
+    @if (mobileFilterOpen) {
+
+      <button
+        type="button"
+        class="mobile-backdrop"
+        [attr.aria-label]="text('Close filters', 'மூடுக')"
+        (click)="mobileFilterOpen = false"
+      ></button>
+
+    }
+
+
+    <!-- ==========================================
+         LEFT FILTER SIDEBAR
+    ========================================== -->
+
+    <aside
+      class="filters-column"
+      [class.mobile-open]="mobileFilterOpen"
+      [attr.aria-label]="text(
+        'Search filters',
+        'தேடல் வடிகட்டிகள்'
+      )"
+    >
+
+      <app-public-search-filters
+        [lang]="lang"
+        [filters]="filters"
+        [options]="options"
+        [facetProfiles]="profiles"
+        [hasHobbies]="hasHobbies"
+        [hasHeights]="hasHeights"
+        [nearbyReady]="nearPosition !== null"
+        [nearbyError]="nearbyError"
+        (filtersChange)="changeFilters($event)"
+        (nearbyRequested)="enableNearby()"
+        (closeRequested)="mobileFilterOpen = false"
+      />
+
     </aside>
 
-    <section class="results-column" [attr.aria-label]="text('Search results','தேடல் முடிவுகள்')">
-      <div class="result-heading"><div><h2>{{text('Matching Profiles','பொருத்தமான சுயவிவரங்கள்')}}</h2>
-        <p>{{text('Only admin-approved and published profiles appear here.','நிர்வாகி ஒப்புதல் பெற்ற வெளியிடப்பட்ட சுயவிவரங்கள் மட்டுமே காட்டப்படும்.')}}</p></div>
-        @if(!loading && !error){<span class="count">{{results.length}} {{text('results','முடிவுகள்')}}</span>}
-      </div>
-      @if(activeFilters>0){<div class="active-summary"><span>{{activeFilters}} {{text('active filters','தேர்ந்தெடுத்த வடிகட்டிகள்')}}</span><button type="button" (click)="reset()">{{text('Reset','மீட்டமை')}}</button></div>}
-      @if(loading){<div class="state" role="status"><span class="spinner" aria-hidden="true"></span><p>{{text('Loading approved profiles...','அங்கீகரிக்கப்பட்ட சுயவிவரங்கள் ஏற்றப்படுகின்றன...')}}</p></div>}
-      @else if(error){<div class="state" role="alert"><h3>{{text('Unable to load profiles','சுயவிவரங்களை ஏற்ற முடியவில்லை')}}</h3><p>{{text('Please check that the Node.js backend is running.','Node.js சேவையகம் இயங்குகிறதா என்று பார்க்கவும்.')}}</p><button type="button" (click)="load()">{{text('Try again','மீண்டும் முயற்சி')}}</button></div>}
-      @else if(memberMode && !requiredGender){<div class="state"><h3>{{text('Complete your gender details','உங்கள் பாலின விவரங்களைப் பூர்த்தி செய்யுங்கள்')}}</h3><p>{{text('Your saved gender is needed to show the appropriate matches. Check My Biodata or contact support.','உங்களுக்கேற்ற பொருத்தங்களைக் காட்ட உங்கள் பதிவு செய்யப்பட்ட பாலின விவரம் தேவை. என் சுயவிவரத்தைப் பார்க்கவும் அல்லது உதவியைத் தொடர்புகொள்ளவும்.')}}</p><a routerLink="/my-biodata">{{text('My Biodata','என் சுயவிவரம்')}} →</a></div>}
-      @else if(!results.length){<div class="state"><h3>{{text('No matching profiles found','பொருத்தமான சுயவிவரங்கள் இல்லை')}}</h3><p>{{text('Try removing a few filters or searching another location.','சில வடிகட்டிகளை நீக்கி அல்லது வேறு ஊரைத் தேர்ந்தெடுத்துப் பாருங்கள்.')}}</p><button type="button" (click)="reset()">{{text('Show all approved profiles','அனைத்து அங்கீகரிக்கப்பட்ட சுயவிவரங்கள்')}}</button></div>}
-      @else {
-        <div class="results-grid" aria-live="polite">
-          @for(profile of visibleResults;track profile.code){
-            <app-public-card [profile]="profile" [returnState]="returnState" [searchRoute]="memberMode ? 'profiles' : 'free-search'" />
-          }
+
+    <!-- ==========================================
+         RIGHT RESULTS SECTION
+    ========================================== -->
+
+    <section
+      class="results-column"
+      [attr.aria-label]="text(
+        'Search results',
+        'தேடல் முடிவுகள்'
+      )"
+    >
+
+
+      <!-- RESULTS HEADING -->
+      <div class="result-heading">
+
+        <div>
+
+          <h2>
+            {{ text(
+              'Matching Profiles',
+              'பொருத்தமான சுயவிவரங்கள்'
+            ) }}
+          </h2>
+
+          <p>
+            {{ text(
+              'Only admin-approved and published profiles appear here.',
+              'நிர்வாகி ஒப்புதல் பெற்ற வெளியிடப்பட்ட சுயவிவரங்கள் மட்டுமே காட்டப்படும்.'
+            ) }}
+          </p>
+
         </div>
-        @if(results.length > displayed){<button type="button" class="load-more" (click)="loadMore()">{{text('Show more profiles','மேலும் சுயவிவரங்கள்')}} ↓</button>}
+
+        @if (!loading && !error) {
+
+          <span class="count">
+            {{ results.length }}
+            {{ text('results', 'முடிவுகள்') }}
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- ACTIVE FILTERS -->
+      @if (activeFilters > 0) {
+
+        <div class="active-summary">
+
+          <span>
+            {{ activeFilters }}
+            {{ text(
+              'active filters',
+              'தேர்ந்தெடுத்த வடிகட்டிகள்'
+            ) }}
+          </span>
+
+          <button
+            type="button"
+            (click)="reset()"
+          >
+            {{ text('Reset', 'மீட்டமை') }}
+          </button>
+
+        </div>
+
       }
-      @if(!memberMode){<div class="member-callout"><div><h3>{{text('New to Astro Alliance?','ஆஸ்ட்ரோ அலையன்ஸில் புதியவரா?')}}</h3><p>{{text('Register and complete your Biodata, then wait for admin approval. Full profile details need an eligible plan.','பதிவுசெய்து சுயவிவரத்தை நிரப்பவும். நிர்வாகி ஒப்புதலுக்குப் பிறகு உள்நுழையலாம். முழு விவரங்களுக்குத் தகுதியான திட்டம் தேவை.')}}</p></div><a routerLink="/register">{{text('Register Now','இப்போது பதிவு செய்யுங்கள்')}} →</a></div>}
+
+
+      <!-- ==========================================
+           LOADING STATE
+      ========================================== -->
+
+      @if (loading) {
+
+        <div class="state" role="status">
+
+          <span
+            class="spinner"
+            aria-hidden="true"
+          ></span>
+
+          <p>
+            {{ text(
+              'Loading approved profiles...',
+              'அங்கீகரிக்கப்பட்ட சுயவிவரங்கள் ஏற்றப்படுகின்றன...'
+            ) }}
+          </p>
+
+        </div>
+
+      }
+
+
+      <!-- ==========================================
+           ERROR STATE
+      ========================================== -->
+
+      @else if (error) {
+
+        <div class="state" role="alert">
+
+          <h3>
+            {{ text(
+              'Unable to load profiles',
+              'சுயவிவரங்களை ஏற்ற முடியவில்லை'
+            ) }}
+          </h3>
+
+          <p>
+            {{ text(
+              'Please check that the Node.js backend is running.',
+              'Node.js சேவையகம் இயங்குகிறதா என்று பார்க்கவும்.'
+            ) }}
+          </p>
+
+          <button
+            type="button"
+            (click)="load()"
+          >
+            {{ text(
+              'Try again',
+              'மீண்டும் முயற்சி'
+            ) }}
+          </button>
+
+        </div>
+
+      }
+
+
+      <!-- ==========================================
+           MEMBER GENDER REQUIRED
+      ========================================== -->
+
+      @else if (memberMode && !requiredGender) {
+
+        <div class="state">
+
+          <h3>
+            {{ text(
+              'Complete your gender details',
+              'உங்கள் பாலின விவரங்களைப் பூர்த்தி செய்யுங்கள்'
+            ) }}
+          </h3>
+
+          <p>
+            {{ text(
+              'Your saved gender is needed to show the appropriate matches. Check My Biodata or contact support.',
+              'உங்களுக்கேற்ற பொருத்தங்களைக் காட்ட உங்கள் பதிவு செய்யப்பட்ட பாலின விவரம் தேவை. என் சுயவிவரத்தைப் பார்க்கவும் அல்லது உதவியைத் தொடர்புகொள்ளவும்.'
+            ) }}
+          </p>
+
+          <a routerLink="/my-biodata">
+            {{ text(
+              'My Biodata',
+              'என் சுயவிவரம்'
+            ) }}
+            →
+          </a>
+
+        </div>
+
+      }
+
+
+      <!-- ==========================================
+           EMPTY RESULTS
+      ========================================== -->
+
+      @else if (!results.length) {
+
+        <div class="state">
+
+          <h3>
+            {{ text(
+              'No matching profiles found',
+              'பொருத்தமான சுயவிவரங்கள் இல்லை'
+            ) }}
+          </h3>
+
+          <p>
+            {{ text(
+              'Try removing a few filters or searching another location.',
+              'சில வடிகட்டிகளை நீக்கி அல்லது வேறு ஊரைத் தேர்ந்தெடுத்துப் பாருங்கள்.'
+            ) }}
+          </p>
+
+          <button
+            type="button"
+            (click)="reset()"
+          >
+            {{ text(
+              'Show all approved profiles',
+              'அனைத்து அங்கீகரிக்கப்பட்ட சுயவிவரங்கள்'
+            ) }}
+          </button>
+
+        </div>
+
+      }
+
+
+      <!-- ==========================================
+           PROFILE RESULTS
+      ========================================== -->
+
+      @else {
+
+        <!-- PROFILE CARDS -->
+        <div
+          class="results-grid"
+          aria-live="polite"
+        >
+
+          @for (
+            profile of visibleResults;
+            track profile.code
+          ) {
+
+            <app-public-card
+              [profile]="profile"
+              [returnState]="returnState"
+              [searchRoute]="memberMode
+                ? 'profiles'
+                : 'free-search'"
+            />
+
+          }
+
+        </div>
+
+
+        <!-- ==========================================
+             SHOW MORE PROFILES
+             APPEND NEXT PROFILES BELOW
+        ========================================== -->
+
+        @if (results.length > displayed) {
+
+          <div class="show-more-wrapper">
+
+            <button
+              type="button"
+              class="show-more-btn"
+              (click)="showMoreProfiles()"
+            >
+
+              {{ text(
+                'Show more profiles',
+                'மேலும் சுயவிவரங்களைக் காண்க'
+              ) }}
+
+              <span aria-hidden="true">↓</span>
+
+            </button>
+
+          </div>
+
+        }
+
+
+        <!-- ==========================================
+             MEMBER REGISTRATION CALLOUT
+        ========================================== -->
+
+        @if (!memberMode) {
+
+          <div class="member-callout">
+
+            <div>
+
+              <h3>
+                {{ text(
+                  'New to Astro Alliance?',
+                  'ஆஸ்ட்ரோ அலையன்ஸில் புதியவரா?'
+                ) }}
+              </h3>
+
+              <p>
+                {{ text(
+                  'Register and complete your Biodata, then wait for admin approval. Full profile details need an eligible plan.',
+                  'பதிவுசெய்து சுயவிவரத்தை நிரப்பவும். நிர்வாகி ஒப்புதலுக்குப் பிறகு உள்நுழையலாம். முழு விவரங்களுக்குத் தகுதியான திட்டம் தேவை.'
+                ) }}
+              </p>
+
+            </div>
+
+            <a routerLink="/register">
+              {{ text(
+                'Register Now',
+                'இப்போது பதிவு செய்யுங்கள்'
+              ) }}
+              →
+            </a>
+
+          </div>
+
+        }
+
+      }
+
     </section>
+
   </div>
+
 </main>

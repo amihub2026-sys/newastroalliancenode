@@ -1,0 +1,278 @@
+/* ASTRO ALLIANCE — MOBILE & TABLET APP SHELL */
+@media (max-width: 880px) {
+  :host { display: block; width: 100%; max-width: 100%; min-width: 0; }
+  :host, :host * { box-sizing: border-box; }
+  .app-shell { width: 100%; max-width: 100%; min-width: 0; padding: 0 0 calc(72px + env(safe-area-inset-bottom)); overflow-x: clip; }
+  #main-content { display: block; width: 100%; max-width: 100%; min-width: 0; overflow-x: clip; }
+
+  .site-header { position: sticky; top: 0; z-index: 1050; width: 100%; background: #fffbfc; border-bottom: 1px solid #f0e0e7; }
+  .header-inner { width: 100%; max-width: 100%; min-height: 62px; margin: 0; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .desktop-nav, .mobile-menu-button, .mobile-nav, .menu-backdrop, .mobile-account-wrap { display: none !important; }
+  .site-brand { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; }
+  .site-brand img { width: 45px; height: 39px; object-fit: contain; flex-shrink: 0; }
+  .brand-copy { min-width: 0; }
+  .logo-title { font-size: clamp(13px, 3.7vw, 20px); line-height: 1.12; white-space: normal; overflow-wrap: break-word; }
+  .brand-copy small { font-size: 7px; letter-spacing: .18em; }
+  .header-actions { display: flex; gap: 7px; align-items: center; flex: 0 0 auto; }
+  .language-choice { padding: 3px; gap: 2px; border-radius: 10px; }
+  .language-choice button { padding: 7px 6px; font-size: 10px; }
+  .mobile-notification-button { position: relative; display: grid !important; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; background: transparent; color: #91335a; cursor: pointer; }
+  .mobile-notification-count { position: absolute; top: -2px; right: -2px; display: grid; place-items: center; min-width: 16px; height: 16px; padding: 0 3px; border-radius: 999px; background: #d43265; color: #fff; font-size: 9px; font-weight: 800; }
+
+  .astro-mobile-bottom-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1100; display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: center; min-height: 66px; padding: 6px 9px calc(7px + env(safe-area-inset-bottom)); background: rgba(255,251,252,.98); border-top: 1px solid #efdae4; box-shadow: 0 -5px 20px rgba(54,19,35,.10); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  .astro-mobile-bottom-nav.guest-navigation { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .astro-bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 0; min-height: 48px; padding: 4px 2px; border-radius: 10px; color: #825d70; text-align: center; text-decoration: none; }
+  .astro-bottom-nav-item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .astro-bottom-nav-item span { font-size: 10px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+  .astro-bottom-nav-item.is-active { color: #902e57; }
+  .astro-bottom-nav-item.is-active svg { stroke-width: 2.3; }
+  .astro-bottom-avatar { width: 26px; height: 26px; border: 2px solid #e6b9cc; border-radius: 50%; object-fit: cover; }
+  .astro-bottom-nav-item.is-active .astro-bottom-avatar { border-color: #902e57; }
+  .site-footer { width: 100%; margin: 0; }
+  .footer-inner { width: min(100% - 32px, 700px); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; padding: 40px 0; }
+  .footer-about { grid-column: 1 / -1; }
+  .footer-bottom { padding: 17px 16px; }
+}
+@media (max-width: 480px) {
+  .header-inner { min-height: 58px; padding: 7px 10px; gap: 5px; }
+  .site-brand img { width: 38px; height: 35px; }
+  .logo-title { font-size: 14px; }
+  .brand-copy small { font-size: 6px; letter-spacing: .13em; }
+  .header-actions { gap: 3px; }
+  .language-choice { padding: 2px; }
+  .language-choice button { padding: 6px 5px; font-size: 9px; }
+  .mobile-notification-button { width: 32px; height: 32px; }
+  .astro-bottom-nav-item span { font-size: 9px; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-about { grid-column: auto; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+}
+
+/* =============================================
+   ASTRO ALLIANCE — MOBILE APP NAVIGATION COLORS
+   Desktop remains unchanged
+============================================= */
+
+@media screen and (max-width: 880px) {
+
+  .astro-mobile-bottom-nav {
+    background: #fff9f5 !important;
+    border-top: 1px solid #efdae2 !important;
+    box-shadow: 0 -5px 24px rgba(82, 28, 54, 0.09);
+  }
+
+  /* DEFAULT ICON COLOR */
+  .astro-bottom-nav-item {
+    color: #93657a !important;
+  }
+
+  .astro-bottom-nav-item svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ACTIVE PAGE COLOR */
+  .astro-bottom-nav-item.is-active {
+    color: #86284e !important;
+  }
+
+  .astro-bottom-nav-item.is-active svg {
+    stroke-width: 2.5;
+  }
+
+  /* ACTIVE LABEL */
+  .astro-bottom-nav-item.is-active span {
+    color: #86284e !important;
+    font-weight: 800;
+  }
+
+  /* NAV LABELS */
+  .astro-bottom-nav-item span {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  /* TOP NAVBAR */
+  .site-header {
+    background: #fffaf7 !important;
+    border-bottom: 1px solid #f0e2e6;
+  }
+
+  /* BRAND COLORS */
+  .logo-title {
+    color: #742648 !important;
+  }
+
+  .brand-copy small {
+    color: #b65c80 !important;
+  }
+
+  /* NOTIFICATION BELL */
+  .mobile-notification-button {
+    color: #8e3157 !important;
+  }
+
+  .mobile-notification-count {
+    background: #9e305c !important;
+    color: white;
+  }
+}
+
+/* ==========================================
+   MOBILE + TABLET BOTTOM NAVIGATION
+   5 ICONS AFTER LOGIN / 4 BEFORE LOGIN
+========================================== */
+
+@media screen and (max-width: 880px) {
+
+  .astro-mobile-bottom-nav {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 0;
+  }
+
+  .astro-mobile-bottom-nav.guest-navigation {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .astro-bottom-nav-item {
+    min-width: 0;
+    padding: 5px 2px;
+    gap: 5px;
+  }
+
+  .astro-bottom-nav-item svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .astro-bottom-nav-item span {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .astro-bottom-nav-item.is-active {
+    color: #86284e !important;
+  }
+}
+
+@media screen and (max-width: 380px) {
+
+  .astro-bottom-nav-item span {
+    font-size: 9px;
+  }
+
+  .astro-bottom-nav-item svg {
+    width: 21px;
+    height: 21px;
+  }
+}
+/* Hide footer on mobile and tablet only */
+@media screen and (max-width: 880px) {
+  app-footer,
+  footer,
+  .footer {
+    display: none !important;
+  }
+}
+
+
+/* ========================================
+   MOBILE PROFILE CHOICE MENU
+======================================== */
+
+@media (max-width: 880px) {
+
+  .astro-mobile-bottom-nav {
+    overflow: visible !important;
+  }
+
+  .astro-mobile-profile-choice {
+    position: relative;
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+    align-items: stretch;
+    justify-content: center;
+  }
+
+  .astro-profile-choice-trigger {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 6px 2px;
+    margin: 0;
+
+    background: transparent;
+    border: 0;
+    color: #965773;
+
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .astro-profile-choice-trigger span {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+
+  .astro-profile-choice-menu {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 12px);
+    z-index: 1000;
+
+    width: min(220px, 78vw);
+    padding: 8px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    background: #fffaf8;
+    border: 1px solid #edd9e0;
+    border-radius: 16px;
+
+    box-shadow: 0 16px 38px rgba(67, 20, 41, 0.23);
+  }
+
+  .astro-profile-choice-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 46px;
+    padding: 10px 13px;
+
+    border-radius: 11px;
+
+    color: #702240;
+    background: transparent;
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .astro-profile-choice-menu a:hover,
+  .astro-profile-choice-menu a:focus-visible {
+    background: #f6e6ec;
+  }
+
+  .astro-profile-choice-menu a > span:first-child {
+    font-size: 19px;
+    flex-shrink: 0;
+  }
+}

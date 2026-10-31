@@ -1,111 +1,520 @@
-<div class="app-shell">
-  @if (!isAdminPage) {
-  <header class="site-header">
-    <div class="header-inner">
-      <a routerLink="/" class="site-brand" aria-label="Astro Alliance Matrimony, home">
-        <img src="assets/malogo.png" alt="" width="70" height="50" />
-        <span class="brand-copy"><strong class="logo-title">{{ currentLang === 'ta' ? 'ஆஸ்ட்ரோ அலையன்ஸ்' : 'Astro Alliance' }}</strong><small>MATRIMONY</small></span>
-      </a>
-      <nav class="desktop-nav" aria-label="Main navigation">
-        <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact:true}">{{ t.nav.home }}</a>
-        <a [routerLink]="(isLoggedIn && mobileAccountStage === 'approved') ? '/profiles' : '/free-search'">{{ profilesNavText }}</a>
-        <a href="/plans" (click)="$event.preventDefault(); goToPage('/plans')">{{ t.nav.plans }}</a>
-        @if (!isLoggedIn) {
-          <a routerLink="/login" class="login-link">{{ t.nav.login }}</a>
-          <a routerLink="/register" class="register-link">{{ t.nav.register }} <span aria-hidden="true">↗</span></a>
-        } @else {
-          <div class="profile-menu-wrap">
-            <button type="button" class="profile-trigger" [attr.aria-expanded]="biodataMenuOpen" aria-controls="profile-menu" (click)="toggleBiodataMenu()">
-              <img class="site-member-avatar" [src]="memberAvatar" (error)="onAvatarError($event)" alt=""/> {{ currentLang === 'ta' ? 'என் கணக்கு' : 'My Account' }}
-              @if (interestNotificationCount > 0) { <span class="notification-number">{{ interestNotificationCount }}</span> }
-              <span aria-hidden="true">⌄</span>
-            </button>
-            @if (biodataMenuOpen) {
-              <div class="profile-popover" id="profile-menu">
-                @if (mobileAccountStage === 'approved') { <a routerLink="/dashboard" (click)="closeMenu()">{{ currentLang === 'ta' ? 'என் முகப்பு' : 'My Dashboard' }}</a> }
-                @if (mobileAccountStage === 'pending') { <a routerLink="/approval-pending" (click)="closeMenu()">{{ currentLang === 'ta' ? 'ஒப்புதல் நிலை' : 'Approval Status' }}</a> }
-                @if (mobileAccountStage === 'draft' || mobileAccountStage === 'rejected') { <a routerLink="/biodata" (click)="closeMenu()">{{ currentLang === 'ta' ? 'பயோடேட்டாவைத் தொடரவும்' : 'Continue Biodata' }}</a> }
-                <a href="/my-biodata" (click)="$event.preventDefault();goToPage('/my-biodata')">{{ currentLang === 'ta' ? 'என் சுயவிவரம்' : 'My profile' }}</a>
-                @if (mobileAccountStage === 'approved') { <a href="/received-interests" (click)="$event.preventDefault();openReceivedInterests()">{{ currentLang === 'ta' ? 'பெற்ற விருப்பங்கள்' : 'Received interests' }} @if(receivedInterestCount > 0){<span>{{ receivedInterestCount }}</span>}</a>
-                <a href="/sent-interests" (click)="$event.preventDefault();openSentInterests()">{{ currentLang === 'ta' ? 'அனுப்பிய விருப்பங்கள்' : 'Sent interests' }} @if(sentInterestCount > 0){<span>{{ sentInterestCount }}</span>}</a> }
 
-                <button type="button" (click)="logout()">{{ t.nav.logout }}</button>
-              </div>
-            }
-          </div>
-        }
-      </nav>
-      <div class="header-actions">
-        <div class="language-choice" role="group" aria-label="Website language">
-          <button type="button" (click)="changeLanguage('en')" [class.active]="currentLang==='en'" [attr.aria-pressed]="currentLang==='en'">EN</button>
-          <button type="button" (click)="changeLanguage('ta')" [class.active]="currentLang==='ta'" [attr.aria-pressed]="currentLang==='ta'">தமிழ்</button>
-        </div>
-        @if (isLoggedIn) {
-          <div class="mobile-account-wrap">
-            <button type="button" class="mobile-account-link" (click)="toggleMobileAccountMenu()"
-              [attr.aria-expanded]="mobileAccountMenuOpen" aria-controls="mobile-account-menu"
-              [attr.aria-label]="currentLang === 'ta' ? 'என் கணக்கு மெனு' : 'Open my account menu'">
-              <img [src]="memberAvatar" (error)="onAvatarError($event)" alt="" width="36" height="36" />
+<div class="app-shell">
+
+  @if (!isAdminPage) {
+    <!-- HEADER -->
+    <header class="site-header">
+      <div class="header-inner">
+
+        <a
+          routerLink="/"
+          class="site-brand"
+          aria-label="Astro Alliance Matrimony, home"
+        >
+          <img
+            src="assets/malogo.png"
+            alt=""
+            width="70"
+            height="50"
+          />
+
+          <span class="brand-copy">
+            <strong class="logo-title">
+              {{ currentLang === 'ta'
+                ? 'ஆஸ்ட்ரோ அலையன்ஸ்'
+                : 'Astro Alliance' }}
+            </strong>
+            <small>MATRIMONY</small>
+          </span>
+        </a>
+
+        <!-- DESKTOP NAVIGATION -->
+        <nav class="desktop-nav" aria-label="Main navigation">
+
+          <a
+            routerLink="/"
+            routerLinkActive="is-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            {{ t.nav.home }}
+          </a>
+
+          <a
+            [routerLink]="
+              isLoggedIn && mobileAccountStage === 'approved'
+                ? '/profiles'
+                : '/free-search'
+            "
+          >
+            {{ profilesNavText }}
+          </a>
+
+          <a
+            href="/plans"
+            (click)="
+              $event.preventDefault();
+              goToPage('/plans')
+            "
+          >
+            {{ t.nav.plans }}
+          </a>
+
+          @if (!isLoggedIn) {
+
+            <a routerLink="/login" class="login-link">
+              {{ t.nav.login }}
+            </a>
+
+            <a routerLink="/register" class="register-link">
+              {{ t.nav.register }}
+              <span aria-hidden="true">↗</span>
+            </a>
+
+          } @else {
+
+            <div class="profile-menu-wrap">
+
+              <button
+                type="button"
+                class="profile-trigger"
+                [attr.aria-expanded]="biodataMenuOpen"
+                aria-controls="profile-menu"
+                (click)="toggleBiodataMenu()"
+              >
+                <img
+                  class="site-member-avatar"
+                  [src]="memberAvatar"
+                  (error)="onAvatarError($event)"
+                  alt=""
+                />
+
+                {{ currentLang === 'ta'
+                  ? 'என் கணக்கு'
+                  : 'My Account' }}
+
+                @if (interestNotificationCount > 0) {
+                  <span class="notification-number">
+                    {{ interestNotificationCount }}
+                  </span>
+                }
+
+                <span aria-hidden="true">⌄</span>
+              </button>
+
+              @if (biodataMenuOpen) {
+
+                <div class="profile-popover" id="profile-menu">
+
+                  @if (mobileAccountStage === 'approved') {
+                    <a routerLink="/dashboard" (click)="closeMenu()">
+                      {{ currentLang === 'ta'
+                        ? 'என் முகப்பு'
+                        : 'My Dashboard' }}
+                    </a>
+                  }
+
+                  @if (mobileAccountStage === 'pending') {
+                    <a
+                      routerLink="/approval-pending"
+                      (click)="closeMenu()"
+                    >
+                      {{ currentLang === 'ta'
+                        ? 'ஒப்புதல் நிலை'
+                        : 'Approval Status' }}
+                    </a>
+                  }
+
+                  @if (
+                    mobileAccountStage === 'draft' ||
+                    mobileAccountStage === 'rejected'
+                  ) {
+                    <a routerLink="/biodata" (click)="closeMenu()">
+                      {{ currentLang === 'ta'
+                        ? 'பயோடேட்டாவைத் தொடரவும்'
+                        : 'Continue Biodata' }}
+                    </a>
+                  }
+
+                  <a
+                    href="/my-biodata"
+                    (click)="
+                      $event.preventDefault();
+                      goToPage('/my-biodata')
+                    "
+                  >
+                    {{ currentLang === 'ta'
+                      ? 'என் சுயவிவரம்'
+                      : 'My Profile' }}
+                  </a>
+
+                  @if (mobileAccountStage === 'approved') {
+
+                    <a
+                      href="/received-interests"
+                      (click)="
+                        $event.preventDefault();
+                        openReceivedInterests()
+                      "
+                    >
+                      {{ currentLang === 'ta'
+                        ? 'பெற்ற விருப்பங்கள்'
+                        : 'Received Interests' }}
+
+                      @if (receivedInterestCount > 0) {
+                        <span>{{ receivedInterestCount }}</span>
+                      }
+                    </a>
+
+                    <a
+                      href="/sent-interests"
+                      (click)="
+                        $event.preventDefault();
+                        openSentInterests()
+                      "
+                    >
+                      {{ currentLang === 'ta'
+                        ? 'அனுப்பிய விருப்பங்கள்'
+                        : 'Sent Interests' }}
+
+                      @if (sentInterestCount > 0) {
+                        <span>{{ sentInterestCount }}</span>
+                      }
+                    </a>
+
+                  }
+
+                  <button type="button" (click)="logout()">
+                    {{ t.nav.logout }}
+                  </button>
+
+                </div>
+              }
+
+            </div>
+          }
+        </nav>
+
+        <!-- HEADER ACTIONS -->
+        <div class="header-actions">
+
+          <div
+            class="language-choice"
+            role="group"
+            aria-label="Website language"
+          >
+            <button
+              type="button"
+              (click)="changeLanguage('en')"
+              [class.active]="currentLang === 'en'"
+              [attr.aria-pressed]="currentLang === 'en'"
+            >
+              EN
             </button>
-            @if (mobileAccountMenuOpen) {
-              <button type="button" class="mobile-account-backdrop" (click)="closeMenu()"
-                [attr.aria-label]="currentLang === 'ta' ? 'மெனுவை மூடவும்' : 'Close account menu'"></button>
-              <nav id="mobile-account-menu" class="mobile-account-popover"
-                [attr.aria-label]="currentLang === 'ta' ? 'என் கணக்கு' : 'My account'">
-                <p class="mobile-account-status">{{ mobileAccountStatusLabel }}</p>
-                @if (mobileAccountStage === 'draft' || mobileAccountStage === 'rejected') {
-                  <a routerLink="/biodata" (click)="closeMenu()">{{ currentLang === 'ta' ? 'பயோடேட்டாவைத் தொடரவும்' : 'Continue Biodata' }}</a>
-                }
-                @if (mobileAccountStage === 'pending') {
-                  <a routerLink="/approval-pending" (click)="closeMenu()">{{ currentLang === 'ta' ? 'ஒப்புதல் நிலை' : 'Approval Status' }}</a>
-                }
-                @if (mobileAccountStage === 'approved') {
-                  <a routerLink="/dashboard" (click)="closeMenu()">{{ currentLang === 'ta' ? 'என் முகப்பு' : 'My Dashboard' }}</a>
-                }
-                <a routerLink="/my-biodata" (click)="closeMenu()">{{ currentLang === 'ta' ? 'என் சுயவிவரம்' : 'My Profile' }}</a>
-                <a routerLink="/free-search" (click)="closeMenu()">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
-                <button type="button" (click)="logout()">{{ t.nav.logout }}</button>
-              </nav>
-            }
+
+            <button
+              type="button"
+              (click)="changeLanguage('ta')"
+              [class.active]="currentLang === 'ta'"
+              [attr.aria-pressed]="currentLang === 'ta'"
+            >
+              தமிழ்
+            </button>
           </div>
-        }
-        <button class="mobile-menu-button" type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen" aria-controls="mobile-menu" aria-label="Toggle navigation">☰</button>
+
+          @if (isLoggedIn) {
+            <button
+              type="button"
+              class="mobile-notification-button"
+              (click)="openMobileNotifications()"
+              [attr.aria-label]="
+                currentLang === 'ta'
+                  ? 'அறிவிப்புகள்'
+                  : 'Notifications'
+              "
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
+                />
+                <path d="M10 21h4"/>
+              </svg>
+
+              @if (interestNotificationCount > 0) {
+                <span class="mobile-notification-count">
+                  {{ interestNotificationCount > 99
+                    ? '99+'
+                    : interestNotificationCount }}
+                </span>
+              }
+            </button>
+          }
+
+        </div>
       </div>
-    </div>
-    @if (menuOpen) {
-    <button class="menu-backdrop" type="button" (click)="closeMenu()" aria-label="Close menu"></button>
-    <nav id="mobile-menu" class="mobile-nav" aria-label="Mobile navigation">
-      <a routerLink="/" (click)="closeMenu()">{{ t.nav.home }}</a>
-      <a [routerLink]="(isLoggedIn && mobileAccountStage === 'approved') ? '/profiles' : '/free-search'" (click)="closeMenu()">{{ profilesNavText }}</a>
-      <a href="/plans" (click)="$event.preventDefault();goToPage('/plans')">{{ t.nav.plans }}</a>
-      @if (!isLoggedIn) {
-        <a routerLink="/login" (click)="closeMenu()">{{ t.nav.login }}</a>
-        <a routerLink="/register" class="mobile-primary" (click)="closeMenu()">{{ t.nav.register }}</a>
-      } @else {
-        @if (mobileAccountStage === 'approved') { <a routerLink="/dashboard" (click)="closeMenu()">{{ currentLang === 'ta' ? 'என் முகப்பு' : 'My Dashboard' }}</a> }
-        @if (mobileAccountStage === 'pending') { <a routerLink="/approval-pending" (click)="closeMenu()">{{ currentLang === 'ta' ? 'ஒப்புதல் நிலை' : 'Approval Status' }}</a> }
-        @if (mobileAccountStage === 'draft' || mobileAccountStage === 'rejected') { <a routerLink="/biodata" (click)="closeMenu()">{{ currentLang === 'ta' ? 'பயோடேட்டாவைத் தொடரவும்' : 'Continue Biodata' }}</a> }
-        <a href="/my-biodata" (click)="$event.preventDefault();goToPage('/my-biodata')">{{ currentLang==='ta' ? 'என் சுயவிவரம்' : 'My profile' }}</a>
-        @if (mobileAccountStage === 'approved') {
-          <a href="/received-interests" (click)="$event.preventDefault();openReceivedInterests()">{{ currentLang==='ta' ? 'பெற்ற விருப்பங்கள்' : 'Received interests' }}</a>
-          <a href="/sent-interests" (click)="$event.preventDefault();openSentInterests()">{{ currentLang==='ta' ? 'அனுப்பிய விருப்பங்கள்' : 'Sent interests' }}</a>
-        }
-        <button type="button" (click)="logout()">{{ t.nav.logout }}</button>
-      }
-    </nav>
-    }
-  </header>
+    </header>
   }
+
+  <!-- SNACKBAR -->
   <app-snackbar></app-snackbar>
-  <main id="main-content"><router-outlet></router-outlet></main>
+
+  <!-- ROUTER CONTENT -->
+  <main id="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  @if (!isAdminPage) {
+
+    <nav
+      class="astro-mobile-bottom-nav"
+      [class.guest-navigation]="!isLoggedIn"
+      aria-label="Mobile bottom navigation"
+    >
+
+      <!-- 01 HOME -->
+      <a
+        routerLink="/"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="astro-bottom-nav-item"
+        (click)="mobileProfileChoiceOpen = false"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 10.5 12 3l9 7.5V21h-6.5v-7h-5v7H3V10.5Z"/>
+        </svg>
+        <span>
+          {{ currentLang === 'ta' ? 'முகப்பு' : 'Home' }}
+        </span>
+      </a>
+
+      <!-- 02 SEARCH -->
+      <a
+        routerLink="/free-search"
+        routerLinkActive="is-active"
+        class="astro-bottom-nav-item"
+        (click)="mobileProfileChoiceOpen = false"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="10.8" cy="10.8" r="6.8"/>
+          <path d="m16 16 5 5"/>
+        </svg>
+        <span>
+          {{ currentLang === 'ta' ? 'தேடல்' : 'Search' }}
+        </span>
+      </a>
+
+      <!-- 03 REGISTER BEFORE LOGIN / PLANS AFTER LOGIN -->
+      @if (!isLoggedIn) {
+
+        <a
+          routerLink="/register"
+          routerLinkActive="is-active"
+          class="astro-bottom-nav-item"
+          (click)="mobileProfileChoiceOpen = false"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10" cy="7" r="3.5"/>
+            <path d="M3.5 20v-2a6.5 6.5 0 0 1 13 0v2"/>
+            <path d="M19 9v7"/>
+            <path d="M15.5 12.5h7"/>
+          </svg>
+          <span>
+            {{ currentLang === 'ta' ? 'பதிவு' : 'Register' }}
+          </span>
+        </a>
+
+      } @else {
+
+        <a
+          routerLink="/plans"
+          routerLinkActive="is-active"
+          class="astro-bottom-nav-item"
+          (click)="mobileProfileChoiceOpen = false"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8Z"/>
+            <path d="M5 19h14"/>
+          </svg>
+          <span>
+            {{ currentLang === 'ta' ? 'திட்டங்கள்' : 'Plans' }}
+          </span>
+        </a>
+
+      }
+
+      <!-- 04 FAVORITES -->
+      <a
+        routerLink="/favorites"
+        routerLinkActive="is-active"
+        class="astro-bottom-nav-item"
+        (click)="mobileProfileChoiceOpen = false"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M20.8 8.7c0 4.5-8.8 10.7-8.8 10.7S3.2 13.2 3.2 8.7a4.6 4.6 0 0 1 8.8-1.8 4.6 4.6 0 0 1 8.8 1.8Z"
+          />
+        </svg>
+        <span>
+          {{ currentLang === 'ta' ? 'விருப்பங்கள்' : 'Favorites' }}
+        </span>
+      </a>
+
+      <!-- 05 PROFILE MENU AFTER LOGIN -->
+      @if (isLoggedIn) {
+
+        <div class="astro-mobile-profile-choice">
+
+          <button
+            type="button"
+            class="astro-bottom-nav-item astro-profile-choice-trigger"
+            (click)="mobileProfileChoiceOpen = !mobileProfileChoiceOpen"
+            [attr.aria-expanded]="mobileProfileChoiceOpen"
+            aria-controls="astro-profile-choice-menu"
+          >
+            <img
+              class="astro-bottom-avatar"
+              [src]="memberAvatar"
+              (error)="onAvatarError($event)"
+              alt=""
+              width="27"
+              height="27"
+            />
+            <span>
+              {{ currentLang === 'ta' ? 'சுயவிவரம்' : 'Profile' }}
+            </span>
+          </button>
+
+          @if (mobileProfileChoiceOpen) {
+
+            <div
+              id="astro-profile-choice-menu"
+              class="astro-profile-choice-menu"
+              aria-label="Profile options"
+            >
+
+              <!-- PROFILE -->
+              <a
+                routerLink="/my-biodata"
+                (click)="mobileProfileChoiceOpen = false"
+              >
+                <span aria-hidden="true">👤</span>
+                <span>
+                  {{ currentLang === 'ta'
+                    ? 'என் சுயவிவரம்'
+                    : 'My Profile' }}
+                </span>
+              </a>
+
+              <!-- DASHBOARD OR APPROVAL FLOW -->
+              <a
+                [routerLink]="
+                  mobileAccountStage === 'approved'
+                    ? '/dashboard'
+                    : mobileAccountStage === 'pending'
+                      ? '/approval-pending'
+                      : '/biodata'
+                "
+                (click)="mobileProfileChoiceOpen = false"
+              >
+                <span aria-hidden="true">▦</span>
+                <span>
+                  @if (mobileAccountStage === 'approved') {
+                    {{ currentLang === 'ta'
+                      ? 'டாஷ்போர்டு'
+                      : 'Dashboard' }}
+                  } @else if (mobileAccountStage === 'pending') {
+                    {{ currentLang === 'ta'
+                      ? 'ஒப்புதல் நிலை'
+                      : 'Approval Status' }}
+                  } @else {
+                    {{ currentLang === 'ta'
+                      ? 'பயோடேட்டா'
+                      : 'Continue Biodata' }}
+                  }
+                </span>
+              </a>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    </nav>
+  }
+
+  <!-- DESKTOP FOOTER -->
   @if (showFooter) {
+
     <footer class="site-footer">
+
       <div class="footer-inner">
-        <div class="footer-about"><div class="footer-mark"><img src="assets/malogo.png" width="64" height="48" alt=""/><strong>Astro Alliance <small>MATRIMONY</small></strong></div><p>{{ t.footer.aboutText }}</p></div>
-        <div class="footer-links"><h3>{{ t.footer.quickLinks }}</h3><a routerLink="/">{{ t.footer.home }}</a><a routerLink="/free-search">{{ t.footer.profiles }}</a><a routerLink="/plans">{{ t.footer.plans }}</a><a routerLink="/terms">{{ t.footer.terms }}</a></div>
-        <div class="footer-links"><h3>{{ t.footer.contact }}</h3><a routerLink="/contact-us">{{ t.footer.contactus }}</a><a routerLink="/privacy-policy">{{ t.footer.privacypolicy }}</a><a href="tel:+919042111424">{{ t.footer.phone }}</a><a href="mailto:astroalliance7@gmail.com">{{ t.footer.email }}</a><a href="https://wa.me/919042111424" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a></div>
+
+        <div class="footer-about">
+          <div class="footer-mark">
+            <img
+              src="assets/malogo.png"
+              width="64"
+              height="48"
+              alt=""
+            />
+
+            <strong>
+              Astro Alliance
+              <small>MATRIMONY</small>
+            </strong>
+          </div>
+
+          <p>{{ t.footer.aboutText }}</p>
+        </div>
+
+        <div class="footer-links">
+          <h3>{{ t.footer.quickLinks }}</h3>
+
+          <a routerLink="/">{{ t.footer.home }}</a>
+          <a routerLink="/free-search">{{ t.footer.profiles }}</a>
+          <a routerLink="/plans">{{ t.footer.plans }}</a>
+          <a routerLink="/terms">{{ t.footer.terms }}</a>
+        </div>
+
+        <div class="footer-links">
+          <h3>{{ t.footer.contact }}</h3>
+
+          <a routerLink="/contact-us">{{ t.footer.contactus }}</a>
+          <a routerLink="/privacy-policy">{{ t.footer.privacypolicy }}</a>
+          <a href="tel:+919042111424">{{ t.footer.phone }}</a>
+          <a href="mailto:astroalliance7@gmail.com">
+            {{ t.footer.email }}
+          </a>
+          <a
+            href="https://wa.me/919042111424"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            WhatsApp ↗
+          </a>
+        </div>
+
       </div>
-      <div class="footer-bottom"><span>{{ t.footer.copyright }}</span><span>{{ t.footer.location }}</span></div>
+
+      <div class="footer-bottom">
+        <span>{{ t.footer.copyright }}</span>
+        <span>{{ t.footer.location }}</span>
+      </div>
+
     </footer>
   }
+
 </div>

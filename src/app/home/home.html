@@ -116,7 +116,259 @@
   </div>
 </section>
 
-<app-home-discovery />
+<!-- Recently approved profiles: separate component. Desktop and mobile styles live there. -->
+<app-home-discovery mode="recent" />
+
+
+
+
+
+
+
+<!-- ==========================================
+     ASTRO ALLIANCE COMMUNITY DIRECTORY
+========================================== -->
+
+<section
+  class="astro-community-section"
+  [class.tamil-section]="currentLang === 'ta'"
+  aria-labelledby="community-title"
+>
+  <div class="astro-community-container">
+
+    <!-- HEADING -->
+  
+<div class="astro-community-heading">
+
+  <!-- DESKTOP HEADING -->
+  <div class="community-desktop-heading">
+
+    <span class="community-kicker">
+      {{ currentLang === 'ta'
+        ? 'ஆஸ்ட்ரோ அலையன்ஸ் மேட்ரிமோனி'
+        : 'ASTRO ALLIANCE MATRIMONY' }}
+    </span>
+
+    <h2 id="community-title">
+      {{ currentLang === 'ta'
+        ? 'உங்கள் சமூகத்தில் வாழ்க்கைத் துணையைத் தேடுங்கள்'
+        : 'Find your match by community' }}
+    </h2>
+
+    <p>
+      {{ currentLang === 'ta'
+        ? 'உங்கள் விருப்பத்திற்கு ஏற்ற திருமண வரன்களை பல்வேறு சமூகங்களில் கண்டறியுங்கள்.'
+        : 'Discover meaningful matrimonial connections across communities.' }}
+    </p>
+
+  </div>
+
+  <!-- MOBILE HEADING -->
+  <div class="community-mobile-heading">
+
+    <h2>
+      {{ currentLang === 'ta'
+        ? 'சமூகம் வாரியாக தேடுங்கள்'
+        : 'Find by Community' }}
+    </h2>
+
+    <p>
+      {{ currentLang === 'ta'
+        ? 'உங்கள் சமூகத்தில் உள்ள வரன்களை கண்டறியுங்கள்.'
+        : 'Explore profiles from your community.' }}
+    </p>
+
+  </div>
+
+</div>
+
+
+    <!-- SEARCH BAR -->
+    <div class="astro-community-toolbar">
+
+      <div class="community-total">
+        <span class="community-total-dot"></span>
+
+        {{ filteredCommunities.length }}
+
+        {{ currentLang === 'ta'
+          ? 'சமூகங்கள்'
+          : 'Communities' }}
+      </div>
+
+      <div class="community-search-box">
+        <span class="community-search-icon"
+              aria-hidden="true">
+          ⌕
+        </span>
+
+        <input
+          type="search"
+          [placeholder]="currentLang === 'ta'
+            ? 'சமூகத்தைத் தேடுங்கள்...'
+            : 'Search communities...'"
+          [attr.aria-label]="currentLang === 'ta'
+            ? 'சமூகத்தைத் தேடுங்கள்'
+            : 'Search communities'"
+          [value]="communitySearch"
+          (input)="onCommunitySearch($any($event.target).value)"
+        />
+      </div>
+
+    </div>
+
+    <!-- COMMUNITY DIRECTORY — 34 names; LIVE COUNTS FROM BACKEND -->
+    <div class="astro-community-grid">
+      @for (community of visibleCommunities; track community.nameEn) {
+        <a
+          class="astro-community-card"
+          routerLink="/free-search"
+          [queryParams]="{ caste: community.nameEn }"
+          [attr.aria-label]="(currentLang === 'ta' ? community.nameTa : community.nameEn) + ' profiles'"
+        >
+          <!-- This background is only revealed by hover CSS on desktop. -->
+          <div class="community-card-image" aria-hidden="true"></div>
+          <div class="community-card-overlay" aria-hidden="true"></div>
+          <div class="community-card-content">
+            <h3 class="community-card-name">
+              {{ currentLang === 'ta' ? community.nameTa : community.nameEn }}
+            </h3>
+            <div class="community-card-footer">
+       
+
+
+<span class="community-profile-count">
+  {{ getCommunityCount(community.nameEn) | number }} Profiles
+</span>
+            </div>
+          </div>
+        </a>
+      } @empty {
+        <p class="community-empty">
+          {{ currentLang === 'ta' ? 'பொருந்தும் சமூகங்கள் இல்லை.' : 'No matching communities found.' }}
+        </p>
+      }
+    </div>
+
+    
+<!-- DESKTOP SHOW MORE -->
+
+@if (!communitySearch.trim() && filteredCommunities.length > 12) {
+  <div class="community-desktop-more">
+    <button
+      type="button"
+      (click)="toggleDesktopCommunities()"
+      [attr.aria-expanded]="showAllDesktopCommunities"
+    >
+      {{ showAllDesktopCommunities
+        ? 'Show Less'
+        : 'Show More Communities' }}
+
+      <span aria-hidden="true">
+        {{ showAllDesktopCommunities ? '↑' : '↓' }}
+      </span>
+    </button>
+  </div>
+}
+
+@if (!communitySearch.trim() && filteredCommunities.length > 6) {
+  <div class="community-mobile-more">
+    <button
+      type="button"
+      (click)="toggleMobileCommunities()"
+      [attr.aria-expanded]="showAllMobileCommunities"
+    >
+      {{ showAllMobileCommunities
+        ? 'Show Less'
+        : 'Show More Communities' }}
+
+      <span aria-hidden="true">
+        {{ showAllMobileCommunities ? '↑' : '↓' }}
+      </span>
+    </button>
+  </div>
+}
+
+
+    <!-- SELECTED COMMUNITY -->
+    <div class="astro-community-bottom">
+
+      <div class="community-selected-info">
+
+        <span>
+          {{ currentLang === 'ta'
+            ? 'தேர்ந்தெடுக்கப்பட்ட சமூகம்'
+            : 'SELECTED COMMUNITY' }}
+        </span>
+
+        <strong>
+          @if (selectedCommunity) {
+
+            {{ currentLang === 'ta'
+              ? selectedCommunity.nameTa
+              : selectedCommunity.nameEn }}
+
+          } @else {
+
+            {{ currentLang === 'ta'
+              ? 'அனைத்து சமூகங்கள்'
+              : 'All Communities' }}
+
+          }
+        </strong>
+
+      </div>
+
+      <a
+        class="community-explore-btn"
+        routerLink="/free-search"
+        [queryParams]="selectedCommunity
+          ? { caste: selectedCommunity.nameEn }
+          : {}"
+      >
+        {{ currentLang === 'ta'
+          ? 'வரன்களைப் பார்க்க'
+          : 'Explore Profiles' }}
+
+        <span aria-hidden="true">↗</span>
+      </a>
+
+    </div>
+
+  </div>
+</section>
+
+
+
+
+<!-- MORE PROFILES YOU MAY LIKE — SAME REUSABLE COMPONENT -->
+<app-home-discovery mode="recommended" />
+
+<!-- MOBILE APP SECTION: sample wedding imagery is inspiration, not verified success claims. -->
+<section class="astro-mobile-success-stories" aria-labelledby="success-heading">
+  <div class="astro-mobile-section-title">
+    <h2 id="success-heading">
+      {{ currentLang === 'ta' ? 'திருமணக் கொண்டாட்டங்கள்' : 'Wedding Inspiration' }}
+    </h2>
+    <a routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு' : 'Register' }} →</a>
+  </div>
+  <div class="astro-success-story-scroll">
+    @for (photo of storyPhotos; track photo.id) {
+      <article class="astro-success-story-card">
+        <img [src]="photo.src" [alt]="photo.alt" loading="lazy" />
+        <div class="astro-success-story-overlay">
+          <strong>{{ currentLang === 'ta' ? photo.captionTa : photo.captionEn }}</strong>
+          <span>{{ currentLang === 'ta' ? 'மாதிரிப் புகைப்படம்' : 'Illustrative photo' }}</span>
+        </div>
+      </article>
+    }
+  </div>
+  <p class="astro-sample-note">
+    {{ currentLang === 'ta'
+      ? 'இவை எடுத்துக்காட்டுப் புகைப்படங்கள்; உறுதிப்படுத்தப்பட்ட வெற்றிக் கதைகள் அல்ல.'
+      : 'Illustrative wedding photos — not verified Astro Alliance success stories.' }}
+  </p>
+</section>
 
 
 
@@ -303,198 +555,6 @@
 
   </div>
 </section>
-
-
-
-
-<!-- ==========================================
-     ASTRO ALLIANCE COMMUNITY DIRECTORY
-========================================== -->
-
-<section
-  class="astro-community-section"
-  [class.tamil-section]="currentLang === 'ta'"
-  aria-labelledby="community-title"
->
-  <div class="astro-community-container">
-
-    <!-- HEADING -->
-    <div class="astro-community-heading">
-
-      <span class="community-kicker">
-        {{ currentLang === 'ta'
-          ? 'ஆஸ்ட்ரோ அலையன்ஸ் மேட்ரிமோனி'
-          : 'ASTRO ALLIANCE MATRIMONY' }}
-      </span>
-
-      <h2 id="community-title">
-        {{ currentLang === 'ta'
-          ? 'உங்கள் சமூகத்தில் வாழ்க்கைத் துணையைத் தேடுங்கள்'
-          : 'Find your match by community' }}
-      </h2>
-
-      <p>
-        {{ currentLang === 'ta'
-          ? 'உங்கள் விருப்பத்திற்கு ஏற்ற திருமண வரன்களை பல்வேறு சமூகங்களில் கண்டறியுங்கள்.'
-          : 'Discover meaningful matrimonial connections across communities.' }}
-      </p>
-
-    </div>
-
-    <!-- SEARCH BAR -->
-    <div class="astro-community-toolbar">
-
-      <div class="community-total">
-        <span class="community-total-dot"></span>
-
-        {{ filteredCommunities.length }}
-
-        {{ currentLang === 'ta'
-          ? 'சமூகங்கள்'
-          : 'Communities' }}
-      </div>
-
-      <div class="community-search-box">
-        <span class="community-search-icon"
-              aria-hidden="true">
-          ⌕
-        </span>
-
-        <input
-          type="search"
-          [placeholder]="currentLang === 'ta'
-            ? 'சமூகத்தைத் தேடுங்கள்...'
-            : 'Search communities...'"
-          [attr.aria-label]="currentLang === 'ta'
-            ? 'சமூகத்தைத் தேடுங்கள்'
-            : 'Search communities'"
-          [value]="communitySearch"
-          (input)="onCommunitySearch($any($event.target).value)"
-        />
-      </div>
-
-    </div>
-
-    <!-- COMMUNITY GRID -->
-    <div class="astro-community-grid">
-
-      @for (
-        community of filteredCommunities;
-        track community.nameEn
-      ) {
-
-        <button
-          type="button"
-          class="astro-community-card"
-          [class.is-selected]="selectedCommunity?.nameEn === community.nameEn"
-          [attr.aria-pressed]="selectedCommunity?.nameEn === community.nameEn"
-          (click)="selectCommunity(community)"
-        >
-
-          <!-- SAME IMAGE FOR ALL 34 CARDS -->
-          <div
-            class="community-card-image"
-            aria-hidden="true"
-          ></div>
-
-          <!-- DARK GRADIENT -->
-          <div
-            class="community-card-overlay"
-            aria-hidden="true"
-          ></div>
-
-          <!-- CARD CONTENT -->
-          <div class="community-card-content">
-
-            <h3 class="community-card-name">
-              {{ currentLang === 'ta'
-                ? community.nameTa
-                : community.nameEn }}
-            </h3>
-
-            <div class="community-card-footer">
-
-              <span class="community-profile-count">
-                {{ community.count | number }}
-
-                {{ currentLang === 'ta'
-                  ? 'சுயவிவரங்கள்'
-                  : 'Profiles' }}
-              </span>
-
-              <span class="community-card-arrow"
-                    aria-hidden="true">
-                ↗
-              </span>
-
-            </div>
-
-          </div>
-
-        </button>
-
-      } @empty {
-
-        <div class="community-empty">
-          {{ currentLang === 'ta'
-            ? 'பொருந்தும் சமூகங்கள் இல்லை.'
-            : 'No matching communities found.' }}
-        </div>
-
-      }
-
-    </div>
-
-    <!-- SELECTED COMMUNITY -->
-    <div class="astro-community-bottom">
-
-      <div class="community-selected-info">
-
-        <span>
-          {{ currentLang === 'ta'
-            ? 'தேர்ந்தெடுக்கப்பட்ட சமூகம்'
-            : 'SELECTED COMMUNITY' }}
-        </span>
-
-        <strong>
-          @if (selectedCommunity) {
-
-            {{ currentLang === 'ta'
-              ? selectedCommunity.nameTa
-              : selectedCommunity.nameEn }}
-
-          } @else {
-
-            {{ currentLang === 'ta'
-              ? 'அனைத்து சமூகங்கள்'
-              : 'All Communities' }}
-
-          }
-        </strong>
-
-      </div>
-
-      <a
-        class="community-explore-btn"
-        routerLink="/free-search"
-        [queryParams]="selectedCommunity
-          ? { caste: selectedCommunity.nameEn }
-          : {}"
-      >
-        {{ currentLang === 'ta'
-          ? 'வரன்களைப் பார்க்க'
-          : 'Explore Profiles' }}
-
-        <span aria-hidden="true">↗</span>
-      </a>
-
-    </div>
-
-  </div>
-</section>
-
-
-
 
 <!-- ==========================================
      ASTRO ALLIANCE TESTIMONIALS
