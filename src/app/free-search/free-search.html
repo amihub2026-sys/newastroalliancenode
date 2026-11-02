@@ -1,179 +1,64 @@
 
+<!-- ==========================================
+     ASTRO ALLIANCE MATRIMONY
+     FREE SEARCH PAGE
+========================================== -->
+
 <main class="free-search-page">
 
-  <!-- ==========================================
-       PAGE HEADER
-  ========================================== -->
+  <!-- ======================================
+       PREMIUM MAROON & GOLD PAGE BANNER
+  ====================================== -->
 
-  <header class="search-hero">
+  <header class="search-hero astro-search-banner">
 
-    <span class="hero-eyebrow">
-      {{ text(
-        'ASTRO ALLIANCE MATRIMONY',
-        'ஆஸ்ட்ரோ அலையன்ஸ் திருமணச் சேவை'
-      ) }}
-    </span>
+    <div class="astro-banner-decoration" aria-hidden="true">
+      <span class="astro-wedding-rings">♡</span>
+    </div>
 
-    <h1>
-      {{ memberMode
-        ? text(
-            'Find Your Match',
-            'உங்களுக்கேற்ற வாழ்க்கைத்துணையைத் தேடுக'
-          )
-        : text(
-            'Find a meaningful connection',
-            'உங்களுக்கேற்ற வாழ்க்கைத்துணையைக் கண்டறியுங்கள்'
-          )
-      }}
-    </h1>
+    <div class="astro-banner-content">
 
-    <p>
-      {{ memberMode
-        ? text(
-            'See approved profiles matched to your account. Basic details are free; private details require an eligible plan.',
-            'உங்கள் கணக்கிற்கு ஏற்ற அங்கீகரிக்கப்பட்ட சுயவிவரங்களைக் காண்க. அடிப்படை விவரங்கள் இலவசம்; தனிப்பட்ட விவரங்களுக்குத் தகுதியான திட்டம் தேவை.'
-          )
-        : text(
-            'Search approved profiles for free. No registration needed to view basic details.',
-            'அங்கீகரிக்கப்பட்ட சுயவிவரங்களின் அடிப்படை விவரங்களைப் பதிவின்றி இலவசமாகத் தேடலாம்.'
-          )
-      }}
-    </p>
+      <span class="astro-banner-eyebrow">
+        ASTRO ALLIANCE MATRIMONY
+      </span>
+
+      <h1>
+        {{ text('Free Search', 'இலவச வரன் தேடல்') }}
+      </h1>
+
+      <p>
+        {{ text(
+          'Discover verified matches for your happy married life',
+          'உங்கள் இனிய திருமண வாழ்க்கைக்கான அங்கீகரிக்கப்பட்ட வரன்களை கண்டறியுங்கள்'
+        ) }}
+      </p>
+
+    </div>
 
   </header>
 
 
-  <!-- ==========================================
-       SEARCH TOOLBAR
-  ========================================== -->
-
-  <div class="search-toolbar" role="search">
-
-    <!-- KEYWORD SEARCH -->
-    <label class="keyword-field">
-
-      <span>
-        {{ text(
-          'Profile ID or keyword',
-          'சுயவிவர எண் அல்லது தேடல் சொல்'
-        ) }}
-      </span>
-
-      <input
-        type="search"
-        [ngModel]="search"
-        (ngModelChange)="search = $event; onSearchChange()"
-        [placeholder]="text(
-          'Search by ID, education, job, location...',
-          'எண், கல்வி, வேலை, ஊர்...'
-        )"
-        autocomplete="off"
-      />
-
-    </label>
-
-
-    <!-- SORT RESULTS -->
-    <label class="sort-field">
-
-      <span>
-        {{ text(
-          'Sort results',
-          'வரிசைப்படுத்து'
-        ) }}
-      </span>
-
-      <select
-        [(ngModel)]="sortBy"
-        (ngModelChange)="onSortChange()"
-      >
-
-        <option value="recent">
-          {{ text(
-            'Recently updated',
-            'சமீபத்தில் புதுப்பிக்கப்பட்டவை'
-          ) }}
-        </option>
-
-        <option value="ageAsc">
-          {{ text(
-            'Age: low to high',
-            'வயது: குறைவு முதல்'
-          ) }}
-        </option>
-
-        <option value="ageDesc">
-          {{ text(
-            'Age: high to low',
-            'வயது: அதிகம் முதல்'
-          ) }}
-        </option>
-
-        @if (hasHobbies) {
-          <option value="hobbies">
-            {{ text(
-              'Most shared hobbies',
-              'அதிகம் பொருந்தும் விருப்பங்கள்'
-            ) }}
-          </option>
-        }
-
-      </select>
-
-    </label>
-
-
-    <!-- MOBILE FILTER BUTTON -->
-    <button
-      type="button"
-      class="mobile-filters"
-      [attr.aria-expanded]="mobileFilterOpen"
-      (click)="mobileFilterOpen = !mobileFilterOpen"
-    >
-      ☷ {{ text('Filters', 'வடிகட்டிகள்') }}
-
-      @if (activeFilters) {
-        <span>({{ activeFilters }})</span>
-      }
-
-    </button>
-
-
-    <!-- RESET -->
-    <button
-      type="button"
-      class="reset-button"
-      (click)="reset()"
-    >
-      {{ text('Clear all', 'அனைத்தையும் நீக்கு') }}
-    </button>
-
-  </div>
-
-
-  <!-- ==========================================
-       SEARCH LAYOUT
-  ========================================== -->
+  <!-- ======================================
+       MAIN SEARCH LAYOUT
+  ====================================== -->
 
   <div class="search-layout">
 
+    <!-- MOBILE FILTER BACKDROP -->
 
-    <!-- MOBILE BACKDROP -->
     @if (mobileFilterOpen) {
-
       <button
         type="button"
         class="mobile-backdrop"
         [attr.aria-label]="text('Close filters', 'மூடுக')"
         (click)="mobileFilterOpen = false"
       ></button>
-
     }
 
 
-    <!-- ==========================================
+    <!-- ====================================
          LEFT FILTER SIDEBAR
-    ========================================== -->
+    ==================================== -->
 
     <aside
       class="filters-column"
@@ -201,9 +86,9 @@
     </aside>
 
 
-    <!-- ==========================================
+    <!-- ====================================
          RIGHT RESULTS SECTION
-    ========================================== -->
+    ==================================== -->
 
     <section
       class="results-column"
@@ -213,11 +98,20 @@
       )"
     >
 
+      <!-- ==================================
+           MATCHING PROFILES HEADING
+      ================================== -->
 
-      <!-- RESULTS HEADING -->
       <div class="result-heading">
 
-        <div>
+        <div class="result-heading-content">
+
+          <span class="results-eyebrow">
+            {{ text(
+              'DISCOVER YOUR MATCH',
+              'உங்கள் வரனை கண்டறியுங்கள்'
+            ) }}
+          </span>
 
           <h2>
             {{ text(
@@ -236,18 +130,136 @@
         </div>
 
         @if (!loading && !error) {
-
           <span class="count">
             {{ results.length }}
             {{ text('results', 'முடிவுகள்') }}
           </span>
-
         }
 
       </div>
 
 
-      <!-- ACTIVE FILTERS -->
+      <!-- ==================================
+           SEARCH TOOLBAR
+           INSIDE MATCHING PROFILES
+      ================================== -->
+
+      <div class="search-toolbar" role="search">
+
+        <!-- KEYWORD SEARCH -->
+
+        <label class="keyword-field">
+
+          <span>
+            {{ text(
+              'Profile ID or keyword',
+              'சுயவிவர எண் அல்லது தேடல் சொல்'
+            ) }}
+          </span>
+
+          <input
+            type="search"
+            [ngModel]="search"
+            (ngModelChange)="search = $event; onSearchChange()"
+            [placeholder]="text(
+              'Search by ID, education, job, location...',
+              'எண், கல்வி, வேலை, ஊர்...'
+            )"
+            autocomplete="off"
+          />
+
+        </label>
+
+
+        <!-- SORT RESULTS -->
+
+        <label class="sort-field">
+
+          <span>
+            {{ text(
+              'Sort results',
+              'வரிசைப்படுத்து'
+            ) }}
+          </span>
+
+          <select
+            [(ngModel)]="sortBy"
+            (ngModelChange)="onSortChange()"
+          >
+
+            <option value="recent">
+              {{ text(
+                'Recently updated',
+                'சமீபத்தில் புதுப்பிக்கப்பட்டவை'
+              ) }}
+            </option>
+
+            <option value="ageAsc">
+              {{ text(
+                'Age: low to high',
+                'வயது: குறைவு முதல்'
+              ) }}
+            </option>
+
+            <option value="ageDesc">
+              {{ text(
+                'Age: high to low',
+                'வயது: அதிகம் முதல்'
+              ) }}
+            </option>
+
+            @if (hasHobbies) {
+              <option value="hobbies">
+                {{ text(
+                  'Most shared hobbies',
+                  'அதிகம் பொருந்தும் விருப்பங்கள்'
+                ) }}
+              </option>
+            }
+
+          </select>
+
+        </label>
+
+
+        <!-- MOBILE FILTER BUTTON -->
+
+        <button
+          type="button"
+          class="mobile-filters"
+          [attr.aria-expanded]="mobileFilterOpen"
+          (click)="mobileFilterOpen = !mobileFilterOpen"
+        >
+
+          ☷ {{ text('Filters', 'வடிகட்டிகள்') }}
+
+          @if (activeFilters) {
+            <span>({{ activeFilters }})</span>
+          }
+
+        </button>
+
+
+        <!-- CLEAR ALL -->
+
+        <button
+          type="button"
+          class="reset-button"
+          (click)="reset()"
+        >
+          {{ text(
+            'Clear all',
+            'அனைத்தையும் நீக்கு'
+          ) }}
+        </button>
+
+      </div>
+
+
+      <!-- ==================================
+           ACTIVE FILTER SUMMARY
+      ================================== -->
+
       @if (activeFilters > 0) {
 
         <div class="active-summary">
@@ -272,9 +284,9 @@
       }
 
 
-      <!-- ==========================================
+      <!-- ==================================
            LOADING STATE
-      ========================================== -->
+      ================================== -->
 
       @if (loading) {
 
@@ -297,9 +309,9 @@
       }
 
 
-      <!-- ==========================================
-           ERROR STATE
-      ========================================== -->
+      <!-- ==================================
+           API ERROR STATE
+      ================================== -->
 
       @else if (error) {
 
@@ -334,9 +346,9 @@
       }
 
 
-      <!-- ==========================================
+      <!-- ==================================
            MEMBER GENDER REQUIRED
-      ========================================== -->
+      ================================== -->
 
       @else if (memberMode && !requiredGender) {
 
@@ -369,9 +381,9 @@
       }
 
 
-      <!-- ==========================================
+      <!-- ==================================
            EMPTY RESULTS
-      ========================================== -->
+      ================================== -->
 
       @else if (!results.length) {
 
@@ -406,13 +418,14 @@
       }
 
 
-      <!-- ==========================================
+      <!-- ==================================
            PROFILE RESULTS
-      ========================================== -->
+      ================================== -->
 
       @else {
 
-        <!-- PROFILE CARDS -->
+        <!-- PROFILE CARD GRID -->
+
         <div
           class="results-grid"
           aria-live="polite"
@@ -436,10 +449,9 @@
         </div>
 
 
-        <!-- ==========================================
+        <!-- ==================================
              SHOW MORE PROFILES
-             APPEND NEXT PROFILES BELOW
-        ========================================== -->
+        ================================== -->
 
         @if (results.length > displayed) {
 
@@ -465,9 +477,10 @@
         }
 
 
-        <!-- ==========================================
-             MEMBER REGISTRATION CALLOUT
-        ========================================== -->
+        <!-- ==================================
+             REGISTRATION CALLOUT
+             GUEST USERS ONLY
+        ================================== -->
 
         @if (!memberMode) {
 

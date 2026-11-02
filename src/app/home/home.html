@@ -1,4 +1,70 @@
 <section class="hero" [class.tamil-mode]="currentLang === 'ta'">
+
+  
+<!-- ==========================================
+     DESKTOP VIDEO HERO
+     HIDDEN ON MOBILE
+========================================== -->
+
+<div class="astro-desktop-video-hero">
+
+  <!-- BACKGROUND VIDEO -->
+
+<video
+  class="astro-hero-video"
+  autoplay
+  muted
+  loop
+  playsinline
+  preload="auto"
+  aria-hidden="true"
+>
+  <source
+    src="/assets/astro-hero.mp4"
+    type="video/mp4"
+  />
+</video>
+
+
+  <!-- DARK GRADIENT FOR TEXT READABILITY -->
+  <div class="astro-video-overlay"></div>
+
+  <!-- EXISTING HERO TITLE AND BUTTONS -->
+  <div class="astro-video-content">
+
+    <h1 class="astro-video-title">
+      {{ t.hero[0].title1 }}
+      <span>{{ t.hero[0].title2 }}</span>
+    </h1>
+
+    <div class="astro-video-actions">
+
+      <a
+        routerLink="/free-search"
+        class="astro-video-primary"
+      >
+        {{ currentLang === 'ta'
+          ? 'இலவச தேடல்'
+          : 'Free Search' }}
+        <span aria-hidden="true">↗</span>
+      </a>
+
+      <a
+        routerLink="/register"
+        class="astro-video-secondary"
+      >
+        {{ currentLang === 'ta'
+          ? 'பதிவு செய்யுங்கள்'
+          : 'Register' }}
+        <span aria-hidden="true">↗</span>
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
   <div
     class="hero-slide"
     [class.active]="currentSlide === 0"

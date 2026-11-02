@@ -1,0 +1,97 @@
+
+/* TWO PROFILE CARDS PER ROW — MOBILE */
+
+@media (max-width: 600px) {
+
+  :host {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .aa-match-card,
+  .aa-match-card.is-compact {
+    height: 255px;
+    border-radius: 12px;
+  }
+
+  .aa-match-photo > img {
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .aa-approved {
+    top: 7px;
+    left: 7px;
+    gap: 4px;
+    padding: 4px 7px;
+    font-size: 8px;
+  }
+
+  .aa-approved-icon {
+    width: 14px;
+    height: 14px;
+    font-size: 9px;
+  }
+
+  .aa-member-details,
+  .aa-match-card.is-compact .aa-member-details {
+    padding: 55px 9px 10px;
+  }
+
+  .aa-member-heading {
+    gap: 4px;
+  }
+
+  .aa-member-name,
+  .aa-match-card.is-compact .aa-member-name {
+    font-size: 16px;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  .aa-member-age {
+    font-size: 10px;
+  }
+
+  /* Small but usable mobile action */
+
+  .aa-match-actions {
+    margin-top: 9px;
+  }
+
+  .aa-view-profile {
+    width: 100%;
+    min-height: 37px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    font-size: 10px;
+  }
+
+  .aa-view-arrow {
+    width: 23px;
+    height: 23px;
+    flex-basis: 23px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  /* INITIALS PLACEHOLDER */
+
+  .aa-placeholder-orbit {
+    width: 125px;
+    height: 125px;
+  }
+
+  .aa-placeholder-monogram {
+    width: 65px;
+    height: 65px;
+    font-size: 25px;
+  }
+
+  .aa-placeholder-brand {
+    margin-top: 14px;
+    font-size: 6px;
+    letter-spacing: 1.5px;
+  }
+}
