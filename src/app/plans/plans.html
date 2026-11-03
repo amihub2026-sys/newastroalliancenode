@@ -52,7 +52,56 @@
         <p>{{ tr.section.subtitle }}</p>
       </div>
 
-      <div class="plan-selection-note" *ngIf="selectedPlanName" role="status"><strong>{{ selectedPlanName }}</strong> — {{currentLang === 'ta' ? 'திட்டம் தேர்வானது; உறுப்பினர் அணுகல் வழங்கப்படவில்லை. நிர்வாகியிடம் செயல்படுத்தக் கோரவும்.' : 'Selected, not activated. Ask the administrator to assign this plan. Basic profiles remain free to view.'}}<button *ngIf="lockedProfileId" type="button" (click)="goToProfile()">{{currentLang === 'ta' ? 'அடிப்படை சுயவிவரத்தைப் பார்க்க' : 'View free basic profile'}} →</button></div>
+      
+<div
+  class="plan-selection-note"
+  *ngIf="selectedPlanName"
+  role="status"
+>
+  <strong>{{ selectedPlanName }}</strong>
+
+  <span>
+    {{
+      currentLang === 'ta'
+        ? 'சோதனை உறுப்பினர் திட்டம் செயல்படுத்தப்பட்டது.'
+        : 'Test membership activated successfully.'
+    }}
+  </span>
+
+  <button
+    *ngIf="lockedProfileId"
+    type="button"
+    (click)="goToProfile()"
+  >
+    {{
+      currentLang === 'ta'
+        ? 'சுயவிவரத்தைப் பார்க்க'
+        : 'View Profile'
+    }}
+    →
+  </button>
+</div>
+
+
+<div
+  *ngIf="isLoadingDbPlans"
+  class="plans-loading"
+  role="status"
+>
+  Loading membership plans...
+</div>
+
+<div
+  *ngIf="!isLoadingDbPlans && plans.length === 0"
+  class="plans-loading"
+>
+  Unable to display membership plans.
+
+  <button type="button" (click)="loadDbPlans()">
+    Try Again
+  </button>
+</div>
+
       <div class="plans-grid">
       <div
   class="plan-card"
@@ -60,7 +109,15 @@
   [ngClass]="'plan-' + i"
   [class.popular]="plan.popular"
   [class.disabled-plan]="plan.disabled"
+  [class.current-plan]="activePlanId === plan.code"
 >
+<div class="plan-glow"></div>
+<div
+  class="current-plan-badge"
+  *ngIf="activePlanId === plan.code"
+>
+  ✓ {{ currentLang === 'ta' ? 'தற்போதைய திட்டம்' : 'Current Plan' }}
+</div>
           <div class="plan-glow"></div>
 
           <span class="tag" *ngIf="plan.popular">
@@ -90,12 +147,25 @@
             </li>
           </ul>
 
-         <button
+
+
+
+<button
   class="choose-btn"
+  type="button"
   (click)="selectPlan(plan)"
-  [disabled]="plan.disabled || isSavingPlan">
-            {{ tr.labels.choosePlan }}
-          </button>
+  [disabled]="plan.disabled || isSavingPlan || activePlanId === plan.code"
+>
+  {{
+    activePlanId === plan.code
+      ? (currentLang === 'ta' ? 'செயலில் உள்ளது' : 'Active Plan')
+      : isSavingPlan && activatingPlanId === plan.code
+        ? (currentLang === 'ta' ? 'செயல்படுத்தப்படுகிறது...' : 'Activating...')
+        : tr.labels.choosePlan
+  }}
+</button>
+
+
         </div>
       </div>
     </div>

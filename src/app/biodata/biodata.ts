@@ -2673,7 +2673,12 @@ if (this.editProfileId) {
   );
 }
 
-this.snackbar.success('Biodata saved successfully');
+
+this.snackbar.success(
+  this.currentLang === 'ta'
+    ? 'உங்கள் சுயவிவரம் சமர்ப்பிக்கப்பட்டது. நிர்வாகியின் ஒப்புதலுக்காக காத்திருக்கவும்.'
+    : 'Biodata submitted successfully. Please wait for admin approval.'
+);
 // Submission changes the server-side approval flow. Never reuse an earlier
 // status response from the short navigation cache.
 this.auth.invalidateFlowStatus();

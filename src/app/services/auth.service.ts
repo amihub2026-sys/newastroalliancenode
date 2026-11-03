@@ -26,6 +26,7 @@ login(data: { mobile: string; dob: string }) {
 }
 
 getUserFlowStatus(forceRefresh = false): Observable<any> {
+  
   const token = typeof localStorage !== 'undefined' ? localStorage.getItem('matrimony_token') || '' : '';
   if (!forceRefresh && this.cachedFlow?.token === token &&
       Date.now() - this.cachedFlow.at < this.flowStatusCacheMs) {
@@ -34,7 +35,12 @@ getUserFlowStatus(forceRefresh = false): Observable<any> {
   if (!forceRefresh && this.pendingFlow?.token === token) {
     return this.pendingFlow.request;
   }
-  const request = this.http.get<any>(`${environment.apiUrl}/profile/flow-status`).pipe(
+  const request = this.http.get<any>(
+  `${environment.apiUrl}/profile/flow-status`,
+  {
+    headers: this.getAuthHeaders()
+  }
+).pipe(
     tap(response => {
       if (response?.success && response?.data &&
           (typeof localStorage === 'undefined' || localStorage.getItem('matrimony_token') === token)) {

@@ -10,10 +10,14 @@ import { AuthService } from '../services/auth.service';
 import { PublicProfile, toPublicProfile } from '../free-search/models/search.models';
 import { PhotoLightbox } from '../shared/photo-lightbox/photo-lightbox';
 import { PublicProfileValuePipe } from '../shared/public-profile-value.pipe';
+import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 @Component({selector:'app-public-profile',standalone:true,imports:[CommonModule,RouterLink,PublicProfileValuePipe,PhotoLightbox],templateUrl:'./public-profile.html',styleUrl:'./public-profile.scss'})
 export class PublicProfilePreview implements OnInit, OnDestroy {
   private route=inject(ActivatedRoute);
+  private router = inject(Router);
+  
   private http=inject(HttpClient);
   private language=inject(LanguageService);
   private auth=inject(AuthService);
@@ -29,6 +33,9 @@ export class PublicProfilePreview implements OnInit, OnDestroy {
   photoFailed = false;
   loading=true;
   error=false;
+  hasActiveMembership = false;
+membershipApproved = false;
+checkingMembership = false;
   get lang(){return this.language.currentLang;}
   get loggedIn(){return this.auth.isLoggedIn();}
   t(en:string,ta:string){return this.lang==='ta'?ta:en;}
@@ -49,6 +56,80 @@ export class PublicProfilePreview implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void { this.request?.unsubscribe(); }
   retry(): void { this.loadProfile(this.profileCode); }
+
+
+ 
+  
+private async openFullProfileIfEligible(
+  code: string
+): Promise<void> {
+
+  this.hasActiveMembership = false;
+  this.membershipApproved = false;
+  this.checkingMembership = false;
+
+  if (!this.loggedIn) {
+    return;
+  }
+
+  const token =
+    localStorage.getItem('matrimony_token');
+
+  if (!token) {
+    return;
+  }
+
+  this.checkingMembership = true;
+
+  try {
+    const response: any = await firstValueFrom(
+      this.http.get(
+        `${environment.apiUrl}/profile/flow-status`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+    );
+
+    if (this.profileCode !== code) {
+      return;
+    }
+
+    const flow = response?.data;
+
+    this.membershipApproved =
+      flow?.adminApproved === true;
+
+    this.hasActiveMembership =
+      flow?.adminApproved === true &&
+      flow?.hasActivePlan === true;
+
+    if (this.hasActiveMembership) {
+      await this.router.navigate(
+        ['/profile-view'],
+        {
+          queryParams: {
+            profileId: code
+          }
+        }
+      );
+    }
+
+  } catch (error) {
+    console.error(
+      'Membership check failed:',
+      error
+    );
+
+  } finally {
+    if (this.profileCode === code) {
+      this.checkingMembership = false;
+    }
+  }
+}
+
 
   private loadProfile(code: string): void {
     this.request?.unsubscribe();
@@ -77,7 +158,14 @@ export class PublicProfilePreview implements OnInit, OnDestroy {
         );
       })
     ).subscribe({
-      next: profile => { this.profile = profile; this.loading = false; },
+      next: profile => {
+  this.profile = profile;
+  this.loading = false;
+
+  if (profile) {
+    void this.openFullProfileIfEligible(code);
+  }
+},
       error: err => {
         this.loading = false; this.error = true;
         this.errorKind = err?.name === 'TimeoutError' ? 'timeout' :

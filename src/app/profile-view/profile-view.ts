@@ -138,6 +138,16 @@ openPhoto(photoUrl?: string) {
   this.openGalleryPopup = false;
   this.openFullPhoto = images.length > 0;
 }
+
+private getMemberHeaders(): {
+  Authorization: string;
+} {
+  const token = localStorage.getItem('matrimony_token');
+
+  return {
+    Authorization: `Bearer ${token || ''}`
+  };
+}
 closePhoto() {
   this.openFullPhoto = false;
   this.selectedPhotoUrl = '';
@@ -771,18 +781,72 @@ private getStoredLoggedInUser(): any | null {
 
   contactUnlocked = false;
   unlockingContact = false;
+  
+
+
   async unlockContact(): Promise<void> {
-    if (this.unlockingContact) return;
-    this.unlockingContact = true;
-    try {
-      const user = this.getStoredLoggedInUser();
-      await firstValueFrom(this.http.post(`${this.apiUrl}/profile-access/contact`, {
-        viewerUserId: user?.user_id, viewedProfileId: this.loadedProfileRow?._id
-      }));
-      await this.loadProfile();
-    } catch (error: any) { this.snackbar.error(error?.error?.message || 'Unable to unlock contact'); }
-    finally { this.unlockingContact = false; this.cdr.detectChanges(); }
+  if (this.unlockingContact) return;
+
+  if (!this.unlocked) {
+    this.snackbar.error(
+      this.currentLang === 'ta'
+        ? 'முழு சுயவிவரத்தைப் பார்க்க செயலில் உள்ள உறுப்பினர் திட்டம் தேவை.'
+        : 'Active membership is required to view full biodata.'
+    );
+    return;
   }
+
+  this.unlockingContact = true;
+
+  try {
+    const response: any = await firstValueFrom(
+      this.http.post(
+        `${this.apiUrl}/profile-access/contact`,
+        {
+          viewedProfileId: this.selectedProfileId
+        },
+        {
+          headers: this.getMemberHeaders()
+        }
+      )
+    );
+
+    if (!response?.contactUnlocked) {
+      throw new Error('Contact access not authorized');
+    }
+
+    await this.loadProfile();
+
+    this.snackbar.success(
+      this.currentLang === 'ta'
+        ? 'ஏற்கப்பட்ட விருப்பக் கோரிக்கையின் தொடர்பு விவரங்கள் திறக்கப்பட்டன.'
+        : 'Accepted interest contact details are available.'
+    );
+
+  } catch (error: any) {
+    const code = error?.error?.code;
+
+    this.snackbar.error(
+      code === 'INTEREST_NOT_ACCEPTED'
+        ? (
+            this.currentLang === 'ta'
+              ? 'விருப்பக் கோரிக்கை ஏற்கப்பட்ட பிறகே தொடர்பு விவரங்களைப் பார்க்க முடியும்.'
+              : 'Contact details are available only after an interest is accepted.'
+          )
+        : (
+            this.currentLang === 'ta'
+              ? 'தொடர்பு விவரங்களை அணுக முடியவில்லை.'
+              : 'Unable to access contact details.'
+          )
+    );
+
+  } finally {
+    this.unlockingContact = false;
+    this.cdr.detectChanges();
+  }
+}
+
+
   async loadProfile(): Promise<void> {
     this.isLoading = true;
     this.profile = null;
@@ -804,7 +868,12 @@ private getStoredLoggedInUser(): any | null {
       }
 
 const res: any = await firstValueFrom(
- this.http.get(`${this.apiUrl}/profile/view/${this.selectedProfileId}`)
+this.http.get(
+  `${this.apiUrl}/profile/view/${encodeURIComponent(this.selectedProfileId)}`,
+  {
+    headers: this.getMemberHeaders()
+  }
+)
 );
 
 let data: any = res?.profile || res?.data || res;
@@ -819,8 +888,8 @@ this.loadedProfileRow = data;
 
 this.profile = this.mapRowToProfile(data);
 
-this.unlocked = true;
-this.contactUnlocked = !!data.contact_unlocked;
+this.unlocked = res?.profileUnlocked === true;
+this.contactUnlocked = res?.contactUnlocked === true;
 // await this.loadAstroMatch();
 await this.checkInterest();
 await this.checkShortlist();
@@ -940,37 +1009,106 @@ goToLoginOrRegister(): void {
 
   this.goToPlans();
 }
+
+
+
 async sendInterest(): Promise<void> {
   if (!this.profile || !this.loadedProfileRow) return;
 
-  const loggedInUser = this.getStoredLoggedInUser();
+  const token = localStorage.getItem('matrimony_token');
 
-  if (!loggedInUser?.user_id) {
-    this.snackbar.error('Please login first');
-    this.router.navigate(['/login']);
+  if (!token) {
+    this.snackbar.error(
+      this.currentLang === 'ta'
+        ? 'முதலில் உள்நுழையவும்.'
+        : 'Please log in first.'
+    );
+
+    await this.router.navigate(['/login']);
+    return;
+  }
+
+  if (this.alreadySent) {
+    this.snackbar.error(
+      this.currentLang === 'ta'
+        ? 'இந்த சுயவிவரத்திற்கு ஏற்கனவே விருப்பக் கோரிக்கை அனுப்பியுள்ளீர்கள்.'
+        : 'You have already sent interest to this profile.'
+    );
     return;
   }
 
   try {
-    await firstValueFrom(
-this.http.post(`${this.apiUrl}/interests`, {
-  fromUserId: loggedInUser.user_id,
-  toUser:
-    this.loadedProfileRow.userId ||
-    this.loadedProfileRow.user_id
-})
+    const result: any = await firstValueFrom(
+      this.http.post(
+        `${this.apiUrl}/interests`,
+        {
+          toProfileId: this.selectedProfileId
+        },
+        {
+          headers: this.getMemberHeaders()
+        }
+      )
     );
+
+    if (!result?.success) {
+      throw new Error('Interest was not confirmed');
+    }
 
     this.alreadySent = true;
     this.interestStatus = 'pending';
-    this.snackbar.success('Interest sent successfully');
+
+    this.snackbar.success(
+      this.currentLang === 'ta'
+        ? 'விருப்பக் கோரிக்கை அனுப்பப்பட்டது. ஒரு விருப்ப எண்ணிக்கை பயன்படுத்தப்பட்டது.'
+        : 'Interest sent successfully. 1 interest credit used.'
+    );
+
     this.cdr.detectChanges();
+
   } catch (error: any) {
-    this.alreadySent = true;
-    this.snackbar.error(error?.error?.message || 'You already sent interest to this profile');
+    const code = error?.error?.code;
+
+    const messages: Record<string, [string, string]> = {
+      ALREADY_SENT: [
+        'You have already sent interest to this profile.',
+        'இந்த சுயவிவரத்திற்கு ஏற்கனவே விருப்பக் கோரிக்கை அனுப்பியுள்ளீர்கள்.'
+      ],
+      NO_ACTIVE_PLAN: [
+        'Activate or renew your membership first.',
+        'முதலில் உறுப்பினர் திட்டத்தை செயல்படுத்தவும் அல்லது புதுப்பிக்கவும்.'
+      ],
+      INTEREST_LIMIT_REACHED: [
+        'Your interest credits are exhausted.',
+        'உங்கள் விருப்பக் கோரிக்கை எண்ணிக்கை முடிந்துவிட்டது.'
+      ],
+      PROFILE_NOT_APPROVED: [
+        'Your biodata must be approved first.',
+        'முதலில் உங்கள் பயோடேட்டா நிர்வாகியால் அங்கீகரிக்கப்பட வேண்டும்.'
+      ],
+      GENDER_NOT_ELIGIBLE: [
+        'You cannot send interest to this profile.',
+        'இந்த சுயவிவரத்திற்கு விருப்பக் கோரிக்கை அனுப்ப முடியாது.'
+      ]
+    };
+
+    const pair = messages[code] || [
+      'Unable to send interest. Please try again.',
+      'விருப்பக் கோரிக்கையை அனுப்ப முடியவில்லை. மீண்டும் முயற்சிக்கவும்.'
+    ];
+
+    if (code === 'ALREADY_SENT') {
+      this.alreadySent = true;
+    }
+
+    this.snackbar.error(
+      this.currentLang === 'ta' ? pair[1] : pair[0]
+    );
+
     this.cdr.detectChanges();
   }
 }
+
+
 async shortlistProfile(): Promise<void> {
   if (!this.profile || !this.loadedProfileRow) return;
 
@@ -999,25 +1137,39 @@ async shortlistProfile(): Promise<void> {
     this.cdr.detectChanges();
   }
 }
-async checkInterest() {
-  const user = this.getStoredLoggedInUser();
-  if (!user?.user_id || !this.loadedProfileRow?._id) return;
 
-  const res: any = await firstValueFrom(
-    this.http.get(`${this.apiUrl}/interests/check`, {
-params: {
-  fromUserId: user.user_id,
-  toUser:
-    this.loadedProfileRow.userId ||
-    this.loadedProfileRow.user_id
-}
-    })
-  );
 
-  this.alreadySent = !!res?.exists;
-  this.interestStatus = res?.status || '';
-  this.cdr.detectChanges();
+  async checkInterest(): Promise<void> {
+  const token = localStorage.getItem('matrimony_token');
+
+  if (!token || !this.selectedProfileId) {
+    return;
+  }
+
+  try {
+    const res: any = await firstValueFrom(
+      this.http.get(
+        `${this.apiUrl}/interests/check`,
+        {
+          headers: this.getMemberHeaders(),
+          params: {
+            toProfileId: this.selectedProfileId
+          }
+        }
+      )
+    );
+
+    this.alreadySent = !!res?.exists;
+    this.interestStatus = res?.status || '';
+
+    this.cdr.detectChanges();
+
+  } catch (error) {
+    console.error('Check interest failed:', error);
+  }
 }
+
+
 async checkShortlist() {
   const user = this.getStoredLoggedInUser();
   if (!user?.user_id || !this.loadedProfileRow?._id) return;

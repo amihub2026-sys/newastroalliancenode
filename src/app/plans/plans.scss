@@ -518,3 +518,70 @@
 }
 
 .plan-selection-note{margin:0 auto 22px;padding:18px 20px;max-width:780px;background:#fff7ee;border:1px solid #bd9c79;border-radius:14px;color:#4f303e;line-height:1.65}.plan-selection-note button{display:inline-flex;margin:8px 0 0 16px;padding:9px 16px;background:#842a4a;border:0;border-radius:10px;color:#fff;font-weight:700;cursor:pointer}@media(max-width:550px){.plan-selection-note button{margin-left:0;width:100%;justify-content:center}}
+
+
+
+.plans-loading {
+  padding: 35px 20px;
+  text-align: center;
+  color: #74183f;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.plans-loading button {
+  margin-left: 12px;
+  padding: 10px 18px;
+  background: #842a4a;
+  color: #fff;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+
+
+/* ACTIVE MEMBERSHIP CARD */
+
+.plan-card.current-plan {
+  border: 2px solid #27754a;
+  box-shadow:
+    0 14px 32px rgba(29, 104, 65, 0.13),
+    0 0 0 3px rgba(39, 117, 74, 0.08);
+}
+
+/* ACTIVE PLAN BADGE */
+
+.current-plan-badge {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 13px;
+  padding: 7px 12px;
+
+  border-radius: 999px;
+  background: #276846;
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* ACTIVE BUTTON */
+
+.current-plan .choose-btn,
+.current-plan .choose-btn:disabled {
+  background: #276846;
+  color: #ffffff;
+  opacity: 1;
+  cursor: default;
+}
+
+/* REMOVE POPULAR CARD OFFSET WHEN ACTIVE */
+
+.plan-card.current-plan.popular {
+  transform: none;
+}
