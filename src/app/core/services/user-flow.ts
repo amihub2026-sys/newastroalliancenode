@@ -121,37 +121,42 @@ export class UserFlowService {
         return this.state;
       }
 
-      this.state = {
-        ...this.state,
+      
+this.state = {
+  ...this.state,
 
-        user_id: this.getCurrentUserId(),
-        gender: flow.gender || '',
+  user_id: this.getCurrentUserId(),
+  gender: flow.gender || '',
 
-        biodata_completed:
-          flow.hasProfile === true &&
-          flow.profileStatus !== 'draft' &&
-          flow.profileStatus !== 'not_created',
+  biodata_completed:
+    flow.biodataCompleted === true,
 
-        payment_done:
-          flow.hasRegistrationPayment === true,
+  payment_done:
+    this.state.payment_done,
 
-        admin_approved:
-          flow.profileStatus === 'approved' &&
-          flow.isPublished === true,
+  admin_approved:
+    flow.adminApproved === true,
 
-        plan_active:
-          flow.hasRegistrationPayment === true,
+  plan_active:
+    flow.adminApproved === true &&
+    flow.hasActivePlan === true,
 
-        profile_status:
-          flow.profileStatus || '',
+  profile_status:
+    flow.profileStatus || '',
 
-        next_route:
-          flow.nextRoute || '/biodata',
+  next_route:
+    flow.nextRoute || '/biodata',
 
-        active_plan_code: '',
-        contacts_used: 0,
-        total_contacts_allowed: 0
-      };
+  active_plan_code:
+    flow.activePlanId || '',
+
+  contacts_used:
+    Number(flow.contactsUsed || 0),
+
+  total_contacts_allowed:
+    Number(flow.totalContactsAllowed || 0)
+};
+
 
       this.saveToStorage();
 
@@ -180,24 +185,26 @@ export class UserFlowService {
     }
   }
 
-  resetFlow(): void {
-    this.state = {
-      mode: 'NORMAL',
-      user_id: '',
-      gender: '',
-      biodata_completed: false,
-      payment_done: false,
-      admin_approved: false,
-      plan_active: false,
-      profile_status: '',
-      next_route: '/biodata',
-      active_plan_code: '',
-      contacts_used: 0,
-      total_contacts_allowed: 0
-    };
+ 
+resetFlow(): void {
+  this.state = {
+    mode: 'NORMAL',
+    user_id: '',
+    gender: '',
+    biodata_completed: false,
+    payment_done: false,
+    admin_approved: false,
+    plan_active: false,
+    profile_status: '',
+    next_route: '/biodata',
+    active_plan_code: '',
+    contacts_used: 0,
+    total_contacts_allowed: 0
+  };
 
-    this.saveToStorage();
-  }
+  this.saveToStorage();
+}
+
 
   private saveToStorage(): void {
     if (!this.isBrowser()) return;

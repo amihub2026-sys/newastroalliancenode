@@ -15,6 +15,9 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd } fro
 import { SnackbarComponent } from './shared/snackbar/snackbar';
 import { SnackbarService } from './shared/snackbar.service';
 
+
+import { MembershipReminderService } from './core/services/membership-reminder.service';
+
 type Language = 'en' | 'ta';
 
 @Component({
@@ -53,6 +56,8 @@ private confirmedStageToken = '';
 private lastMenuStatusCheck = 0;
 private menuStatusChecking = false;
 private readonly language = inject(LanguageService);
+private readonly membershipReminder =
+  inject(MembershipReminderService);
 get currentLang(): Language { return this.language.currentLang; }
 set currentLang(value: Language) { this.language.currentLang = value; }
 isNavigating = false;
@@ -133,6 +138,7 @@ hasBiodataStatus = false;
 
 constructor() {
   this.updateSiteChrome(this.router.url);
+  this.membershipReminder.start();
   if (this.isBrowser) {
 
 

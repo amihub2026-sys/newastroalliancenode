@@ -163,57 +163,79 @@
 
     <div class="hero-actions">
 
+
 <div class="interest-block">
 
-<button
-  class="primary-btn"
-  class="primary-btn"
-  [class.success-btn]="alreadySent"
-  [disabled]="alreadySent"
-  (click)="sendInterest()"
+  <button
+    type="button"
+    class="primary-btn"
+    [class.success-btn]="interestStatus === 'accepted'"
+    [disabled]="alreadySent || !unlocked"
+    (click)="sendInterest()"
+  >
+    {{
+      interestStatus === 'accepted'
+        ? (
+            currentLang === 'ta'
+              ? 'விருப்பக் கோரிக்கை ஏற்கப்பட்டது'
+              : 'Interest Accepted'
+          )
+        : interestStatus === 'rejected'
+          ? (
+              currentLang === 'ta'
+                ? 'விருப்பக் கோரிக்கை நிராகரிக்கப்பட்டது'
+                : 'Interest Rejected'
+            )
+          : alreadySent
+            ? (
+                currentLang === 'ta'
+                  ? 'விருப்பக் கோரிக்கை அனுப்பப்பட்டது'
+                  : 'Interest Sent'
+              )
+            : (
+                currentLang === 'ta'
+                  ? 'விருப்பக் கோரிக்கை அனுப்பவும்'
+                  : 'Send Interest'
+              )
+    }}
+  </button>
 
->
-  {{
-    alreadySent
-      ? (currentLang === 'ta'
-          ? 'ஆர்வம் அனுப்பப்பட்டது'
-          : 'Interest Sent')
-      : (currentLang === 'ta'
-          ? 'ஆர்வம் அனுப்பு'
-          : 'Send Interest')
-  }}
-</button>
+  <div
+    *ngIf="alreadySent"
+    class="interest-status-text"
+    [style.color]="
+      interestStatus === 'accepted'
+        ? '#16a34a'
+        : interestStatus === 'rejected'
+          ? '#dc2626'
+          : '#f59e0b'
+    "
+  >
 
-<div
-  class="interest-status-text"
-  *ngIf="alreadySent"
-  [style.color]="
-    interestStatus === 'accepted'
-      ? '#16a34a'
-      : interestStatus === 'rejected'
-      ? '#dc2626'
-      : '#f59e0b'
-  "
->
-{{
-  interestStatus === 'accepted'
-    ? (currentLang === 'ta'
-        ? '❤️ வாழ்த்துகள்! உங்கள் ஆர்வம் ஏற்றுக்கொள்ளப்பட்டது.'
-        : '❤️ Congratulations! Your interest was accepted.')
+    {{
+      interestStatus === 'accepted'
+        ? (
+            currentLang === 'ta'
+              ? '❤️ உங்கள் விருப்பக் கோரிக்கை ஏற்கப்பட்டது.'
+              : '❤️ Your interest was accepted.'
+          )
+        : interestStatus === 'rejected'
+          ? (
+              currentLang === 'ta'
+                ? 'உங்கள் விருப்பக் கோரிக்கை நிராகரிக்கப்பட்டது.'
+                : 'Your interest was rejected.'
+            )
+          : (
+              currentLang === 'ta'
+                ? '⏳ உங்கள் விருப்பக் கோரிக்கை பதிலுக்காக காத்திருக்கிறது.'
+                : '⏳ Waiting for a response to your interest.'
+            )
+    }}
 
-    : interestStatus === 'rejected'
-    ? (currentLang === 'ta'
-        ? '💔 மன்னிக்கவும்! உங்கள் ஆர்வம் நிராகரிக்கப்பட்டது.'
-        : '💔 Sorry! Your interest was rejected.')
-
-    : (currentLang === 'ta'
-        ? '⏳ உங்கள் ஆர்வ கோரிக்கை பதிலுக்காக காத்திருக்கிறது.'
-        : '⏳ Your interest request is waiting for response.')
-}}
+  </div>
 
 </div>
 
-</div>
 
 
 
@@ -540,82 +562,260 @@
         </div>
       </div>
 
-      <div class="detail-card">
-  <h2>{{ currentLang === 'ta' ? 'முகவரி விவரங்கள்' : 'Address Details' }}</h2>
+    
+<!-- =======================================
+     ADDRESS DETAILS
+======================================= -->
 
-<div *ngIf="unlocked" class="detail-list">
-  <div>
-    <span>{{ currentLang === 'ta' ? 'முகவரி' : 'Address' }}</span>
+<div class="detail-card">
 
-<strong>
-  {{ getText(p.address) || '-' }}
-</strong>
+  <h2>
+    {{
+      currentLang === 'ta'
+        ? 'முகவரி விவரங்கள்'
+        : 'Address Details'
+    }}
+  </h2>
+
+  <!-- GENERAL LOCATION AVAILABLE TO MEMBERS -->
+
+  <div class="detail-list">
+
+    <div>
+      <span>
+        {{ currentLang === 'ta' ? 'நகரம்' : 'City' }}
+      </span>
+
+      <strong>
+        {{ getCategoryText(p.city) || '-' }}
+      </strong>
+    </div>
+
+    <div>
+      <span>
+        {{ currentLang === 'ta' ? 'மாநிலம்' : 'State' }}
+      </span>
+
+      <strong>
+        {{ getCategoryText(p.state) || '-' }}
+      </strong>
+    </div>
+
+    <div>
+      <span>
+        {{ currentLang === 'ta' ? 'நாடு' : 'Country' }}
+      </span>
+
+      <strong>
+        {{ getCategoryText(p.country) || '-' }}
+      </strong>
+    </div>
+
   </div>
 
-  <div><span>{{ currentLang === 'ta' ? 'நகரம்' : 'City' }}</span><strong>{{ getCategoryText(p.city) || '-' }}</strong></div>
-  <div><span>{{ currentLang === 'ta' ? 'மாநிலம்' : 'State' }}</span><strong>{{ getCategoryText(p.state) || '-' }}</strong></div>
-  <div><span>{{ currentLang === 'ta' ? 'நாடு' : 'Country' }}</span><strong>{{ getCategoryText(p.country) || '-' }}</strong></div>
-</div>
+  <!-- EXACT ADDRESS ONLY AFTER ACCEPTANCE -->
 
- <div *ngIf="!unlocked" class="premium-lock-box">
-  <div class="lock-icon">💖</div>
-  {{ currentLang === 'ta' ? 'முகவரி மறைக்கப்பட்டுள்ளது' : 'Address Hidden' }}
-  <p>{{
-  currentLang === 'ta'
-    ? 'முழு முகவரி விவரங்களை பார்க்க உங்கள் திட்டத்தை மேம்படுத்தவும்.'
-    : 'Upgrade your plan to view full address details securely.'
-}}</p>
-  <button class="unlock-premium-btn" (click)="goToLoginOrRegister()">
-    {{ currentLang === 'ta' ? 'இப்போது திறக்கவும்' : 'Unlock Now' }}
-  </button>
-</div>
-</div>
-     <div class="detail-card contact-card">
-      <h2>
-  {{ currentLang === 'ta'
-    ? 'தொடர்பு விவரங்கள்'
-    : 'Contact Details'
-  }}
-</h2>
+  <div *ngIf="unlocked && contactUnlocked"
+       class="detail-list">
 
-<div *ngIf="contactUnlocked" class="detail-list">
+    <div>
+      <span>
+        {{
+          currentLang === 'ta'
+            ? 'முழு முகவரி'
+            : 'Full Address'
+        }}
+      </span>
 
-  <div>
-    <span>{{ currentLang === 'ta' ? 'மொபைல்' : 'Mobile' }}</span>
-<strong>
-  {{ p.mobile || '-' }}
-</strong>
+      <strong>
+        {{ getText(p.address) || '-' }}
+      </strong>
+    </div>
+
   </div>
 
-  <div>
-    <span>{{ currentLang === 'ta' ? 'கூடுதல் மொபைல்' : 'Additional Mobile' }}</span>
-<strong>
-  {{ p.additionalMobile || '-' }}
-</strong>
-  </div>
+  <!-- PRIVATE ADDRESS LOCK -->
 
-  <div>
-    <span>{{ currentLang === 'ta' ? 'மின்னஞ்சல்' : 'Email' }}</span>
-<strong>
-  {{ p.email || '-' }}
-</strong>
+  <div *ngIf="!contactUnlocked"
+       class="premium-lock-box">
+
+    <div class="lock-icon">🔒</div>
+
+    <h3>
+      {{
+        currentLang === 'ta'
+          ? 'முழு முகவரி பாதுகாக்கப்பட்டுள்ளது'
+          : 'Full Address Protected'
+      }}
+    </h3>
+
+    <p>
+      {{
+        currentLang === 'ta'
+          ? 'விருப்பக் கோரிக்கை ஏற்கப்பட்ட பிறகும் செயலில் உள்ள உறுப்பினர் திட்டம் இருக்கும்போதும் மட்டுமே முழு முகவரியைப் பார்க்க முடியும்.'
+          : 'The full address becomes available after an interest is accepted, while your membership remains active.'
+      }}
+    </p>
+
   </div>
 
 </div>
 
-       <div *ngIf="!contactUnlocked" class="premium-lock-box">
-  <div class="lock-icon">💖</div>
-  <h3>{{ currentLang === 'ta' ? 'தொடர்பு விவரங்கள் பூட்டப்பட்டுள்ளது' : 'Contact Details Locked' }}</h3>
-  <p>{{
-  currentLang === 'ta'
-    ? 'தொலைபேசி எண் மற்றும் மின்னஞ்சலை பார்க்க திட்டத்தை மேம்படுத்தவும்.'
-    : 'Use one contact credit to view phone number and email.'
-}}</p>
-  <button class="unlock-premium-btn" (click)="unlockContact()" [disabled]="unlockingContact">
-    {{ currentLang === 'ta' ? 'திட்டங்களை பார்க்க' : 'Unlock contact' }}
-  </button>
+
+
+     
+<!-- =======================================
+     CONTACT DETAILS
+======================================= -->
+
+<div class="detail-card contact-card">
+
+  <h2>
+    {{
+      currentLang === 'ta'
+        ? 'தொடர்பு விவரங்கள்'
+        : 'Contact Details'
+    }}
+  </h2>
+
+  <!-- ACCEPTED INTEREST + ACTIVE PLAN -->
+
+  <div
+    *ngIf="unlocked && contactUnlocked"
+    class="detail-list"
+  >
+
+    <!-- MOBILE -->
+
+    <div>
+      <span>
+        {{
+          currentLang === 'ta'
+            ? 'மொபைல் எண்'
+            : 'Mobile Number'
+        }}
+      </span>
+
+      <strong>
+        {{ p.mobile || '-' }}
+      </strong>
+    </div>
+
+    <!-- ADDITIONAL MOBILE -->
+
+    <div>
+      <span>
+        {{
+          currentLang === 'ta'
+            ? 'கூடுதல் மொபைல்'
+            : 'Additional Mobile'
+        }}
+      </span>
+
+      <strong>
+        {{ p.additionalMobile || '-' }}
+      </strong>
+    </div>
+
+    <!-- EMAIL -->
+
+    <div>
+      <span>
+        {{
+          currentLang === 'ta'
+            ? 'மின்னஞ்சல்'
+            : 'Email'
+        }}
+      </span>
+
+      <strong>
+        {{ p.email || '-' }}
+      </strong>
+    </div>
+
+    <p class="contact-access-note">
+      {{
+        currentLang === 'ta'
+          ? 'ஏற்கப்பட்ட விருப்பக் கோரிக்கையின் மூலம் தொடர்பு விவரங்களைப் பார்க்க அனுமதி வழங்கப்பட்டுள்ளது.'
+          : 'Contact access is authorized through an accepted interest.'
+      }}
+    </p>
+
+  </div>
+
+  <!-- CONTACT LOCKED -->
+
+  <div
+    *ngIf="!contactUnlocked"
+    class="premium-lock-box"
+  >
+
+    <div class="lock-icon">🔒</div>
+
+    <h3>
+      {{
+        currentLang === 'ta'
+          ? 'தொடர்பு விவரங்கள் பாதுகாக்கப்பட்டுள்ளன'
+          : 'Contact Details Protected'
+      }}
+    </h3>
+
+    <p>
+      {{
+        currentLang === 'ta'
+          ? 'தொடர்பு விவரங்களைப் பார்க்க முதலில் விருப்பக் கோரிக்கை ஏற்கப்பட வேண்டும். விருப்பக் கோரிக்கை அனுப்பும்போது மட்டுமே ஒரு எண்ணிக்கை கழிக்கப்படும்.'
+          : 'Contact details become available after an interest is accepted. One credit is used when sending the interest, not when viewing contacts.'
+      }}
+    </p>
+
+    <!-- SHOW ACTION ONLY IF INTEREST ACCEPTED -->
+
+    <button
+      *ngIf="interestStatus === 'accepted' && unlocked"
+      type="button"
+      class="unlock-premium-btn"
+      (click)="unlockContact()"
+      [disabled]="unlockingContact"
+    >
+      {{
+        unlockingContact
+          ? (
+              currentLang === 'ta'
+                ? 'சரிபார்க்கப்படுகிறது...'
+                : 'Verifying...'
+            )
+          : (
+              currentLang === 'ta'
+                ? 'தொடர்பு அனுமதியைச் சரிபார்க்கவும்'
+                : 'Verify Contact Access'
+            )
+      }}
+    </button>
+
+    <!-- INTEREST PENDING -->
+
+    <p *ngIf="interestStatus === 'pending'">
+      {{
+        currentLang === 'ta'
+          ? 'உங்கள் விருப்பக் கோரிக்கை பதிலுக்காக காத்திருக்கிறது.'
+          : 'Your interest request is awaiting a response.'
+      }}
+    </p>
+
+    <!-- INTEREST NOT SENT -->
+
+    <p *ngIf="!alreadySent && interestStatus !== 'accepted'">
+      {{
+        currentLang === 'ta'
+          ? 'தொடர்பு விவரங்களை அணுக இந்தச் சுயவிவரத்திற்கு விருப்பக் கோரிக்கை அனுப்பலாம்.'
+          : 'You can send an interest to this profile to request contact access.'
+      }}
+    </p>
+
+  </div>
+
 </div>
-      </div>
+
 
       <div class="detail-card">
         <h2>{{ currentLang === 'ta' ? 'ஜாதக பொருத்தம்' : 'Astrology Match' }}</h2>
