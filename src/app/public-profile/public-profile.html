@@ -1,520 +1,198 @@
+<main class="aa-page">
+  <div class="aa-page-inner">
+    <!-- <a class="aa-back" [routerLink]="backRoute" [queryParams]="returnState ? { s: returnState } : null">
+      <span aria-hidden="true">←</span> {{ t('Back to Free Search', 'இலவச தேடலுக்குத் திரும்புக') }}
+    </a> -->
 
-<main class="aa-preview-page">
-  <div class="aa-preview-container">
-
-    <!-- BACK BUTTON -->
-    <a
-      [routerLink]="backRoute"
-      [queryParams]="returnState ? { s: returnState } : null"
-      class="aa-back"
-    >
-      ←
-      {{
-        t(
-          'Back to Free Search',
-          'இலவச தேடலுக்குத் திரும்புக'
-        )
-      }}
-    </a>
-
-    <!-- LOADING -->
     @if (loading) {
-      <div class="aa-message" role="status">
-        {{
-          t(
-            'Loading profile…',
-            'சுயவிவரம் ஏற்றப்படுகிறது…'
-          )
-        }}
-      </div>
-    }
+      <div class="profile-heart-loader"
+     role="status"
+     aria-label="Loading profile">
 
-    <!-- ERROR -->
-    @else if (error) {
+  <span class="heart">♥</span>
+  <span class="heart">♥</span>
+  <span class="heart">♥</span>
+  <span class="heart">♥</span>
+  <span class="heart">♥</span>
+  <span class="heart">♥</span>
+
+</div>
+    } @else if (error) {
       <div class="aa-message" role="alert">
-
-        <h2>
-          {{
-            t(
-              'Could not load this profile',
-              'இந்தச் சுயவிவரத்தை ஏற்ற முடியவில்லை'
-            )
-          }}
-        </h2>
-
-        <p>
-          {{
-            errorKind === 'timeout'
-              ? t(
-                  'The server is taking too long.',
-                  'சேவையகம் பதிலளிக்க அதிக நேரம் எடுக்கிறது.'
-                )
-              : t(
-                  'Check the backend connection and try again.',
-                  'பின்தள இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.'
-                )
-          }}
-        </p>
-
-        <button
-          type="button"
-          class="aa-retry"
-          (click)="retry()"
-        >
-          {{
-            t(
-              'Try Again',
-              'மீண்டும் முயற்சிக்கவும்'
-            )
-          }}
-        </button>
-
+        <h2>{{ t('Could not load this profile', 'இந்தச் சுயவிவரத்தை ஏற்ற முடியவில்லை') }}</h2>
+        <p>{{ errorKind === 'timeout' ? t('The server is taking too long.', 'சேவையகம் அதிக நேரம் எடுக்கிறது.') : t('Please check your connection.', 'இணைப்பைச் சரிபார்க்கவும்.') }}</p>
+        <button type="button" class="aa-action-primary" (click)="retry()">{{ t('Try Again', 'மீண்டும் முயற்சிக்கவும்') }}</button>
       </div>
-    }
-
-    <!-- PROFILE NOT FOUND -->
-    @else if (!profile) {
-      <div class="aa-message">
-        {{
-          t(
-            'This approved profile is not available.',
-            'இந்த அங்கீகரிக்கப்பட்ட சுயவிவரம் கிடைக்கவில்லை.'
-          )
-        }}
-      </div>
-    }
-
-    <!-- PUBLIC PROFILE -->
-    @else {
-
-      <!-- PROFILE HEADER -->
-      <div class="aa-preview-heading">
-
-        <div>
-          <span class="aa-eyebrow">
-            {{
-              t(
-                'MATRIMONY PROFILE',
-                'திருமண சுயவிவரம்'
-              )
-            }}
-          </span>
-
-          <h1>{{ displayName }}</h1>
-
-          <p class="aa-id-label">
-            {{
-              t(
-                'Profile ID',
-                'சுயவிவர எண்'
-              )
-            }}:
-            {{ profile.code }}
-          </p>
-
-          <p>
-            {{
-              t(
-                'Basic profile — free to view',
-                'அடிப்படை சுயவிவரம் — இலவசமாகப் பார்க்கலாம்'
-              )
-            }}
-          </p>
-        </div>
-
-        <span class="aa-approval">
-          ✓
-          {{
-            t(
-              'Approved',
-              'அங்கீகரிக்கப்பட்டது'
-            )
-          }}
-        </span>
-
-      </div>
-
-      <!-- PROFILE GRID -->
-      <div class="aa-preview-grid">
-
-        <!-- PROFILE PHOTO -->
-        <aside class="aa-preview-photo">
-
-          <button
-            type="button"
-            class="aa-open-photo"
-            (click)="openPhoto()"
-            [attr.aria-label]="t(
-              'View full photo',
-              'முழு புகைப்படம் பார்க்க'
-            )"
-          >
-            <img
-              [src]="photoFailed ? avatar : (profile.image || avatar)"
-              [alt]="t(
-                'Profile image',
-                'சுயவிவரப் படம்'
-              )"
-              (error)="onImageError($event)"
-            />
-
-            <span class="aa-photo-zoom">
-              {{
-                t(
-                  'View full photo',
-                  'முழு படம் பார்க்க'
-                )
-              }}
-              ⤢
-            </span>
-          </button>
-
-          <div class="aa-photo-label">
-            {{ profile.code }}
+    } @else if (!profile) {
+      <div class="aa-message">{{ t('Approved profile not available.', 'அங்கீகரிக்கப்பட்ட சுயவிவரம் கிடைக்கவில்லை.') }}</div>
+    } @else {
+      <div class="aa-main-card">
+        <aside class="aa-left">
+          <div class="aa-photo-card">
+            <div class="aa-photo-frame">
+              <button type="button" class="aa-photo-button" (click)="openPhoto()" [attr.aria-label]="t('View full photo', 'முழு புகைப்படம் பார்க்க')">
+                <img [src]="photoFailed ? avatar : (profile.image || avatar)" [alt]="displayName" (error)="onImageError($event)" />
+              </button>
+              <span class="aa-approved"><span aria-hidden="true">✓</span> {{ t('Approved', 'அங்கீகரிக்கப்பட்டது') }}</span>
+              <div class="aa-photo-id">{{ profile.code }}</div>
+            </div>
           </div>
-
+          <div class="aa-profile-actions">
+            <button type="button" class="aa-action-primary" (click)="sendInterest()" [disabled]="sendingInterest || !!interestStatus">
+              <span aria-hidden="true">♡</span>
+              {{ interestStatus === 'accepted' ? t('Interest Accepted', 'விருப்பம் ஏற்கப்பட்டது') : interestStatus === 'pending' ? t('Interest Pending', 'விருப்பம் நிலுவையில்') : interestStatus === 'rejected' ? t('Interest Rejected', 'விருப்பம் நிராகரிக்கப்பட்டது') : sendingInterest ? t('Sending…', 'அனுப்பப்படுகிறது…') : t('Send Interest', 'விருப்பம் தெரிவிக்கவும்') }}
+            </button>
+            <button type="button" class="aa-action-outline" (click)="shortlistProfile()" [disabled]="shortlistBusy || alreadyShortlisted">
+              <span aria-hidden="true">♧</span>
+              {{ alreadyShortlisted ? t('Shortlisted', 'பிடித்ததில் சேர்க்கப்பட்டது') : t('Shortlist', 'பிடித்ததில் சேர்') }}
+            </button>
+          </div>
         </aside>
 
-        <!-- BASIC PROFILE DETAILS -->
-        <section class="aa-preview-info">
-
-          <h2>
-            {{
-              t(
-                'Basic Details',
-                'அடிப்படை விவரங்கள்'
-              )
-            }}
-          </h2>
-
-          <div class="aa-info-grid">
-
-            @if (profile.age) {
-              <div>
-                <small>
-                  {{ t('Age', 'வயது') }}
-                </small>
-                <strong>
-                  {{ profile.age }}
-                </strong>
-              </div>
-            }
-
-            @if (profile.gender) {
-              <div>
-                <small>
-                  {{ t('Gender', 'பாலினம்') }}
-                </small>
-                <strong>
-                  {{
-                    profile.gender
-                      | publicValue:lang
-                  }}
-                </strong>
-              </div>
-            }
-
-            @if (profile.heightCm) {
-              <div>
-                <small>
-                  {{ t('Height', 'உயரம்') }}
-                </small>
-                <strong>
-                  {{ profile.heightCm }} cm
-                </strong>
-              </div>
-            }
-
-            @if (profile.maritalStatus) {
-              <div>
-                <small>
-                  {{
-                    t(
-                      'Marital Status',
-                      'திருமண நிலை'
-                    )
-                  }}
-                </small>
-                <strong>
-                  {{
-                    profile.maritalStatus
-                      | publicValue:lang
-                  }}
-                </strong>
-              </div>
-            }
-
-            @if (profile.religion) {
-              <div>
-                <small>
-                  {{ t('Religion', 'மதம்') }}
-                </small>
-                <strong>
-                  {{
-                    profile.religion
-                      | publicValue:lang
-                  }}
-                </strong>
-              </div>
-            }
-
-            @if (profile.caste) {
-              <div>
-                <small>
-                  {{ t('Community', 'சமூகம்') }}
-                </small>
-                <strong>
-                  {{
-                    profile.caste
-                      | publicValue:lang
-                  }}
-                </strong>
-              </div>
-            }
-
-            @if (profile.city) {
-              <div>
-                <small>
-                  {{ t('City', 'நகரம்') }}
-                </small>
-                <strong>
-                  {{
-                    profile.city
-                      | publicValue:lang
-                  }}
-                </strong>
-              </div>
-            }
-
-            @if (profile.district) {
-              <div>
-                <small>
-                  {{ t('District', 'மாவட்டம்') }}
-                </small>
-                <strong>
-                  {{
-                    profile.district
-                      | publicValue:lang
-                  }}
-                </strong>
-              </div>
-            }
-
-            @if (profile.state) {
-              <div>
-                <small>
-                  {{ t('State', 'மாநிலம்') }}
-                </small>
-                <strong>
-                  {{
-                    profile.state
-                      | publicValue:lang
-                  }}
-                </strong>
-              </div>
-            }
-
-            @if (profile.nakshatra) {
-              <div>
-                <small>
-                  {{ t('Star', 'நட்சத்திரம்') }}
-                </small>
-                <strong>
-                  {{
-                    profile.nakshatra
-                      | publicValue:lang
-                  }}
-                </strong>
-              </div>
-            }
-
-            @if (profile.education) {
-              <div>
-                <small>
-                  {{ t('Education', 'கல்வி') }}
-                </small>
-                <strong>
-                  {{
-                    profile.education
-                      | publicValue:lang
-                  }}
-                </strong>
-              </div>
-            }
-
-            @if (profile.profession) {
-              <div>
-                <small>
-                  {{ t('Occupation', 'தொழில்') }}
-                </small>
-                <strong>
-                  {{
-                    profile.profession
-                      | publicValue:lang
-                  }}
-                </strong>
-              </div>
-            }
-
+        <section class="aa-right">
+          <div class="aa-hero">
+            <div class="aa-ring-art" aria-hidden="true"><i></i><i></i></div>
+            <div class="aa-kicker"><span>✧</span> {{ t('Matrimony Profile', 'திருமண சுயவிவரம்') }}</div>
+            <div class="aa-name-line"><h1>{{ displayName }}</h1><span class="aa-name-check" aria-label="Approved">✓</span></div>
+            <div class="aa-hero-facts">
+              @if (profile.age) { <span>{{ t('Age', 'வயது') }}: <strong>{{ profile.age }}</strong></span> }
+              @if (profile.gender) { <span>{{ t('Gender', 'பாலினம்') }}: <strong>{{ profile.gender | publicValue:lang }}</strong></span> }
+              @if (profile.maritalStatus) { <span>{{ t('Marital Status', 'திருமண நிலை') }}: <strong>{{ profile.maritalStatus | publicValue:lang }}</strong></span> }
+              @if (profile.city) { <span>{{ t('City', 'நகரம்') }}: <strong>{{ profile.city | publicValue:lang }}</strong></span> }
+            </div>
           </div>
 
-          <!-- PRIVACY MESSAGE -->
-          <div class="aa-privacy-note">
-            <span aria-hidden="true">🔒</span>
+          <nav class="aa-tab-list" [attr.aria-label]="t('Profile details', 'சுயவிவர விவரங்கள்')">
+            <button type="button" [class.active]="activeTab === 'basic'" [attr.aria-pressed]="activeTab === 'basic'" (click)="selectTab('basic')">
+              <span class="aa-tab-icon" aria-hidden="true">♙</span><span>{{ t('Basic Details', 'அடிப்படை விவரங்கள்') }}</span>
+            </button>
+            <button type="button" [class.active]="activeTab === 'family'" [attr.aria-pressed]="activeTab === 'family'" (click)="selectTab('family')">
+              <span class="aa-tab-icon" aria-hidden="true">♧</span><span>{{ t('Family Details', 'குடும்ப விவரங்கள்') }}</span>
+              @if (!hasActiveMembership && !checkingMembership) {
+  <span class="aa-premium-mark" aria-label="Premium">♛</span>
+}
+            </button>
+            <button type="button" [class.active]="activeTab === 'horoscope'" [attr.aria-pressed]="activeTab === 'horoscope'" (click)="selectTab('horoscope')">
+              <span class="aa-tab-icon" aria-hidden="true">☼</span><span>{{ t('Horoscope Details', 'ஜாதக விவரங்கள்') }}</span>
+              @if (!hasActiveMembership && !checkingMembership) {
+  <span class="aa-premium-mark" aria-label="Premium">♛</span>
+}
+            </button>
+            <button type="button" [class.active]="activeTab === 'contact'" [attr.aria-pressed]="activeTab === 'contact'" (click)="selectTab('contact')">
+              <span class="aa-tab-icon" aria-hidden="true">{{ hasActiveMembership ? '♡' : '♙' }}</span><span>{{ t('Contact Details', 'தொடர்பு விவரங்கள்') }}</span>
+              @if (!hasActiveMembership && !checkingMembership) {
+  <span class="aa-premium-mark" aria-label="Premium">♛</span>
+}
+            </button>
+          </nav>
 
-            {{
-              t(
-                'Phone numbers, email and exact address are protected. They become available only after interest acceptance and while your membership is active.',
-                'தொலைபேசி எண்கள், மின்னஞ்சல் மற்றும் முழு முகவரி பாதுகாக்கப்பட்டுள்ளன. விருப்பக் கோரிக்கை ஏற்கப்பட்ட பிறகும் உங்கள் உறுப்பினர் திட்டம் செயலில் இருக்கும் போதும் மட்டுமே அவற்றைப் பார்க்க முடியும்.'
-              )
-            }}
+          <div class="aa-detail-panel">
+            @if (activeTab === 'basic') {
+              <h2 class="aa-panel-title"><span class="aa-title-symbol">●</span> {{ t('Basic Details', 'அடிப்படை விவரங்கள்') }}</h2>
+              <div class="aa-fields">
+                @if (profile.age) { <div class="aa-field"><span>{{ t('Age', 'வயது') }}</span><strong>{{ profile.age }}</strong></div> }
+                @if (profile.gender) { <div class="aa-field"><span>{{ t('Gender', 'பாலினம்') }}</span><strong>{{ profile.gender | publicValue:lang }}</strong></div> }
+                @if (profile.maritalStatus) { <div class="aa-field"><span>{{ t('Marital Status', 'திருமண நிலை') }}</span><strong>{{ profile.maritalStatus | publicValue:lang }}</strong></div> }
+                @if (profile.religion) { <div class="aa-field"><span>{{ t('Religion', 'மதம்') }}</span><strong>{{ profile.religion | publicValue:lang }}</strong></div> }
+                @if (profile.caste) { <div class="aa-field"><span>{{ t('Community', 'சமூகம்') }}</span><strong>{{ profile.caste | publicValue:lang }}</strong></div> }
+                @if (profile.city) { <div class="aa-field"><span>{{ t('City', 'நகரம்') }}</span><strong>{{ profile.city | publicValue:lang }}</strong></div> }
+                @if (profile.state) { <div class="aa-field"><span>{{ t('State', 'மாநிலம்') }}</span><strong>{{ profile.state | publicValue:lang }}</strong></div> }
+                @if (profile.nakshatra) { <div class="aa-field"><span>{{ t('Star', 'நட்சத்திரம்') }}</span><strong>{{ profile.nakshatra | publicValue:lang }}</strong></div> }
+                @if (profile.education) { <div class="aa-field"><span>{{ t('Education', 'கல்வி') }}</span><strong>{{ profile.education | publicValue:lang }}</strong></div> }
+                @if (profile.profession) { <div class="aa-field"><span>{{ t('Occupation', 'தொழில்') }}</span><strong>{{ profile.profession | publicValue:lang }}</strong></div> }
+                @if (profile.heightCm) { <div class="aa-field"><span>{{ t('Height', 'உயரம்') }}</span><strong>{{ profile.heightCm }} cm</strong></div> }
+                @if (profile.district) { <div class="aa-field"><span>{{ t('District', 'மாவட்டம்') }}</span><strong>{{ profile.district | publicValue:lang }}</strong></div> }
+              </div>
+              @if (hasActiveMembership && premiumProfile && extraBasicFields.length) {
+                <h3 class="aa-subhead">{{ t('Additional Personal, Career & Partner Details', 'கூடுதல் தனிப்பட்ட, தொழில் மற்றும் துணைவர் விவரங்கள்') }}</h3>
+                <div class="aa-fields">
+                  @for (field of extraBasicFields; track field.en) {
+                    <div class="aa-field"><span>{{ t(field.en, field.ta) }}</span><strong>{{ field.value }}</strong></div>
+                  }
+                </div>
+              }
+            } @else if (checkingMembership || loadingPremium) {
+              <div class="aa-state" role="status">{{ t('Verifying your membership and loading details…', 'உறுப்பினர் திட்டம் சரிபார்க்கப்படுகிறது…') }}</div>
+            } @else if (!hasActiveMembership || !premiumProfile) {
+              <div class="aa-state aa-premium-state">
+                <span class="aa-state-symbol" aria-hidden="true">♛</span>
+                <h2>{{ t('Premium Details', 'பிரீமியம் விவரங்கள்') }}</h2>
+                <p>{{ !loggedIn ? t('Register or log in to continue.', 'தொடர பதிவு செய்யவும் அல்லது உள்நுழையவும்.') : !membershipApproved ? t('Admin approval is required before subscribing.', 'உறுப்பினர் திட்டத்திற்கு முன் நிர்வாகியின் ஒப்புதல் தேவை.') : t('Subscribe or renew your plan to access these details.', 'இந்த விவரங்களைப் பார்க்க உறுப்பினர் திட்டத்தைப் பெறவும் அல்லது புதுப்பிக்கவும்.') }}</p>
+                <button type="button" class="aa-action-primary aa-subscribe" (click)="goToPlans()">
+                  {{ !loggedIn ? t('Register Now', 'இப்போதே பதிவு செய்க') : !membershipApproved ? t('Complete Biodata', 'பயோடேட்டாவை முடிக்கவும்') : t('View Membership Plans', 'உறுப்பினர் திட்டங்கள்') }}
+                </button>
+              </div>
+            } @else if (activeTab === 'family') {
+              <h2 class="aa-panel-title"><span class="aa-title-symbol">♛</span> {{ t('Family Details', 'குடும்ப விவரங்கள்') }}</h2>
+              <div class="aa-fields">
+                @for (field of familyFields; track field.en) {
+                  <div class="aa-field"><span>{{ t(field.en, field.ta) }}</span><strong>{{ field.value }}</strong></div>
+                } @empty { <div class="aa-state">{{ t('No family details provided.', 'குடும்ப விவரங்கள் சேர்க்கப்படவில்லை.') }}</div> }
+              </div>
+            } @else if (activeTab === 'horoscope') {
+              <h2 class="aa-panel-title"><span class="aa-title-symbol">☼</span> {{ t('Horoscope Details', 'ஜாதக விவரங்கள்') }}</h2>
+              <div class="aa-fields">
+                @for (field of horoscopeFields; track field.en) {
+                  <div class="aa-field"><span>{{ t(field.en, field.ta) }}</span><strong>{{ field.value }}</strong></div>
+                } @empty { <div class="aa-state">{{ t('No horoscope details provided.', 'ஜாதக விவரங்கள் சேர்க்கப்படவில்லை.') }}</div> }
+              </div>
+              @if (premiumProfile?.astrology?.rasiChart?.length || premiumProfile?.rasi_chart?.length) {
+                <div class="aa-chart-area">
+                  <h3>{{ t('Rasi Chart', 'ராசி கட்டம்') }}</h3>
+                  <div class="aa-chart-cells">
+                    @for (cell of (premiumProfile.astrology?.rasiChart || premiumProfile.rasi_chart); track $index) {
+                      <span>{{ cell }}</span>
+                    }
+                  </div>
+                </div>
+              }
+              @if (premiumProfile?.astrology?.amsamChart?.length || premiumProfile?.amsam_chart?.length) {
+                <div class="aa-chart-area">
+                  <h3>{{ t('Amsam Chart', 'அம்ச கட்டம்') }}</h3>
+                  <div class="aa-chart-cells">
+                    @for (cell of (premiumProfile.astrology?.amsamChart || premiumProfile.amsam_chart); track $index) {
+                      <span>{{ cell }}</span>
+                    }
+                  </div>
+                </div>
+              }
+            } @else if (activeTab === 'contact') {
+              <h2 class="aa-panel-title"><span class="aa-title-symbol">♡</span> {{ t('Contact Details', 'தொடர்பு விவரங்கள்') }}</h2>
+              @if (contactUnlocked) {
+                <div class="aa-success-note">✓ {{ t('Interest accepted. Contact access is active.', 'விருப்பம் ஏற்கப்பட்டது. தொடர்பு அனுமதி செயலில் உள்ளது.') }}</div>
+                <div class="aa-fields">
+                  @for (field of contactFields; track field.en) {
+                    <div class="aa-field"><span>{{ t(field.en, field.ta) }}</span><strong>{{ field.value }}</strong></div>
+                  } @empty { <div class="aa-state">{{ t('Contact details have not been provided.', 'தொடர்பு விவரங்கள் சேர்க்கப்படவில்லை.') }}</div> }
+                </div>
+              } @else {
+                <div class="aa-state aa-contact-state">
+                  <span class="aa-state-symbol" aria-hidden="true">♡</span>
+                  <h3>{{ t('Contact Details Are Protected', 'தொடர்பு விவரங்கள் பாதுகாக்கப்பட்டுள்ளன') }}</h3>
+                  <p>{{ t('Send an interest to this member. Phone number, email and full address will be visible only after the interest is accepted, while your plan is active.', 'இந்த உறுப்பினருக்கு விருப்பக் கோரிக்கை அனுப்பவும். அது ஏற்கப்பட்ட பிறகும் உறுப்பினர் திட்டம் செயலில் இருக்கும் போதும் மட்டுமே எண், மின்னஞ்சல் மற்றும் முகவரி காட்டப்படும்.') }}</p>
+                  @if (interestStatus === 'pending') {
+                    <span class="aa-interest-status">{{ t('Your interest is awaiting a response.', 'உங்கள் விருப்பக் கோரிக்கை பதிலுக்காக காத்திருக்கிறது.') }}</span>
+                  } @else if (interestStatus === 'accepted') {
+                    <button type="button" class="aa-action-outline" (click)="verifyContact()">{{ t('Verify Accepted Contact Access', 'ஏற்கப்பட்ட தொடர்பு அனுமதியைச் சரிபார்க்கவும்') }}</button>
+                  } @else if (interestStatus === 'rejected') {
+                    <span class="aa-interest-status">{{ t('Your interest was rejected.', 'உங்கள் விருப்பக் கோரிக்கை நிராகரிக்கப்பட்டது.') }}</span>
+                  } @else {
+                    <button type="button" class="aa-action-primary aa-subscribe" (click)="sendInterest()" [disabled]="sendingInterest">{{ t('Send Interest', 'விருப்பம் தெரிவிக்கவும்') }}</button>
+                  }
+                </div>
+              }
+            }
+
+            <div class="aa-privacy-note">
+              <span class="aa-note-lock" aria-hidden="true">🔒</span>
+              <span>{{ t('Phone numbers, email and exact address remain private until interest acceptance and an active membership.', 'விருப்பக் கோரிக்கை ஏற்கப்பட்டு உறுப்பினர் திட்டம் செயலில் இருக்கும் வரை எண்கள், மின்னஞ்சல் மற்றும் முழு முகவரி பாதுகாக்கப்படும்.') }}</span>
+            </div>
           </div>
-
         </section>
-
       </div>
-
-      <!-- MEMBERSHIP SECTION -->
-      <section class="aa-locked">
-
-        <div class="aa-lock-icon" aria-hidden="true">
-          🔒
-        </div>
-
-        <div>
-
-          <h2>
-            {{
-              t(
-                'Explore the Complete Profile',
-                'முழு சுயவிவரத்தைப் பார்க்கவும்'
-              )
-            }}
-          </h2>
-
-          <p>
-            {{
-              t(
-                'An approved account with an active membership can view complete biodata, including family details, education, horoscope and additional photos. Private contact details require an accepted interest.',
-                'நிர்வாகி ஒப்புதல் பெற்ற செயலில் உள்ள உறுப்பினர் திட்டத்தின் மூலம் குடும்ப விவரங்கள், கல்வி, ஜாதகம் மற்றும் கூடுதல் புகைப்படங்களைப் பார்க்கலாம். தனிப்பட்ட தொடர்பு விவரங்களைப் பார்க்க விருப்பக் கோரிக்கை ஏற்கப்பட்டிருக்க வேண்டும்.'
-              )
-            }}
-          </p>
-
-        </div>
-
-        <div class="aa-locked-actions">
-
-          <!-- NOT LOGGED IN -->
-          @if (!loggedIn) {
-
-            <a
-              routerLink="/register"
-              [queryParams]="{
-                from: 'profiles',
-                profileId: profile.code,
-                profileName: profile.name
-              }"
-            >
-              {{
-                t(
-                  'Register to Continue',
-                  'தொடர பதிவு செய்க'
-                )
-              }}
-              →
-            </a>
-
-          }
-
-          <!-- LOGGED IN -->
-          @else {
-
-            @if (hasActiveMembership) {
-
-              <a
-                routerLink="/profile-view"
-                [queryParams]="{
-                  profileId: profile.code
-                }"
-              >
-                {{
-                  t(
-                    'View Full Biodata',
-                    'முழு பயோடேட்டாவைப் பார்க்கவும்'
-                  )
-                }}
-                →
-              </a>
-
-            }
-
-            @else if (checkingMembership) {
-
-              <span role="status">
-                {{
-                  t(
-                    'Checking membership…',
-                    'உறுப்பினர் திட்டம் சரிபார்க்கப்படுகிறது…'
-                  )
-                }}
-              </span>
-
-            }
-
-            @else if (membershipApproved) {
-
-              <a
-                routerLink="/plans"
-                [queryParams]="{
-                  from: 'profiles',
-                  profileId: profile.code,
-                  profileName: profile.name
-                }"
-              >
-                {{
-                  t(
-                    'View Membership Plans',
-                    'உறுப்பினர் திட்டங்களைப் பார்க்கவும்'
-                  )
-                }}
-                →
-              </a>
-
-            }
-
-            @else {
-
-              <a
-                routerLink="/biodata"
-              >
-                {{
-                  t(
-                    'Check Biodata and Approval',
-                    'பயோடேட்டா மற்றும் ஒப்புதலைச் சரிபார்க்கவும்'
-                  )
-                }}
-                →
-              </a>
-
-            }
-
-          }
-
-        </div>
-
-      </section>
-
     }
-
-    <!-- PHOTO LIGHTBOX -->
     @if (lightboxOpen) {
-      <app-photo-lightbox
-        [images]="publicPhotos"
-        [lang]="lang"
-        (closed)="lightboxOpen = false"
-      />
+      <app-photo-lightbox [images]="publicPhotos" [lang]="lang" (closed)="lightboxOpen = false" />
     }
-
   </div>
 </main>

@@ -1331,3 +1331,74 @@ select:focus-visible {
     font-size: 20px;
   }
 }
+/* ==========================================
+   ASTRO ALLIANCE — CIRCULAR HEART LOADER
+========================================== */
+
+.approved-heart-loader-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-height: 180px;
+  width: 100%;
+}
+
+.approved-heart-loader {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.approved-heart-loader .heart {
+  --angle: calc(var(--i) * 30deg);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1;
+  color: #ffffff;
+
+  opacity: 0.25;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--angle))
+    translateY(-40px);
+
+  animation: circularHeartPulse 1.2s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.1s);
+}
+
+/* HEARTS LIGHT UP ONE BY ONE */
+
+@keyframes circularHeartPulse {
+  0%, 100% {
+    opacity: 0.2;
+    filter: brightness(0.8);
+  }
+
+  40% {
+    opacity: 1;
+    filter:
+      brightness(1.3)
+      drop-shadow(0 0 6px rgba(255,255,255,0.5));
+  }
+
+  70% {
+    opacity: 0.5;
+    filter: brightness(1);
+  }
+}
+
+.approved-loader-text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: center;
+}

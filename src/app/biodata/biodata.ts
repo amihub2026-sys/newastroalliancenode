@@ -42,6 +42,7 @@ export class Biodata implements OnInit {
     constructor(
     private flow: UserFlowService
   ) {}
+
   app = inject(LanguageService);
   cdr = inject(ChangeDetectorRef);
   snackbar = inject(SnackbarService);
@@ -79,6 +80,14 @@ fieldErrors: Record<string, boolean> = {};
 private nameTranslateTimer: any;
 private fatherNameTranslateTimer: any;
 private motherNameTranslateTimer: any;
+
+// Member name transliteration and review state.
+// Used by the PersonalDetails child template through vm.
+showAlternateSpelling = true;
+nameSpellingManuallyCorrected = false;
+nameNeedsReview = false;
+
+
 
 
 isInvalid(field: string): boolean {
@@ -123,9 +132,15 @@ activeStep = 0;
 readonly familySpellingCorrected: Record<'fatherName' | 'motherName', boolean> = {
   fatherName: false, motherName: false
 };
-showAlternateSpelling = false;
-nameSpellingManuallyCorrected = false;
-nameNeedsReview = false;
+
+
+
+
+private tamilCorrectionTimer:
+  ReturnType<typeof setTimeout> | null = null;
+
+private tamilCorrectionVersion = 0;
+private englishNameVersion = 0;
 
 get selectedWizardStep() { return this.wizardSteps[this.activeStep]; }
 get nameInActiveLanguage(): string {
@@ -137,24 +152,258 @@ get alternateNameSuggestion(): string {
   return this.currentLang === 'ta' ? this.formData.fullName : this.formDataTa.fullName;
 }
 setAlternateNameSpelling(value: string): void {
-  this.nameSpellingManuallyCorrected = true;
-  if (this.currentLang === 'ta') this.formData.fullName = value.trim();
-  else this.formDataTa.fullName = value.trim();
-  // Do not mark English text as a valid Tamil spelling.
-  this.nameNeedsReview = this.currentLang === 'en' && !!value.trim() && !hasTamilScript(value);
-}
-onUserNameInput(value: string): void {
-  const suggestion = suggestBilingualName(value);
-  const inputIsTamil = hasTamilScript(value);
-  if (inputIsTamil) {
-    this.formDataTa.fullName = value;
-    if (!this.nameSpellingManuallyCorrected) this.formData.fullName = suggestion.en;
+  this.nameRequestId++;
+  clearTimeout(this.nameTranslateTimer);
+
+  if (this.currentLang === 'ta') {
+    this.formData.fullName = value.trim();
   } else {
-    this.formData.fullName = value;
-    if (!this.nameSpellingManuallyCorrected) this.formDataTa.fullName = suggestion.ta;
+    this.formDataTa.fullName = value.trim();
   }
-  this.nameNeedsReview = !this.nameSpellingManuallyCorrected && suggestion.needsReview;
+
+  this.nameSpellingManuallyCorrected = true;
+
+  this.nameNeedsReview =
+    this.currentLang === 'en' &&
+    !!value.trim() &&
+    !hasTamilScript(value);
+
+  this.cdr.markForCheck();
 }
+
+    
+private nameRequestId = 0;
+
+
+
+onUserNameInput(value: string): void {
+  const version = ++this.englishNameVersion;
+
+  clearTimeout(this.nameTranslateTimer);
+
+  const name = value.trim();
+
+  // =====================================
+  // TAMIL MODE
+  // =====================================
+  if (this.currentLang === 'ta') {
+
+    // Display what the user types immediately.
+    this.formDataTa.fullName = value;
+
+    if (!name) {
+      this.formData.fullName = '';
+      this.nameNeedsReview = false;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    // Convert English keyboard input to Tamil.
+    if (/[a-zA-Z]/.test(value)) {
+
+      this.nameTranslateTimer = setTimeout(async () => {
+        try {
+          // Convert English portions while
+          // preserving existing Tamil characters.
+          const parts = value.match(/[a-zA-Z]+/g) || [];
+
+          const converted = await Promise.all(
+            parts.map(part => this.googleTamilInput(part))
+          );
+
+          if (version !== this.englishNameVersion) {
+            return;
+          }
+
+          let index = 0;
+
+          const tamilName = value.replace(
+            /[a-zA-Z]+/g,
+            () => converted[index++] || ''
+          );
+
+          // Only accept a fully converted Tamil value.
+          if (
+            hasTamilScript(tamilName) &&
+            !/[a-zA-Z]/.test(tamilName)
+          ) {
+            this.formDataTa.fullName = tamilName;
+
+            if (!this.nameSpellingManuallyCorrected) {
+              this.formData.fullName =
+                this.tamilToEnglishName(tamilName);
+            }
+
+            this.nameNeedsReview = false;
+          } else {
+            this.nameNeedsReview = true;
+          }
+
+          this.cdr.detectChanges();
+
+        } catch (error) {
+          console.error(
+            'Tamil transliteration failed:',
+            error
+          );
+
+          this.nameNeedsReview = true;
+          this.cdr.markForCheck();
+        }
+
+      }, 450);
+
+      return;
+    }
+
+    // Already valid Tamil text.
+    if (hasTamilScript(value)) {
+      if (!this.nameSpellingManuallyCorrected) {
+        this.formData.fullName =
+          this.tamilToEnglishName(value);
+      }
+
+      this.nameNeedsReview = false;
+    }
+
+    this.cdr.markForCheck();
+    return;
+  }
+
+  // =====================================
+  // ENGLISH MODE
+  // =====================================
+
+  this.formData.fullName = value;
+
+  if (!name) {
+    this.formDataTa.fullName = '';
+    this.nameSpellingManuallyCorrected = false;
+    this.nameNeedsReview = false;
+    this.cdr.markForCheck();
+    return;
+  }
+
+  if (this.nameSpellingManuallyCorrected) {
+    return;
+  }
+
+  const suggestion = suggestBilingualName(name);
+
+  this.formDataTa.fullName =
+    hasTamilScript(suggestion.ta)
+      ? suggestion.ta
+      : '';
+
+  this.nameNeedsReview =
+    !hasTamilScript(this.formDataTa.fullName);
+
+  this.cdr.markForCheck();
+
+  this.nameTranslateTimer = setTimeout(async () => {
+    try {
+      const tamil = await this.googleTamilInput(name);
+
+      if (version !== this.englishNameVersion) {
+        return;
+      }
+
+      if (this.nameSpellingManuallyCorrected) {
+        return;
+      }
+
+      if (
+        hasTamilScript(tamil) &&
+        !/[a-zA-Z]/.test(tamil)
+      ) {
+        this.formDataTa.fullName = tamil;
+        this.nameNeedsReview = false;
+      } else {
+        this.nameNeedsReview =
+          !hasTamilScript(this.formDataTa.fullName);
+      }
+
+      this.cdr.detectChanges();
+
+    } catch (error) {
+      console.error(
+        'English-to-Tamil suggestion failed:',
+        error
+      );
+
+      this.nameNeedsReview = true;
+      this.cdr.markForCheck();
+    }
+  }, 450);
+}
+
+
+
+onTamilCorrectionTyping(value: string): void {
+
+  const version = ++this.tamilCorrectionVersion;
+
+  if (this.tamilCorrectionTimer) {
+    clearTimeout(this.tamilCorrectionTimer);
+  }
+
+  // User is manually correcting Tamil, so stop
+  // automatic full-name suggestions from overwriting it.
+  this.englishNameVersion++;
+  clearTimeout(this.nameTranslateTimer);
+
+  this.formDataTa.fullName = value;
+
+  if (!value.trim()) {
+    this.nameSpellingManuallyCorrected = false;
+    this.formData.nameTaManuallyEdited = false;
+    this.nameNeedsReview = true;
+    this.cdr.markForCheck();
+    return;
+  }
+
+  this.nameSpellingManuallyCorrected = true;
+  this.formData.nameTaManuallyEdited = true;
+
+  // Already entirely Tamil
+  if (!/[a-zA-Z]/.test(value)) {
+    this.nameNeedsReview = !hasTamilScript(value);
+    this.cdr.markForCheck();
+    return;
+  }
+
+  // Allow English-keyboard typing, then convert
+  // only the English words, preserving existing Tamil.
+  this.tamilCorrectionTimer = setTimeout(async () => {
+
+    const englishParts = value.match(/[a-zA-Z]+/g) || [];
+
+    const convertedParts = await Promise.all(
+      englishParts.map(part => this.googleTamilInput(part))
+    );
+
+    if (version !== this.tamilCorrectionVersion) return;
+
+    let index = 0;
+
+    const convertedValue = value.replace(
+      /[a-zA-Z]+/g,
+      () => convertedParts[index++] || ''
+    );
+
+    this.formDataTa.fullName = convertedValue;
+
+    this.nameNeedsReview =
+      !hasTamilScript(convertedValue) ||
+      /[a-zA-Z]/.test(convertedValue);
+
+    this.cdr.detectChanges();
+
+  }, 450);
+}
+
+
+
   /** Translate only known profile choices for a Tamil review; never fake user prose. */
   wizardDisplayValue(input: unknown): string {
     const value = String(input ?? '').trim();
@@ -3114,6 +3363,8 @@ this.formDataTa.iruppidam =
 this.showIruppidamDropdown = false;
 
 }
+
+
 
 
 }

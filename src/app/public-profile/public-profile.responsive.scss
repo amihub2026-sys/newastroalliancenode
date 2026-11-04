@@ -1,0 +1,815 @@
+
+/* ============================================
+   ASTRO ALLIANCE MATRIMONY
+   PUBLIC PROFILE — RESPONSIVE ONLY
+
+   Desktop styles remain in public-profile.scss
+============================================ */
+
+/* ============================================
+   SMALL DESKTOP / LAPTOP
+   1440px and below
+============================================ */
+
+@media (max-width: 1440px) {
+
+  .aa-page-inner {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .aa-main-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .aa-right {
+    min-width: 0;
+  }
+
+  .aa-name-line h1 {
+    font-size: clamp(32px, 3.2vw, 44px);
+  }
+
+  .aa-tab-list {
+    gap: 6px;
+  }
+
+  .aa-tab-list button {
+    padding: 8px 5px;
+    font-size: 11px;
+  }
+
+  .aa-fields {
+    column-gap: 23px;
+  }
+}
+
+/* ============================================
+   LAPTOP / LARGE TABLET
+   1200px and below
+============================================ */
+
+@media (max-width: 1200px) {
+
+  .aa-page {
+    padding: 22px 16px 55px;
+  }
+
+  .aa-page::before {
+    left: 16px;
+    right: 16px;
+  }
+
+  .aa-main-card {
+    width: 100%;
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: 20px;
+    padding: 16px;
+  }
+
+  .aa-photo-button img {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: 410px;
+    object-fit: contain;
+    object-position: center top;
+  }
+
+  .aa-action-primary,
+  .aa-action-outline {
+    min-height: 43px;
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+
+  .aa-profile-actions {
+    gap: 7px;
+  }
+
+  .aa-hero {
+    min-height: 122px;
+    padding: 8px;
+  }
+
+  .aa-name-line h1 {
+    font-size: 37px;
+  }
+
+  .aa-hero-facts > span {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .aa-tab-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+    padding: 6px;
+  }
+
+  .aa-tab-list button {
+    min-height: 52px;
+    font-size: 10px;
+    gap: 4px;
+  }
+
+  .aa-tab-icon {
+    font-size: 17px;
+  }
+
+  .aa-premium-mark {
+    width: 15px;
+    height: 15px;
+    flex-basis: 15px;
+  }
+
+  .aa-premium-mark::before {
+    width: 15px;
+    height: 15px;
+  }
+
+  .aa-detail-panel {
+    padding: 20px;
+  }
+
+  .aa-fields {
+    column-gap: 15px;
+  }
+
+  .aa-field {
+    grid-template-columns: minmax(90px, 43%) minmax(0, 1fr);
+    gap: 8px;
+  }
+}
+
+/* ============================================
+   TABLET
+   900px and below
+============================================ */
+
+@media (max-width: 900px) {
+
+  .aa-page {
+    padding: 20px 14px 50px;
+  }
+
+  .aa-page::before {
+    left: 14px;
+    right: 14px;
+    height: 195px;
+    border-radius: 24px;
+  }
+
+  .aa-main-card {
+    width: 100%;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 16px;
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .aa-left {
+    top: 85px;
+  }
+
+  .aa-photo-card {
+    padding: 3px;
+    border-radius: 15px;
+  }
+
+  .aa-photo-frame {
+    border-radius: 11px;
+  }
+
+  .aa-photo-button img {
+    height: auto;
+    min-height: 0;
+    max-height: 350px;
+    object-fit: contain;
+  }
+
+  .aa-photo-id {
+    padding: 10px;
+    font-size: 17px;
+  }
+
+  .aa-photo-approved {
+    top: 8px;
+    left: 8px;
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .aa-profile-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .aa-action-primary,
+  .aa-action-outline {
+    min-height: 42px;
+    padding: 7px 4px;
+    font-size: 10px;
+    gap: 4px;
+  }
+
+  .aa-profile-actions span {
+    font-size: 14px;
+  }
+
+  .aa-hero {
+    min-height: 112px;
+  }
+
+  .aa-name-line h1 {
+    font-size: 32px;
+  }
+
+  .aa-name-check {
+    width: 25px;
+    height: 25px;
+    font-size: 13px;
+  }
+
+  .aa-kicker {
+    font-size: 11px;
+  }
+
+  .aa-hero-facts {
+    row-gap: 4px;
+  }
+
+  .aa-hero-facts > span {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .aa-ring-art {
+    opacity: .25;
+    transform: rotate(-15deg) scale(.7);
+    transform-origin: right top;
+  }
+
+  .aa-tab-list {
+    gap: 4px;
+    padding: 5px;
+    margin: 6px 0 14px;
+  }
+
+  .aa-tab-list button {
+    flex-direction: column;
+    gap: 3px;
+    min-height: 64px;
+    padding: 6px 3px;
+    font-size: 9px;
+    text-align: center;
+  }
+
+  .aa-detail-panel {
+    padding: 18px 15px;
+    border-radius: 16px;
+  }
+
+  .aa-panel-title {
+    font-size: 23px;
+  }
+
+  .aa-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .aa-field {
+    grid-template-columns: minmax(110px, 42%) minmax(0, 1fr);
+    min-height: 43px;
+  }
+
+  .aa-privacy-note {
+    padding: 12px;
+    font-size: 11px;
+  }
+}
+
+/* ============================================
+   MOBILE AND SMALL TABLET
+   700px and below
+============================================ */
+
+@media (max-width: 700px) {
+
+  :host {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .aa-page {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 100vh;
+    padding: 15px 12px 45px;
+
+    background: linear-gradient(
+      180deg,
+      #751334 0,
+      #911b43 155px,
+      #fff4f3 156px,
+      #fffafa 100%
+    );
+  }
+
+  .aa-page::before {
+    top: 9px;
+    left: 10px;
+    right: 10px;
+    height: 150px;
+    border-radius: 20px;
+  }
+
+  .aa-page-inner {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* GLASS BACK BUTTON */
+
+  .aa-back {
+    margin: 3px 0 15px 3px;
+    padding: 9px 13px;
+    font-size: 11px;
+    gap: 6px;
+  }
+
+  .aa-back span {
+    font-size: 18px;
+  }
+
+  /* STACK PHOTO AND DETAILS */
+
+  .aa-main-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    gap: 20px;
+    padding: 13px;
+    border-radius: 20px;
+    box-sizing: border-box;
+  }
+
+  .aa-left {
+    position: static;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+    align-self: center;
+  }
+
+  .aa-photo-card {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 16px;
+  }
+
+  .aa-photo-frame {
+    background: #fff;
+  }
+
+  .aa-photo-button {
+    width: 100%;
+    background: #fff;
+  }
+
+  .aa-photo-button img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    object-fit: contain;
+    object-position: center top;
+    background: #fff;
+  }
+
+  .aa-photo-id {
+    padding: 11px;
+    font-size: 19px;
+  }
+
+  /* BOTH ACTIONS IN ONE ROW */
+
+  .aa-profile-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 9px;
+    margin: 12px 0 0;
+  }
+
+  .aa-action-primary,
+  .aa-action-outline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 9px 5px;
+    font-size: 11px;
+    gap: 5px;
+    white-space: normal;
+  }
+
+  .aa-profile-actions span {
+    font-size: 15px;
+  }
+
+  /* RIGHT DETAILS BELOW PHOTO */
+
+  .aa-right {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .aa-hero {
+    min-height: 0;
+    padding: 8px 3px 15px;
+  }
+
+  .aa-kicker {
+    font-size: 11px;
+  }
+
+  .aa-name-line {
+    gap: 10px;
+    margin: 7px 0 11px;
+  }
+
+  .aa-name-line h1 {
+    font-size: clamp(29px, 7vw, 39px);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  .aa-name-check {
+    width: 26px;
+    height: 26px;
+  }
+
+  .aa-hero-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 0;
+  }
+
+  .aa-hero-facts > span {
+    font-size: 11px;
+    padding: 5px 9px;
+  }
+
+  .aa-hero-facts > span:first-child {
+    padding-left: 0;
+  }
+
+  /* WEDDING RINGS */
+
+  .aa-ring-art {
+    right: -25px;
+    top: -12px;
+    opacity: .17;
+    transform: rotate(-15deg) scale(.55);
+    transform-origin: right top;
+  }
+
+  /* FOUR BUTTONS ALWAYS ONE ROW */
+
+  .aa-tab-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 6px 0 16px;
+    padding: 5px;
+    border-radius: 13px;
+  }
+
+  .aa-tab-list button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    width: 100%;
+    min-height: 72px;
+    padding: 8px 3px;
+    border-radius: 9px;
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1.3;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .aa-tab-icon {
+    font-size: 18px;
+  }
+
+  .aa-premium-mark,
+  .aa-premium-mark::before {
+    width: 13px;
+    height: 13px;
+  }
+
+  .aa-premium-mark {
+    flex-basis: 13px;
+  }
+
+  .aa-contact-heart {
+    font-size: 17px;
+  }
+
+  /* DETAIL PANEL */
+
+  .aa-detail-panel {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 17px 15px 20px;
+    border-radius: 15px;
+  }
+
+  .aa-panel-title {
+    font-size: 22px;
+    gap: 9px;
+    margin-bottom: 14px;
+  }
+
+  .aa-title-symbol {
+    width: 22px;
+    height: 22px;
+    flex-basis: 22px;
+  }
+
+  .aa-title-symbol::before {
+    font-size: 23px;
+  }
+
+  .aa-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .aa-field {
+    display: grid;
+    grid-template-columns: minmax(115px, 41%) minmax(0, 1fr);
+    gap: 8px;
+    min-height: 45px;
+    padding: 9px 2px;
+  }
+
+  .aa-field > span {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .aa-field strong {
+    font-size: 11.5px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .aa-subhead {
+    margin: 19px 0 8px;
+    font-size: 14px;
+  }
+
+  /* PRIVACY NOTE */
+
+  .aa-privacy-note {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    margin-top: 16px;
+    border-radius: 10px;
+    font-size: 10.5px;
+    line-height: 1.65;
+  }
+
+  .aa-note-lock {
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+
+  /* PREMIUM / MEMBERSHIP STATES */
+
+  .aa-state {
+    padding: 25px 10px;
+    font-size: 12px;
+  }
+
+  .aa-state h2,
+  .aa-state h3 {
+    font-size: 19px;
+  }
+
+  .aa-state p {
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  .aa-subscribe {
+    min-height: 43px;
+  }
+
+  .aa-interest-status,
+  .aa-success-note {
+    padding: 11px;
+    font-size: 11px;
+  }
+
+  /* HOROSCOPE CHART */
+
+  .aa-chart-area {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .aa-chart-cells {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .aa-chart-cells span {
+    min-height: 48px;
+    padding: 4px;
+    font-size: 10px;
+  }
+
+  /* LOADING CARD */
+
+  .aa-message {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 30px auto;
+    padding: 32px 15px;
+    border-radius: 14px;
+  }
+
+  .profile-heart-loader {
+    gap: 6px;
+    min-height: 50px;
+  }
+
+  .profile-heart-loader .heart {
+    font-size: 17px;
+  }
+}
+
+/* ============================================
+   SMALL MOBILE
+   420px and below
+============================================ */
+
+@media (max-width: 420px) {
+
+  .aa-page {
+    padding: 12px 9px 35px;
+  }
+
+  .aa-page::before {
+    left: 8px;
+    right: 8px;
+    border-radius: 16px;
+  }
+
+  .aa-main-card {
+    padding: 10px;
+    gap: 16px;
+    border-radius: 16px;
+  }
+
+  .aa-left {
+    max-width: 300px;
+  }
+
+  .aa-photo-id {
+    font-size: 17px;
+  }
+
+  .aa-photo-approved {
+    font-size: 9px;
+    padding: 5px 8px;
+  }
+
+  .aa-profile-actions {
+    gap: 7px;
+  }
+
+  .aa-action-primary,
+  .aa-action-outline {
+    min-height: 42px;
+    padding: 8px 4px;
+    font-size: 10px;
+  }
+
+  .aa-name-line h1 {
+    font-size: 30px;
+  }
+
+  .aa-hero-facts > span {
+    font-size: 10px;
+    padding: 5px 7px;
+  }
+
+  .aa-tab-list {
+    gap: 3px;
+    padding: 4px;
+  }
+
+  .aa-tab-list button {
+    min-height: 70px;
+    padding: 6px 2px;
+    font-size: 8px;
+    gap: 3px;
+  }
+
+  .aa-tab-icon {
+    font-size: 16px;
+  }
+
+  .aa-detail-panel {
+    padding: 15px 11px;
+  }
+
+  .aa-panel-title {
+    font-size: 20px;
+  }
+
+  .aa-field {
+    grid-template-columns: minmax(100px, 42%) minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .aa-field > span,
+  .aa-field strong {
+    font-size: 10.5px;
+  }
+}
+
+/* ============================================
+   EXTRA SMALL MOBILE
+   360px and below
+============================================ */
+
+@media (max-width: 360px) {
+
+  .aa-page {
+    padding: 10px 6px 30px;
+  }
+
+  .aa-main-card {
+    padding: 8px;
+  }
+
+  .aa-left {
+    max-width: 270px;
+  }
+
+  .aa-action-primary,
+  .aa-action-outline {
+    font-size: 9px;
+    gap: 3px;
+  }
+
+  .aa-tab-list button {
+    font-size: 7.5px;
+    min-height: 68px;
+  }
+
+  .aa-tab-icon {
+    font-size: 15px;
+  }
+
+  .aa-premium-mark,
+  .aa-premium-mark::before {
+    width: 11px;
+    height: 11px;
+  }
+
+  .aa-field {
+    grid-template-columns: minmax(92px, 41%) minmax(0, 1fr);
+  }
+
+  .aa-privacy-note {
+    font-size: 10px;
+  }
+}

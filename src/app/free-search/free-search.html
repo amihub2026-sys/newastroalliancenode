@@ -288,25 +288,42 @@
            LOADING STATE
       ================================== -->
 
-      @if (loading) {
+      
+<!-- ==================================
+     LOADING STATE — 12 HEARTS
+================================== -->
 
-        <div class="state" role="status">
+@if (loading) {
 
-          <span
-            class="spinner"
-            aria-hidden="true"
-          ></span>
+  <div class="state" role="status">
 
-          <p>
-            {{ text(
-              'Loading approved profiles...',
-              'அங்கீகரிக்கப்பட்ட சுயவிவரங்கள் ஏற்றப்படுகின்றன...'
-            ) }}
-          </p>
+    <div class="approved-heart-loader-wrap"
+         aria-label="Loading approved profiles">
 
-        </div>
+      <div class="approved-heart-loader" aria-hidden="true">
 
-      }
+        <span
+          class="heart"
+          *ngFor="let heart of [1,2,3,4,5,6,7,8,9,10,11,12]; let i = index"
+          [style.--i]="i">
+          ♥
+        </span>
+
+      </div>
+
+      <p class="approved-loader-text">
+        {{ text(
+          'Loading approved profiles...',
+          'அங்கீகரிக்கப்பட்ட சுயவிவரங்கள் ஏற்றப்படுகின்றன...'
+        ) }}
+      </p>
+
+    </div>
+
+  </div>
+
+}
+
 
 
       <!-- ==================================

@@ -40,30 +40,121 @@
 
 </ng-container>
 
+
+
+
 <ng-template #normalNameFields>
-  <div class="field full-width" [class.invalid]="vm.isInvalid('fullName')">
-    <label for="user-profile-name">{{ vm.tr.labels.fullName }} <span class="required">*</span></label>
-    <input id="user-profile-name" type="text" [ngModel]="vm.nameInActiveLanguage"
-      (ngModelChange)="vm.onUserNameInput($event)" name="fullNameUser"
-      [attr.lang]="vm.currentLang" autocomplete="name"
-      [placeholder]="vm.currentLang === 'ta' ? 'பெயரை உள்ளிடவும் (எ.கா., தாமரை செல்வி)' : 'Enter name (e.g., Thamarai Selvi)'" />
-    <small class="field-error" *ngIf="vm.isInvalid('fullName')">{{ vm.tr.labels.required }}</small>
-    <div class="wizard-name-hint" *ngIf="vm.nameInActiveLanguage">
-      <span>{{ vm.currentLang === 'ta' ? 'பிற மொழியில் பெயர் (பரிந்துரை)' : 'Name in Tamil (suggestion)' }}:</span>
-      <strong>{{ vm.alternateNameSuggestion || (vm.currentLang === 'ta' ? 'ஆங்கில எழுத்தைச் சரிபார்க்கவும்' : 'Tamil spelling not available') }}</strong>
-      <button type="button" (click)="vm.showAlternateSpelling = !vm.showAlternateSpelling">
-        {{ vm.currentLang === 'ta' ? 'எழுத்தைத் திருத்தவும்' : 'Correct spelling' }}
+
+  <div
+    class="field full-width"
+    [class.invalid]="vm.isInvalid('fullName')"
+  >
+
+    <!-- FULL NAME -->
+    <label for="user-profile-name">
+      {{ vm.tr.labels.fullName }}
+      <span class="required">*</span>
+    </label>
+
+    <input
+      id="user-profile-name"
+      type="text"
+      name="fullNameUser"
+      [ngModel]="vm.nameInActiveLanguage"
+      (ngModelChange)="vm.onUserNameInput($event)"
+      [attr.lang]="vm.currentLang"
+      autocomplete="name"
+      [placeholder]="vm.currentLang === 'ta'
+        ? 'பெயரை உள்ளிடவும்'
+        : 'Enter full name'"
+    />
+
+    <small
+      class="field-error"
+      *ngIf="vm.isInvalid('fullName')"
+    >
+      {{ vm.tr.labels.required }}
+    </small>
+
+    <!-- NAME SUGGESTION -->
+    <div class="wizard-name-hint">
+
+      <span>
+        {{ vm.currentLang === 'ta'
+          ? 'Name in English (suggestion):'
+          : 'Name in Tamil (suggestion):' }}
+      </span>
+
+      <strong>
+        {{
+          vm.alternateNameSuggestion ||
+          (vm.currentLang === 'ta'
+            ? 'English spelling not available'
+            : 'Tamil spelling not available')
+        }}
+      </strong>
+
+      <button
+        type="button"
+        (click)="tamilCorrectionInput.focus()"
+      >
+        {{
+          vm.currentLang === 'ta'
+            ? 'Correct spelling'
+            : 'Correct spelling'
+        }}
       </button>
+
     </div>
-    <div *ngIf="vm.showAlternateSpelling" class="wizard-correction">
-      <label for="alternate-profile-name">{{ vm.currentLang === 'ta' ? 'ஆங்கிலப் பெயரைச் சரிசெய்யவும்' : 'Correct Tamil spelling' }}</label>
-      <input id="alternate-profile-name" name="alternateNameCorrection" type="text"
-        [ngModel]="vm.alternateNameSuggestion" (ngModelChange)="vm.setAlternateNameSpelling($event)" />
+
+    <!-- ALWAYS VISIBLE CORRECTION -->
+    <div class="wizard-correction">
+
+      <label for="alternate-profile-name">
+        {{
+          vm.currentLang === 'ta'
+            ? 'Correct English spelling'
+            : 'Correct Tamil spelling'
+        }}
+      </label>
+
+      <input
+        #tamilCorrectionInput
+        id="alternate-profile-name"
+        name="alternateNameCorrection"
+        type="text"
+        [ngModel]="vm.alternateNameSuggestion"
+        (ngModelChange)="vm.currentLang === 'en'
+          ? vm.onTamilCorrectionTyping($event)
+          : vm.setAlternateNameSpelling($event)"
+        [attr.lang]="vm.currentLang === 'en' ? 'ta' : 'en'"
+        autocomplete="off"
+        [placeholder]="vm.currentLang === 'en'
+          ? 'Type using English keyboard'
+          : 'Enter English spelling'"
+      />
+
     </div>
-    <small class="wizard-name-note">{{ vm.currentLang === 'ta' ? 'பெயரின் எழுத்துப்பிழையைச் சரிபார்க்கவும். பெயரை ஒருமுறை மட்டும் உள்ளிடினால் போதும்.' : 'Names are transliterated, not translated. Please check the suggested spelling; enter your name only once.' }}</small>
-  <small class="wizard-name-warning" *ngIf="vm.nameNeedsReview && vm.currentLang === 'en'">Tamil spelling is not confirmed. Please use “Correct spelling” to enter the correct Tamil name.</small>
+
+    <small class="wizard-name-note">
+      {{
+        vm.currentLang === 'ta'
+          ? 'பெயரின் எழுத்துப்பிழையைச் சரிபார்க்கவும்.'
+          : 'Names are transliterated, not translated. Check and correct the Tamil spelling if necessary.'
+      }}
+    </small>
+
+    <small
+      class="wizard-name-warning"
+      *ngIf="vm.nameNeedsReview && vm.currentLang === 'en'"
+    >
+      Please confirm the Tamil spelling before submitting.
+    </small>
+
   </div>
+
 </ng-template>
+
 
 
          <div class="field" [class.invalid]="vm.isInvalid('gender')">
