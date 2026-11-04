@@ -1408,3 +1408,72 @@
 
   text-align: center !important;
 }
+/* ============================================
+   ASTRO ALLIANCE — 6 HEART LOADING ANIMATION
+============================================ */
+
+.profile-heart-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 60px;
+}
+
+.profile-heart-loader .heart {
+  display: inline-block;
+
+  font-family: Arial, sans-serif;
+  font-size: 23px;
+  line-height: 1;
+
+  color: #a91c51;
+
+  opacity: 0.25;
+  transform: scale(0.65);
+
+  animation: heartLoadingWave 1.5s ease-in-out infinite;
+
+  animation-delay: calc(var(--i) * 0.15s);
+
+  filter: drop-shadow(0 2px 3px rgba(169, 28, 81, 0.12));
+}
+
+/* HEART WAVE */
+
+@keyframes heartLoadingWave {
+
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.65) translateY(0);
+    color: #cf8da6;
+  }
+
+  35% {
+    opacity: 1;
+    transform: scale(1.25) translateY(-5px);
+    color: #a3134a;
+    filter: drop-shadow(0 4px 6px rgba(163, 19, 74, 0.25));
+  }
+
+  65% {
+    opacity: 0.65;
+    transform: scale(0.9) translateY(0);
+    color: #c74372;
+  }
+}
+
+/* ACCESSIBILITY */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
