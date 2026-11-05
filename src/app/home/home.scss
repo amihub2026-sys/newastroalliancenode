@@ -1553,12 +1553,12 @@
     inset: 0;
     z-index: 1;
 
-    background: linear-gradient(
-      90deg,
-      rgba(22, 8, 18, 0.72) 0%,
-      rgba(30, 10, 24, 0.40) 45%,
-      rgba(22, 8, 18, 0.08) 100%
-    );
+    // background: linear-gradient(
+    //   90deg,
+    //   rgba(22, 8, 18, 0.72) 0%,
+    //   rgba(30, 10, 24, 0.40) 45%,
+    //   rgba(22, 8, 18, 0.08) 100%
+    // );
 
     pointer-events: none;
   }
@@ -1665,5 +1665,37 @@
 @media (max-width: 880px) {
   .astro-desktop-video-hero {
     display: none !important;
+  }
+}
+/* Desktop video */
+.astro-video-desktop {
+  display: block !important;
+}
+
+.astro-video-mobile {
+  display: none !important;
+}
+@media screen and (min-width: 881px) {
+  .astro-desktop-video-hero .astro-video-desktop {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    filter: brightness(1.18) saturate(1.06) !important;
+  }
+
+}
+@media screen and (min-width: 881px) {
+  .astro-video-overlay {
+    display: none !important;
+  }
+}
+@media screen and (min-width: 881px) {
+  .hero .astro-video-title {
+    font-size: clamp(28px, 2.8vw, 42px) !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+    max-width: 480px !important;
+    margin-bottom: 20px !important;
   }
 }

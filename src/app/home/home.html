@@ -10,17 +10,37 @@
 
   <!-- BACKGROUND VIDEO -->
 
+
+<!-- DESKTOP VIDEO -->
 <video
-  class="astro-hero-video"
+  class="astro-hero-video astro-video-desktop"
   autoplay
   muted
+  [muted]="true"
   loop
   playsinline
-  preload="auto"
+  preload="metadata"
   aria-hidden="true"
 >
   <source
     src="/assets/astro-hero.mp4"
+    type="video/mp4"
+  />
+</video>
+
+<!-- MOBILE VIDEO -->
+<video
+  class="astro-hero-video astro-video-mobile"
+  autoplay
+  muted
+  [muted]="true"
+  loop
+  playsinline
+  preload="metadata"
+  aria-hidden="true"
+>
+  <source
+    src="/assets/astro-hero-mobile.mp4"
     type="video/mp4"
   />
 </video>
