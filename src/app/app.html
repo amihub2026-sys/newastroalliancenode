@@ -1,11 +1,18 @@
 
 <div class="app-shell">
 
+  <!-- ============================================
+       PUBLIC NAVBAR
+  ============================================= -->
   @if (!isAdminPage) {
-    <!-- HEADER -->
+
     <header class="site-header">
+
       <div class="header-inner">
 
+        <!-- =====================================
+             BRAND / EXISTING LOGO
+        ====================================== -->
         <a
           routerLink="/"
           class="site-brand"
@@ -13,9 +20,9 @@
         >
           <img
             src="assets/malogo.png"
-            alt=""
-            width="70"
-            height="50"
+            alt="Astro Alliance logo"
+            width="80"
+            height="59"
           />
 
           <span class="brand-copy">
@@ -24,13 +31,20 @@
                 ? 'ஆஸ்ட்ரோ அலையன்ஸ்'
                 : 'Astro Alliance' }}
             </strong>
+
             <small>MATRIMONY</small>
           </span>
         </a>
 
-        <!-- DESKTOP NAVIGATION -->
-        <nav class="desktop-nav" aria-label="Main navigation">
+        <!-- =====================================
+             DESKTOP NAVIGATION
+        ====================================== -->
+        <nav
+          class="desktop-nav"
+          aria-label="Main navigation"
+        >
 
+          <!-- HOME -->
           <a
             routerLink="/"
             routerLinkActive="is-active"
@@ -39,39 +53,51 @@
             {{ t.nav.home }}
           </a>
 
+          <!-- FIND YOUR MATCH -->
           <a
             [routerLink]="
               isLoggedIn && mobileAccountStage === 'approved'
                 ? '/profiles'
                 : '/free-search'
             "
+            routerLinkActive="is-active"
           >
             {{ profilesNavText }}
           </a>
 
-          <a
-            href="/plans"
-            (click)="
-              $event.preventDefault();
-              goToPage('/plans')
-            "
-          >
-            {{ t.nav.plans }}
-          </a>
+          <!-- PLANS -->
+        <a
+  routerLink="/plans"
+  routerLinkActive="is-active"
+>
+  {{ t.nav.plans }}
+</a>
 
+          <!-- GUEST NAVIGATION -->
           @if (!isLoggedIn) {
 
-            <a routerLink="/login" class="login-link">
+            <a
+              routerLink="/login"
+              routerLinkActive="is-active"
+              class="login-link"
+            >
               {{ t.nav.login }}
             </a>
 
-            <a routerLink="/register" class="register-link">
+            <a
+              routerLink="/register"
+              class="register-link"
+            >
               {{ t.nav.register }}
+
               <span aria-hidden="true">↗</span>
             </a>
 
           } @else {
 
+            <!-- =================================
+                 MY ACCOUNT DROPDOWN
+            ================================== -->
             <div class="profile-menu-wrap">
 
               <button
@@ -81,39 +107,58 @@
                 aria-controls="profile-menu"
                 (click)="toggleBiodataMenu()"
               >
+
                 <img
                   class="site-member-avatar"
                   [src]="memberAvatar"
                   (error)="onAvatarError($event)"
                   alt=""
+                  width="31"
+                  height="31"
                 />
 
-                {{ currentLang === 'ta'
-                  ? 'என் கணக்கு'
-                  : 'My Account' }}
+                <span>
+                  {{ currentLang === 'ta'
+                    ? 'என் கணக்கு'
+                    : 'My Account' }}
+                </span>
 
                 @if (interestNotificationCount > 0) {
                   <span class="notification-number">
-                    {{ interestNotificationCount }}
+                    {{ interestNotificationCount > 99
+                      ? '99+'
+                      : interestNotificationCount }}
                   </span>
                 }
 
                 <span aria-hidden="true">⌄</span>
+
               </button>
 
               @if (biodataMenuOpen) {
 
-                <div class="profile-popover" id="profile-menu">
+                <div
+                  class="profile-popover"
+                  id="profile-menu"
+                >
 
+                  <!-- APPROVED MEMBER DASHBOARD -->
                   @if (mobileAccountStage === 'approved') {
-                    <a routerLink="/dashboard" (click)="closeMenu()">
+
+                    <a
+                      routerLink="/dashboard"
+                      (click)="closeMenu()"
+                    >
                       {{ currentLang === 'ta'
                         ? 'என் முகப்பு'
                         : 'My Dashboard' }}
                     </a>
+
                   }
 
+                  <!-- PENDING APPROVAL -->
                   @if (mobileAccountStage === 'pending') {
+
                     <a
                       routerLink="/approval-pending"
                       (click)="closeMenu()"
@@ -122,19 +167,27 @@
                         ? 'ஒப்புதல் நிலை'
                         : 'Approval Status' }}
                     </a>
+
                   }
 
+                  <!-- DRAFT / REJECTED PROFILE -->
                   @if (
                     mobileAccountStage === 'draft' ||
                     mobileAccountStage === 'rejected'
                   ) {
-                    <a routerLink="/biodata" (click)="closeMenu()">
+
+                    <a
+                      routerLink="/biodata"
+                      (click)="closeMenu()"
+                    >
                       {{ currentLang === 'ta'
                         ? 'பயோடேட்டாவைத் தொடரவும்'
                         : 'Continue Biodata' }}
                     </a>
+
                   }
 
+                  <!-- MY PROFILE -->
                   <a
                     href="/my-biodata"
                     (click)="
@@ -147,8 +200,10 @@
                       : 'My Profile' }}
                   </a>
 
+                  <!-- MEMBER INTERESTS -->
                   @if (mobileAccountStage === 'approved') {
 
+                    <!-- RECEIVED INTERESTS -->
                     <a
                       href="/received-interests"
                       (click)="
@@ -156,15 +211,20 @@
                         openReceivedInterests()
                       "
                     >
-                      {{ currentLang === 'ta'
-                        ? 'பெற்ற விருப்பங்கள்'
-                        : 'Received Interests' }}
+                      <span>
+                        {{ currentLang === 'ta'
+                          ? 'பெற்ற விருப்பங்கள்'
+                          : 'Received Interests' }}
+                      </span>
 
                       @if (receivedInterestCount > 0) {
-                        <span>{{ receivedInterestCount }}</span>
+                        <span>
+                          {{ receivedInterestCount }}
+                        </span>
                       }
                     </a>
 
+                    <!-- SENT INTERESTS -->
                     <a
                       href="/sent-interests"
                       (click)="
@@ -172,36 +232,51 @@
                         openSentInterests()
                       "
                     >
-                      {{ currentLang === 'ta'
-                        ? 'அனுப்பிய விருப்பங்கள்'
-                        : 'Sent Interests' }}
+                      <span>
+                        {{ currentLang === 'ta'
+                          ? 'அனுப்பிய விருப்பங்கள்'
+                          : 'Sent Interests' }}
+                      </span>
 
                       @if (sentInterestCount > 0) {
-                        <span>{{ sentInterestCount }}</span>
+                        <span>
+                          {{ sentInterestCount }}
+                        </span>
                       }
                     </a>
 
                   }
 
-                  <button type="button" (click)="logout()">
+                  <!-- LOGOUT -->
+                  <button
+                    type="button"
+                    (click)="logout()"
+                  >
                     {{ t.nav.logout }}
                   </button>
 
                 </div>
+
               }
 
             </div>
+
           }
+
         </nav>
 
-        <!-- HEADER ACTIONS -->
+        <!-- =====================================
+             HEADER ACTIONS
+        ====================================== -->
         <div class="header-actions">
 
+          <!-- LANGUAGE SWITCHER -->
           <div
             class="language-choice"
             role="group"
             aria-label="Website language"
           >
+
             <button
               type="button"
               (click)="changeLanguage('en')"
@@ -219,9 +294,12 @@
             >
               தமிழ்
             </button>
+
           </div>
 
+          <!-- MOBILE NOTIFICATION BUTTON -->
           @if (isLoggedIn) {
+
             <button
               type="button"
               class="mobile-notification-button"
@@ -232,6 +310,7 @@
                   : 'Notifications'
               "
             >
+
               <svg
                 viewBox="0 0 24 24"
                 width="24"
@@ -256,23 +335,84 @@
                     : interestNotificationCount }}
                 </span>
               }
+
             </button>
+
           }
 
         </div>
+
       </div>
+
+<!-- Right corner wedding rings -->
+<img
+  class="astro-header-right-rings"
+  src="assets/navbar-right-ring.png"
+  alt=""
+  aria-hidden="true"
+/>
+
+      <!-- Champagne gold filled band. Single smooth shape, no stray scribble. -->
+      
+<div class="astro-header-curve" aria-hidden="true">
+  <svg
+    viewBox="0 0 1440 42"
+    preserveAspectRatio="none"
+  >
+    <defs>
+      <linearGradient id="aaGoldBand" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#f8d98c"/>
+        <stop offset="25%" stop-color="#f3c465"/>
+        <stop offset="50%" stop-color="#fff0bc"/>
+        <stop offset="75%" stop-color="#d69a36"/>
+        <stop offset="100%" stop-color="#f5d17f"/>
+      </linearGradient>
+    </defs>
+
+    <!-- One continuous gold shape, edge to edge -->
+    <path
+      d="M0 0
+         H1440
+         V16
+         C1150 16 1030 30 750 30
+         C460 30 230 16 0 16
+         Z"
+      fill="url(#aaGoldBand)"
+    />
+
+    <!-- One clean curved gold outline -->
+    <path
+      d="M0 16
+         C230 16 460 30 750 30
+         C1030 30 1150 16 1440 16"
+      fill="none"
+      stroke="#bb8028"
+      stroke-width="1.5"
+    />
+  </svg>
+</div>
+
+
     </header>
+
   }
 
-  <!-- SNACKBAR -->
+  <!-- ============================================
+       GLOBAL SNACKBAR
+  ============================================= -->
   <app-snackbar></app-snackbar>
 
-  <!-- ROUTER CONTENT -->
+  <!-- ============================================
+       ROUTER CONTENT
+  ============================================= -->
   <main id="main-content">
     <router-outlet></router-outlet>
   </main>
 
-  <!-- MOBILE BOTTOM NAVIGATION -->
+  <!-- ============================================
+       MOBILE BOTTOM NAVIGATION
+       Existing application behavior preserved
+  ============================================= -->
   @if (!isAdminPage) {
 
     <nav
@@ -289,12 +429,19 @@
         class="astro-bottom-nav-item"
         (click)="mobileProfileChoiceOpen = false"
       >
+
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M3 10.5 12 3l9 7.5V21h-6.5v-7h-5v7H3V10.5Z"/>
+          <path
+            d="M3 10.5 12 3l9 7.5V21h-6.5v-7h-5v7H3V10.5Z"
+          />
         </svg>
+
         <span>
-          {{ currentLang === 'ta' ? 'முகப்பு' : 'Home' }}
+          {{ currentLang === 'ta'
+            ? 'முகப்பு'
+            : 'Home' }}
         </span>
+
       </a>
 
       <!-- 02 SEARCH -->
@@ -304,16 +451,25 @@
         class="astro-bottom-nav-item"
         (click)="mobileProfileChoiceOpen = false"
       >
+
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="10.8" cy="10.8" r="6.8"/>
+          <circle
+            cx="10.8"
+            cy="10.8"
+            r="6.8"
+          />
           <path d="m16 16 5 5"/>
         </svg>
+
         <span>
-          {{ currentLang === 'ta' ? 'தேடல்' : 'Search' }}
+          {{ currentLang === 'ta'
+            ? 'தேடல்'
+            : 'Search' }}
         </span>
+
       </a>
 
-      <!-- 03 REGISTER BEFORE LOGIN / PLANS AFTER LOGIN -->
+      <!-- 03 REGISTER / PLANS -->
       @if (!isLoggedIn) {
 
         <a
@@ -322,15 +478,20 @@
           class="astro-bottom-nav-item"
           (click)="mobileProfileChoiceOpen = false"
         >
+
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="10" cy="7" r="3.5"/>
             <path d="M3.5 20v-2a6.5 6.5 0 0 1 13 0v2"/>
             <path d="M19 9v7"/>
             <path d="M15.5 12.5h7"/>
           </svg>
+
           <span>
-            {{ currentLang === 'ta' ? 'பதிவு' : 'Register' }}
+            {{ currentLang === 'ta'
+              ? 'பதிவு'
+              : 'Register' }}
           </span>
+
         </a>
 
       } @else {
@@ -341,13 +502,20 @@
           class="astro-bottom-nav-item"
           (click)="mobileProfileChoiceOpen = false"
         >
+
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8Z"/>
+            <path
+              d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8Z"
+            />
             <path d="M5 19h14"/>
           </svg>
+
           <span>
-            {{ currentLang === 'ta' ? 'திட்டங்கள்' : 'Plans' }}
+            {{ currentLang === 'ta'
+              ? 'திட்டங்கள்'
+              : 'Plans' }}
           </span>
+
         </a>
 
       }
@@ -359,17 +527,22 @@
         class="astro-bottom-nav-item"
         (click)="mobileProfileChoiceOpen = false"
       >
+
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path
             d="M20.8 8.7c0 4.5-8.8 10.7-8.8 10.7S3.2 13.2 3.2 8.7a4.6 4.6 0 0 1 8.8-1.8 4.6 4.6 0 0 1 8.8 1.8Z"
           />
         </svg>
+
         <span>
-          {{ currentLang === 'ta' ? 'விருப்பங்கள்' : 'Favorites' }}
+          {{ currentLang === 'ta'
+            ? 'விருப்பங்கள்'
+            : 'Favorites' }}
         </span>
+
       </a>
 
-      <!-- 05 PROFILE MENU AFTER LOGIN -->
+      <!-- 05 MEMBER PROFILE MENU -->
       @if (isLoggedIn) {
 
         <div class="astro-mobile-profile-choice">
@@ -381,6 +554,7 @@
             [attr.aria-expanded]="mobileProfileChoiceOpen"
             aria-controls="astro-profile-choice-menu"
           >
+
             <img
               class="astro-bottom-avatar"
               [src]="memberAvatar"
@@ -389,9 +563,13 @@
               width="27"
               height="27"
             />
+
             <span>
-              {{ currentLang === 'ta' ? 'சுயவிவரம்' : 'Profile' }}
+              {{ currentLang === 'ta'
+                ? 'சுயவிவரம்'
+                : 'Profile' }}
             </span>
+
           </button>
 
           @if (mobileProfileChoiceOpen) {
@@ -402,20 +580,23 @@
               aria-label="Profile options"
             >
 
-              <!-- PROFILE -->
+              <!-- MY PROFILE -->
               <a
                 routerLink="/my-biodata"
                 (click)="mobileProfileChoiceOpen = false"
               >
+
                 <span aria-hidden="true">👤</span>
+
                 <span>
                   {{ currentLang === 'ta'
                     ? 'என் சுயவிவரம்'
                     : 'My Profile' }}
                 </span>
+
               </a>
 
-              <!-- DASHBOARD OR APPROVAL FLOW -->
+              <!-- DASHBOARD OR BIODATA -->
               <a
                 [routerLink]="
                   mobileAccountStage === 'approved'
@@ -426,22 +607,33 @@
                 "
                 (click)="mobileProfileChoiceOpen = false"
               >
+
                 <span aria-hidden="true">▦</span>
+
                 <span>
+
                   @if (mobileAccountStage === 'approved') {
+
                     {{ currentLang === 'ta'
                       ? 'டாஷ்போர்டு'
                       : 'Dashboard' }}
+
                   } @else if (mobileAccountStage === 'pending') {
+
                     {{ currentLang === 'ta'
                       ? 'ஒப்புதல் நிலை'
                       : 'Approval Status' }}
+
                   } @else {
+
                     {{ currentLang === 'ta'
                       ? 'பயோடேட்டா'
                       : 'Continue Biodata' }}
+
                   }
+
                 </span>
+
               </a>
 
             </div>
@@ -453,51 +645,91 @@
       }
 
     </nav>
+
   }
 
-  <!-- DESKTOP FOOTER -->
+  <!-- ============================================
+       DESKTOP FOOTER
+  ============================================= -->
   @if (showFooter) {
 
     <footer class="site-footer">
 
       <div class="footer-inner">
 
+        <!-- FOOTER BRAND -->
         <div class="footer-about">
+
           <div class="footer-mark">
+
             <img
               src="assets/malogo.png"
               width="64"
               height="48"
-              alt=""
+              alt="Astro Alliance logo"
             />
 
             <strong>
               Astro Alliance
               <small>MATRIMONY</small>
             </strong>
+
           </div>
 
-          <p>{{ t.footer.aboutText }}</p>
+          <p>
+            {{ t.footer.aboutText }}
+          </p>
+
         </div>
 
+        <!-- FOOTER LINKS -->
         <div class="footer-links">
-          <h3>{{ t.footer.quickLinks }}</h3>
 
-          <a routerLink="/">{{ t.footer.home }}</a>
-          <a routerLink="/free-search">{{ t.footer.profiles }}</a>
-          <a routerLink="/plans">{{ t.footer.plans }}</a>
-          <a routerLink="/terms">{{ t.footer.terms }}</a>
+          <h3>
+            {{ t.footer.quickLinks }}
+          </h3>
+
+          <a routerLink="/">
+            {{ t.footer.home }}
+          </a>
+
+          <a routerLink="/free-search">
+            {{ t.footer.profiles }}
+          </a>
+
+          <a routerLink="/plans">
+            {{ t.footer.plans }}
+          </a>
+
+          <a routerLink="/terms">
+            {{ t.footer.terms }}
+          </a>
+
         </div>
 
+        <!-- CONTACT -->
         <div class="footer-links">
-          <h3>{{ t.footer.contact }}</h3>
 
-          <a routerLink="/contact-us">{{ t.footer.contactus }}</a>
-          <a routerLink="/privacy-policy">{{ t.footer.privacypolicy }}</a>
-          <a href="tel:+919042111424">{{ t.footer.phone }}</a>
+          <h3>
+            {{ t.footer.contact }}
+          </h3>
+
+          <a routerLink="/contact-us">
+            {{ t.footer.contactus }}
+          </a>
+
+          <a routerLink="/privacy-policy">
+            {{ t.footer.privacypolicy }}
+          </a>
+
+          <a href="tel:+919042111424">
+            {{ t.footer.phone }}
+          </a>
+
           <a href="mailto:astroalliance7@gmail.com">
             {{ t.footer.email }}
           </a>
+
           <a
             href="https://wa.me/919042111424"
             target="_blank"
@@ -505,16 +737,26 @@
           >
             WhatsApp ↗
           </a>
+
         </div>
 
       </div>
 
+      <!-- COPYRIGHT -->
       <div class="footer-bottom">
-        <span>{{ t.footer.copyright }}</span>
-        <span>{{ t.footer.location }}</span>
+
+        <span>
+          {{ t.footer.copyright }}
+        </span>
+
+        <span>
+          {{ t.footer.location }}
+        </span>
+
       </div>
 
     </footer>
+
   }
 
 </div>
