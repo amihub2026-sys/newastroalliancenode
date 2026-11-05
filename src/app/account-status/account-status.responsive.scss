@@ -1,0 +1,381 @@
+
+/* ============================================
+   ASTRO ALLIANCE JOURNEY
+   RESPONSIVE STYLES
+============================================ */
+
+/* LARGE TABLET */
+
+@media (max-width: 1200px) {
+
+  .hero-quote {
+    margin-right: 175px;
+  }
+
+  .journey-panel {
+    padding: 22px 16px;
+  }
+
+  .journey-info-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .next-card {
+    grid-column: 1 / -1;
+    min-height: auto;
+  }
+
+  .journey-steps {
+    min-width: 1120px;
+  }
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+
+  .journey-page {
+    padding: 0 16px 28px;
+  }
+
+  .journey-hero {
+    margin: 0 -16px 15px;
+    padding: 25px 5%;
+  }
+
+  .hero-copy h1 {
+    font-size: 36px;
+  }
+
+  .hero-quote {
+    margin-right: 130px;
+    width: 220px;
+  }
+
+  .hero-quote p {
+    font-size: 17px;
+  }
+
+  .hero-rings {
+    transform: scale(.8);
+    transform-origin: right center;
+  }
+
+  .journey-heading-copy {
+    gap: 12px;
+  }
+
+  .journey-heading-copy h2 {
+    font-size: 28px;
+  }
+
+  .journey-info-grid {
+    gap: 12px;
+  }
+
+  .journey-card {
+    padding: 21px;
+  }
+
+  .support-copy {
+    gap: 11px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 767px) {
+
+  .journey-page {
+    padding: 0 12px 100px;
+  }
+
+  /* HERO */
+
+  .journey-hero {
+    min-height: 155px;
+
+    margin: 0 -12px 13px;
+    padding: 24px 19px;
+  }
+
+  .hero-copy {
+    max-width: 75%;
+  }
+
+  .hero-eyebrow {
+    font-size: 9px;
+    letter-spacing: 1.8px;
+  }
+
+  .hero-copy h1 {
+    margin: 10px 0 5px;
+    font-size: 30px;
+    line-height: 1.2;
+  }
+
+  .hero-copy p {
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .hero-quote {
+    display: none;
+  }
+
+  .hero-rings {
+    right: -32px;
+
+    width: 165px;
+    opacity: .46;
+
+    transform: scale(.65);
+    transform-origin: right center;
+  }
+
+  /* MAIN PANEL */
+
+  .journey-panel {
+    padding: 19px 10px 15px;
+    border-radius: 17px;
+  }
+
+  .journey-panel-heading {
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 13px;
+
+    margin: 0 7px 19px;
+  }
+
+  .journey-heading-copy {
+    display: block;
+  }
+
+  .journey-heading-copy h2 {
+    font-size: 26px;
+    line-height: 1.2;
+  }
+
+  .journey-heading-copy p {
+    margin-top: 7px;
+
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .heading-separator {
+    display: none;
+  }
+
+  .journey-language {
+    align-self: flex-start;
+  }
+
+  /* HORIZONTAL STEPS */
+
+  .journey-scroll {
+    margin: 0;
+    padding-bottom: 12px;
+
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+
+  .journey-steps {
+    grid-template-columns: repeat(8, 137px);
+    min-width: max-content;
+    gap: 8px;
+  }
+
+  .journey-step {
+    scroll-snap-align: start;
+  }
+
+  .step-icon-area {
+    height: 94px;
+  }
+
+  .step-circle {
+    width: 73px;
+    height: 73px;
+  }
+
+  .step-circle svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .step-number {
+    top: 63px;
+  }
+
+  .step-check {
+    top: 46px;
+  }
+
+  .journey-step:not(:last-child)::after {
+    top: 21px;
+    font-size: 20px;
+  }
+
+  .journey-step h3 {
+    font-size: 13px;
+    min-height: 39px;
+  }
+
+  .step-state-label {
+    height: 34px;
+  }
+
+  .step-instruction {
+    min-height: 105px;
+    padding: 10px 8px;
+  }
+
+  .step-instruction p {
+    font-size: 11px;
+  }
+
+  /* INFORMATION CARDS */
+
+  .journey-info-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+
+    margin-top: 15px;
+  }
+
+  .next-card {
+    grid-column: auto;
+  }
+
+  .journey-card {
+    min-height: auto;
+    padding: 21px;
+    border-radius: 16px;
+  }
+
+  .card-heading {
+    gap: 10px;
+  }
+
+  .card-heading h2 {
+    font-size: 22px;
+  }
+
+  .card-description {
+    font-size: 13px;
+  }
+
+  .notification-list li {
+    font-size: 12.5px;
+  }
+
+  .next-item p {
+    font-size: 13px;
+  }
+
+  .decorative-mail {
+    opacity: .25;
+  }
+
+  /* SUPPORT */
+
+  .journey-support {
+    flex-direction: column;
+    align-items: stretch;
+
+    gap: 15px;
+
+    padding: 19px;
+    margin-top: 15px;
+  }
+
+  .support-copy {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .support-copy h3 {
+    font-size: 22px;
+  }
+
+  .support-copy p {
+    flex-basis: 100%;
+    font-size: 13px;
+  }
+
+  .support-button {
+    width: 100%;
+  }
+
+  /* EXPIRY */
+
+  .expiry-notice {
+    flex-wrap: wrap;
+    padding: 13px;
+  }
+
+  .expiry-notice p {
+    font-size: 12px;
+  }
+
+  .expiry-notice a {
+    width: 100%;
+    padding-left: 43px;
+  }
+
+  /* REJECTED */
+
+  .rejected-page {
+    padding-top: 25px;
+  }
+
+  .rejected-panel {
+    padding: 30px 20px;
+  }
+
+  .rejected-panel h1 {
+    font-size: 26px;
+  }
+}
+
+/* SMALL MOBILE */
+
+@media (max-width: 380px) {
+
+  .hero-copy h1 {
+    font-size: 27px;
+  }
+
+  .journey-heading-copy h2 {
+    font-size: 24px;
+  }
+
+  .journey-card {
+    padding: 17px;
+  }
+
+  .notification-list {
+    gap: 12px;
+  }
+
+  .journey-steps {
+    grid-template-columns: repeat(8, 130px);
+  }
+}
+
+/* REDUCED MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .journey-scroll {
+    scroll-behavior: auto;
+  }
+
+  .journey-loading-ring {
+    animation: none;
+  }
+}

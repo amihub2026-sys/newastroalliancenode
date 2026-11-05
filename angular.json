@@ -43,7 +43,7 @@
   "src/assets/tamil/common.js"
 ],
             "server": "src/main.server.ts",
-            "outputMode": "server",
+            "outputMode": "static",
             "security": {
               "allowedHosts": []
             },

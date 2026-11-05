@@ -46,10 +46,20 @@ export const authGuard: CanActivateFn = async (_route, state) => {
     return approved || ['draft', 'not_created', 'rejected'].includes(status)
       ? true : router.createUrlTree(['/approval-pending']);
   }
-  if (path === '/approval-pending') {
-    return status === 'pending' || awaitingPublication ? true
-      : router.createUrlTree([approved ? '/dashboard' : status === 'rejected' ? '/profile-rejected' : '/biodata']);
-  }
+  
+if (path === '/approval-pending') {
+  // Permanent Matrimony Journey page.
+  // Allow submitted members to view their journey
+  // even after admin approval and subscription.
+
+  return (
+    flow.biodataCompleted === true ||
+    ['pending', 'approved', 'rejected'].includes(status)
+  )
+    ? true
+    : router.createUrlTree(['/biodata']);
+}
+
   if (path === '/profile-rejected') {
     return status === 'rejected' ? true
       : router.createUrlTree([approved ? '/dashboard' : status === 'pending' || awaitingPublication ? '/approval-pending' : '/biodata']);
