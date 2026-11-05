@@ -1,0 +1,87 @@
+
+/* ==========================================
+   MOBILE PROFILE CARDS — COMPACT DESIGN
+========================================== */
+
+@media (max-width: 600px) {
+
+  .aa-match-card {
+    height: 285px;
+    border-radius: 14px;
+  }
+
+  /* Full-size photo stays inside card */
+  .aa-match-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Smaller default avatar */
+  .aa-avatar-holder {
+    width: 88px;
+    height: 88px;
+    top: 39%;
+  }
+
+  .aa-avatar-brand {
+    top: calc(39% + 55px);
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  /* Reduce bottom spacing */
+  .aa-member-details {
+    padding: 35px 10px 12px;
+  }
+
+  .aa-member-heading {
+    gap: 4px;
+  }
+
+  .aa-member-name {
+    font-size: 17px;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  .aa-member-age {
+    font-size: 11px;
+  }
+
+  /* Hide View Profile button completely */
+  .aa-match-actions {
+    display: none !important;
+  }
+
+  /* Smaller approved badge */
+  .aa-approved {
+    top: 9px;
+    left: 9px;
+    gap: 4px;
+    padding: 4px 7px 4px 4px;
+    font-size: 9px;
+  }
+
+  .aa-approved-icon {
+    width: 16px;
+    height: 16px;
+    flex-basis: 16px;
+    font-size: 10px;
+  }
+
+  /* Entire card is clickable */
+  .aa-mobile-card-link {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+  }
+
+  /* Compact variant */
+  .aa-match-card.is-compact {
+    height: 260px;
+  }
+}

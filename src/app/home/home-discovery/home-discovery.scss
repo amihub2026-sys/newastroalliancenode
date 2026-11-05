@@ -1,11 +1,47 @@
 /* Astro Alliance — Home Discovery | Base / desktop styles only */
 :host { display: block; }
 
+
+/* ==========================================
+   ASTRO ALLIANCE
+   WEDDING RINGS WATERMARK BACKGROUND
+   BOTH PROFILE SECTIONS
+========================================== */
+
 .home-discovery {
-  background: linear-gradient(120deg, #101013, #1d141b);
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.20),
+      rgba(255, 255, 255, 0.20)
+    ),
+    url('/assets/Elegant Watercolor Wedding Rings Background.png');
+
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
   padding: 67px 19px 74px;
-  color: #fff;
+  color: #401d30;
 }
+
+/* SECTION HEADINGS */
+
+.home-discovery header h2 {
+  color: #651635;
+}
+
+.home-discovery header p {
+  color: #725765;
+}
+
+.home-discovery header div > span {
+  color: #ae7b29;
+}
+
+.home-discovery header > a {
+  color: #861c47;
+}
+
 .home-discovery-inner { width: 100%; max-width: 1250px; margin: 0 auto; }
 .home-discovery header {
   display: flex;
@@ -332,4 +368,78 @@
   .astro-expand-card.is-active .astro-view-profile:hover {
     background: #aa3867;
   }
+}
+
+/* ==========================================
+   ASTRO ALLIANCE
+   DISCOVERY SECTION TEXT VISIBILITY FIX
+   Recent + Recommended Profiles
+========================================== */
+
+/* SMALL GOLDEN HEADING */
+
+.home-discovery .discovery-header > div > span {
+  color: #a77521 !important;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+/* MAIN SECTION TITLE */
+
+.home-discovery .discovery-header h2 {
+  color: #741137 !important;
+  font-weight: 700;
+  text-shadow: none !important;
+}
+
+/* DESCRIPTION */
+
+.home-discovery .discovery-header p {
+  color: #604452 !important;
+  font-weight: 500;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* VIEW ALL LINK */
+
+.home-discovery .discovery-header > a {
+  color: #87143e !important;
+  font-weight: 800;
+  opacity: 1 !important;
+}
+
+.home-discovery .discovery-header > a:hover {
+  color: #b67d25 !important;
+}
+
+/* SHOW MORE PROFILES BUTTON */
+
+.home-discovery .home-show-more {
+  background: #86143f;
+  color: #ffffff !important;
+  border-color: #b88b4b;
+}
+
+.home-discovery .home-show-more:hover {
+  background: #a52150;
+}
+
+/* FILTER BUTTONS */
+
+.home-discovery .discovery-filters button {
+  color: #741137;
+}
+
+.home-discovery .discovery-filters button.active {
+  background: #86143f;
+  color: #ffffff;
+}
+
+/* LOADING / ERROR MESSAGES */
+
+.home-discovery .home-status {
+  color: #64394c;
+  background: rgba(255, 255, 255, 0.85);
+  border-color: #ead5c5;
 }
