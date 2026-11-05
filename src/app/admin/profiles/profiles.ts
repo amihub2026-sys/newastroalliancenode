@@ -454,11 +454,18 @@ get filteredProfiles(): any[] {
 
   return this.profiles.filter(profile => {
 
-    const matchesCode =
-      !this.profileCodeFilter ||
-      String(profile.profile_code || '')
-        .toLowerCase()
-        .includes(this.profileCodeFilter.toLowerCase());
+const searchCode = this.profileCodeFilter
+  .trim()
+  .toLowerCase()
+  .replace(/^aam-?/, '');
+
+const profileCode = String(profile.profile_code || '')
+  .trim()
+  .toLowerCase()
+  .replace(/^aam-?/, '');
+
+const matchesCode =
+  !searchCode || profileCode === searchCode;
 
     const matchesName =
       !this.nameFilter ||

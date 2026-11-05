@@ -27,7 +27,7 @@ export class Admin {
       { label: 'Profile views', path: '/admin/profile-views', icon: '◉' },
       { label: 'Interests', path: '/admin/interests', icon: '↗' },
       { label: 'Shortlists', path: '/admin/shortlists', icon: '☆' },
-      { label: 'Likes history', path: '/admin/likes-history', icon: '♥' }
+      // { label: 'Likes history', path: '/admin/likes-history', icon: '♥' }
     ] },
     { title: 'Membership & billing', items: [
       { label: 'Plans', path: '/admin/plans', icon: '▤' },

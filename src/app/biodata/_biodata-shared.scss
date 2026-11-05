@@ -1955,3 +1955,243 @@ body {
 .user-biodata-wizard .review-paragraph { overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.65; }
 .user-biodata-wizard .review-photos { display: grid; grid-template-columns: repeat(auto-fill,minmax(min(100%,115px),1fr)); gap: 10px; }
 .user-biodata-wizard .review-photos img { width: 100%; height: 150px; object-fit: contain; background: #fff8fa; border-radius: 10px; border: 1px solid #efdae3; }
+
+/* ==============================================
+   ASTRO ALLIANCE - ADMIN BIODATA DESKTOP FIX
+   Does not affect the member wizard
+============================================== */
+
+@media screen and (min-width: 901px) {
+
+  app-biodata .biodata-page:not(.user-biodata-wizard) {
+    padding: 20px 24px;
+    background: #f8f5f7;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .biodata-container {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  /* Main form and review panel */
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .biodata-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 320px !important;
+    gap: 24px !important;
+    align-items: start;
+    width: 100%;
+    min-width: 0;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .form-side {
+    width: 100% !important;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* Fix fixed/overlapping review panel */
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .preview-side {
+    position: sticky !important;
+    top: 24px !important;
+    right: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    margin: 0 !important;
+    z-index: 2;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .preview-card {
+    width: 100% !important;
+    max-width: none !important;
+    border-radius: 18px;
+    border: 1px solid #f0e2e9;
+    box-shadow: 0 8px 24px rgba(64, 22, 44, .07);
+  }
+
+  /* Personal / Family / Education form */
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .form-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 18px 22px !important;
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Place labels above inputs */
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .field,
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .additional-phone-field {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 7px !important;
+    min-width: 0 !important;
+    width: 100%;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: #a81f58;
+    margin: 0;
+    white-space: normal;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .field input:not([type="checkbox"]),
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .field select,
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .field textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 44px;
+    border-radius: 9px;
+    padding: 9px 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .field > div,
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .birth-time-wrap,
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .additional-phone-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+  }
+
+  /* Additional mobile number */
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .additional-mobile-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 88px !important;
+    gap: 8px !important;
+    width: 100%;
+    align-items: center !important;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .additional-mobile-row input {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 44px !important;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .additional-mobile-row .remove-btn {
+    width: 88px !important;
+    min-width: 0 !important;
+    height: 44px !important;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .field-error {
+    margin-left: 0 !important;
+    white-space: normal !important;
+  }
+
+  /* Professional section cards */
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .form-accordion {
+    border-radius: 14px;
+    border: 1px solid #f0e2e9;
+    box-shadow: 0 5px 20px rgba(64, 22, 44, .04);
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .section-card {
+    padding: 22px;
+  }
+
+  /* Review text must not overflow */
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .preview-full-content {
+    grid-template-columns: minmax(0, 1fr) !important;
+    padding: 16px !important;
+    min-width: 0;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .preview-grid p {
+    grid-template-columns: 100px minmax(0, 1fr) !important;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .preview-grid span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Medium desktop: keep the review beside the form */
+@media screen and (min-width: 1200px) and (max-width: 1500px) {
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .biodata-layout {
+    grid-template-columns: minmax(0, 1fr) 270px !important;
+    gap: 16px !important;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .preview-side {
+    position: sticky !important;
+    top: 18px !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .preview-full-content {
+    grid-template-columns: 1fr !important;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .section-card {
+    padding: 16px !important;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .form-grid {
+    gap: 14px !important;
+  }
+}
+@media screen and (min-width: 901px) and (max-width: 1199px) {
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .biodata-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .preview-side {
+    position: static !important;
+    width: 100% !important;
+    margin-top: 16px !important;
+  }
+
+  app-biodata .biodata-page:not(.user-biodata-wizard)
+  .preview-full-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}

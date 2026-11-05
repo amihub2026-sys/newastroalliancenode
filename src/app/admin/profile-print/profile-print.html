@@ -6,9 +6,9 @@
 <button
   class="mobile-pdf-btn"
   type="button"
-  onclick="window.print()"
+  (click)="printReport()"
   *ngIf="!isLoading && profile">
-  📄 Download PDF
+  📄 Print / Download PDF
 </button>
 <div class="print-page" *ngIf="!isLoading && profile">
 
@@ -238,7 +238,10 @@ profile.caste_text ||
 <strong>சம்பளம் :</strong>
 <span>{{ profile.salary_text_ta || '-' }}</span>
 </p>
-<p><strong>தந்தை தொழில் :</strong><span>{{ v(profile.father_occupation, profile.father_occupation_ta) }}</span></p>
+<p class="father-occupation-row">
+  <strong>தந்தை தொழில் :</strong>
+  <span>{{ v(profile.father_occupation, profile.father_occupation_ta) }}</span>
+</p>
 
 <p><strong>தாய் தொழில் :</strong><span>{{ v(profile.mother_occupation, profile.mother_occupation_ta) }}</span></p>
 
@@ -265,36 +268,47 @@ profile.caste_text ||
 
 <!-- Children - show only when YES -->
 
-<p
+<!-- CHILDREN STATUS - SECOND MARRIAGE -->
+
+<ng-container
   *ngIf="
-    profile.children_status === 'Yes' ||
-    profile.children_status === 'yes' ||
-    profile.children_status === true ||
-    profile.children_status === 'true'
+    profile.second_marriage_reason ||
+    profile.second_marriage_reason_ta
   "
 >
-  <strong>குழந்தைகள் :</strong>
-  <span>ஆம்</span>
-</p>
+  <p>
+    <strong>குழந்தைகள் :</strong>
+    <span>
+      {{
+        profile.children_status === true ||
+        profile.children_status === 'Yes' ||
+        profile.children_status === 'yes' ||
+        profile.children_status === 'true' ||
+        profile.children_status === 'ஆம்'
+          ? 'ஆம்'
+          : 'இல்லை'
+      }}
+    </span>
+  </p>
 
-<p
-  *ngIf="
-    (
-      profile.children_status === 'Yes' ||
-      profile.children_status === 'yes' ||
-      profile.children_status === true ||
-      profile.children_status === 'true'
-    ) &&
-    (profile.children_details || profile.children_details_ta)
-  "
->
-  <strong>குழந்தைகள் விவரம் :</strong>
-
-  <span>
-    {{ v(profile.children_details, profile.children_details_ta) }}
-  </span>
-</p>
-
+  <p
+    *ngIf="
+      (
+        profile.children_status === true ||
+        profile.children_status === 'Yes' ||
+        profile.children_status === 'yes' ||
+        profile.children_status === 'true' ||
+        profile.children_status === 'ஆம்'
+      ) &&
+      (profile.children_details || profile.children_details_ta)
+    "
+  >
+    <strong>குழந்தைகள் விவரம் :</strong>
+    <span>
+      {{ v(profile.children_details, profile.children_details_ta) }}
+    </span>
+  </p>
+</ng-container>
 
 
     </div>

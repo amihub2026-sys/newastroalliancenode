@@ -199,12 +199,14 @@ h3 {
   .print-page {
     width: 200mm !important;
     max-width: 200mm !important;
-    min-height: 287mm !important;
+    min-height: 0 !important;
+height: auto !important;
     margin: 0 auto !important;
     padding: 4mm !important;
     border: 2px solid #008000 !important;
     box-sizing: border-box !important;
-    overflow: hidden !important;
+    min-height: 0 !important;
+height: auto !important;
   }
 
   .mobile-pdf-btn,
@@ -555,9 +557,6 @@ h3 {
     font-weight: 900;
   }
 
-  .print-page {
-    display: none !important;
-  }
 }
 /* =========================================================
    FINAL HOROSCOPE 12-BOX FIX
@@ -751,4 +750,87 @@ h3 {
   height: auto !important;
 
   object-fit: contain !important;
+}
+@media print {
+  .print-page {
+    display: flex !important;
+    visibility: visible !important;
+  }
+
+  .print-loading,
+  .mobile-pdf-btn {
+    display: none !important;
+  }
+}
+/* =========================================
+   SINGLE PAGE A4 PRINT FIX
+========================================= */
+
+@media print {
+
+@page {
+  size: A4 portrait;
+  margin: 12mm 5mm 5mm 5mm;
+}
+
+  .print-page {
+    width: 200mm !important;
+    max-width: 200mm !important;
+
+    min-height: 0 !important;
+    height: auto !important;
+
+    margin: 0 auto !important;
+    padding: 3mm !important;
+
+    box-sizing: border-box !important;
+    overflow: visible !important;
+
+    display: block !important;
+  }
+
+  .print-header {
+    margin-bottom: 4px !important;
+    padding: 2px 0 4px !important;
+  }
+
+  .column p,
+  .astro-details-row p,
+  .contact-section p {
+    margin-top: 0 !important;
+    margin-bottom: 3px !important;
+    line-height: 1.2 !important;
+  }
+
+  .two-column {
+    padding-bottom: 2px !important;
+  }
+
+  .astro-details-row {
+    margin-top: 3px !important;
+    padding: 3px 0 !important;
+  }
+
+  .chart-section {
+    margin: 3px 0 !important;
+    padding: 3px 0 !important;
+  }
+
+  .contact-section {
+    margin-top: 3px !important;
+    padding-top: 0 !important;
+  }
+
+  .print-footer-note {
+    margin-top: 3px !important;
+    padding-top: 3px !important;
+    font-size: 10px !important;
+    line-height: 1.15 !important;
+    break-inside: avoid !important;
+  }
+
+  .mobile-pdf-btn,
+  .print-loading {
+    display: none !important;
+  }
 }

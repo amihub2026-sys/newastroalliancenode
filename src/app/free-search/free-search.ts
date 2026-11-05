@@ -12,7 +12,7 @@ import {
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpBackend } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   debounceTime,
@@ -56,6 +56,10 @@ import {
 export class FreeSearch implements OnInit {
 
   private readonly http = inject(HttpClient);
+  // Public profile requests do not need login headers
+private readonly publicHttp = new HttpClient(
+  inject(HttpBackend)
+);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly language = inject(LanguageService);
   private readonly route = inject(ActivatedRoute);
@@ -398,12 +402,12 @@ export class FreeSearch implements OnInit {
     this.loading = true;
     this.error = false;
 
-    this.http
-      .get<unknown>(
-        `${environment.apiUrl}/profile`
-      )
+   this.publicHttp
+  .get<unknown>(
+    `${environment.apiUrl}/profile`
+  )
       .pipe(
-        timeout(12000),
+        timeout(30000),
         takeUntilDestroyed(this.destroyRef),
         finalize(() => {
           this.loading = false;

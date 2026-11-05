@@ -2684,16 +2684,14 @@ const selectedKudumbaNilai = this.kudumbaNilaiList.find(
 );
 this.isSaving = true;
 
+try {
+  if (!this.isAdminBiodataMode()) {
+    await this.prepareEnglishValues();
+  }
 
-
-if (!this.isAdminBiodataMode()) {
-  await this.prepareEnglishValues();
-}
-   try {
-
-        if (this.currentLang === 'en') {
-          await this.prepareAutoTamilValues();
-        }
+  if (this.currentLang === 'en') {
+    await this.prepareAutoTamilValues();
+  }
 
 let appUserId = this.currentUserId || '';
 const profileImageUrl = this.selectedProfileImage
