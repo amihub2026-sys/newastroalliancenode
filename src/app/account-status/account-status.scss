@@ -1,0 +1,1151 @@
+
+/* ============================================
+   ASTRO ALLIANCE MATRIMONY
+   ACCOUNT STATUS - MAIN DESIGN
+============================================ */
+
+:host {
+  display: block;
+
+  --aa-maroon: #810b37;
+  --aa-dark-maroon: #570722;
+  --aa-gold: #d89b2b;
+  --aa-soft-gold: #ffe8ad;
+
+  --aa-cream: #fffaf6;
+  --aa-ink: #321422;
+  --aa-muted: #67525e;
+  --aa-line: #efd6ba;
+
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--aa-ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.journey-page {
+  width: 100%;
+  min-height: calc(100vh - 100px);
+
+  padding: 0 24px 32px;
+
+  background: linear-gradient(
+    180deg,
+    #fffaf7 0%,
+    #ffffff 45%,
+    #fff9f5 100%
+  );
+}
+
+/* ============================================
+   HERO
+============================================ */
+
+.journey-hero {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 175px;
+
+  margin: 0 -24px 14px;
+  padding: 28px 6%;
+
+  overflow: hidden;
+
+  background: linear-gradient(
+    105deg,
+    #fffaf6 0%,
+    #fff4eb 62%,
+    #f4debb 100%
+  );
+
+  border-bottom: 1px solid #e9c99b;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  color: #b98228;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.hero-copy h1 {
+  margin: 12px 0 5px;
+
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(30px, 3vw, 45px);
+  font-weight: 700;
+
+  color: var(--aa-maroon);
+}
+
+.hero-copy p {
+  margin: 0;
+
+  color: #5e364a;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.hero-quote {
+  position: relative;
+  z-index: 2;
+
+  width: 310px;
+  margin-left: auto;
+  margin-right: 220px;
+
+  text-align: center;
+}
+
+.hero-quote p {
+  margin: 0;
+
+  color: #95234c;
+
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 20px;
+  font-style: italic;
+  line-height: 1.55;
+}
+
+.hero-quote span {
+  display: block;
+  margin-top: 9px;
+
+  color: #b31e4e;
+  font-size: 19px;
+  letter-spacing: 2px;
+}
+
+/* ============================================
+   DECORATIVE WEDDING RINGS
+============================================ */
+
+.hero-rings {
+  position: absolute;
+
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 270px;
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 250, 225, .95),
+    rgba(248, 218, 164, .45) 65%,
+    transparent 95%
+  );
+}
+
+.ring {
+  position: absolute;
+
+  top: 58px;
+
+  width: 93px;
+  height: 61px;
+
+  border: 11px ridge #d99520;
+  border-radius: 50%;
+
+  box-shadow:
+    0 6px 12px rgba(115, 69, 9, .20),
+    inset 0 2px 4px rgba(255,255,255,.8);
+}
+
+.ring-one {
+  left: 50px;
+  transform: rotate(-25deg);
+}
+
+.ring-two {
+  left: 108px;
+  transform: rotate(25deg);
+}
+
+/* ============================================
+   JOURNEY PANEL
+============================================ */
+
+.journey-panel {
+  padding: 24px 21px 28px;
+
+  background: rgba(255,255,255,.96);
+
+  border: 1px solid #ecc18a;
+  border-radius: 24px;
+
+  box-shadow:
+    0 9px 26px rgba(109, 36, 39, .055),
+    inset 0 0 0 3px rgba(255,244,226,.85);
+}
+
+.journey-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  margin: 0 13px 24px;
+}
+
+.journey-heading-copy {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 23px;
+}
+
+.journey-heading-copy h2 {
+  margin: 0;
+
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(25px, 2.5vw, 35px);
+
+  color: var(--aa-maroon);
+}
+
+.heading-separator {
+  display: inline-block;
+
+  width: 1px;
+  height: 31px;
+
+  background: #aa8a93;
+}
+
+.journey-heading-copy p {
+  margin: 0;
+
+  font-size: 14px;
+  color: #564458;
+}
+
+/* ============================================
+   LANGUAGE BUTTON
+============================================ */
+
+.journey-language {
+  display: flex;
+  gap: 3px;
+
+  flex-shrink: 0;
+
+  padding: 4px;
+
+  border: 1px solid #edcfab;
+  border-radius: 30px;
+
+  background: #fff6eb;
+}
+
+.journey-language button {
+  min-width: 44px;
+
+  padding: 7px 11px;
+
+  border: 0;
+  border-radius: 25px;
+
+  background: transparent;
+
+  color: var(--aa-maroon);
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.journey-language button.active {
+  background: var(--aa-maroon);
+  color: white;
+}
+
+/* ============================================
+   STEPS SCROLLER
+============================================ */
+
+.journey-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding: 0 0 9px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #e0ba7d #fff6ec;
+}
+
+.journey-steps {
+  display: grid;
+
+  grid-template-columns: repeat(
+    8,
+    minmax(136px, 1fr)
+  );
+
+  gap: 10px;
+
+  min-width: 1120px;
+}
+
+/* ============================================
+   INDIVIDUAL STEP
+============================================ */
+
+.journey-step {
+  position: relative;
+
+  min-width: 0;
+  text-align: center;
+}
+
+.journey-step:not(:last-child)::after {
+  content: "→";
+
+  position: absolute;
+  top: 25px;
+  right: -16px;
+
+  z-index: 2;
+
+  font-size: 25px;
+  color: #94818a;
+}
+
+.step-icon-area {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+
+  height: 105px;
+}
+
+.step-circle {
+  display: grid;
+  place-items: center;
+
+  width: 82px;
+  height: 82px;
+
+  border: 2px solid #d0c7d0;
+  border-radius: 50%;
+
+  background: linear-gradient(
+    145deg,
+    #faf8fa,
+    #e8e4eb
+  );
+
+  color: #a296a7;
+
+  box-shadow:
+    inset 0 2px 5px white,
+    0 3px 7px rgba(85, 35, 59, .07);
+}
+
+.step-circle svg {
+  width: 37px;
+  height: 37px;
+}
+
+/* COMPLETED */
+
+.step-completed .step-circle {
+  background: linear-gradient(
+    150deg,
+    #b6104c,
+    #650724
+  );
+
+  border-color: #e8c278;
+  color: white;
+
+  box-shadow:
+    0 5px 12px rgba(113, 13, 50, .18);
+}
+
+/* CURRENT STAGE */
+
+.step-current .step-circle {
+  background: linear-gradient(
+    145deg,
+    #fff8dc,
+    #eeba4a
+  );
+
+  border: 3px solid #d99b18;
+
+  color: #bc8114;
+
+  box-shadow:
+    0 0 0 4px #fff4d6,
+    0 6px 13px rgba(195, 132, 22, .16);
+}
+
+/* NUMBER */
+
+.step-number {
+  position: absolute;
+
+  top: 69px;
+  left: calc(50% - 13px);
+
+  display: grid;
+  place-items: center;
+
+  width: 26px;
+  height: 26px;
+
+  border-radius: 50%;
+
+  background: #77778a;
+  color: white;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.step-completed .step-number,
+.step-current .step-number {
+  background: #820c37;
+  border: 2px solid #dba331;
+}
+
+/* COMPLETED TICK */
+
+.step-check {
+  position: absolute;
+
+  top: 52px;
+  left: calc(50% + 19px);
+
+  display: grid;
+  place-items: center;
+
+  width: 28px;
+  height: 28px;
+
+  border-radius: 50%;
+
+  background: #d89b2b;
+  border: 2px solid #fff6dc;
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* STEP TITLES */
+
+.journey-step h3 {
+  min-height: 44px;
+
+  margin: 4px 0 0;
+  padding: 0 4px;
+
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+
+  color: var(--aa-maroon);
+}
+
+.step-current h3 {
+  color: #a56d0c;
+}
+
+/* STATUS */
+
+.step-state-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 37px;
+}
+
+.completed-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #438a50;
+}
+
+.current-label {
+  padding: 6px 12px;
+
+  border: 1px solid #f4d28b;
+  border-radius: 25px;
+
+  background: #fff0c6;
+
+  color: #91350d;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* DESCRIPTION UNDER STEPS */
+
+.step-instruction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 108px;
+
+  padding: 13px 10px;
+
+  border: 1px solid #ece1dc;
+  border-radius: 12px;
+
+  background: linear-gradient(
+    180deg,
+    #fffcfa,
+    #faf6f3
+  );
+}
+
+.step-instruction p {
+  margin: 0;
+
+  font-size: 12px;
+  line-height: 1.55;
+
+  color: #40343d;
+}
+
+.step-current .step-instruction {
+  background: #fff8e9;
+  border-color: #efcf95;
+}
+
+.step-completed .step-instruction {
+  background: #fff8f5;
+}
+
+/* ============================================
+   EXPIRY NOTICE
+============================================ */
+
+.expiry-notice {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  margin-top: 16px;
+  padding: 14px 18px;
+
+  border: 1px solid #e8c180;
+  border-radius: 14px;
+
+  background: #fff3d7;
+}
+
+.expiry-notice-icon {
+  display: grid;
+  place-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #cc8d24;
+  color: white;
+  font-weight: 800;
+}
+
+.expiry-notice p {
+  flex: 1;
+  margin: 0;
+  font-size: 14px;
+}
+
+.expiry-notice a {
+  color: var(--aa-maroon);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ============================================
+   THREE INFO CARDS
+============================================ */
+
+.journey-info-grid {
+  display: grid;
+
+  grid-template-columns: 1.08fr 1fr 1fr;
+  gap: 16px;
+
+  margin-top: 20px;
+}
+
+.journey-card {
+  position: relative;
+  overflow: hidden;
+
+  min-height: 275px;
+
+  padding: 24px;
+
+  border: 1px solid var(--aa-line);
+  border-radius: 19px;
+
+  background: linear-gradient(
+    135deg,
+    #fffbf8,
+    #fff2ed
+  );
+
+  box-shadow:
+    0 5px 14px rgba(105, 41, 42, .035);
+}
+
+.notification-card,
+.next-card {
+  background: linear-gradient(
+    125deg,
+    #fffdf9,
+    #fff9f5
+  );
+}
+
+.card-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 13px;
+}
+
+.card-heading h2 {
+  margin: 0;
+
+  color: var(--aa-maroon);
+
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(20px, 1.8vw, 26px);
+  line-height: 1.2;
+}
+
+.card-icon {
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 35px;
+  height: 37px;
+
+  font-size: 27px;
+
+  color: #c58b20;
+}
+
+.notification-heading-icon {
+  color: #94123f;
+}
+
+.next-heading-icon {
+  color: #ae1e4d;
+}
+
+.card-description {
+  margin: 0 0 18px;
+
+  color: #46333d;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* STATUS SUMMARY */
+
+.status-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  max-width: 340px;
+
+  padding: 13px 16px;
+
+  border: 1px solid #edd4c1;
+  border-radius: 12px;
+
+  background: #f8e9df;
+}
+
+.status-summary span {
+  font-size: 12px;
+  color: #634957;
+}
+
+.status-summary strong {
+  font-size: 17px;
+  color: var(--aa-maroon);
+}
+
+.card-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 17px;
+
+  color: var(--aa-maroon);
+
+  font-size: 13px;
+  font-weight: 800;
+
+  text-decoration: none;
+}
+
+/* ============================================
+   NOTIFICATIONS
+============================================ */
+
+.notification-list {
+  position: relative;
+  z-index: 1;
+
+  list-style: none;
+
+  display: grid;
+  gap: 13px;
+
+  padding: 0;
+  margin: 0;
+}
+
+.notification-list li {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.notification-icon {
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  width: 24px;
+  height: 24px;
+
+  border-radius: 50%;
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.notification-icon.green {
+  background: #3b9857;
+}
+
+.notification-icon.amber {
+  background: #dba12f;
+}
+
+.notification-icon.rose {
+  background: #c34968;
+}
+
+.notification-icon.purple {
+  background: #922974;
+}
+
+/* ENVELOPE DECORATION */
+
+.decorative-mail {
+  position: absolute;
+
+  right: 17px;
+  bottom: 7px;
+
+  opacity: .46;
+  pointer-events: none;
+}
+
+.mail-envelope {
+  font-size: 77px;
+  line-height: 1;
+
+  color: #d7ad96;
+}
+
+.mail-heart {
+  position: absolute;
+
+  top: 24px;
+  right: 23px;
+
+  color: #b51a4d;
+  font-size: 18px;
+}
+
+/* ============================================
+   NEXT STEPS
+============================================ */
+
+.next-list {
+  display: grid;
+  gap: 16px;
+}
+
+.next-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.next-number {
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    145deg,
+    #fff3c9,
+    #eab44a
+  );
+
+  color: #8a2d40;
+
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.next-item p {
+  margin: 0;
+
+  font-size: 13.5px;
+  line-height: 1.6;
+
+  color: #40343d;
+}
+
+/* ============================================
+   SUPPORT
+============================================ */
+
+.journey-support {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  margin-top: 20px;
+  padding: 16px 22px;
+
+  border: 1px solid #edc99b;
+  border-radius: 18px;
+
+  background: linear-gradient(
+    95deg,
+    #fff8ef,
+    #fff0e3
+  );
+}
+
+.support-copy {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.support-question {
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 39px;
+  height: 39px;
+
+  border-radius: 50%;
+
+  background: #d69b2b;
+  color: white;
+
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.support-copy h3 {
+  margin: 0;
+
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 24px;
+
+  color: var(--aa-maroon);
+}
+
+.support-copy p {
+  margin: 0;
+
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.support-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  flex-shrink: 0;
+
+  min-height: 44px;
+
+  padding: 11px 24px;
+
+  border: 2px solid #dda940;
+  border-radius: 30px;
+
+  background: linear-gradient(
+    180deg,
+    #ad1149,
+    #710626
+  );
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  text-decoration: none;
+
+  box-shadow:
+    0 5px 11px rgba(112, 10, 47, .15);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.support-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 15px rgba(112, 10, 47, .20);
+}
+
+/* ============================================
+   LOADING / API ERROR
+============================================ */
+
+.journey-loading,
+.journey-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+
+  min-height: 360px;
+
+  text-align: center;
+}
+
+.journey-loading-ring {
+  width: 50px;
+  height: 50px;
+
+  border: 4px solid #efd9c5;
+  border-top-color: #8b113d;
+
+  border-radius: 50%;
+
+  animation: journeySpin 1s linear infinite;
+}
+
+@keyframes journeySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.journey-loading p {
+  color: var(--aa-maroon);
+  font-size: 14px;
+}
+
+.journey-error h2 {
+  color: var(--aa-maroon);
+  font-family: Georgia, serif;
+}
+
+.journey-error p {
+  color: var(--aa-muted);
+}
+
+.journey-error button {
+  padding: 11px 20px;
+
+  border: 0;
+  border-radius: 25px;
+
+  background: var(--aa-maroon);
+  color: white;
+
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ============================================
+   REJECTED PROFILE
+============================================ */
+
+.rejected-page {
+  display: grid;
+  place-items: center;
+
+  padding-top: 45px;
+  padding-bottom: 45px;
+}
+
+.rejected-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 17px;
+
+  width: min(100%, 650px);
+
+  padding: 42px 30px;
+
+  background: white;
+
+  border: 1px solid #eccdb7;
+  border-radius: 22px;
+
+  text-align: center;
+
+  box-shadow:
+    0 14px 35px rgba(103, 25, 54, .07);
+}
+
+.rejected-symbol {
+  display: grid;
+  place-items: center;
+
+  width: 65px;
+  height: 65px;
+
+  border-radius: 50%;
+
+  background: #fff0df;
+  color: #b62940;
+
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.section-eyebrow {
+  color: #c08b2a;
+
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+.rejected-panel h1 {
+  margin: 0;
+
+  color: var(--aa-maroon);
+  font-family: Georgia, serif;
+  font-size: 31px;
+}
+
+.rejected-panel p {
+  max-width: 480px;
+  margin: 0;
+
+  color: var(--aa-muted);
+  line-height: 1.7;
+}
+
+.rejected-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-top: 12px;
+}
+
+.journey-btn {
+  padding: 12px 20px;
+
+  border-radius: 30px;
+
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.journey-btn.primary {
+  background: var(--aa-maroon);
+  color: white;
+}
+
+.journey-btn.secondary {
+  border: 1px solid var(--aa-maroon);
+  color: var(--aa-maroon);
+  background: white;
+}
+
+/* ACCESSIBILITY */
+
+.journey-language button:focus-visible,
+.support-button:focus-visible,
+.card-action-link:focus-visible,
+.journey-btn:focus-visible {
+  outline: 3px solid #cc9b45;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-loading-ring {
+    animation: none;
+  }
+
+  .support-button {
+    transition: none;
+  }
+}

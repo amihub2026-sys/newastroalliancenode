@@ -39,8 +39,7 @@ export class PublicCard {
   @Input({ required: true })
   set profile(value: PublicProfile) {
 
-    // Reset image error only when the profile
-    // or its image URL changes.
+    // Reset photo error when profile or image changes.
     if (
       this._profile?.code !== value.code ||
       this._profile?.image !== value.image
@@ -74,11 +73,14 @@ export class PublicCard {
 
   photoFailed = false;
 
+  // Prevent repeated avatar loading errors.
+  avatarFailed = false;
+
   // ==========================================
   // LANGUAGE
   // ==========================================
 
-  get lang() {
+  get lang(): 'en' | 'ta' {
     return this.langService.currentLang;
   }
 
@@ -126,7 +128,7 @@ export class PublicCard {
   }
 
   // ==========================================
-  // PROFILE PHOTO URL
+  // ORIGINAL PROFILE PHOTO
   // ==========================================
 
   get photo(): string {
@@ -134,7 +136,7 @@ export class PublicCard {
   }
 
   // ==========================================
-  // CHECK IF REAL PHOTO IS AVAILABLE
+  // REAL PHOTO AVAILABILITY
   // ==========================================
 
   get hasPhoto(): boolean {
@@ -142,7 +144,70 @@ export class PublicCard {
   }
 
   // ==========================================
-  // PROFILE INITIALS FOR PLACEHOLDER
+  // GENDER-BASED DEFAULT AVATAR
+  // ==========================================
+
+  get defaultAvatar(): string {
+
+    const gender = String(this.profile?.gender || '')
+      .trim()
+      .toLowerCase();
+
+    if (
+      [
+        'female',
+        'woman',
+        'bride',
+        'பெண்',
+        'மணமகள்'
+      ].includes(gender)
+    ) {
+      return '/assets/women%20avathar.avif';
+    }
+
+    if (
+      [
+        'male',
+        'man',
+        'groom',
+        'ஆண்',
+        'மணமகன்'
+      ].includes(gender)
+    ) {
+      return '/assets/men%20avathar.avif';
+    }
+
+    return '/assets/avatars/person.svg';
+  }
+
+  // ==========================================
+  // DISPLAY PHOTO
+  // ==========================================
+
+  get displayPhoto(): string {
+
+    if (this.avatarFailed) {
+      return '';
+    }
+
+    if (this.hasPhoto) {
+      return this.photo;
+    }
+
+    return this.defaultAvatar;
+  }
+
+  // ==========================================
+  // DISPLAY AVATAR OR INITIALS
+  // ==========================================
+
+  get showImage(): boolean {
+    return !this.avatarFailed;
+  }
+
+  // ==========================================
+  // PROFILE INITIALS
+  // FINAL FALLBACK
   // ==========================================
 
   get initials(): string {
@@ -173,23 +238,31 @@ export class PublicCard {
   }
 
   // ==========================================
-  // PROFILE IMAGE ERROR HANDLING
+  // PHOTO ERROR HANDLING
   // ==========================================
 
   onPhotoError(event: Event): void {
 
     const img = event.target as HTMLImageElement;
 
-    // Prevent repeated error handling.
+    // When a real image fails, use the avatar.
+    if (!this.photoFailed && this.photo.length > 0) {
+
+      this.photoFailed = true;
+
+      img.src = this.defaultAvatar;
+
+      return;
+    }
+
+    // If the avatar also fails, show initials.
     img.onerror = null;
 
-    // Replace broken image with the HTML
-    // initials placeholder.
-    this.photoFailed = true;
+    this.avatarFailed = true;
   }
 
   // ==========================================
-  // REMEMBER SEARCH POSITION
+  // REMEMBER SEARCH SCROLL POSITION
   // ==========================================
 
   rememberSearchPosition(): void {
@@ -210,5 +283,4 @@ export class PublicCard {
       // Browser storage may be unavailable.
     }
   }
-
 }

@@ -1,9 +1,23 @@
 
+/* ==========================================
+   ASTRO ALLIANCE MATRIMONY
+   PREMIUM PUBLIC PROFILE CARD
+   MAROON • GOLD • WHITE
+========================================== */
+
+/* ==========================================
+   COMPONENT HOST
+========================================== */
+
 :host {
   display: block;
   width: 100%;
   min-width: 0;
 }
+
+/* ==========================================
+   PROFILE CARD
+========================================== */
 
 .aa-match-card {
   position: relative;
@@ -12,62 +26,213 @@
   overflow: hidden;
   isolation: isolate;
   box-sizing: border-box;
-  background: #251722;
-  color: #fff;
-  border: 1px solid rgba(194, 153, 166, .40);
+
+  background: #371b2a;
+  color: #ffffff;
+
+  border: 1px solid rgba(194, 153, 166, 0.4);
   border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(31, 9, 23, .14);
+
+  box-shadow: 0 12px 30px rgba(31, 9, 23, 0.14);
+
   transition:
-    transform .4s ease,
-    box-shadow .4s ease,
-    border-color .4s ease;
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
 }
 
 .aa-match-card:hover {
   transform: translateY(-5px);
   border-color: #d7aeab;
-  box-shadow: 0 20px 44px rgba(31, 9, 23, .26);
+  box-shadow: 0 20px 44px rgba(31, 9, 23, 0.26);
 }
 
-/* FULL BLEED PORTRAIT */
+/* ==========================================
+   PHOTO AREA
+   ALWAYS FILLS CARD
+========================================== */
 
 .aa-match-photo {
   position: absolute;
   inset: 0;
-  overflow: hidden;
-  background: #ede0e2;
-}
-
-.aa-match-photo > img {
-  display: block;
   width: 100%;
   height: 100%;
+
+  overflow: hidden;
+  box-sizing: border-box;
+
+  background: #371b2a;
+}
+
+/* ==========================================
+   REAL UPLOADED PHOTO
+   FULL CARD COVER
+========================================== */
+
+.aa-match-photo.aa-has-real-photo {
+  background: #251722;
+}
+
+.aa-match-photo.aa-has-real-photo
+  > img.aa-real-photo {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+
   object-fit: cover;
   object-position: center 20%;
-  transition: transform .65s ease, filter .5s ease;
+
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+
+  transition:
+    transform 0.65s ease,
+    filter 0.5s ease;
 }
 
-.aa-match-card:hover .aa-match-photo > img {
+.aa-match-card:hover
+  .aa-match-photo.aa-has-real-photo
+  > img.aa-real-photo {
   transform: scale(1.055);
-  filter: brightness(.84);
+  filter: brightness(0.84);
 }
 
-/* APPROVAL BADGE */
+/* ==========================================
+   DEFAULT AVATAR BACKGROUND
+   PLAIN MAROON
+========================================== */
+
+.aa-match-photo.aa-using-avatar {
+  background: #371b2a;
+}
+
+/* ==========================================
+   SMALL DEFAULT AVATAR HOLDER
+========================================== */
+
+.aa-avatar-holder {
+  position: absolute;
+  z-index: 2;
+
+  top: 40%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  display: grid;
+  place-items: center;
+
+  width: 138px;
+  height: 138px;
+
+  box-sizing: border-box;
+  overflow: hidden;
+
+  background: #fff9f5;
+  border: 2px solid #d8af73;
+  border-radius: 50%;
+
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+/* ==========================================
+   DEFAULT MALE / FEMALE AVATAR IMAGE
+========================================== */
+
+.aa-avatar-holder > img.aa-avatar-image {
+  position: static;
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  max-width: 100%;
+  max-height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  object-fit: cover;
+  object-position: center;
+
+  border: 0;
+  border-radius: 50%;
+
+  transform: none;
+}
+
+/* ==========================================
+   AVATAR BRAND NAME
+========================================== */
+
+.aa-avatar-brand {
+  position: absolute;
+  z-index: 2;
+
+  top: calc(40% + 85px);
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  color: #e8c69b;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ==========================================
+   FINAL FALLBACK INITIALS
+========================================== */
+
+.aa-avatar-initials {
+  color: #722543;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 45px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* ==========================================
+   APPROVED BADGE
+========================================== */
 
 .aa-approved {
   position: absolute;
-  z-index: 4;
+  z-index: 5;
+
   top: 15px;
   left: 15px;
+
   display: inline-flex;
   align-items: center;
   gap: 7px;
+
   padding: 6px 11px 6px 6px;
-  border: 1px solid rgba(233, 250, 236, .35);
+
+  border: 1px solid rgba(233, 250, 236, 0.35);
   border-radius: 999px;
-  background: rgba(23, 67, 48, .88);
+
+  background: rgba(23, 67, 48, 0.88);
+
   backdrop-filter: blur(12px);
-  color: #fff;
+  -webkit-backdrop-filter: blur(12px);
+
+  color: #ffffff;
+
   font-size: 11px;
   font-weight: 700;
   line-height: 1.2;
@@ -76,82 +241,29 @@
 .aa-approved-icon {
   display: grid;
   place-items: center;
+
   width: 20px;
   height: 20px;
+
+  flex: 0 0 20px;
+
   border-radius: 50%;
+
   background: #e6f4e9;
   color: #245b3d;
+
   font-size: 12px;
 }
 
-/* PREMIUM EMPTY PHOTO DESIGN */
-
-.aa-photo-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse at 72% 20%, rgba(207, 143, 158, .25), transparent 40%),
-    radial-gradient(ellipse at 15% 80%, rgba(171, 93, 117, .26), transparent 45%),
-    linear-gradient(145deg, #482336 0%, #251624 57%, #3d1d31 100%);
-}
-
-.aa-photo-placeholder::before {
-  content: "";
-  position: absolute;
-  inset: 13px;
-  border: 1px solid rgba(235, 195, 187, .19);
-  border-radius: 14px;
-  pointer-events: none;
-}
-
-.aa-placeholder-orbit {
-  position: absolute;
-  width: 245px;
-  height: 245px;
-  border: 1px solid rgba(232, 182, 172, .16);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 39px rgba(232, 182, 172, .035),
-    0 0 0 81px rgba(232, 182, 172, .025);
-}
-
-.aa-placeholder-monogram {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  width: 128px;
-  height: 128px;
-  border-radius: 50%;
-  border: 1px solid rgba(238, 199, 187, .40);
-  background: linear-gradient(140deg, #8e536a, #542c43);
-  color: #fae8df;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 48px;
-  letter-spacing: 2px;
-  box-shadow: 0 18px 40px rgba(12, 4, 9, .25);
-}
-
-.aa-placeholder-brand {
-  position: relative;
-  z-index: 1;
-  margin-top: 24px;
-  color: #e0b9b7;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 3px;
-}
-
-/* BOTTOM CONTENT */
+/* ==========================================
+   MEMBER DETAILS
+   BOTTOM OF CARD
+========================================== */
 
 .aa-member-details {
   position: absolute;
   z-index: 3;
+
   inset: auto 0 0;
 
   display: flex;
@@ -159,41 +271,64 @@
 
   width: 100%;
   box-sizing: border-box;
+
   padding: 100px 20px 20px;
 
-  /* No dark shade initially */
-  background: transparent;
-
-  transition: background 0.35s ease;
+  background: linear-gradient(
+    to top,
+    rgba(25, 8, 18, 0.82) 0%,
+    rgba(25, 8, 18, 0.22) 55%,
+    transparent 100%
+  );
 }
+
+/* Use plain maroon on cards with avatars */
+
+.aa-match-card.has-placeholder
+  .aa-member-details {
+  background: transparent;
+}
+
+/* ==========================================
+   NAME AND AGE
+========================================== */
 
 .aa-member-heading {
   display: flex;
   flex-direction: column;
   gap: 7px;
+
   min-width: 0;
-  transition: transform .32s ease;
+
+  transition: transform 0.32s ease;
 }
 
 .aa-member-name {
   margin: 0;
-  color: #fff;
+
+  color: #ffffff;
+
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(23px, 2.1vw, 29px);
   font-weight: 700;
+
   line-height: 1.15;
   overflow-wrap: anywhere;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, .3);
+
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .aa-member-age {
   color: #f1d6de;
+
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
 }
 
-/* PREMIUM ACTION */
+/* ==========================================
+   PROFILE ACTION
+========================================== */
 
 .aa-match-actions {
   min-width: 0;
@@ -205,23 +340,33 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+
   box-sizing: border-box;
-  min-height: 48px;
+
   width: 100%;
+  min-height: 48px;
+
   padding: 10px 12px 10px 17px;
-  border: 1px solid rgba(255,255,255,.25);
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 12px;
+
   background: #913359;
-  color: #fff;
+  color: #ffffff;
+
   text-decoration: none;
+
   font-size: 13px;
   font-weight: 700;
-  transition: background .25s ease, border-color .25s ease;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .aa-view-profile:hover {
   background: #ac416a;
-  border-color: rgba(255,255,255,.5);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .aa-view-profile:focus-visible {
@@ -232,65 +377,217 @@
 .aa-view-arrow {
   display: grid;
   place-items: center;
+
   width: 29px;
   height: 29px;
+
   flex: 0 0 29px;
+
   border-radius: 9px;
-  background: rgba(255,255,255,.15);
+
+  background: rgba(255, 255, 255, 0.15);
+
   font-size: 18px;
 }
 
-/* DESKTOP: ACTION REVEAL */
+/* ==========================================
+   MOBILE CARD LINK
+========================================== */
+
+.aa-mobile-card-link {
+  display: none;
+}
+
+/* ==========================================
+   DESKTOP ACTION REVEAL
+========================================== */
 
 @media (hover: hover) and (pointer: fine) {
+
   .aa-match-actions {
     opacity: 0;
     visibility: hidden;
+
     max-height: 0;
-    overflow: hidden;
     margin-top: 0;
+
+    overflow: hidden;
+
     transform: translateY(15px);
     pointer-events: none;
+
     transition:
-      opacity .3s ease,
-      transform .3s ease,
-      max-height .3s ease,
-      margin-top .3s ease,
-      visibility .3s ease;
+      opacity 0.3s ease,
+      transform 0.3s ease,
+      max-height 0.3s ease,
+      margin-top 0.3s ease,
+      visibility 0.3s ease;
   }
 
   .aa-match-card:hover .aa-match-actions,
   .aa-match-card:focus-within .aa-match-actions {
     opacity: 1;
     visibility: visible;
+
     max-height: 80px;
     margin-top: 16px;
+
     transform: translateY(0);
+
     pointer-events: auto;
     overflow: visible;
   }
 }
 
-/* COMPACT VARIANT */
+/* ==========================================
+   COMPACT PROFILE CARDS
+========================================== */
 
 .aa-match-card.is-compact {
   height: 355px;
 }
 
-.aa-match-card.is-compact .aa-member-details {
+.aa-match-card.is-compact
+  .aa-member-details {
   padding: 76px 16px 16px;
 }
 
-.aa-match-card.is-compact .aa-member-name {
+.aa-match-card.is-compact
+  .aa-member-name {
   font-size: 22px;
 }
 
+.aa-match-card.is-compact
+  .aa-avatar-holder {
+  width: 115px;
+  height: 115px;
+}
+
+.aa-match-card.is-compact
+  .aa-avatar-brand {
+  top: calc(40% + 72px);
+}
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 900px) {
+
+  .aa-match-card {
+    height: 400px;
+  }
+
+  .aa-avatar-holder {
+    width: 125px;
+    height: 125px;
+  }
+
+  .aa-avatar-brand {
+    top: calc(40% + 78px);
+  }
+
+  .aa-member-details {
+    padding: 85px 17px 17px;
+  }
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+  .aa-match-card {
+    height: 390px;
+    border-radius: 17px;
+  }
+
+  .aa-avatar-holder {
+    width: 112px;
+    height: 112px;
+  }
+
+  .aa-avatar-brand {
+    top: calc(40% + 70px);
+    font-size: 9px;
+    letter-spacing: 1.6px;
+  }
+
+  .aa-member-details {
+    padding: 80px 16px 16px;
+  }
+
+  .aa-member-name {
+    font-size: 25px;
+  }
+
+  .aa-approved {
+    top: 12px;
+    left: 12px;
+  }
+
+  .aa-mobile-card-link {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  .aa-match-actions {
+    position: relative;
+    z-index: 3;
+  }
+
+  .aa-match-actions .aa-view-profile {
+    min-height: 46px;
+  }
+
+  .aa-match-card.is-compact {
+    height: 340px;
+  }
+}
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media (max-width: 360px) {
+
+  .aa-match-card {
+    height: 360px;
+  }
+
+  .aa-avatar-holder {
+    width: 100px;
+    height: 100px;
+  }
+
+  .aa-avatar-brand {
+    top: calc(40% + 64px);
+    font-size: 8px;
+  }
+
+  .aa-member-name {
+    font-size: 23px;
+  }
+
+  .aa-member-details {
+    padding: 75px 13px 13px;
+  }
+}
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
+
 @media (prefers-reduced-motion: reduce) {
+
   .aa-match-card,
-  .aa-match-photo > img,
+  .aa-real-photo,
   .aa-member-heading,
   .aa-match-actions,
   .aa-view-profile {
-    transition: none !important;
+    transition: none;
   }
 }

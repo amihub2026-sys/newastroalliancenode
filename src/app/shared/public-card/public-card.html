@@ -1,9 +1,11 @@
+
 <article
   class="aa-match-card"
   [class.is-compact]="compact"
   [class.has-placeholder]="!hasPhoto"
 >
-  <!-- Mobile: whole card is clickable -->
+
+  <!-- MOBILE CARD LINK -->
   <a
     class="aa-mobile-card-link"
     [routerLink]="['/free-profile', profile.code]"
@@ -16,57 +18,117 @@
     "
   ></a>
 
+  <!-- PROFILE PHOTO AREA -->
+  <div
+    class="aa-match-photo"
+    [class.aa-has-real-photo]="hasPhoto"
+    [class.aa-using-avatar]="!hasPhoto"
+  >
 
-  <div class="aa-match-photo">
-@if (hasPhoto) {
-  <img
-    [src]="photo"
-    [alt]="t('Profile photo for ', 'சுயவிவரப் படம் ') + displayName"
-    (error)="onPhotoError($event)"
-    loading="lazy"
-    decoding="async"
-  />
-} @else {
-    
-      <div class="aa-photo-placeholder" aria-hidden="true">
-        <div class="aa-placeholder-orbit"></div>
-        <div class="aa-placeholder-monogram">
-          {{ initials }}
+    @if (showImage) {
+
+      @if (hasPhoto) {
+
+        <!-- REAL PHOTO: FULL CARD -->
+        <img
+          class="aa-real-photo"
+          [src]="displayPhoto"
+          [alt]="displayName"
+          (error)="onPhotoError($event)"
+          loading="lazy"
+          decoding="async"
+        />
+
+      } @else {
+
+        <!-- DEFAULT AVATAR: SMALL CIRCLE -->
+        <div class="aa-avatar-holder">
+          <img
+            class="aa-avatar-image"
+            [src]="displayPhoto"
+            [alt]="displayName"
+            (error)="onPhotoError($event)"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
-        <span class="aa-placeholder-brand">ASTRO ALLIANCE</span>
+
+        <span class="aa-avatar-brand">
+          ASTRO ALLIANCE
+        </span>
+
+      }
+
+    } @else {
+
+      <!-- FALLBACK INITIALS -->
+      <div class="aa-avatar-holder aa-avatar-initials">
+        {{ initials }}
       </div>
+
+      <span class="aa-avatar-brand">
+        ASTRO ALLIANCE
+      </span>
+
     }
 
+    <!-- APPROVED BADGE -->
     <span class="aa-approved">
-      <span class="aa-approved-icon" aria-hidden="true">✓</span>
+      <span class="aa-approved-icon" aria-hidden="true">
+        ✓
+      </span>
       {{ t('Approved', 'அங்கீகரிக்கப்பட்டது') }}
     </span>
 
   </div>
 
+  <!-- MEMBER DETAILS -->
   <div class="aa-member-details">
 
     <div class="aa-member-heading">
-      <h3 class="aa-member-name">{{ displayName }}</h3>
 
-      @if (profile.age !== null && profile.age !== undefined) {
+      <h3 class="aa-member-name">
+        {{ displayName }}
+      </h3>
+
+      @if (
+        profile.age !== null &&
+        profile.age !== undefined
+      ) {
         <span class="aa-member-age">
-          {{ profile.age }} {{ t('Years', 'வயது') }}
+          {{ profile.age }}
+          {{ t('Years', 'வயது') }}
         </span>
       }
+
     </div>
 
+    <!-- VIEW PROFILE BUTTON -->
     <div class="aa-match-actions">
+
       <a
         class="aa-view-profile"
         [routerLink]="['/free-profile', profile.code]"
-        [queryParams]="returnState ? { s: returnState, source: searchRoute } : null"
+        [queryParams]="returnState
+          ? { s: returnState, source: searchRoute }
+          : null"
         (click)="rememberSearchPosition()"
-        [attr.aria-label]="t('View basic profile for ', 'அடிப்படை சுயவிவரத்தைப் பார்க்க ') + displayName"
+        [attr.aria-label]="
+          t(
+            'View basic profile for ',
+            'அடிப்படை சுயவிவரத்தைப் பார்க்க '
+          ) + displayName
+        "
       >
-        <span>{{ t('View Profile', 'சுயவிவரத்தைக் காண்க') }}</span>
-        <span class="aa-view-arrow" aria-hidden="true">↗</span>
+        <span>
+          {{ t('View Profile', 'சுயவிவரத்தைக் காண்க') }}
+        </span>
+
+        <span class="aa-view-arrow" aria-hidden="true">
+          ↗
+        </span>
       </a>
+
     </div>
 
   </div>
