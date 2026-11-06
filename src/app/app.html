@@ -523,7 +523,14 @@
     <router-outlet></router-outlet>
   </main>
 
+<!-- ============================================
+     FLOATING GOLDEN GALAXY
+     PUBLIC WEBSITE ONLY
+============================================ -->
 
+@if (!isAdminPage) {
+  <app-astro-galaxy />
+}
   <!-- ============================================
        MOBILE BOTTOM NAVIGATION
   ============================================ -->

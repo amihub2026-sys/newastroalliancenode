@@ -1,0 +1,485 @@
+
+/* ==========================================
+   ASTRO ALLIANCE
+   GOLDEN GALAXY WIDGET - DESKTOP
+========================================== */
+
+:host {
+  display: contents;
+}
+
+/* ==========================================
+   WIDGET POSITION
+========================================== */
+
+.astro-galaxy-widget {
+  position: fixed;
+
+  right: 24px;
+  bottom: 26px;
+
+  z-index: 1000;
+
+  width: max-content;
+
+  font-family: Arial, sans-serif;
+}
+
+/* ==========================================
+   STANDING CARTOON ASTROLOGER
+========================================== */
+
+.astro-floating-guide {
+  position: absolute;
+
+  right: 91px;
+  bottom: -4px;
+
+  width: 190px;
+  height: 245px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  margin: 0;
+  padding: 0;
+
+  pointer-events: none;
+
+  animation: astroCharacterEnter .6s ease both;
+}
+
+.astro-guide-character {
+  display: block;
+
+  width: 190px;
+  height: 245px;
+
+  max-width: none;
+
+  object-fit: contain;
+  object-position: bottom center;
+
+  transform: translateX(19px);
+
+  filter:
+    drop-shadow(0 8px 12px rgba(48, 12, 36, .2));
+}
+
+/* ==========================================
+   MAIN GOLDEN GALAXY BUTTON
+========================================== */
+
+.astro-galaxy-trigger {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 120px;
+  height: 120px;
+
+  margin: 0;
+  padding: 0;
+
+  border: 2px solid #f8d58d;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #54246e 0%,
+      #24112f 68%,
+      #12091c 100%
+    );
+
+  box-shadow:
+    0 0 0 5px rgba(255, 205, 110, .12),
+    0 0 28px rgba(247, 185, 79, .62),
+    0 0 55px rgba(226, 152, 59, .24),
+    0 12px 30px rgba(41, 9, 29, .35);
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+
+  animation: astroButtonPulse 3s ease-in-out infinite;
+}
+
+.astro-galaxy-trigger:hover {
+  filter: brightness(1.12);
+}
+
+.astro-galaxy-trigger:focus-visible {
+  outline: 3px solid #ffe2a5;
+  outline-offset: 5px;
+}
+
+/* ==========================================
+   SVG
+========================================== */
+
+.galaxy-svg {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+}
+
+/* ==========================================
+   ROTATION ANIMATIONS
+========================================== */
+
+.galaxy-zodiac-ring,
+.galaxy-inner-spin,
+.galaxy-planet-orbit {
+  transform-origin: 60px 60px;
+  transform-box: view-box;
+}
+
+/* Golden wheel clockwise */
+.galaxy-zodiac-ring {
+  animation:
+    astroZodiacRotate 22s linear infinite;
+}
+
+/* Galaxy counterclockwise */
+.galaxy-inner-spin {
+  animation:
+    astroGalaxyRotate 15s linear infinite;
+}
+
+/* All nine planets orbit */
+.galaxy-planet-orbit {
+  animation:
+    astroPlanetOrbit 16s linear infinite;
+}
+
+/* Twinkling stars */
+.galaxy-stars {
+  animation:
+    astroStarGlow 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes astroZodiacRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes astroGalaxyRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes astroPlanetOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes astroStarGlow {
+  from {
+    opacity: .4;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes astroButtonPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 5px rgba(255, 205, 110, .12),
+      0 0 24px rgba(247, 185, 79, .45),
+      0 12px 30px rgba(41, 9, 29, .35);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 8px rgba(255, 205, 110, .2),
+      0 0 42px rgba(247, 185, 79, .78),
+      0 12px 30px rgba(41, 9, 29, .35);
+  }
+}
+
+/* ==========================================
+   ASTROLOGER ENTRANCE
+========================================== */
+
+@keyframes astroCharacterEnter {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* ==========================================
+   ASTROLOGY POPUP
+========================================== */
+
+.astro-galaxy-panel {
+  position: absolute;
+
+  right: 0;
+  bottom: 138px;
+
+  width: 350px;
+  max-width: calc(100vw - 30px);
+
+  overflow: hidden;
+
+  background: #fffaf5;
+
+  border: 1px solid #d5a75e;
+  border-radius: 20px;
+
+  box-shadow:
+    0 18px 60px rgba(39, 8, 28, .32),
+    0 0 18px rgba(225, 172, 88, .18);
+
+  animation: astroPopupEnter .25s ease-out;
+}
+
+@keyframes astroPopupEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================
+   POPUP HEADER
+========================================== */
+
+.astro-galaxy-panel-header {
+  position: relative;
+
+  padding: 24px 20px 20px;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      #762f56,
+      #48152f 75%,
+      #2b0b20
+    );
+}
+
+.astro-galaxy-kicker {
+  display: block;
+
+  color: #e7bd73;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.astro-galaxy-panel-header h2 {
+  margin: 13px 0 8px;
+
+  color: #ffe1a0;
+
+  font-family: Georgia, serif;
+  font-size: 27px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.astro-galaxy-panel-header p {
+  margin: 0;
+
+  color: #f2d5df;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.astro-galaxy-close {
+  position: absolute;
+
+  top: 8px;
+  right: 12px;
+
+  width: 30px;
+  height: 30px;
+
+  padding: 0;
+
+  background: transparent;
+  border: none;
+
+  color: #ffe5bb;
+
+  font-size: 26px;
+
+  cursor: pointer;
+}
+
+/* ==========================================
+   POPUP BODY
+========================================== */
+
+.astro-galaxy-panel-body {
+  padding: 17px;
+}
+
+.astro-galaxy-instruction {
+  margin: 0 0 5px;
+
+  color: #603147;
+
+  text-align: center;
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.astro-galaxy-instruction.tamil {
+  margin-bottom: 17px;
+  color: #8b6574;
+}
+
+/* ==========================================
+   ASTROLOGY OPTION CARDS
+========================================== */
+
+.astro-galaxy-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 14px 12px;
+  margin-top: 10px;
+
+  background: #fff;
+
+  border: 1px solid #ead4c1;
+  border-radius: 13px;
+
+  color: #52233b;
+  text-decoration: none;
+
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    transform .2s ease;
+}
+
+.astro-galaxy-option:hover {
+  background: #fff1e4;
+  border-color: #d6a560;
+
+  transform: translateY(-2px);
+}
+
+.astro-galaxy-option:focus-visible {
+  outline: 2px solid #b47b39;
+  outline-offset: 2px;
+}
+
+.astro-galaxy-option-icon {
+  flex: 0 0 42px;
+
+  display: grid;
+  place-items: center;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  background: #561d3a;
+  color: #f5d18a;
+
+  font-size: 25px;
+}
+
+.astro-galaxy-option-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+
+  min-width: 0;
+}
+
+.astro-galaxy-option-text strong {
+  font-size: 14px;
+}
+
+.astro-galaxy-option-text small {
+  color: #98687a;
+
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.astro-galaxy-option-arrow {
+  color: #ad753d;
+  font-size: 19px;
+}
+
+/* ==========================================
+   POPUP FOOTER
+========================================== */
+
+.astro-galaxy-panel-footer {
+  padding: 12px;
+
+  text-align: center;
+
+  background: #f7e9dc;
+  color: #a37a4f;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .galaxy-zodiac-ring,
+  .galaxy-inner-spin,
+  .galaxy-planet-orbit,
+  .galaxy-stars,
+  .astro-galaxy-trigger,
+  .astro-floating-guide,
+  .astro-galaxy-panel {
+    animation: none !important;
+  }
+}

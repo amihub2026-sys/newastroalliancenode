@@ -13,6 +13,7 @@ import { environment } from '../environments/environment';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd } from '@angular/router';
 import { SnackbarComponent } from './shared/snackbar/snackbar';
+import { AstroGalaxy } from './shared/astro-galaxy/astro-galaxy';
 import { SnackbarService } from './shared/snackbar.service';
 
 
@@ -28,7 +29,8 @@ imports: [
   RouterLink,
   RouterLinkActive,
   RouterOutlet,
-  SnackbarComponent
+  SnackbarComponent,
+  AstroGalaxy
 ],
   templateUrl: './app.html',
   styleUrls: [
