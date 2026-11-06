@@ -1,34 +1,79 @@
 
 <div class="astro-galaxy-widget">
 
-  <!-- ========================================
+  <!-- =====================================
        STANDING CARTOON ASTROLOGER
-  ========================================= -->
+       HIDDEN ON LOGIN PAGE
+  ====================================== -->
 
-  @if (!isOpen) {
+  @if (!isOpen && !isLoginPage) {
+
     <div class="astro-floating-guide">
 
       <img
         src="assets/astro-widget/astrologer.png"
-        alt="Astrologer pointing towards the galaxy"
+        alt="Cartoon astrologer presenting astrology services"
         class="astro-guide-character"
         draggable="false"
       />
 
     </div>
+
   }
 
-  <!-- ========================================
-       GOLDEN GALAXY FLOATING BUTTON
-  ========================================= -->
+  <!-- =====================================
+       SMALL ASTROLOGER DIALOGUE
+       HIDDEN ON LOGIN PAGE
+  ====================================== -->
+
+  @if (!isOpen && showSpeech && !isLoginPage) {
+
+    <div
+      class="astro-speech-bubble"
+      role="note"
+    >
+
+      <button
+        type="button"
+        class="astro-speech-close"
+        (click)="closeSpeech()"
+        aria-label="Close astrologer message"
+      >
+        ×
+      </button>
+
+      <strong class="astro-speech-title">
+        வணக்கம்! 🙏
+      </strong>
+
+      <p class="astro-speech-tamil">
+        ஜாதகப் பொருத்தம் பார்க்கலாமா?
+      </p>
+
+      <p class="astro-speech-english">
+        Check your match or birth chart!
+      </p>
+
+      <span class="astro-speech-hint">
+        ✦ Tap the galaxy
+      </span>
+
+    </div>
+
+  }
+
+  <!-- =====================================
+       GOLDEN GALAXY BUTTON
+       VISIBLE ON LOGIN AND PUBLIC PAGES
+  ====================================== -->
 
   <button
     type="button"
     class="astro-galaxy-trigger"
     (click)="toggleGalaxy()"
     [attr.aria-expanded]="isOpen"
-    aria-controls="astro-galaxy-panel"
-    aria-label="Open astrology services"
+    [attr.aria-controls]="isOpen ? 'astro-galaxy-panel' : null"
+    aria-label="Open Horoscope Match and Birth Chart"
   >
 
     <svg
@@ -40,41 +85,49 @@
 
       <defs>
 
-        <!-- Deep galaxy colours -->
+        <!-- PURPLE / GOLD GALAXY -->
         <radialGradient id="astroGalaxyCore">
           <stop offset="0%" stop-color="#fff7d5"/>
-          <stop offset="10%" stop-color="#ffd37a"/>
-          <stop offset="22%" stop-color="#ef99d9"/>
-          <stop offset="45%" stop-color="#773ba7"/>
-          <stop offset="75%" stop-color="#32145c"/>
+          <stop offset="12%" stop-color="#ffcd70"/>
+          <stop offset="28%" stop-color="#ed95d2"/>
+          <stop offset="52%" stop-color="#753ca7"/>
+          <stop offset="80%" stop-color="#301252"/>
           <stop offset="100%" stop-color="#0d0924"/>
         </radialGradient>
 
-        <!-- Metallic golden border -->
+        <!-- GOLDEN RING -->
         <linearGradient id="astroGalaxyGold">
           <stop offset="0%" stop-color="#a26828"/>
-          <stop offset="22%" stop-color="#f8d589"/>
-          <stop offset="42%" stop-color="#fff3c1"/>
-          <stop offset="63%" stop-color="#d39a40"/>
-          <stop offset="85%" stop-color="#ffe1a1"/>
-          <stop offset="100%" stop-color="#995c25"/>
+          <stop offset="25%" stop-color="#f8d589"/>
+          <stop offset="50%" stop-color="#fff3c1"/>
+          <stop offset="75%" stop-color="#d39a40"/>
+          <stop offset="100%" stop-color="#ffe1a1"/>
         </linearGradient>
 
-        <!-- Center glow -->
+        <!-- GALAXY LIGHT -->
         <radialGradient id="astroGalaxyLight">
-          <stop offset="0%" stop-color="#fff9df" stop-opacity="1"/>
-          <stop offset="35%" stop-color="#ffe0a2" stop-opacity=".65"/>
-          <stop offset="100%" stop-color="#ce65ce" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#fff9df"/>
+          <stop
+            offset="35%"
+            stop-color="#ffe0a2"
+            stop-opacity=".7"
+          />
+          <stop
+            offset="100%"
+            stop-color="#ce65ce"
+            stop-opacity="0"
+          />
         </radialGradient>
 
+        <!-- SOFT GLOW -->
         <filter id="astroGalaxyGlow">
-          <feGaussianBlur stdDeviation="3"/>
+          <feGaussianBlur stdDeviation="2.5"/>
         </filter>
 
       </defs>
 
       <!-- =====================================
-           GOLDEN OUTER GLOW
+           OUTER GOLDEN FRAME
       ====================================== -->
 
       <circle
@@ -105,7 +158,7 @@
       />
 
       <!-- =====================================
-           ROTATING ZODIAC WHEEL
+           ROTATING GOLDEN ZODIAC WHEEL
       ====================================== -->
 
       <g class="galaxy-zodiac-ring">
@@ -116,7 +169,7 @@
           r="39"
           fill="none"
           stroke="url(#astroGalaxyGold)"
-          stroke-width="2.5"
+          stroke-width="2.4"
         />
 
         <circle
@@ -125,37 +178,33 @@
           r="33"
           fill="none"
           stroke="#f5c978"
-          stroke-width=".7"
+          stroke-width=".8"
           stroke-dasharray="2 3"
         />
 
         @for (i of zodiacTicks; track i) {
 
           <g
-            [attr.transform]="'rotate(' + (i * 30) + ' 60 60)'"
+            [attr.transform]="
+              'rotate(' + (i * 30) + ' 60 60)'
+            "
           >
 
             <path
-              d="M60 21 L60 27"
-              fill="none"
+              d="M60 21 L60 32"
               stroke="#ffdc97"
-              stroke-width="1.3"
+              stroke-width="1.2"
             />
 
             <circle
               cx="60"
               cy="24"
-              r="1.1"
+              r="1.3"
               fill="#fff4d1"
             />
 
-            <path
-              d="M60 28 L60 32"
-              stroke="#bb8543"
-              stroke-width=".6"
-            />
-
           </g>
+
         }
 
       </g>
@@ -173,7 +222,7 @@
           fill="url(#astroGalaxyCore)"
         />
 
-        <!-- Purple spiral arm -->
+        <!-- PURPLE SPIRAL -->
         <path
           d="
             M34 67
@@ -189,7 +238,7 @@
           opacity=".85"
         />
 
-        <!-- Golden spiral arm -->
+        <!-- GOLDEN SPIRAL -->
         <path
           d="
             M34 55
@@ -203,7 +252,7 @@
           stroke-linecap="round"
         />
 
-        <!-- Light particles -->
+        <!-- SMALL GALAXY STARS -->
         <circle cx="40" cy="49" r="1.3" fill="#ffe3ad"/>
         <circle cx="81" cy="48" r="1.1" fill="#ffbde9"/>
         <circle cx="83" cy="75" r="1.2" fill="#ffe6ac"/>
@@ -211,7 +260,7 @@
         <circle cx="68" cy="36" r="1" fill="#fff4ce"/>
         <circle cx="52" cy="85" r="1.1" fill="#d6aaff"/>
 
-        <!-- Bright center -->
+        <!-- CENTER LIGHT -->
         <circle
           cx="60"
           cy="60"
@@ -234,186 +283,78 @@
 
       <g class="galaxy-planet-orbit">
 
-        <!-- 1. MERCURY -->
-        <g transform="rotate(0 60 60)">
+        @for (planet of planets; track planet.name) {
 
-          <circle
-            cx="60" cy="10" r="2.8"
-            fill="#b5a39a"
-            stroke="#f2d8c5"
-            stroke-width=".5"
-          />
-
-          <circle
-            cx="59" cy="9" r=".7"
-            fill="#ffeddc"
-          />
-
-        </g>
-
-        <!-- 2. VENUS -->
-        <g transform="rotate(40 60 60)">
-
-          <circle
-            cx="60" cy="10" r="4.2"
-            fill="#e8b66d"
-            stroke="#ffe4a8"
-            stroke-width=".6"
-          />
-
-          <path
-            d="M57 9 Q60 7 63 10"
-            fill="none"
-            stroke="#fff0bf"
-            stroke-width="1"
-          />
-
-        </g>
-
-        <!-- 3. EARTH -->
-        <g transform="rotate(80 60 60)">
-
-          <circle
-            cx="60" cy="10" r="4.6"
-            fill="#287fc9"
-            stroke="#a9e7ff"
-            stroke-width=".7"
-          />
-
-          <path
-            d="M58 7 L61 8 L63 11 L59 13 L57 10 Z"
-            fill="#75cf91"
-          />
-
-        </g>
-
-        <!-- 4. MARS -->
-        <g transform="rotate(120 60 60)">
-
-          <circle
-            cx="60" cy="10" r="3.5"
-            fill="#c8583b"
-            stroke="#f9aa83"
-            stroke-width=".6"
-          />
-
-          <circle
-            cx="61" cy="9" r="1"
-            fill="#f6ad85"
-          />
-
-        </g>
-
-        <!-- 5. JUPITER -->
-        <g transform="rotate(160 60 60)">
-
-          <circle
-            cx="60" cy="10" r="6"
-            fill="#d8a277"
-            stroke="#ffe1b4"
-            stroke-width=".7"
-          />
-
-          <path
-            d="
-              M54 7 Q60 9 66 7
-              M54 11 Q60 13 66 11
-              M56 14 Q60 15 64 14
+          <g
+            [attr.transform]="
+              'rotate(' + planet.angle + ' 60 60)'
             "
-            fill="none"
-            stroke="#966244"
-            stroke-width="1.2"
-          />
+          >
 
-          <ellipse
-            cx="62"
-            cy="10"
-            rx="1.5"
-            ry="1"
-            fill="#b86551"
-          />
+            <!-- SATURN RINGS -->
+            @if (planet.name === 'Saturn') {
 
-        </g>
+              <ellipse
+                cx="60"
+                cy="10"
+                rx="9"
+                ry="3.5"
+                fill="none"
+                stroke="#f3d5a2"
+                stroke-width="1.5"
+                transform="rotate(-25 60 10)"
+              />
 
-        <!-- 6. SATURN -->
-        <g transform="rotate(200 60 60)">
+            }
 
-          <ellipse
-            cx="60"
-            cy="10"
-            rx="9"
-            ry="3.4"
-            fill="none"
-            stroke="#e7c28d"
-            stroke-width="1.5"
-            transform="rotate(-25 60 10)"
-          />
+            <!-- PLANET -->
+            <circle
+              cx="60"
+              cy="10"
+              [attr.r]="planet.radius"
+              [attr.fill]="planet.color"
+              stroke="#ffe9bd"
+              stroke-width=".6"
+            />
 
-          <circle
-            cx="60" cy="10" r="4.7"
-            fill="#cba46c"
-            stroke="#ffe1a1"
-            stroke-width=".7"
-          />
+            <!-- EARTH CONTINENTS -->
+            @if (planet.name === 'Earth') {
 
-          <path
-            d="M52 14 Q60 5 68 6"
-            fill="none"
-            stroke="#fff0bc"
-            stroke-width="1"
-          />
+              <path
+                d="M58 7 L61 8 L63 11 L59 13 L57 10 Z"
+                fill="#80d99c"
+              />
 
-        </g>
+            }
 
-        <!-- 7. URANUS -->
-        <g transform="rotate(240 60 60)">
+            <!-- JUPITER STRIPES -->
+            @if (planet.name === 'Jupiter') {
 
-          <circle
-            cx="60" cy="10" r="4.1"
-            fill="#78cbd8"
-            stroke="#d5ffff"
-            stroke-width=".6"
-          />
+              <path
+                d="
+                  M54 7 Q60 9 66 7
+                  M54 11 Q60 13 66 11
+                  M56 14 Q60 15 64 14
+                "
+                fill="none"
+                stroke="#936247"
+                stroke-width="1"
+              />
 
-          <path
-            d="M57 9 Q60 11 63 9"
-            fill="none"
-            stroke="#e0ffff"
-            stroke-width=".9"
-          />
+            }
 
-        </g>
+            <!-- LIGHT REFLECTION -->
+            <circle
+              cx="59"
+              cy="9"
+              r=".8"
+              fill="#fff8dc"
+              opacity=".85"
+            />
 
-        <!-- 8. NEPTUNE -->
-        <g transform="rotate(280 60 60)">
+          </g>
 
-          <circle
-            cx="60" cy="10" r="4.1"
-            fill="#365dbf"
-            stroke="#9cbcff"
-            stroke-width=".6"
-          />
-
-          <path
-            d="M57 10 Q60 8 63 10"
-            fill="none"
-            stroke="#a8c8ff"
-            stroke-width=".9"
-          />
-
-        </g>
-
-        <!-- 9. PLUTO -->
-        <g transform="rotate(320 60 60)">
-
-          <circle
-            cx="60" cy="10" r="2.6"
-            fill="#b8a092"
-            stroke="#efcfb5"
-            stroke-width=".5"
-          />
-
-        </g>
+        }
 
       </g>
 
@@ -425,39 +366,33 @@
 
         <path
           d="
-            M23 29
-            L25 34
-            L30 36
-            L25 38
-            L23 43
-            L21 38
-            L16 36
-            L21 34 Z
+            M23 29 L25 34 L30 36
+            L25 38 L23 43 L21 38
+            L16 36 L21 34 Z
           "
           fill="#ffdfa0"
         />
 
         <path
           d="
-            M94 18
-            L96 23
-            L101 25
-            L96 27
-            L94 32
-            L92 27
-            L87 25
-            L92 23 Z
+            M94 18 L96 23 L101 25
+            L96 27 L94 32 L92 27
+            L87 25 L92 23 Z
           "
           fill="#fff1c3"
         />
 
         <circle
-          cx="102" cy="93" r="1.5"
+          cx="102"
+          cy="93"
+          r="1.5"
           fill="#fff3c0"
         />
 
         <circle
-          cx="17" cy="86" r="1.5"
+          cx="17"
+          cy="86"
+          r="1.5"
           fill="#fff0b7"
         />
 
@@ -467,9 +402,9 @@
 
   </button>
 
-  <!-- ========================================
+  <!-- =====================================
        ASTROLOGY SERVICES POPUP
-  ========================================= -->
+  ====================================== -->
 
   @if (isOpen) {
 
@@ -505,7 +440,7 @@
 
       </div>
 
-      <!-- CONTENT -->
+      <!-- BODY -->
       <div class="astro-galaxy-panel-body">
 
         <p class="astro-galaxy-instruction">

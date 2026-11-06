@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {
+  Component,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -79,92 +82,105 @@ export class HoroscopeMatch {
     groomRasi: ''
   };
 
-  constructor(
-    private http: HttpClient
-  ) {}
+ constructor(
+  private http: HttpClient,
+  private cdr: ChangeDetectorRef
+) {}
 
-  checkMatch(): void {
-    this.errorMessage = '';
-    this.result = null;
 
-    if (
-      !this.form.brideNakshatra ||
-      !this.form.bridePaadam ||
-      !this.form.brideRasi ||
-      !this.form.groomNakshatra ||
-      !this.form.groomPaadam ||
-      !this.form.groomRasi
-    ) {
-      this.errorMessage =
-        'Please fill all bride and groom horoscope details.';
-      return;
+checkMatch(): void {
+
+  this.errorMessage = '';
+  this.result = null;
+
+
+if (
+  !this.form.brideNakshatra ||
+  !this.form.brideRasi ||
+  !this.form.groomNakshatra ||
+  !this.form.groomRasi
+) {
+  this.errorMessage =
+    'Please select Nakshatra and Rasi for both bride and groom.';
+
+  this.cdr.detectChanges();
+  return;
+}
+
+
+  // Prevent duplicate requests
+  if (this.isLoading) {
+    return;
+  }
+
+  this.isLoading = true;
+  this.cdr.detectChanges();
+
+  const payload = {
+    brideNakshatra: this.form.brideNakshatra,
+    bridePaadam: this.form.bridePaadam,
+    brideRasi: this.form.brideRasi,
+
+    groomNakshatra: this.form.groomNakshatra,
+    groomPaadam: this.form.groomPaadam,
+    groomRasi: this.form.groomRasi
+  };
+
+  this.http.post<any>(
+    `${this.apiUrl}/horoscope-matching/match`,
+    payload
+  ).subscribe({
+
+    next: (response) => {
+
+      this.result = response?.data || response;
+      this.errorMessage = '';
+      this.isLoading = false;
+
+      console.log(
+        'HOROSCOPE MATCH RESULT',
+        this.result
+      );
+
+      // Immediately refresh the result in Angular
+      this.cdr.detectChanges();
+    },
+
+    error: (error) => {
+
+      console.error(
+        'HOROSCOPE MATCH ERROR',
+        error
+      );
+
+      const backendData = error?.error?.data;
+
+      if (backendData) {
+
+        this.result = backendData;
+
+        this.errorMessage =
+          backendData?.resultTa ||
+          backendData?.resultEn ||
+          error?.error?.message ||
+          'Unable to calculate horoscope match.';
+
+      } else {
+
+        this.errorMessage =
+          error?.error?.message ||
+          'Unable to calculate horoscope match.';
+      }
+
+      this.isLoading = false;
+
+      // Immediately show error/result without another click
+      this.cdr.detectChanges();
     }
 
-    this.isLoading = true;
+  });
+}
 
-    const payload = {
-      brideNakshatra:
-        this.form.brideNakshatra,
-
-      bridePaadam:
-        this.form.bridePaadam,
-
-      brideRasi:
-        this.form.brideRasi,
-
-      groomNakshatra:
-        this.form.groomNakshatra,
-
-      groomPaadam:
-        this.form.groomPaadam,
-
-      groomRasi:
-        this.form.groomRasi
-    };
-
-    this.http.post<any>(
-      `${this.apiUrl}/horoscope-matching/match`,
-      payload
-    ).subscribe({
-      next: (response) => {
-        this.isLoading = false;
-
-        this.result =
-          response?.data || response;
-
-        console.log(
-          'HOROSCOPE MATCH RESULT',
-          this.result
-        );
-      },
-
-      error: (error) => {
-        this.isLoading = false;
-
-        console.error(
-          'HOROSCOPE MATCH ERROR',
-          error
-        );
-
-        const backendData =
-          error?.error?.data;
-
-        if (backendData) {
-          this.result = backendData;
-
-          this.errorMessage =
-            backendData?.resultTa ||
-            backendData?.resultEn ||
-            error?.error?.message ||
-            'Unable to calculate horoscope match.';
-        } else {
-          this.errorMessage =
-            error?.error?.message ||
-            'Unable to calculate horoscope match.';
-        }
-      }
-    });
-  }
 
   resetForm(): void {
     this.form = {

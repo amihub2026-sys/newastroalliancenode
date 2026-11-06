@@ -33,15 +33,25 @@
       </div>
 
 
-      <div class="form-group">
-        <label>Birth Time / பிறந்த நேரம்</label>
+    
+<div class="form-group">
+  <label>
+    Birth Time (24-Hour Format) /
+    பிறந்த நேரம் (24 மணி நேர முறை)
+  </label>
 
-        <input
-          type="time"
-          [(ngModel)]="brideForm.timeOfBirth"
-          name="brideTimeOfBirth"
-        >
-      </div>
+  <input
+    type="time"
+    [(ngModel)]="groomForm.timeOfBirth"
+    name="groomTimeOfBirth"
+    step="60"
+  >
+
+  <small class="time-hint">
+    Example: 09:15 = Morning, 21:15 = Night
+  </small>
+</div>
+
 
 
       <div class="form-group">
@@ -103,15 +113,24 @@
       </div>
 
 
-      <div class="form-group">
-        <label>Birth Time / பிறந்த நேரம்</label>
+   
+<div class="form-group">
+  <label>
+    Birth Time (24-Hour Format) /
+    பிறந்த நேரம் (24 மணி நேர முறை)
+  </label>
 
-        <input
-          type="time"
-          [(ngModel)]="groomForm.timeOfBirth"
-          name="groomTimeOfBirth"
-        >
-      </div>
+  <input
+    type="time"
+    [(ngModel)]="brideForm.timeOfBirth"
+    name="brideTimeOfBirth"
+    step="60"
+  >
+
+  <small class="time-hint">
+    Example: 06:30 = Morning, 18:30 = Evening
+  </small>
+</div>
 
 
       <div class="form-group">

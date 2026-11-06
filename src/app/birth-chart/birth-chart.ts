@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../environments/environment';
@@ -14,7 +17,9 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./birth-chart.scss']
 })
 export class BirthChart {
-
+constructor(
+  private cdr: ChangeDetectorRef
+) {}
  brideForm = {
   dateOfBirth: '',
   timeOfBirth: '',
@@ -76,9 +81,10 @@ async searchBridePlace(): Promise<void> {
       error
     );
 
-  } finally {
-    this.bridePlaceLoading = false;
-  }
+} finally {
+  this.bridePlaceLoading = false;
+  this.cdr.detectChanges();
+}
 }
 async searchGroomPlace(): Promise<void> {
   const query =
@@ -113,9 +119,10 @@ async searchGroomPlace(): Promise<void> {
       error
     );
 
-  } finally {
-    this.groomPlaceLoading = false;
-  }
+} finally {
+  this.groomPlaceLoading = false;
+  this.cdr.detectChanges();
+}
 }
 selectBridePlace(place: any): void {
   this.brideForm.placeOfBirth =
@@ -192,11 +199,18 @@ get chartSections(): any[] {
     }
   ];
 }
+
 async calculateBirthChart(): Promise<void> {
+
+  // Prevent multiple API requests
+  if (this.isLoading) {
+    return;
+  }
 
   this.errorMessage = '';
   this.result = null;
 
+  // Validate bride and groom birth details
   if (
     !this.brideForm.dateOfBirth ||
     !this.brideForm.timeOfBirth ||
@@ -211,10 +225,14 @@ async calculateBirthChart(): Promise<void> {
   ) {
     this.errorMessage =
       'Please enter complete Bride and Groom birth details.';
+
+    this.cdr.detectChanges();
     return;
   }
 
+  // Show loading state immediately
   this.isLoading = true;
+  this.cdr.detectChanges();
 
   try {
 
@@ -243,14 +261,28 @@ async calculateBirthChart(): Promise<void> {
 
     const data = await response.json();
 
+    // Handle unsuccessful response
     if (!response.ok || !data.success) {
+
       this.errorMessage =
         data.message ||
         'Unable to calculate horoscope matching.';
+
+      this.cdr.detectChanges();
       return;
     }
 
+    // Store API result
     this.result = data;
+    this.errorMessage = '';
+
+    console.log(
+      'BIRTH CHART RESULT:',
+      this.result
+    );
+
+    // Display result without another click
+    this.cdr.detectChanges();
 
   } catch (error) {
 
@@ -262,8 +294,16 @@ async calculateBirthChart(): Promise<void> {
     this.errorMessage =
       'Unable to connect to astrology server.';
 
+    this.cdr.detectChanges();
+
   } finally {
+
+    // Stop loading regardless of API outcome
     this.isLoading = false;
+
+    // Refresh button and results immediately
+    this.cdr.detectChanges();
   }
 }
+
 }
