@@ -503,7 +503,14 @@
     <router-outlet></router-outlet>
   </main>
 
+<!-- ============================================
+     FLOATING GOLDEN GALAXY
+     PUBLIC WEBSITE ONLY
+============================================ -->
 
+@if (!isAdminPage) {
+  <app-astro-galaxy />
+}
   <!-- ============================================
        MOBILE BOTTOM NAVIGATION
   ============================================ -->
@@ -617,28 +624,6 @@
       }
 
 
-      <!-- FAVORITES -->
-
-      <a
-        routerLink="/favorites"
-        routerLinkActive="is-active"
-        class="astro-bottom-nav-item"
-        (click)="mobileProfileChoiceOpen = false"
-      >
-
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M20.8 8.7c0 4.5-8.8 10.7-8.8 10.7S3.2 13.2 3.2 8.7a4.6 4.6 0 0 1 8.8-1.8 4.6 4.6 0 0 1 8.8 1.8Z"
-          />
-        </svg>
-
-        <span>
-          {{ currentLang === 'ta'
-            ? 'விருப்பங்கள்'
-            : 'Favorites' }}
-        </span>
-
-      </a>
 
 
       <!-- =====================================
@@ -787,6 +772,33 @@
                 </span>
 
               </a>
+
+<!-- MOBILE PROFILE LOGOUT -->
+<button
+  type="button"
+  class="astro-mobile-logout"
+  (click)="mobileProfileChoiceOpen = false; logout()"
+>
+  <svg
+    viewBox="0 0 24 24"
+    width="20"
+    height="20"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+    <path d="M16 17l5-5-5-5"/>
+    <path d="M21 12H9"/>
+  </svg>
+
+  <span>
+    {{ currentLang === 'ta' ? 'வெளியேறு' : 'Logout' }}
+  </span>
+</button>
 
             </div>
 

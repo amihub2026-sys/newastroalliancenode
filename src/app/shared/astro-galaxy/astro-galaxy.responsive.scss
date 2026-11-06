@@ -1,0 +1,248 @@
+
+/* ==========================================
+   ASTRO ALLIANCE GALAXY
+   MOBILE / TABLET RESPONSIVE
+========================================== */
+
+@media screen and (max-width: 880px) {
+
+  /* WIDGET POSITION */
+
+  .astro-galaxy-widget {
+    right: 14px;
+
+    bottom: calc(
+      86px + env(safe-area-inset-bottom)
+    );
+
+    width: 88px;
+    height: 88px;
+  }
+
+  /* GALAXY */
+
+  .astro-galaxy-trigger {
+    width: 88px;
+    height: 88px;
+  }
+
+  /* ASTROLOGER */
+
+  .astro-floating-guide {
+    right: 67px;
+    bottom: -3px;
+
+    width: 130px;
+    height: 180px;
+  }
+
+  .astro-guide-character {
+    width: 130px;
+    height: 180px;
+
+    transform: translateX(12px);
+  }
+
+  /* SMALL DIALOGUE BESIDE HAND */
+
+  .astro-speech-bubble {
+    right: 0;
+    bottom: 115px;
+
+    width: 130px;
+    max-width: none;
+    padding: 7px 8px;
+
+    border-radius: 10px;
+  }
+
+  .astro-speech-bubble::after {
+    left: 15px;
+    right: auto;
+    bottom: -5px;
+
+    width: 8px;
+    height: 8px;
+  }
+
+  .astro-speech-close {
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+  }
+
+  .astro-speech-title {
+    margin-right: 12px;
+    margin-bottom: 3px;
+    font-size: 11px;
+  }
+
+  .astro-speech-tamil {
+    margin-bottom: 3px;
+    font-size: 9px;
+    line-height: 1.35;
+  }
+
+  .astro-speech-english {
+    margin-bottom: 4px;
+    font-size: 9px;
+    line-height: 1.35;
+  }
+
+  .astro-speech-hint {
+    padding: 4px 5px;
+    font-size: 9px;
+  }
+
+  /* POPUP */
+
+  .astro-galaxy-panel {
+    right: 0;
+    bottom: 105px;
+
+    width: 320px;
+    max-width: calc(100vw - 28px);
+
+    max-height: min(72dvh, 600px);
+    overflow-y: auto;
+
+    border-radius: 16px;
+  }
+
+  .astro-galaxy-panel-header {
+    padding: 20px 15px 16px;
+  }
+
+  .astro-galaxy-panel-header h2 {
+    font-size: 23px;
+  }
+
+  .astro-galaxy-panel-header p {
+    font-size: 12px;
+  }
+
+  .astro-galaxy-panel-body {
+    padding: 13px;
+  }
+
+  .astro-galaxy-option {
+    padding: 12px 10px;
+    gap: 10px;
+  }
+
+  .astro-galaxy-option-text strong {
+    font-size: 13px;
+  }
+
+  .astro-galaxy-option-text small {
+    font-size: 11px;
+  }
+}
+
+/* ==========================================
+   VERY SMALL PHONES
+========================================== */
+
+@media screen and (max-width: 370px) {
+
+  .astro-galaxy-widget {
+    right: 10px;
+
+    width: 78px;
+    height: 78px;
+  }
+
+  .astro-galaxy-trigger {
+    width: 78px;
+    height: 78px;
+  }
+
+  .astro-floating-guide {
+    right: 61px;
+
+    width: 115px;
+    height: 160px;
+  }
+
+  .astro-guide-character {
+    width: 115px;
+    height: 160px;
+
+    transform: translateX(10px);
+  }
+
+  .astro-speech-bubble {
+    right: 0;
+    bottom: 102px;
+
+    width: 120px;
+    padding: 7px;
+  }
+
+  .astro-speech-title {
+    font-size: 10px;
+  }
+
+  .astro-speech-tamil,
+  .astro-speech-english {
+    font-size: 8.5px;
+  }
+
+  .astro-speech-hint {
+    font-size: 8.5px;
+  }
+
+  .astro-galaxy-panel {
+    bottom: 94px;
+    width: 290px;
+    max-width: calc(100vw - 20px);
+  }
+
+  .astro-galaxy-panel-header h2 {
+    font-size: 21px;
+  }
+}
+
+/* ==========================================
+   MOBILE LANDSCAPE
+========================================== */
+
+@media screen and (max-width: 880px)
+       and (orientation: landscape) {
+
+  .astro-galaxy-widget {
+    bottom: 15px;
+
+    width: 68px;
+    height: 68px;
+  }
+
+  .astro-galaxy-trigger {
+    width: 68px;
+    height: 68px;
+  }
+
+  .astro-floating-guide {
+    right: 51px;
+
+    width: 90px;
+    height: 115px;
+  }
+
+  .astro-guide-character {
+    width: 90px;
+    height: 115px;
+
+    transform: translateX(9px);
+  }
+
+  /* Keep short screens uncluttered */
+  .astro-speech-bubble {
+    display: none;
+  }
+
+  .astro-galaxy-panel {
+    bottom: 80px;
+    max-height: calc(100dvh - 105px);
+  }
+}

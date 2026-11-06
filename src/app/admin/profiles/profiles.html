@@ -195,9 +195,11 @@
 
 <td>{{ currentLang === 'ta' ? (profile.full_name_ta || profile.full_name) : profile.full_name }}</td>
 <td>{{ calculateAge(profile.dob) }}</td>
+
 <td class="dob-col">
-  {{ profile.dob || '-' }}
+  {{ formatDOB(profile.dob) }}
 </td>
+
 <td>{{ profile.mobile || '-' }}</td>
 <td>{{ cityText(profile.city_text) }}</td>
 <td>{{ dateText(profile.created_at) }}</td>
@@ -228,13 +230,31 @@
   <div class="action-group">
     <button class="view-btn" type="button" (click)="viewProfile(profile, $event)">View</button>
 <button class="edit-btn" type="button" (click)="editProfile(profile, $event)">Edit</button>
-<button class="approve-btn" type="button" (click)="approveProfile(profile, $event)">Approve</button>
+
+<button
+  class="approve-btn"
+  type="button"
+  (click)="approveProfile(profile, $event)"
+  [disabled]="getStatus(profile) === 'approved'"
+  [class.status-disabled]="getStatus(profile) === 'approved'"
+  [title]="getStatus(profile) === 'approved'
+    ? 'Already Approved'
+    : 'Approve Profile'">
+  {{ getStatus(profile) === 'approved' ? 'Approved' : 'Approve' }}
+</button>
+
 <button
   class="disapprove-btn"
   type="button"
-  (click)="disapproveProfile(profile, $event)">
-  Disapprove
+  (click)="disapproveProfile(profile, $event)"
+  [disabled]="getStatus(profile) !== 'approved'"
+  [class.status-disabled]="getStatus(profile) !== 'approved'"
+  [title]="getStatus(profile) !== 'approved'
+    ? 'Already Pending'
+    : 'Disapprove Profile'">
+  {{ getStatus(profile) === 'approved' ? 'Disapprove' : 'Pending' }}
 </button>
+
 <button class="package-btn" type="button" (click)="addPackage(profile, $event)">Add Package</button>
 <button class="delete-btn" type="button" (click)="deleteProfile(profile, $event)">Delete</button>
   </div>

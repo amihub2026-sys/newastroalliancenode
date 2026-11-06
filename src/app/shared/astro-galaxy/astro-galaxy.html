@@ -1,0 +1,531 @@
+
+<div class="astro-galaxy-widget">
+
+  <!-- =====================================
+       STANDING CARTOON ASTROLOGER
+       HIDDEN ON LOGIN PAGE
+  ====================================== -->
+
+  @if (!isOpen && !isLoginPage) {
+
+    <div class="astro-floating-guide">
+
+      <img
+        src="assets/astro-widget/astrologer.png"
+        alt="Cartoon astrologer presenting astrology services"
+        class="astro-guide-character"
+        draggable="false"
+      />
+
+    </div>
+
+  }
+
+  <!-- =====================================
+       SMALL ASTROLOGER DIALOGUE
+       HIDDEN ON LOGIN PAGE
+  ====================================== -->
+
+  @if (!isOpen && showSpeech && !isLoginPage) {
+
+    <div
+      class="astro-speech-bubble"
+      role="note"
+    >
+
+      <button
+        type="button"
+        class="astro-speech-close"
+        (click)="closeSpeech()"
+        aria-label="Close astrologer message"
+      >
+        ×
+      </button>
+
+      <strong class="astro-speech-title">
+        வணக்கம்! 🙏
+      </strong>
+
+      <p class="astro-speech-tamil">
+        ஜாதகப் பொருத்தம் பார்க்கலாமா?
+      </p>
+
+      <p class="astro-speech-english">
+        Check your match or birth chart!
+      </p>
+
+      <span class="astro-speech-hint">
+        ✦ Tap the galaxy
+      </span>
+
+    </div>
+
+  }
+
+  <!-- =====================================
+       GOLDEN GALAXY BUTTON
+       VISIBLE ON LOGIN AND PUBLIC PAGES
+  ====================================== -->
+
+  <button
+    type="button"
+    class="astro-galaxy-trigger"
+    (click)="toggleGalaxy()"
+    [attr.aria-expanded]="isOpen"
+    [attr.aria-controls]="isOpen ? 'astro-galaxy-panel' : null"
+    aria-label="Open Horoscope Match and Birth Chart"
+  >
+
+    <svg
+      class="galaxy-svg"
+      viewBox="0 0 120 120"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+
+      <defs>
+
+        <!-- PURPLE / GOLD GALAXY -->
+        <radialGradient id="astroGalaxyCore">
+          <stop offset="0%" stop-color="#fff7d5"/>
+          <stop offset="12%" stop-color="#ffcd70"/>
+          <stop offset="28%" stop-color="#ed95d2"/>
+          <stop offset="52%" stop-color="#753ca7"/>
+          <stop offset="80%" stop-color="#301252"/>
+          <stop offset="100%" stop-color="#0d0924"/>
+        </radialGradient>
+
+        <!-- GOLDEN RING -->
+        <linearGradient id="astroGalaxyGold">
+          <stop offset="0%" stop-color="#a26828"/>
+          <stop offset="25%" stop-color="#f8d589"/>
+          <stop offset="50%" stop-color="#fff3c1"/>
+          <stop offset="75%" stop-color="#d39a40"/>
+          <stop offset="100%" stop-color="#ffe1a1"/>
+        </linearGradient>
+
+        <!-- GALAXY LIGHT -->
+        <radialGradient id="astroGalaxyLight">
+          <stop offset="0%" stop-color="#fff9df"/>
+          <stop
+            offset="35%"
+            stop-color="#ffe0a2"
+            stop-opacity=".7"
+          />
+          <stop
+            offset="100%"
+            stop-color="#ce65ce"
+            stop-opacity="0"
+          />
+        </radialGradient>
+
+        <!-- SOFT GLOW -->
+        <filter id="astroGalaxyGlow">
+          <feGaussianBlur stdDeviation="2.5"/>
+        </filter>
+
+      </defs>
+
+      <!-- =====================================
+           OUTER GOLDEN FRAME
+      ====================================== -->
+
+      <circle
+        cx="60"
+        cy="60"
+        r="53"
+        fill="#e7b056"
+        opacity=".25"
+        filter="url(#astroGalaxyGlow)"
+      />
+
+      <circle
+        cx="60"
+        cy="60"
+        r="49"
+        fill="#180c2b"
+        stroke="url(#astroGalaxyGold)"
+        stroke-width="3"
+      />
+
+      <circle
+        cx="60"
+        cy="60"
+        r="44"
+        fill="#1c1033"
+        stroke="#ffe0a0"
+        stroke-width=".8"
+      />
+
+      <!-- =====================================
+           ROTATING GOLDEN ZODIAC WHEEL
+      ====================================== -->
+
+      <g class="galaxy-zodiac-ring">
+
+        <circle
+          cx="60"
+          cy="60"
+          r="39"
+          fill="none"
+          stroke="url(#astroGalaxyGold)"
+          stroke-width="2.4"
+        />
+
+        <circle
+          cx="60"
+          cy="60"
+          r="33"
+          fill="none"
+          stroke="#f5c978"
+          stroke-width=".8"
+          stroke-dasharray="2 3"
+        />
+
+        @for (i of zodiacTicks; track i) {
+
+          <g
+            [attr.transform]="
+              'rotate(' + (i * 30) + ' 60 60)'
+            "
+          >
+
+            <path
+              d="M60 21 L60 32"
+              stroke="#ffdc97"
+              stroke-width="1.2"
+            />
+
+            <circle
+              cx="60"
+              cy="24"
+              r="1.3"
+              fill="#fff4d1"
+            />
+
+          </g>
+
+        }
+
+      </g>
+
+      <!-- =====================================
+           SPINNING GALAXY CENTER
+      ====================================== -->
+
+      <g class="galaxy-inner-spin">
+
+        <circle
+          cx="60"
+          cy="60"
+          r="30"
+          fill="url(#astroGalaxyCore)"
+        />
+
+        <!-- PURPLE SPIRAL -->
+        <path
+          d="
+            M34 67
+            C37 39 85 34 90 56
+            C94 85 49 94 44 68
+            C40 48 76 44 77 63
+            C78 78 52 76 54 59
+          "
+          fill="none"
+          stroke="#d895ee"
+          stroke-width="4"
+          stroke-linecap="round"
+          opacity=".85"
+        />
+
+        <!-- GOLDEN SPIRAL -->
+        <path
+          d="
+            M34 55
+            C49 31 88 45 87 68
+            C84 93 45 84 46 62
+            C48 46 73 47 73 62
+          "
+          fill="none"
+          stroke="#ffe09b"
+          stroke-width="2.4"
+          stroke-linecap="round"
+        />
+
+        <!-- SMALL GALAXY STARS -->
+        <circle cx="40" cy="49" r="1.3" fill="#ffe3ad"/>
+        <circle cx="81" cy="48" r="1.1" fill="#ffbde9"/>
+        <circle cx="83" cy="75" r="1.2" fill="#ffe6ac"/>
+        <circle cx="44" cy="77" r="1" fill="#e6c3ff"/>
+        <circle cx="68" cy="36" r="1" fill="#fff4ce"/>
+        <circle cx="52" cy="85" r="1.1" fill="#d6aaff"/>
+
+        <!-- CENTER LIGHT -->
+        <circle
+          cx="60"
+          cy="60"
+          r="13"
+          fill="url(#astroGalaxyLight)"
+        />
+
+        <circle
+          cx="60"
+          cy="60"
+          r="5"
+          fill="#fff1bf"
+        />
+
+      </g>
+
+      <!-- =====================================
+           NINE ORBITING PLANETS
+      ====================================== -->
+
+      <g class="galaxy-planet-orbit">
+
+        @for (planet of planets; track planet.name) {
+
+          <g
+            [attr.transform]="
+              'rotate(' + planet.angle + ' 60 60)'
+            "
+          >
+
+            <!-- SATURN RINGS -->
+            @if (planet.name === 'Saturn') {
+
+              <ellipse
+                cx="60"
+                cy="10"
+                rx="9"
+                ry="3.5"
+                fill="none"
+                stroke="#f3d5a2"
+                stroke-width="1.5"
+                transform="rotate(-25 60 10)"
+              />
+
+            }
+
+            <!-- PLANET -->
+            <circle
+              cx="60"
+              cy="10"
+              [attr.r]="planet.radius"
+              [attr.fill]="planet.color"
+              stroke="#ffe9bd"
+              stroke-width=".6"
+            />
+
+            <!-- EARTH CONTINENTS -->
+            @if (planet.name === 'Earth') {
+
+              <path
+                d="M58 7 L61 8 L63 11 L59 13 L57 10 Z"
+                fill="#80d99c"
+              />
+
+            }
+
+            <!-- JUPITER STRIPES -->
+            @if (planet.name === 'Jupiter') {
+
+              <path
+                d="
+                  M54 7 Q60 9 66 7
+                  M54 11 Q60 13 66 11
+                  M56 14 Q60 15 64 14
+                "
+                fill="none"
+                stroke="#936247"
+                stroke-width="1"
+              />
+
+            }
+
+            <!-- LIGHT REFLECTION -->
+            <circle
+              cx="59"
+              cy="9"
+              r=".8"
+              fill="#fff8dc"
+              opacity=".85"
+            />
+
+          </g>
+
+        }
+
+      </g>
+
+      <!-- =====================================
+           SPARKLING STARS
+      ====================================== -->
+
+      <g class="galaxy-stars">
+
+        <path
+          d="
+            M23 29 L25 34 L30 36
+            L25 38 L23 43 L21 38
+            L16 36 L21 34 Z
+          "
+          fill="#ffdfa0"
+        />
+
+        <path
+          d="
+            M94 18 L96 23 L101 25
+            L96 27 L94 32 L92 27
+            L87 25 L92 23 Z
+          "
+          fill="#fff1c3"
+        />
+
+        <circle
+          cx="102"
+          cy="93"
+          r="1.5"
+          fill="#fff3c0"
+        />
+
+        <circle
+          cx="17"
+          cy="86"
+          r="1.5"
+          fill="#fff0b7"
+        />
+
+      </g>
+
+    </svg>
+
+  </button>
+
+  <!-- =====================================
+       ASTROLOGY SERVICES POPUP
+  ====================================== -->
+
+  @if (isOpen) {
+
+    <section
+      id="astro-galaxy-panel"
+      class="astro-galaxy-panel"
+      aria-label="Astrology services"
+    >
+
+      <!-- HEADER -->
+      <div class="astro-galaxy-panel-header">
+
+        <span class="astro-galaxy-kicker">
+          ✦ ASTRO ALLIANCE ✦
+        </span>
+
+        <button
+          type="button"
+          class="astro-galaxy-close"
+          (click)="closeGalaxy()"
+          aria-label="Close astrology menu"
+        >
+          ×
+        </button>
+
+        <h2>
+          Explore Your Stars
+        </h2>
+
+        <p>
+          உங்கள் ஜோதிடப் பயணத்தைத் தொடங்குங்கள்
+        </p>
+
+      </div>
+
+      <!-- BODY -->
+      <div class="astro-galaxy-panel-body">
+
+        <p class="astro-galaxy-instruction">
+          Choose the astrology service you want to explore.
+        </p>
+
+        <p class="astro-galaxy-instruction tamil">
+          நீங்கள் பார்க்க விரும்பும் ஜோதிட சேவையைத் தேர்ந்தெடுக்கவும்.
+        </p>
+
+        <!-- HOROSCOPE MATCH -->
+        <a
+          routerLink="/horoscope-match"
+          class="astro-galaxy-option"
+          (click)="closeGalaxy()"
+        >
+
+          <span class="astro-galaxy-option-icon">
+            ♡
+          </span>
+
+          <span class="astro-galaxy-option-text">
+
+            <strong>
+              Horoscope Match
+            </strong>
+
+            <small>
+              திருமணப் பொருத்தம்
+            </small>
+
+            <small>
+              Check traditional marriage compatibility.
+            </small>
+
+          </span>
+
+          <span class="astro-galaxy-option-arrow">
+            ↗
+          </span>
+
+        </a>
+
+        <!-- BIRTH CHART -->
+        <a
+          routerLink="/birth-chart"
+          class="astro-galaxy-option"
+          (click)="closeGalaxy()"
+        >
+
+          <span class="astro-galaxy-option-icon">
+            ✧
+          </span>
+
+          <span class="astro-galaxy-option-text">
+
+            <strong>
+              Birth Chart
+            </strong>
+
+            <small>
+              ஜாதகக் கட்டம்
+            </small>
+
+            <small>
+              Explore your birth chart details.
+            </small>
+
+          </span>
+
+          <span class="astro-galaxy-option-arrow">
+            ↗
+          </span>
+
+        </a>
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="astro-galaxy-panel-footer">
+        ✦ DISCOVER YOUR COSMIC JOURNEY ✦
+      </div>
+
+    </section>
+
+  }
+
+</div>

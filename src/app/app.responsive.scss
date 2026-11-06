@@ -377,10 +377,7 @@
 
     display: grid !important;
 
-    grid-template-columns: repeat(
-      5,
-      minmax(0, 1fr)
-    ) !important;
+   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
 
     align-items: center;
 
@@ -408,13 +405,9 @@
 
   /* Guest users: four navigation items */
 
-  .astro-mobile-bottom-nav.guest-navigation {
-    grid-template-columns: repeat(
-      4,
-      minmax(0, 1fr)
-    ) !important;
-  }
-
+.astro-mobile-bottom-nav.guest-navigation {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
 
   /* ==========================================
      BOTTOM NAV ITEMS
@@ -863,6 +856,7 @@
 
 }
 
+
 /* Normal dropdown item — no highlight or subtitle */
 .approval-menu-item {
   display: flex;
@@ -928,3 +922,22 @@
   }
 
 }
+
+@media screen and (max-width: 880px) {
+  .astro-profile-choice-menu .astro-mobile-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 13px;
+    border: 1px solid #f2d3dc;
+    border-radius: 11px;
+    background: #fff0f3;
+    color: #a21448;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+  }
+}
+
