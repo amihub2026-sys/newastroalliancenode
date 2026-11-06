@@ -1,82 +1,476 @@
-/* ASTRO ALLIANCE — MOBILE & TABLET APP SHELL */
-@media (max-width: 880px) {
-  :host { display: block; width: 100%; max-width: 100%; min-width: 0; }
-  :host, :host * { box-sizing: border-box; }
-  .app-shell { width: 100%; max-width: 100%; min-width: 0; padding: 0 0 calc(72px + env(safe-area-inset-bottom)); overflow-x: clip; }
-  #main-content { display: block; width: 100%; max-width: 100%; min-width: 0; overflow-x: clip; }
 
-  .site-header { position: sticky; top: 0; z-index: 1050; width: 100%; background: #fffbfc; border-bottom: 1px solid #f0e0e7; }
-  .header-inner { width: 100%; max-width: 100%; min-height: 62px; margin: 0; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .desktop-nav, .mobile-menu-button, .mobile-nav, .menu-backdrop, .mobile-account-wrap { display: none !important; }
-  .site-brand { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; }
-  .site-brand img { width: 45px; height: 39px; object-fit: contain; flex-shrink: 0; }
-  .brand-copy { min-width: 0; }
-  .logo-title { font-size: clamp(13px, 3.7vw, 20px); line-height: 1.12; white-space: normal; overflow-wrap: break-word; }
-  .brand-copy small { font-size: 7px; letter-spacing: .18em; }
-  .header-actions { display: flex; gap: 7px; align-items: center; flex: 0 0 auto; }
-  .language-choice { padding: 3px; gap: 2px; border-radius: 10px; }
-  .language-choice button { padding: 7px 6px; font-size: 10px; }
-  .mobile-notification-button { position: relative; display: grid !important; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; background: transparent; color: #91335a; cursor: pointer; }
-  .mobile-notification-count { position: absolute; top: -2px; right: -2px; display: grid; place-items: center; min-width: 16px; height: 16px; padding: 0 3px; border-radius: 999px; background: #d43265; color: #fff; font-size: 9px; font-weight: 800; }
+/* ==========================================================
+   ASTRO ALLIANCE MATRIMONY
+   COMPLETE MOBILE & TABLET RESPONSIVE STYLESHEET
+   MAROON • GOLD • WHITE
+   ========================================================== */
 
-  .astro-mobile-bottom-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1100; display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: center; min-height: 66px; padding: 6px 9px calc(7px + env(safe-area-inset-bottom)); background: rgba(255,251,252,.98); border-top: 1px solid #efdae4; box-shadow: 0 -5px 20px rgba(54,19,35,.10); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
-  .astro-mobile-bottom-nav.guest-navigation { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .astro-bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 0; min-height: 48px; padding: 4px 2px; border-radius: 10px; color: #825d70; text-align: center; text-decoration: none; }
-  .astro-bottom-nav-item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .astro-bottom-nav-item span { font-size: 10px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
-  .astro-bottom-nav-item.is-active { color: #902e57; }
-  .astro-bottom-nav-item.is-active svg { stroke-width: 2.3; }
-  .astro-bottom-avatar { width: 26px; height: 26px; border: 2px solid #e6b9cc; border-radius: 50%; object-fit: cover; }
-  .astro-bottom-nav-item.is-active .astro-bottom-avatar { border-color: #902e57; }
-  .site-footer { width: 100%; margin: 0; }
-  .footer-inner { width: min(100% - 32px, 700px); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; padding: 40px 0; }
-  .footer-about { grid-column: 1 / -1; }
-  .footer-bottom { padding: 17px 16px; }
-}
-@media (max-width: 480px) {
-  .header-inner { min-height: 58px; padding: 7px 10px; gap: 5px; }
-  .site-brand img { width: 38px; height: 35px; }
-  .logo-title { font-size: 14px; }
-  .brand-copy small { font-size: 6px; letter-spacing: .13em; }
-  .header-actions { gap: 3px; }
-  .language-choice { padding: 2px; }
-  .language-choice button { padding: 6px 5px; font-size: 9px; }
-  .mobile-notification-button { width: 32px; height: 32px; }
-  .astro-bottom-nav-item span { font-size: 9px; }
-  .footer-inner { grid-template-columns: 1fr; }
-  .footer-about { grid-column: auto; }
-  .footer-bottom { flex-direction: column; text-align: center; }
-}
 
-/* =============================================
-   ASTRO ALLIANCE — MOBILE APP NAVIGATION COLORS
-   Desktop remains unchanged
-============================================= */
+/* ==========================================================
+   TABLET + MOBILE — MAX 880px
+   ========================================================== */
 
 @media screen and (max-width: 880px) {
 
-  .astro-mobile-bottom-nav {
-    background: #fff9f5 !important;
-    border-top: 1px solid #efdae2 !important;
-    box-shadow: 0 -5px 24px rgba(82, 28, 54, 0.09);
+  /* ==========================================
+     APP SHELL
+  ========================================== */
+
+  :host {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
-  /* DEFAULT ICON COLOR */
+  :host,
+  :host * {
+    box-sizing: border-box;
+  }
+
+  .app-shell {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    padding: 0 0 calc(
+      72px + env(safe-area-inset-bottom)
+    );
+
+    overflow-x: clip;
+  }
+
+  #main-content {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+
+  /* ==========================================
+     HIDE DESKTOP NAVIGATION
+  ========================================== */
+
+  .desktop-nav,
+  .mobile-menu-button,
+  .mobile-nav,
+  .menu-backdrop,
+  .mobile-account-wrap {
+    display: none !important;
+  }
+
+
+  /* ==========================================
+     MOBILE HEADER
+  ========================================== */
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+
+    display: block;
+    width: 100%;
+
+    height: auto;
+    min-height: 0;
+
+    margin: 0;
+    padding: 0;
+
+    background: #fffaf7 !important;
+    border: 0 !important;
+  }
+
+  .site-header .header-inner {
+    position: relative !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 60px;
+    min-height: 60px;
+
+    margin: 0;
+
+    padding: 6px 6px 6px 9px !important;
+
+    gap: 6px;
+  }
+
+
+  /* ==========================================
+     BRAND LOGO + TITLE
+  ========================================== */
+
+  .site-header .site-brand {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    flex: 0 1 auto !important;
+
+    width: auto;
+    min-width: 0;
+
+    max-width: calc(100% - 160px) !important;
+
+    margin: 0;
+    padding: 0;
+
+    gap: 4px;
+
+    text-decoration: none;
+  }
+
+  .site-header .site-brand img {
+    display: block;
+
+    flex: 0 0 56px !important;
+
+    width: 56px !important;
+    max-width: 56px !important;
+    height: 48px !important;
+
+    margin: 0 !important;
+    padding: 0;
+
+    object-fit: contain !important;
+  }
+
+  .site-header .brand-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    width: auto;
+    min-width: 0;
+
+    margin: 0;
+    padding: 0;
+
+    gap: 1px;
+
+    transform: none;
+  }
+
+  .site-header .brand-copy .logo-title {
+    display: block;
+
+    max-width: 100%;
+
+    margin: 0;
+
+    color: #790b35 !important;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    line-height: 1.08;
+    letter-spacing: -0.25px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-header .brand-copy small {
+    display: block;
+
+    margin: 0;
+
+    color: #b88628 !important;
+
+    font-size: 8px;
+    font-weight: 800;
+
+    line-height: 1.1;
+    letter-spacing: 1px;
+
+    transform: none;
+  }
+
+
+  /* ==========================================
+     HEADER RIGHT ACTIONS
+     LANGUAGE + BELL
+  ========================================== */
+
+  .site-header .header-actions {
+    position: absolute !important;
+
+    top: 50% !important;
+    right: 6px !important;
+    left: auto !important;
+
+    transform: translateY(-50%) !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+
+    width: auto !important;
+
+    flex: 0 0 auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    gap: 6px !important;
+  }
+
+
+  /* ==========================================
+     LANGUAGE SWITCHER
+  ========================================== */
+
+  .site-header .language-choice {
+    display: flex;
+    align-items: center;
+
+    flex: 0 0 auto !important;
+
+    margin: 0 !important;
+
+    padding: 3px;
+    gap: 2px;
+
+    border-radius: 999px;
+  }
+
+  .site-header .language-choice button {
+    min-height: 32px;
+
+    padding: 6px 8px;
+
+    font-size: 10px;
+
+    white-space: nowrap;
+  }
+
+
+  /* ==========================================
+     NOTIFICATION BELL
+  ========================================== */
+
+  .site-header .mobile-notification-button {
+    position: relative !important;
+
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+
+    transform: none !important;
+
+    display: grid !important;
+    place-items: center;
+
+    flex: 0 0 32px !important;
+
+    width: 32px !important;
+    height: 32px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #8e3157 !important;
+
+    cursor: pointer;
+  }
+
+  .mobile-notification-count {
+    position: absolute;
+
+    top: -2px;
+    right: -2px;
+
+    display: grid;
+    place-items: center;
+
+    min-width: 16px;
+    height: 16px;
+
+    padding: 0 3px;
+
+    border-radius: 999px;
+
+    background: #9e305c;
+    color: #ffffff;
+
+    font-size: 9px;
+    font-weight: 800;
+  }
+
+
+  /* ==========================================
+     REMOVE DESKTOP DECORATION
+  ========================================== */
+
+  .site-header .astro-header-right-rings {
+    display: none !important;
+  }
+
+
+  /* ==========================================
+     CHAMPAGNE GOLD HEADER CURVE
+  ========================================== */
+
+  .site-header .astro-header-curve {
+    position: relative;
+
+    inset: auto;
+
+    display: block;
+
+    width: 100%;
+    height: 9px;
+
+    min-height: 0;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+
+    overflow: hidden;
+
+    line-height: 0;
+    background: transparent;
+  }
+
+  .site-header .astro-header-curve svg {
+    display: block;
+
+    width: 100%;
+    height: 9px;
+
+    margin: 0;
+    padding: 0;
+
+    vertical-align: bottom;
+  }
+
+
+  /* ==========================================
+     MOBILE BOTTOM NAVIGATION
+  ========================================== */
+
+  .astro-mobile-bottom-nav {
+    position: fixed;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 1100;
+
+    display: grid !important;
+
+    grid-template-columns: repeat(
+      5,
+      minmax(0, 1fr)
+    ) !important;
+
+    align-items: center;
+
+    gap: 0;
+
+    min-height: 66px;
+
+    padding:
+      6px
+      9px
+      calc(7px + env(safe-area-inset-bottom));
+
+    background: #fff9f5 !important;
+
+    border-top: 1px solid #efdae2 !important;
+
+    box-shadow:
+      0 -5px 24px rgba(82, 28, 54, 0.09);
+
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+
+    overflow: visible !important;
+  }
+
+  /* Guest users: four navigation items */
+
+  .astro-mobile-bottom-nav.guest-navigation {
+    grid-template-columns: repeat(
+      4,
+      minmax(0, 1fr)
+    ) !important;
+  }
+
+
+  /* ==========================================
+     BOTTOM NAV ITEMS
+  ========================================== */
+
   .astro-bottom-nav-item {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    min-width: 0;
+    min-height: 48px;
+
+    padding: 5px 2px;
+
+    border-radius: 10px;
+
     color: #93657a !important;
+
+    text-align: center;
+    text-decoration: none;
   }
 
   .astro-bottom-nav-item svg {
-    width: 23px;
-    height: 23px;
+    width: 22px;
+    height: 22px;
+
     fill: none;
     stroke: currentColor;
+
     stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
-  /* ACTIVE PAGE COLOR */
+  .astro-bottom-nav-item span {
+    font-size: 10px;
+    font-weight: 600;
+
+    line-height: 1.2;
+
+    letter-spacing: 0;
+
+    white-space: nowrap;
+  }
+
+
+  /* ==========================================
+     ACTIVE BOTTOM NAV
+  ========================================== */
+
   .astro-bottom-nav-item.is-active {
     color: #86284e !important;
   }
@@ -85,127 +479,62 @@
     stroke-width: 2.5;
   }
 
-  /* ACTIVE LABEL */
   .astro-bottom-nav-item.is-active span {
     color: #86284e !important;
     font-weight: 800;
   }
 
-  /* NAV LABELS */
-  .astro-bottom-nav-item span {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0;
+
+  /* ==========================================
+     BOTTOM NAV PROFILE AVATAR
+  ========================================== */
+
+  .astro-bottom-avatar {
+    width: 26px;
+    height: 26px;
+
+    border: 2px solid #e6b9cc;
+    border-radius: 50%;
+
+    object-fit: cover;
   }
 
-  /* TOP NAVBAR */
-  .site-header {
-    background: #fffaf7 !important;
-    border-bottom: 1px solid #f0e2e6;
+  .astro-bottom-nav-item.is-active
+  .astro-bottom-avatar {
+    border-color: #902e57;
   }
 
-  /* BRAND COLORS */
-  .logo-title {
-    color: #742648 !important;
-  }
 
-  .brand-copy small {
-    color: #b65c80 !important;
-  }
-
-  /* NOTIFICATION BELL */
-  .mobile-notification-button {
-    color: #8e3157 !important;
-  }
-
-  .mobile-notification-count {
-    background: #9e305c !important;
-    color: white;
-  }
-}
-
-/* ==========================================
-   MOBILE + TABLET BOTTOM NAVIGATION
-   5 ICONS AFTER LOGIN / 4 BEFORE LOGIN
-========================================== */
-
-@media screen and (max-width: 880px) {
-
-  .astro-mobile-bottom-nav {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    gap: 0;
-  }
-
-  .astro-mobile-bottom-nav.guest-navigation {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-
-  .astro-bottom-nav-item {
-    min-width: 0;
-    padding: 5px 2px;
-    gap: 5px;
-  }
-
-  .astro-bottom-nav-item svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .astro-bottom-nav-item span {
-    font-size: 10px;
-    white-space: nowrap;
-  }
-
-  .astro-bottom-nav-item.is-active {
-    color: #86284e !important;
-  }
-}
-
-@media screen and (max-width: 380px) {
-
-  .astro-bottom-nav-item span {
-    font-size: 9px;
-  }
-
-  .astro-bottom-nav-item svg {
-    width: 21px;
-    height: 21px;
-  }
-}
-/* Hide footer on mobile and tablet only */
-@media screen and (max-width: 880px) {
-  app-footer,
-  footer,
-  .footer {
-    display: none !important;
-  }
-}
-
-
-/* ========================================
-   MOBILE PROFILE CHOICE MENU
-======================================== */
-
-@media (max-width: 880px) {
-
-  .astro-mobile-bottom-nav {
-    overflow: visible !important;
-  }
+  /* ==========================================
+     MOBILE PROFILE MENU WRAPPER
+  ========================================== */
 
   .astro-mobile-profile-choice {
     position: relative;
+
     display: flex;
+
     flex: 1 1 0;
+
     min-width: 0;
+
     align-items: stretch;
     justify-content: center;
   }
 
+
+  /* ==========================================
+     MOBILE PROFILE TRIGGER
+  ========================================== */
+
   .astro-profile-choice-trigger {
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
     justify-content: center;
+
     gap: 4px;
 
     width: 100%;
@@ -215,10 +544,13 @@
     margin: 0;
 
     background: transparent;
+
     border: 0;
+
     color: #965773;
 
     font: inherit;
+
     cursor: pointer;
   }
 
@@ -227,42 +559,61 @@
     line-height: 1.2;
   }
 
+
+  /* ==========================================
+     MOBILE PROFILE DROPDOWN
+  ========================================== */
+
   .astro-profile-choice-menu {
     position: absolute;
+
     right: 0;
     bottom: calc(100% + 12px);
+
     z-index: 1000;
 
-    width: min(220px, 78vw);
-    padding: 8px;
-
     display: flex;
+
     flex-direction: column;
+
     gap: 5px;
 
+    width: min(220px, 78vw);
+
+    padding: 8px;
+
     background: #fffaf8;
+
     border: 1px solid #edd9e0;
+
     border-radius: 16px;
 
-    box-shadow: 0 16px 38px rgba(67, 20, 41, 0.23);
+    box-shadow:
+      0 16px 38px rgba(67, 20, 41, 0.23);
   }
 
   .astro-profile-choice-menu a {
     display: flex;
+
     align-items: center;
+
     gap: 10px;
 
     min-height: 46px;
+
     padding: 10px 13px;
 
     border-radius: 11px;
 
     color: #702240;
+
     background: transparent;
+
     text-decoration: none;
 
     font-size: 13px;
     font-weight: 700;
+
     line-height: 1.3;
   }
 
@@ -271,244 +622,243 @@
     background: #f6e6ec;
   }
 
-  .astro-profile-choice-menu a > span:first-child {
+  .astro-profile-choice-menu
+  a > span:first-child {
     font-size: 19px;
     flex-shrink: 0;
   }
-}
 
-/* ==========================================
-   MOBILE TOP HEADER — COMPACT ALIGNMENT ONLY
-   Other app / navigation styles above retained.
-========================================== */
 
-@media screen and (max-width: 880px) {
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 1050;
+  /* ==========================================
+     MOBILE FOOTER
+  ========================================== */
+
+  .site-footer {
     width: 100%;
-    height: auto;
-    min-height: 0;
-    margin: 0;
-    padding: 0;
-    background: #fffaf7 !important;
-    border-bottom: 0;
-  }
-
-  .site-header .header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 100%;
-    height: 60px;
-    min-height: 60px;
-    margin: 0;
-    padding: 7px 12px;
-    gap: 6px;
-  }
-
-  .site-header .site-brand {
-    display: flex;
-    flex: 1 1 auto;
-    min-width: 0;
-    max-width: none;
-    width: auto;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 4px;
-    padding: 0;
     margin: 0;
   }
 
-  .site-header .site-brand img {
-    display: block;
-    flex: 0 0 38px;
-    width: 38px;
-    max-width: 38px;
-    height: 36px;
-    margin: 0;
-    object-fit: contain;
+  .footer-inner {
+    width: min(
+      calc(100% - 32px),
+      700px
+    );
+
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+    gap: 30px;
+
+    padding: 40px 0;
   }
 
-  .site-header .brand-copy {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 1px;
-    min-width: 0;
-    width: auto;
-    padding: 0;
-    margin: 0;
-    transform: none;
+  .footer-about {
+    grid-column: 1 / -1;
   }
 
-  .site-header .brand-copy .logo-title {
-    display: block;
-    max-width: 100%;
-    margin: 0;
-    font-size: 15px;
-    line-height: 1.08;
-    letter-spacing: -0.25px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #790b35 !important;
+  .footer-bottom {
+    padding: 17px 16px;
   }
 
-  .site-header .brand-copy small {
-    display: block;
-    margin: 0;
-    font-size: 8px;
-    line-height: 1.1;
-    letter-spacing: 1px;
-    font-weight: 800;
-    color: #b88628 !important;
-  }
+  /* Hide footer on mobile/tablet */
 
-  .site-header .header-actions {
-    display: flex;
-    flex: 0 0 auto;
-    align-items: center;
-    justify-content: flex-end;
-    margin-left: auto;
-    gap: 5px;
-  }
-
-  .site-header .language-choice {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    padding: 3px;
-    border-radius: 999px;
-  }
-
-  .site-header .language-choice button {
-    min-height: 32px;
-    padding: 6px 8px;
-    font-size: 10px;
-    white-space: nowrap;
-  }
-
-  .site-header .mobile-notification-button {
-    flex: 0 0 34px;
-    width: 34px;
-    height: 34px;
-    padding: 0;
-  }
-
-  .site-header .astro-header-right-rings {
+  app-footer,
+  footer,
+  .footer {
     display: none !important;
   }
 
-  .site-header .astro-header-curve {
-    position: relative;
-    inset: auto;
-    display: block;
-    width: 100%;
-    height: 9px;
-    min-height: 0;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-
-  .site-header .astro-header-curve svg {
-    display: block;
-    width: 100%;
-    height: 9px;
-  }
 }
 
+
+/* ==========================================================
+   SMALL MOBILE — MAX 480px
+   ========================================================== */
+
 @media screen and (max-width: 480px) {
+
+  /* ==========================================
+     SMALL HEADER
+  ========================================== */
+
   .site-header .header-inner {
     height: 56px;
     min-height: 56px;
-    padding: 6px 9px;
+
+    padding: 5px 6px 5px 9px !important;
+
     gap: 4px;
   }
 
-  .site-header .site-brand { gap: 3px; }
-  .site-header .site-brand img {
-    flex-basis: 33px;
-    width: 33px;
-    max-width: 33px;
-    height: 33px;
-  }
 
-  .site-header .brand-copy .logo-title { font-size: 13px; }
-  .site-header .brand-copy small { font-size: 7px; letter-spacing: 0.8px; }
-  .site-header .header-actions { gap: 4px; }
-  .site-header .language-choice { padding: 2px; }
-  .site-header .language-choice button { min-height: 30px; padding: 5px 7px; font-size: 9px; }
-  .site-header .mobile-notification-button { flex-basis: 30px; width: 30px; height: 30px; }
-  .site-header .astro-header-curve,
-  .site-header .astro-header-curve svg { height: 8px; }
-}
-
-@media screen and (max-width: 360px) {
-  .site-header .header-inner { padding: 5px 7px; }
-  .site-header .site-brand img { flex-basis: 29px; width: 29px; max-width: 29px; height: 29px; }
-  .site-header .brand-copy .logo-title { font-size: 11px; }
-  .site-header .brand-copy small { font-size: 6px; letter-spacing: 0.5px; }
-  .site-header .language-choice button { padding: 5px 6px; }
-}
-
-
-
-
-/* MOBILE NAVBAR — NOTIFICATION AT RIGHT CORNER */
-
-@media (max-width: 880px) {
-
-  .site-header .header-inner {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding-right: 8px !important;
-  }
+  /* ==========================================
+     BRAND
+  ========================================== */
 
   .site-header .site-brand {
-    flex: 0 1 auto !important;
-    min-width: 0;
+    gap: 3px;
+
+    max-width: calc(
+      100% - 147px
+    ) !important;
   }
 
+  .site-header .site-brand img {
+    flex: 0 0 52px !important;
+
+    width: 52px !important;
+    max-width: 52px !important;
+
+    height: 46px !important;
+  }
+
+  .site-header .brand-copy .logo-title {
+    font-size: 13px;
+  }
+
+  .site-header .brand-copy small {
+    font-size: 7px;
+    letter-spacing: 0.8px;
+  }
+
+
+  /* ==========================================
+     HEADER ACTIONS
+  ========================================== */
+
   .site-header .header-actions {
-    display: flex !important;
-    align-items: center;
-    justify-content: flex-end;
-    flex: 1 1 auto !important;
-    min-width: 0;
-    margin-left: auto !important;
-    padding: 0 !important;
-    gap: 6px;
+    right: 4px !important;
+    gap: 4px !important;
   }
 
   .site-header .language-choice {
-    flex: 0 0 auto;
-    margin-left: auto !important;
-    margin-right: 0 !important;
+    padding: 2px;
   }
+
+  .site-header .language-choice button {
+    min-height: 30px;
+
+    padding: 5px 7px;
+
+    font-size: 9px;
+  }
+
+
+  /* ==========================================
+     NOTIFICATION BELL
+  ========================================== */
 
   .site-header .mobile-notification-button {
-    position: static !important;
-    transform: none !important;
-    flex: 0 0 32px !important;
-    width: 32px;
-    height: 32px;
-    margin: 0 !important;
-    padding: 0;
+    flex-basis: 30px !important;
+
+    width: 30px !important;
+    height: 30px !important;
   }
+
+
+  /* ==========================================
+     GOLD CURVE
+  ========================================== */
+
+  .site-header .astro-header-curve,
+  .site-header .astro-header-curve svg {
+    height: 8px;
+  }
+
+
+  /* ==========================================
+     BOTTOM NAVIGATION LABELS
+  ========================================== */
+
+  .astro-bottom-nav-item span {
+    font-size: 9px;
+  }
+
+
+  /* ==========================================
+     FOOTER
+  ========================================== */
+
+  .footer-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-about {
+    grid-column: auto;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+
 }
 
-@media (max-width: 480px) {
-  .site-header .header-inner {
-    padding-right: 5px !important;
+
+/* ==========================================================
+   EXTRA SMALL MOBILE — MAX 380px
+   ========================================================== */
+
+@media screen and (max-width: 380px) {
+
+  .astro-bottom-nav-item svg {
+    width: 21px;
+    height: 21px;
   }
 
-  .site-header .header-actions {
-    gap: 4px;
+  .astro-bottom-nav-item span {
+    font-size: 9px;
   }
+
+}
+
+
+/* ==========================================================
+   VERY SMALL MOBILE — MAX 360px
+   ========================================================== */
+
+@media screen and (max-width: 360px) {
+
+  /* ==========================================
+     HEADER
+  ========================================== */
+
+  .site-header .header-inner {
+    padding: 5px 5px 5px 7px !important;
+  }
+
+
+  /* ==========================================
+     LOGO
+  ========================================== */
+
+  .site-header .site-brand img {
+    flex-basis: 44px !important;
+
+    width: 44px !important;
+    max-width: 44px !important;
+
+    height: 42px !important;
+  }
+
+  .site-header .brand-copy .logo-title {
+    font-size: 11px;
+  }
+
+  .site-header .brand-copy small {
+    font-size: 6px;
+    letter-spacing: 0.5px;
+  }
+
+
+  /* ==========================================
+     LANGUAGE
+  ========================================== */
+
+  .site-header .language-choice button {
+    padding: 5px 6px;
+  }
+
 }

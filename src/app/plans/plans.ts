@@ -58,7 +58,7 @@ interface ActiveSubscriptionResponse {
 }
 
 // ==========================================
-// TEST ACTIVATION RESPONSE
+// DEVELOPMENT ACTIVATION RESPONSE
 // ==========================================
 
 interface DevActivationResponse {
@@ -142,10 +142,12 @@ export class Plans implements OnInit {
         subtitle:
           'Review available membership plans and continue viewing profiles. Premium details require an active membership.'
       },
+
       section: {
         title: 'Our Membership Plans',
         subtitle: 'Choose the best plan for your matrimony journey'
       },
+
       labels: {
         mostPopular: 'Most Popular',
         choosePlan: 'Choose Plan',
@@ -281,7 +283,6 @@ export class Plans implements OnInit {
     return features?.[this.currentLang] ||
       features?.en ||
       [];
-
   }
 
   // ==========================================
@@ -295,6 +296,7 @@ export class Plans implements OnInit {
     }
 
     try {
+
       const raw =
         localStorage.getItem('matrimony_user') ||
         localStorage.getItem('user') ||
@@ -344,7 +346,6 @@ export class Plans implements OnInit {
     try {
 
       const response = await firstValueFrom(
-
         this.http.get<ActiveSubscriptionResponse>(
           `${environment.apiUrl}/subscription/me`,
           {
@@ -367,7 +368,6 @@ export class Plans implements OnInit {
           response.data?.plan_name || '';
 
         this.cdr.detectChanges();
-
       });
 
     } catch (error) {
@@ -414,7 +414,8 @@ export class Plans implements OnInit {
           .filter(plan => plan.isActive !== false)
           .map(plan => {
 
-            const price = Number(plan.price || 0);
+            const price =
+              Number(plan.price || 0);
 
             const durationDays =
               Number(plan.durationInDays || 0);
@@ -423,7 +424,6 @@ export class Plans implements OnInit {
               Math.round(durationDays / 30);
 
             return {
-
               code: plan._id,
 
               name: {
@@ -474,7 +474,6 @@ export class Plans implements OnInit {
               durationInDays:
                 durationDays
             };
-
           });
 
         this.isLoadingDbPlans = false;
@@ -497,7 +496,6 @@ export class Plans implements OnInit {
         this.isLoadingDbPlans = false;
 
         this.cdr.detectChanges();
-
       });
 
       this.snackbar.error(
@@ -513,9 +511,7 @@ export class Plans implements OnInit {
   // ==========================================
 
   goBackToProfiles(): void {
-
     void this.router.navigate(['/profiles']);
-
   }
 
   // ==========================================
@@ -582,10 +578,14 @@ export class Plans implements OnInit {
   }
 
   // ==========================================
-  // ACTIVATE MEMBERSHIP PLAN
+  // SELECT / ACTIVATE MEMBERSHIP PLAN
   // ==========================================
 
   async selectPlan(plan: any): Promise<void> {
+
+    // ------------------------------------------
+    // PREVENT DUPLICATE ACTIVATION
+    // ------------------------------------------
 
     if (
       plan.disabled ||
@@ -598,6 +598,10 @@ export class Plans implements OnInit {
     if (!this.isBrowser) {
       return;
     }
+
+    // ------------------------------------------
+    // CHECK MEMBER LOGIN
+    // ------------------------------------------
 
     const token =
       localStorage.getItem('matrimony_token');
@@ -623,6 +627,10 @@ export class Plans implements OnInit {
       return;
     }
 
+    // ------------------------------------------
+    // VALIDATE PLAN
+    // ------------------------------------------
+
     if (!plan.code) {
 
       this.snackbar.error(
@@ -634,7 +642,24 @@ export class Plans implements OnInit {
       return;
     }
 
-    // Only the clicked plan enters loading state.
+    // ==========================================
+    // FIX: LOCAL DEVELOPMENT CHECK
+    // ==========================================
+    //
+    // This must stay INSIDE selectPlan().
+    //
+    // The backend intentionally disables
+    // /subscription/dev-activate in production.
+    //
+    // Do not use development activation to
+    // bypass real membership payments.
+    // ==========================================
+
+   
+
+    // ==========================================
+    // LOADING STATE
+    // ==========================================
 
     this.ngZone.run(() => {
 
@@ -644,15 +669,17 @@ export class Plans implements OnInit {
         String(plan.code);
 
       this.cdr.detectChanges();
-
     });
 
     try {
 
-      const response = await firstValueFrom(
+      // ========================================
+      // DEVELOPMENT-ONLY ACTIVATION
+      // ========================================
 
+      const response = await firstValueFrom(
         this.http.post<DevActivationResponse>(
-          `${environment.apiUrl}/subscription/dev-activate`,
+          `${environment.apiUrl}/subscription/free-activate`,
           {
             planId: plan.code
           },
@@ -665,6 +692,10 @@ export class Plans implements OnInit {
       );
 
       const activated = response.data;
+
+      // ========================================
+      // VERIFY ACTIVATION RESPONSE
+      // ========================================
 
       if (
         !response.success ||
@@ -679,7 +710,9 @@ export class Plans implements OnInit {
         );
       }
 
-      // Update the active plan after backend success.
+      // ========================================
+      // UPDATE ACTIVE PLAN
+      // ========================================
 
       this.ngZone.run(() => {
 
@@ -692,21 +725,24 @@ export class Plans implements OnInit {
         this.activePlanName =
           String(activated.plan_name || '');
 
-        // Clear old approval/subscription cache.
+        // Clear cached membership / approval status.
         this.auth.invalidateFlowStatus();
 
         this.cdr.detectChanges();
-
       });
 
-      this.snackbar.success(
-        this.currentLang === 'ta'
-          ? 'சோதனை உறுப்பினர் திட்டம் வெற்றிகரமாக செயல்படுத்தப்பட்டது'
-          : 'Test membership activated successfully'
-      );
+      // ========================================
+      // SUCCESS MESSAGE
+      // ========================================
 
-      // Remain on plans page.
-      // Profile permissions are enforced by the backend.
+      this.snackbar.success(
+  this.currentLang === 'ta'
+    ? 'உறுப்பினர் திட்டம் வெற்றிகரமாக செயல்படுத்தப்பட்டது'
+    : 'Membership activated successfully'
+);
+
+      // Remain on the plans page.
+      // Backend controls profile permissions.
 
     } catch (error: any) {
 
@@ -717,24 +753,32 @@ export class Plans implements OnInit {
 
       const status = error?.status;
 
-      const localizedMessage =
-        status === 403
-          ? (
-              this.currentLang === 'ta'
-                ? 'இந்தச் செயலுக்கு அனுமதி இல்லை. நிர்வாகி ஒப்புதலையும் சோதனை அமைப்பையும் சரிபார்க்கவும்.'
-                : 'Activation is not permitted. Check admin approval and local test settings.'
-            )
-          : (
-              this.currentLang === 'ta'
-                ? 'உறுப்பினர் திட்டத்தை செயல்படுத்த முடியவில்லை. மீண்டும் முயற்சிக்கவும்.'
-                : 'Unable to activate membership. Please try again.'
-            );
-
+   const localizedMessage =
+  status === 403
+    ? (
+        this.currentLang === 'ta'
+          ? 'இலவச உறுப்பினர் திட்ட செயல்பாடு அனுமதிக்கப்படவில்லை.'
+          : 'Free membership activation is disabled. Please contact the administrator.'
+      )
+    : status === 409
+      ? (
+          this.currentLang === 'ta'
+            ? 'ஏற்கனவே செயலில் உள்ள உறுப்பினர் திட்டம் உள்ளது.'
+            : 'You already have an active membership. Contact admin to change it.'
+        )
+      : (
+          this.currentLang === 'ta'
+            ? 'உறுப்பினர் திட்டத்தை செயல்படுத்த முடியவில்லை. மீண்டும் முயற்சிக்கவும்.'
+            : 'Unable to activate membership. Please try again.'
+        );
       this.snackbar.error(localizedMessage);
 
     } finally {
 
-      // Always clear both loading properties.
+      // ========================================
+      // RESET LOADING STATE
+      // ========================================
+
       this.ngZone.run(() => {
 
         this.isSavingPlan = false;
@@ -742,9 +786,7 @@ export class Plans implements OnInit {
         this.activatingPlanId = null;
 
         this.cdr.detectChanges();
-
       });
-
     }
   }
 

@@ -104,13 +104,31 @@ async assignPlan(plan: any): Promise<void> {
   this.isAssigning = true;
 
   try {
-    await this.http
-      .post(`${environment.apiUrl}/subscription/admin-assign`, {
-        profile_id: this.profileId,
-        plan_id: plan._id,
-        payment_mode: this.paymentMode
-      })
-      .toPromise();
+    const adminToken = localStorage.getItem('admin_token');
+
+if (!adminToken) {
+  throw new Error('Admin login required');
+}
+
+const res: any = await this.http.post(
+  `${environment.apiUrl}/subscription/admin-assign`,
+  {
+    profile_id: this.profileId,
+    plan_id: plan._id,
+    payment_mode: this.paymentMode
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${adminToken}`
+    }
+  }
+).toPromise();
+
+if (res?.success !== true) {
+  throw new Error(
+    res?.message || 'Package assignment failed'
+  );
+}
 
     alert('Package assigned successfully');
     this.router.navigate(['/admin/profiles']);
