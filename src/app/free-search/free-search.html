@@ -171,55 +171,6 @@
         </label>
 
 
-        <!-- SORT RESULTS -->
-
-        <label class="sort-field">
-
-          <span>
-            {{ text(
-              'Sort results',
-              'வரிசைப்படுத்து'
-            ) }}
-          </span>
-
-          <select
-            [(ngModel)]="sortBy"
-            (ngModelChange)="onSortChange()"
-          >
-
-            <option value="recent">
-              {{ text(
-                'Recently updated',
-                'சமீபத்தில் புதுப்பிக்கப்பட்டவை'
-              ) }}
-            </option>
-
-            <option value="ageAsc">
-              {{ text(
-                'Age: low to high',
-                'வயது: குறைவு முதல்'
-              ) }}
-            </option>
-
-            <option value="ageDesc">
-              {{ text(
-                'Age: high to low',
-                'வயது: அதிகம் முதல்'
-              ) }}
-            </option>
-
-            @if (hasHobbies) {
-              <option value="hobbies">
-                {{ text(
-                  'Most shared hobbies',
-                  'அதிகம் பொருந்தும் விருப்பங்கள்'
-                ) }}
-              </option>
-            }
-
-          </select>
-
-        </label>
 
 
         <!-- MOBILE FILTER BUTTON -->
@@ -470,28 +421,41 @@
              SHOW MORE PROFILES
         ================================== -->
 
-        @if (results.length > displayed) {
+    
+<!-- ==========================================
+     INFINITE SCROLL — AUTO LOAD MORE PROFILES
+========================================== -->
 
-          <div class="show-more-wrapper">
+@if (hasMoreProfiles) {
 
-            <button
-              type="button"
-              class="show-more-btn"
-              (click)="showMoreProfiles()"
-            >
+  <div
+    #autoLoadTrigger
+    class="infinite-scroll-sentinel"
+    role="status"
+    aria-live="polite"
+  >
 
-              {{ text(
-                'Show more profiles',
-                'மேலும் சுயவிவரங்களைக் காண்க'
-              ) }}
+    <div
+      class="infinite-scroll-loader"
+      aria-hidden="true"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
 
-              <span aria-hidden="true">↓</span>
+    <p>
+      {{
+        text(
+          'Loading more profiles...',
+          'மேலும் சுயவிவரங்கள் ஏற்றப்படுகின்றன...'
+        )
+      }}
+    </p>
 
-            </button>
+  </div>
 
-          </div>
-
-        }
+}
 
 
         <!-- ==================================

@@ -3,28 +3,23 @@ import {
   Component,
   OnInit,
   OnDestroy,
+  ChangeDetectorRef,
   inject
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+
 import {
-  ActivatedRoute,
-  RouterLink
+  Router,
+  RouterLink,
+  ActivatedRoute
 } from '@angular/router';
 
-import {
-  firstValueFrom,
-  timeout
-} from 'rxjs';
-
+import { firstValueFrom, timeout } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 type Language = 'en' | 'ta';
-
-type StageStatus =
-  | 'completed'
-  | 'current'
-  | 'upcoming';
+type StageStatus = 'completed' | 'current' | 'upcoming';
 
 type StageIcon =
   | 'file'
@@ -42,6 +37,7 @@ interface StageDefinition {
   titleTa: string;
   descriptionEn: string;
   descriptionTa: string;
+  route: string;
 }
 
 interface DisplayStage {
@@ -50,15 +46,13 @@ interface DisplayStage {
   title: string;
   description: string;
   state: StageStatus;
+  route: string;
 }
 
 @Component({
   selector: 'app-account-status',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink
-  ],
+  imports: [CommonModule, RouterLink],
   templateUrl: './account-status.html',
   styleUrls: [
     './account-status.scss',
@@ -67,17 +61,36 @@ interface DisplayStage {
 })
 export class AccountStatus implements OnInit, OnDestroy {
 
+  // ==========================================
+  // SERVICES
+  // ==========================================
+
   private readonly auth = inject(AuthService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
+  // ==========================================
+  // INTERNAL STATE
+  // ==========================================
+
   private refreshTimer?: ReturnType<typeof setInterval>;
+  private destroyed = false;
+  private checking = false;
+  private statusInitialized = false;
+
+  private previousApproved = false;
+  private previousPlanActive = false;
 
   readonly routeRejected =
     this.route.snapshot.routeConfig?.path ===
     'profile-rejected';
 
-  lang: Language = 'en';
+  // ==========================================
+  // PAGE STATE
+  // ==========================================
 
+  lang: Language = 'en';
   memberName = '';
 
   loading = true;
@@ -89,11 +102,13 @@ export class AccountStatus implements OnInit, OnDestroy {
   planActive = false;
   profileStatus = '';
 
-  // Current stage is derived from server status.
   currentStage = 1;
 
-  // These require separate verified subscription data.
   daysUntilExpiry: number | null = null;
+
+  // ==========================================
+  // ALL EIGHT MATRIMONY JOURNEY STAGES
+  // ==========================================
 
   readonly definitions: StageDefinition[] = [
     {
@@ -103,7 +118,8 @@ export class AccountStatus implements OnInit, OnDestroy {
       descriptionEn:
         'Your profile details have been submitted successfully.',
       descriptionTa:
-        'உங்கள் சுயவிவர விவரங்கள் வெற்றிகரமாக சமர்ப்பிக்கப்பட்டுள்ளன.'
+        'உங்கள் சுயவிவர விவரங்கள் வெற்றிகரமாக சமர்ப்பிக்கப்பட்டுள்ளன.',
+      route: '/my-biodata'
     },
     {
       icon: 'approval',
@@ -112,7 +128,8 @@ export class AccountStatus implements OnInit, OnDestroy {
       descriptionEn:
         'Our team reviews your profile before it becomes visible.',
       descriptionTa:
-        'உங்கள் சுயவிவரம் வெளியிடப்படுவதற்கு முன் நிர்வாகக் குழு சரிபார்க்கும்.'
+        'உங்கள் சுயவிவரம் வெளியிடப்படுவதற்கு முன் நிர்வாகக் குழு சரிபார்க்கும்.',
+      route: '/approval-pending'
     },
     {
       icon: 'crown',
@@ -121,7 +138,8 @@ export class AccountStatus implements OnInit, OnDestroy {
       descriptionEn:
         'Choose a suitable plan after approval to unlock access.',
       descriptionTa:
-        'ஒப்புதலுக்குப் பிறகு பொருத்தமான சந்தா திட்டத்தைத் தேர்ந்தெடுக்கவும்.'
+        'ஒப்புதலுக்குப் பிறகு பொருத்தமான சந்தா திட்டத்தைத் தேர்ந்தெடுக்கவும்.',
+      route: '/plans'
     },
     {
       icon: 'eye',
@@ -130,16 +148,18 @@ export class AccountStatus implements OnInit, OnDestroy {
       descriptionEn:
         'Browse eligible profiles once your subscription is active.',
       descriptionTa:
-        'சந்தா செயல்பாட்டிற்கு வந்ததும் தகுதியான சுயவிவரங்களைப் பார்க்கலாம்.'
+        'சந்தா செயல்பாட்டிற்கு வந்ததும் தகுதியான சுயவிவரங்களைப் பார்க்கலாம்.',
+      route: '/free-search'
     },
     {
       icon: 'heart',
       titleEn: 'Send Interest',
       titleTa: 'விருப்பம் அனுப்புதல்',
       descriptionEn:
-        'Express interest in the suitable profiles you like.',
+        'Express interest in suitable profiles you like.',
       descriptionTa:
-        'நீங்கள் விரும்பும் பொருத்தமான வரன்களுக்கு விருப்பத்தை அனுப்பலாம்.'
+        'நீங்கள் விரும்பும் பொருத்தமான வரன்களுக்கு விருப்பத்தை அனுப்பலாம்.',
+      route: '/free-search'
     },
     {
       icon: 'users',
@@ -148,7 +168,8 @@ export class AccountStatus implements OnInit, OnDestroy {
       descriptionEn:
         'Members can accept or reject interests they receive.',
       descriptionTa:
-        'உறுப்பினர்கள் பெற்ற விருப்பங்களை ஏற்கலாம் அல்லது நிராகரிக்கலாம்.'
+        'உறுப்பினர்கள் பெற்ற விருப்பங்களை ஏற்கலாம் அல்லது நிராகரிக்கலாம்.',
+      route: '/received-interests'
     },
     {
       icon: 'bell',
@@ -157,7 +178,8 @@ export class AccountStatus implements OnInit, OnDestroy {
       descriptionEn:
         'Reminder stages: 2 days and 1 day before plan expiry.',
       descriptionTa:
-        'சந்தா முடிவதற்கு 2 நாட்கள் மற்றும் 1 நாள் முன்பு நினைவூட்டல் நிலைகள்.'
+        'சந்தா முடிவதற்கு 2 நாட்கள் மற்றும் 1 நாள் முன்பு நினைவூட்டல் நிலைகள்.',
+      route: '/dashboard'
     },
     {
       icon: 'renew',
@@ -166,9 +188,14 @@ export class AccountStatus implements OnInit, OnDestroy {
       descriptionEn:
         'After expiry, renew your plan to continue eligible access.',
       descriptionTa:
-        'காலாவதியானதும் சேவைகளைத் தொடர சந்தாவைப் புதுப்பிக்கவும்.'
+        'காலாவதியானதும் சேவைகளைத் தொடர சந்தாவைப் புதுப்பிக்கவும்.',
+      route: '/plans'
     }
   ];
+
+  // ==========================================
+  // INITIALIZATION
+  // ==========================================
 
   async ngOnInit(): Promise<void> {
     this.loadLanguage();
@@ -176,16 +203,27 @@ export class AccountStatus implements OnInit, OnDestroy {
 
     await this.loadJourney();
 
-    // Refresh when the member revisits the tab.
+    if (this.destroyed) return;
+
     if (typeof window !== 'undefined') {
       window.addEventListener(
         'focus',
         this.handleWindowFocus
       );
+
+      // Check the current approval and plan status
+      // every 30 seconds while this page is open.
+      this.refreshTimer = setInterval(() => {
+        if (!document.hidden) {
+          void this.loadJourney(true);
+        }
+      }, 30000);
     }
   }
 
   ngOnDestroy(): void {
+    this.destroyed = true;
+
     if (typeof window !== 'undefined') {
       window.removeEventListener(
         'focus',
@@ -199,17 +237,16 @@ export class AccountStatus implements OnInit, OnDestroy {
   }
 
   private readonly handleWindowFocus = (): void => {
-    void this.loadJourney();
+    void this.loadJourney(true);
   };
 
-  /* =====================================
-     LANGUAGE
-  ===================================== */
+  // ==========================================
+  // LANGUAGE
+  // ==========================================
 
   private loadLanguage(): void {
     if (typeof window === 'undefined') return;
 
-    // Page-local preference.
     const saved = localStorage.getItem(
       'astro_journey_language'
     );
@@ -219,7 +256,6 @@ export class AccountStatus implements OnInit, OnDestroy {
       return;
     }
 
-    // Use document language if the application sets it.
     const documentLanguage =
       document.documentElement.lang.toLowerCase();
 
@@ -240,14 +276,12 @@ export class AccountStatus implements OnInit, OnDestroy {
   }
 
   tr(english: string, tamil: string): string {
-    return this.lang === 'ta'
-      ? tamil
-      : english;
+    return this.lang === 'ta' ? tamil : english;
   }
 
-  /* =====================================
-     MEMBER NAME
-  ===================================== */
+  // ==========================================
+  // MEMBER NAME
+  // ==========================================
 
   private extractName(source: any): string {
     if (!source || typeof source !== 'object') {
@@ -266,13 +300,13 @@ export class AccountStatus implements OnInit, OnDestroy {
       source.data?.name
     ];
 
-    const result = values.find(
+    const found = values.find(
       value =>
         typeof value === 'string' &&
         value.trim().length > 0
     );
 
-    return result?.trim() || '';
+    return found?.trim() || '';
   }
 
   private loadMemberName(): void {
@@ -285,12 +319,13 @@ export class AccountStatus implements OnInit, OnDestroy {
 
       if (!raw) return;
 
-      const user = JSON.parse(raw);
-      this.memberName = this.extractName(user);
+      this.memberName = this.extractName(
+        JSON.parse(raw)
+      );
 
     } catch (error) {
       console.warn(
-        'Unable to read saved member name',
+        'Unable to read member name',
         error
       );
     }
@@ -315,26 +350,74 @@ export class AccountStatus implements OnInit, OnDestroy {
       : `Hi ${this.firstName},`;
   }
 
-  /* =====================================
-     REAL USER FLOW
-  ===================================== */
+  // ==========================================
+  // CLICK ANY JOURNEY STEP
+  // ==========================================
 
-  async loadJourney(): Promise<void> {
-    // No authenticated status request during SSR.
+  openJourneyStep(index: number): void {
+    const stage = this.definitions[index];
+
+    if (!stage) return;
+
+    let target = stage.route;
+
+    // If biodata has not been submitted,
+    // open the biodata form.
+    if (index === 0 && !this.biodataCompleted) {
+      target = '/biodata';
+    }
+
+    // Active members use the authenticated
+    // profile search for viewing and interests.
+    if (
+      (index === 3 || index === 4) &&
+      this.planActive
+    ) {
+      target = '/profiles';
+    }
+
+    void this.router.navigateByUrl(target);
+  }
+
+  // ==========================================
+  // REAL BACKEND FLOW STATUS
+  // ==========================================
+
+  async loadJourney(silent = false): Promise<void> {
+
+    // Do not make authenticated API calls
+    // during server-side rendering.
     if (typeof window === 'undefined') {
       this.loading = false;
       return;
     }
 
-    this.loading = true;
-    this.errorMessage = '';
+    // Prevent duplicate simultaneous requests.
+    if (this.checking || this.destroyed) {
+      return;
+    }
+
+    this.checking = true;
+
+    if (!silent) {
+      this.loading = true;
+      this.errorMessage = '';
+      this.cdr.detectChanges();
+    }
 
     try {
+
+      // ========================================
+      // FETCH SERVER FLOW
+      // ========================================
+
       const response: any = await firstValueFrom(
         this.auth.getUserFlowStatus().pipe(
           timeout({ first: 8000 })
         )
       );
+
+      if (this.destroyed) return;
 
       const flow = response?.data;
 
@@ -344,60 +427,134 @@ export class AccountStatus implements OnInit, OnDestroy {
         );
       }
 
-      this.biodataCompleted =
+      // ========================================
+      // PROFILE STATUS
+      // ========================================
+
+      const completed =
         flow.biodataCompleted === true;
 
-      this.profileStatus = String(
+      const status = String(
         flow.profileStatus || ''
       ).toLowerCase();
 
-      this.adminApproved =
+      const approved =
         flow.adminApproved === true;
 
-      // Match the security/navigation guard.
-      this.profilePublished =
-        this.profileStatus === 'approved' &&
+      const published =
+        status === 'approved' &&
         flow.isPublished === true;
 
       const fullyApproved =
-        this.adminApproved &&
-        this.profilePublished;
+        approved && published;
 
-      this.planActive =
+      const active =
         fullyApproved &&
         flow.hasActivePlan === true;
 
-      // Read the name only if the server returns one.
+      // ========================================
+      // DETECT ACTUAL STATUS TRANSITIONS
+      // ========================================
+
+      const approvalJustCompleted =
+        this.statusInitialized &&
+        !this.previousApproved &&
+        fullyApproved;
+
+      const planJustActivated =
+        this.statusInitialized &&
+        !this.previousPlanActive &&
+        active;
+
+      // ========================================
+      // UPDATE COMPONENT STATE
+      // ========================================
+
+      this.biodataCompleted = completed;
+      this.profileStatus = status;
+      this.adminApproved = approved;
+      this.profilePublished = published;
+      this.planActive = active;
+
+      // Update name if the backend provides it.
       const serverName = this.extractName(flow);
 
       if (serverName) {
         this.memberName = serverName;
       }
 
+      // Calculate the current journey step.
       this.calculateCurrentStage();
 
+      // Store verified status for next comparison.
+      this.previousApproved = fullyApproved;
+      this.previousPlanActive = active;
+      this.statusInitialized = true;
+
+      this.errorMessage = '';
+
+      // ========================================
+      // AUTOMATIC NAVIGATION
+      // ========================================
+
+      // If a subscription becomes active
+      // while this page is open.
+      if (planJustActivated) {
+        void this.router.navigateByUrl(
+          '/free-search'
+        );
+        return;
+      }
+
+      // If admin approval and publication
+      // become complete while this page is open.
+      if (
+        approvalJustCompleted &&
+        !active
+      ) {
+        void this.router.navigateByUrl(
+          '/plans'
+        );
+      }
+
     } catch (error) {
+
+      if (this.destroyed) return;
+
       console.error(
         'Journey status loading failed',
         error
       );
 
-      this.errorMessage = this.tr(
-        'Unable to load your current status. Please try again.',
-        'உங்கள் தற்போதைய நிலையை ஏற்ற முடியவில்லை. மீண்டும் முயற்சிக்கவும்.'
-      );
+      if (!silent) {
+        this.errorMessage = this.tr(
+          'Unable to load your current status. Please try again.',
+          'உங்கள் தற்போதைய நிலையை ஏற்ற முடியவில்லை. மீண்டும் முயற்சிக்கவும்.'
+        );
 
-      // Do not present cached status as verified.
-      this.currentStage = 0;
+        this.currentStage = 0;
+      }
 
     } finally {
-      this.loading = false;
+
+      this.checking = false;
+
+      if (!this.destroyed) {
+
+        // Critical loading spinner fix.
+        this.loading = false;
+
+        // Immediately render new backend status.
+        this.cdr.detectChanges();
+      }
+
     }
+
   }
 
-  /* =====================================
-     STAGE CALCULATION
-  ===================================== */
+  // ==========================================
+  // CURRENT JOURNEY PROGRESS
+  // ==========================================
 
   private calculateCurrentStage(): void {
 
@@ -406,13 +563,11 @@ export class AccountStatus implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.isRejected) {
-      this.currentStage = 2;
-      return;
-    }
-
-    if (!this.adminApproved ||
-        !this.profilePublished) {
+    if (
+      this.isRejected ||
+      !this.adminApproved ||
+      !this.profilePublished
+    ) {
       this.currentStage = 2;
       return;
     }
@@ -422,9 +577,8 @@ export class AccountStatus implements OnInit, OnDestroy {
       return;
     }
 
-    // Real active plan.
-    // Interest activity and expiry require their
-    // respective APIs, so they stay informational.
+    // Interest and expiry stages require
+    // additional verified API information.
     this.currentStage = 4;
   }
 
@@ -433,44 +587,53 @@ export class AccountStatus implements OnInit, OnDestroy {
       this.profileStatus === 'rejected';
   }
 
-  get stages(): DisplayStage[] {
+  // ==========================================
+  // JOURNEY STAGE DISPLAY
+  // ==========================================
 
+  get stages(): DisplayStage[] {
     return this.definitions.map(
       (item, index) => {
 
         const number = index + 1;
-
         let state: StageStatus = 'upcoming';
 
-        if (this.currentStage > 0 &&
-            !this.isRejected) {
-
+        if (
+          this.currentStage > 0 &&
+          !this.isRejected
+        ) {
           if (number < this.currentStage) {
             state = 'completed';
           } else if (number === this.currentStage) {
             state = 'current';
           }
-
         }
 
         return {
           number,
           icon: item.icon,
-          title: this.lang === 'ta'
-            ? item.titleTa
-            : item.titleEn,
-          description: this.lang === 'ta'
-            ? item.descriptionTa
-            : item.descriptionEn,
-          state
+
+          title:
+            this.lang === 'ta'
+              ? item.titleTa
+              : item.titleEn,
+
+          description:
+            this.lang === 'ta'
+              ? item.descriptionTa
+              : item.descriptionEn,
+
+          state,
+          route: item.route
         };
+
       }
     );
   }
 
-  /* =====================================
-     CURRENT STATUS
-  ===================================== */
+  // ==========================================
+  // STATUS TITLE
+  // ==========================================
 
   get statusTitle(): string {
 
@@ -488,8 +651,10 @@ export class AccountStatus implements OnInit, OnDestroy {
       );
     }
 
-    if (!this.adminApproved ||
-        !this.profilePublished) {
+    if (
+      !this.adminApproved ||
+      !this.profilePublished
+    ) {
       return this.tr(
         'Profile under review',
         'சுயவிவரம் பரிசீலனையில் உள்ளது'
@@ -509,11 +674,15 @@ export class AccountStatus implements OnInit, OnDestroy {
     );
   }
 
+  // ==========================================
+  // STATUS DESCRIPTION
+  // ==========================================
+
   get statusDescription(): string {
 
     if (this.isRejected) {
       return this.tr(
-        'Please review your biodata and contact support for details before resubmitting.',
+        'Please review your biodata and contact support before resubmitting.',
         'மீண்டும் சமர்ப்பிக்கும் முன் உங்கள் சுயவிவரத்தை சரிபார்த்து உதவிக் குழுவைத் தொடர்புகொள்ளவும்.'
       );
     }
@@ -534,33 +703,41 @@ export class AccountStatus implements OnInit, OnDestroy {
 
     if (!this.profilePublished) {
       return this.tr(
-        'Your profile has been approved and is awaiting publication.',
+        'Your profile is approved and awaiting publication.',
         'உங்கள் சுயவிவரம் அங்கீகரிக்கப்பட்டுள்ளது. வெளியீட்டிற்காகக் காத்திருக்கிறது.'
       );
     }
 
     if (!this.planActive) {
       return this.tr(
-        'Your profile is approved and published. Choose a subscription plan to continue.',
-        'உங்கள் சுயவிவரம் அங்கீகரிக்கப்பட்டு வெளியிடப்பட்டுள்ளது. தொடர சந்தா திட்டத்தைத் தேர்ந்தெடுக்கவும்.'
+        'Your profile is approved and published. Choose a subscription plan.',
+        'உங்கள் சுயவிவரம் அங்கீகரிக்கப்பட்டு வெளியிடப்பட்டுள்ளது. சந்தா திட்டத்தைத் தேர்ந்தெடுக்கவும்.'
       );
     }
 
     return this.tr(
-      'Your membership is active. You can explore eligible profiles and use features available under your plan.',
-      'உங்கள் சந்தா செயல்பாட்டில் உள்ளது. தகுதியான வரன்களையும் உங்கள் திட்டத்தில் உள்ள வசதிகளையும் பயன்படுத்தலாம்.'
+      'Your membership is active. Explore eligible profiles and available features.',
+      'உங்கள் சந்தா செயல்பாட்டில் உள்ளது. தகுதியான வரன்களைப் பார்க்கலாம்.'
     );
   }
 
+  // ==========================================
+  // NEXT ACTION ROUTE
+  // ==========================================
+
   get actionRoute(): string {
 
-    if (this.isRejected ||
-        !this.biodataCompleted) {
+    if (
+      this.isRejected ||
+      !this.biodataCompleted
+    ) {
       return '/biodata';
     }
 
-    if (!this.adminApproved ||
-        !this.profilePublished) {
+    if (
+      !this.adminApproved ||
+      !this.profilePublished
+    ) {
       return '/free-search';
     }
 
@@ -571,18 +748,26 @@ export class AccountStatus implements OnInit, OnDestroy {
     return '/profiles';
   }
 
+  // ==========================================
+  // NEXT ACTION LABEL
+  // ==========================================
+
   get actionLabel(): string {
 
-    if (this.isRejected ||
-        !this.biodataCompleted) {
+    if (
+      this.isRejected ||
+      !this.biodataCompleted
+    ) {
       return this.tr(
         'Continue Biodata',
         'சுயவிவரத்தைத் தொடரவும்'
       );
     }
 
-    if (!this.adminApproved ||
-        !this.profilePublished) {
+    if (
+      !this.adminApproved ||
+      !this.profilePublished
+    ) {
       return this.tr(
         'Explore Free Search',
         'இலவச தேடல்'
@@ -602,7 +787,12 @@ export class AccountStatus implements OnInit, OnDestroy {
     );
   }
 
+  // ==========================================
+  // CURRENT STAGE LABEL
+  // ==========================================
+
   get currentStageLabel(): string {
+
     if (this.isRejected) {
       return this.tr(
         'Changes Required',
@@ -636,6 +826,10 @@ export class AccountStatus implements OnInit, OnDestroy {
       'செயல்பாட்டில்'
     );
   }
+
+  // ==========================================
+  // PLAN EXPIRY INFORMATION
+  // ==========================================
 
   get expiryMessage(): string {
 
@@ -673,4 +867,5 @@ export class AccountStatus implements OnInit, OnDestroy {
 
     return '';
   }
+
 }

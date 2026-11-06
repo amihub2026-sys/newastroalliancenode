@@ -4,7 +4,6 @@
   <main class="journey-page">
     <div class="journey-loading" role="status">
       <div class="journey-loading-ring"></div>
-
       <p>
         {{ tr(
           'Loading your matrimony journey...',
@@ -18,6 +17,7 @@
 
   <main class="journey-page">
     <div class="journey-error" role="alert">
+
       <h2>
         {{ tr(
           'Unable to load profile status',
@@ -30,6 +30,7 @@
       <button type="button" (click)="loadJourney()">
         {{ tr('Try Again', 'மீண்டும் முயற்சிக்கவும்') }}
       </button>
+
     </div>
   </main>
 
@@ -46,10 +47,10 @@
       </span>
 
       <h1>{{ statusTitle }}</h1>
-
       <p>{{ statusDescription }}</p>
 
       <div class="rejected-actions">
+
         <a routerLink="/biodata" class="journey-btn primary">
           {{ tr(
             'Correct My Biodata',
@@ -63,496 +64,495 @@
             'உதவிக் குழுவைத் தொடர்புகொள்ள'
           ) }}
         </a>
-      </div>
 
+      </div>
     </section>
 
   </main>
 
 } @else {
 
-<main class="journey-page">
+  <main class="journey-page">
 
-  <!-- =====================================
-       HERO
-  ====================================== -->
+    <!-- =====================================
+         HERO
+    ====================================== -->
 
-  <section class="journey-hero">
+    <section class="journey-hero">
 
-    <div class="hero-copy">
+      <div class="hero-copy">
 
-      <span class="hero-eyebrow">
-        ASTRO ALLIANCE MATRIMONY
-      </span>
+        <span class="hero-eyebrow">
+          ASTRO ALLIANCE MATRIMONY
+        </span>
 
-      <h1>{{ greeting }}</h1>
-
-      <p>
-        {{ tr(
-          'Here is the current status of your profile.',
-          'உங்கள் சுயவிவரத்தின் தற்போதைய நிலை இங்கே.'
-        ) }}
-      </p>
-
-    </div>
-
-    <div class="hero-quote">
-      <p>
-        {{ tr(
-          '“Every meaningful journey begins with a small step.”',
-          '“ஒவ்வொரு அர்த்தமுள்ள பயணமும் ஒரு சிறிய அடியிலிருந்து தொடங்குகிறது.”'
-        ) }}
-      </p>
-
-      <span>──── ♡ ────</span>
-    </div>
-
-    <div class="hero-rings" aria-hidden="true">
-      <span class="ring ring-one"></span>
-      <span class="ring ring-two"></span>
-    </div>
-
-  </section>
-
-
-  <!-- =====================================
-       JOURNEY TRACKER
-  ====================================== -->
-
-  <section class="journey-panel">
-
-    <div class="journey-panel-heading">
-
-      <div class="journey-heading-copy">
-
-        <h2>
-          {{ tr(
-            'Your Matrimony Journey',
-            'உங்கள் திருமணப் பயணம்'
-          ) }}
-        </h2>
-
-        <span class="heading-separator"></span>
+        <h1>{{ greeting }}</h1>
 
         <p>
           {{ tr(
-            'Track your profile status and next steps.',
-            'உங்கள் சுயவிவர நிலை மற்றும் அடுத்த படிகளை அறியுங்கள்.'
+            'Here is the current status of your profile.',
+            'உங்கள் சுயவிவரத்தின் தற்போதைய நிலை இங்கே.'
           ) }}
         </p>
 
       </div>
 
-      <!-- PAGE LANGUAGE SWITCH -->
+      <div class="hero-quote">
 
-      <div class="journey-language" role="group"
-           aria-label="Journey page language">
+        <p>
+          {{ tr(
+            '“Every meaningful journey begins with a small step.”',
+            '“ஒவ்வொரு அர்த்தமுள்ள பயணமும் ஒரு சிறிய அடியிலிருந்து தொடங்குகிறது.”'
+          ) }}
+        </p>
 
-        <button
-          type="button"
-          [class.active]="lang === 'en'"
-          [attr.aria-pressed]="lang === 'en'"
-          (click)="changeLanguage('en')">
-          EN
-        </button>
-
-        <button
-          type="button"
-          [class.active]="lang === 'ta'"
-          [attr.aria-pressed]="lang === 'ta'"
-          (click)="changeLanguage('ta')">
-          தமிழ்
-        </button>
+        <span>──── ♡ ────</span>
 
       </div>
 
-    </div>
+      <div class="hero-rings" aria-hidden="true">
+        <span class="ring ring-one"></span>
+        <span class="ring ring-two"></span>
+      </div>
 
+    </section>
 
-    <!-- STAGES -->
+    <!-- =====================================
+         JOURNEY TRACKER
+    ====================================== -->
 
-    <div class="journey-scroll">
+    <section class="journey-panel">
 
-      <div class="journey-steps">
+      <div class="journey-panel-heading">
 
-        @for (step of stages; track step.number) {
+        <div class="journey-heading-copy">
 
-          <article
-            class="journey-step"
-            [class.step-completed]="step.state === 'completed'"
-            [class.step-current]="step.state === 'current'"
-            [class.step-upcoming]="step.state === 'upcoming'">
+          <h2>
+            {{ tr(
+              'Your Matrimony Journey',
+              'உங்கள் திருமணப் பயணம்'
+            ) }}
+          </h2>
 
-            <div class="step-icon-area">
+          <span class="heading-separator"></span>
 
-              <div class="step-circle">
+          <p>
+            {{ tr(
+              'Track your profile status and next steps.',
+              'உங்கள் சுயவிவர நிலை மற்றும் அடுத்த படிகளை அறியுங்கள்.'
+            ) }}
+          </p>
 
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true">
+        </div>
 
-                  @switch (step.icon) {
+        <div
+          class="journey-language"
+          role="group"
+          aria-label="Journey page language"
+        >
 
-                    @case ('file') {
-                      <path d="M6 3h8l4 4v14H6z"/>
-                      <path d="M14 3v5h4M9 12h6M9 16h6"/>
+          <button
+            type="button"
+            [class.active]="lang === 'en'"
+            [attr.aria-pressed]="lang === 'en'"
+            (click)="changeLanguage('en')"
+          >
+            EN
+          </button>
+
+          <button
+            type="button"
+            [class.active]="lang === 'ta'"
+            [attr.aria-pressed]="lang === 'ta'"
+            (click)="changeLanguage('ta')"
+          >
+            தமிழ்
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- ALL EIGHT CLICKABLE STAGES -->
+
+      <div class="journey-scroll">
+
+        <div class="journey-steps">
+
+          @for (step of stages; track step.number) {
+
+            <article
+              class="journey-step"
+              [class.step-completed]="step.state === 'completed'"
+              [class.step-current]="step.state === 'current'"
+              [class.step-upcoming]="step.state === 'upcoming'"
+              role="link"
+              tabindex="0"
+              [attr.aria-label]="tr('Open ', 'திறக்க ') + step.title"
+              (click)="openJourneyStep(step.number - 1)"
+              (keydown.enter)="openJourneyStep(step.number - 1)"
+              (keydown.space)="$event.preventDefault(); openJourneyStep(step.number - 1)"
+            >
+
+              <div class="step-icon-area">
+
+                <div class="step-circle">
+
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+
+                    @switch (step.icon) {
+
+                      @case ('file') {
+                        <path d="M6 3h8l4 4v14H6z"/>
+                        <path d="M14 3v5h4M9 12h6M9 16h6"/>
+                      }
+
+                      @case ('approval') {
+                        <circle cx="9" cy="8" r="3"/>
+                        <path d="M3 20v-2a6 6 0 0 1 10-4"/>
+                        <circle cx="17" cy="17" r="4"/>
+                        <path d="M17 14.5v3l2 1"/>
+                      }
+
+                      @case ('crown') {
+                        <path d="M3 7l5 4 4-7 4 7 5-4-2 12H5z"/>
+                        <path d="M5 21h14"/>
+                      }
+
+                      @case ('eye') {
+                        <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      }
+
+                      @case ('heart') {
+                        <path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/>
+                      }
+
+                      @case ('users') {
+                        <circle cx="9" cy="8" r="3"/>
+                        <path d="M3 20v-2a6 6 0 0 1 12 0v2z"/>
+                        <circle cx="18" cy="9" r="2"/>
+                        <path d="M17 15a5 5 0 0 1 4 5"/>
+                      }
+
+                      @case ('bell') {
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 9h18c0-1-3-2-3-9z"/>
+                        <path d="M10 21h4"/>
+                      }
+
+                      @case ('renew') {
+                        <path d="M20 7v5h-5"/>
+                        <path d="M4 17v-5h5"/>
+                        <path d="M5 9a8 8 0 0 1 14-2l1 5"/>
+                        <path d="M19 15a8 8 0 0 1-14 2l-1-5"/>
+                      }
+
                     }
 
-                    @case ('approval') {
-                      <circle cx="9" cy="8" r="3"/>
-                      <path d="M3 20v-2a6 6 0 0 1 10-4"/>
-                      <circle cx="17" cy="17" r="4"/>
-                      <path d="M17 14.5v3l2 1"/>
-                    }
+                  </svg>
 
-                    @case ('crown') {
-                      <path d="M3 7l5 4 4-7 4 7 5-4-2 12H5z"/>
-                      <path d="M5 21h14"/>
-                    }
+                </div>
 
-                    @case ('eye') {
-                      <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/>
-                      <circle cx="12" cy="12" r="3"/>
-                    }
+                <span class="step-number">
+                  {{ step.number }}
+                </span>
 
-                    @case ('heart') {
-                      <path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/>
-                    }
-
-                    @case ('users') {
-                      <circle cx="9" cy="8" r="3"/>
-                      <path d="M3 20v-2a6 6 0 0 1 12 0v2z"/>
-                      <circle cx="18" cy="9" r="2"/>
-                      <path d="M17 15a5 5 0 0 1 4 5"/>
-                    }
-
-                    @case ('bell') {
-                      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 9h18c0-1-3-2-3-9z"/>
-                      <path d="M10 21h4"/>
-                    }
-
-                    @case ('renew') {
-                      <path d="M20 7v5h-5"/>
-                      <path d="M4 17v-5h5"/>
-                      <path d="M5 9a8 8 0 0 1 14-2l1 5"/>
-                      <path d="M19 15a8 8 0 0 1-14 2l-1-5"/>
-                    }
-
-                  }
-
-                </svg>
+                @if (step.state === 'completed') {
+                  <span class="step-check">✓</span>
+                }
 
               </div>
 
-              <span class="step-number">
-                {{ step.number }}
+              <h3>{{ step.title }}</h3>
+
+              <div class="step-state-label">
+
+                @if (step.state === 'completed') {
+
+                  <span class="completed-label">
+                    {{ tr('Completed', 'நிறைவடைந்தது') }}
+                  </span>
+
+                }
+
+                @if (step.state === 'current') {
+
+                  <span class="current-label">
+                    {{ currentStageLabel }}
+                  </span>
+
+                }
+
+              </div>
+
+              <div class="step-instruction">
+                <p>{{ step.description }}</p>
+              </div>
+
+              <span class="step-open-hint">
+                {{ tr('Open step', 'திறக்க') }}
+                <span aria-hidden="true">↗</span>
               </span>
 
-              @if (step.state === 'completed') {
-                <span class="step-check">✓</span>
-              }
+            </article>
 
-            </div>
+          }
 
-            <h3>{{ step.title }}</h3>
-
-            <div class="step-state-label">
-
-              @if (step.state === 'completed') {
-                <span class="completed-label">
-                  {{ tr('Completed', 'நிறைவடைந்தது') }}
-                </span>
-              }
-
-              @if (step.state === 'current') {
-                <span class="current-label">
-                  {{ currentStageLabel }}
-                </span>
-              }
-
-            </div>
-
-            <div class="step-instruction">
-              <p>{{ step.description }}</p>
-            </div>
-
-          </article>
-
-        }
+        </div>
 
       </div>
 
-    </div>
+    </section>
 
-  </section>
+    <!-- =====================================
+         EXPIRY NOTICE
+    ====================================== -->
 
+    @if (expiryMessage) {
 
-  <!-- =====================================
-       EXPIRY MESSAGE
-  ====================================== -->
+      <section class="expiry-notice" role="status">
 
-  @if (expiryMessage) {
+        <span class="expiry-notice-icon">!</span>
 
-    <section class="expiry-notice" role="status">
+        <p>{{ expiryMessage }}</p>
 
-      <span class="expiry-notice-icon">!</span>
+        <a routerLink="/plans">
+          {{ tr('Renew Plan', 'சந்தாவைப் புதுப்பிக்க') }} →
+        </a>
 
-      <p>{{ expiryMessage }}</p>
+      </section>
 
-      <a routerLink="/plans">
+    }
+
+    <!-- =====================================
+         INFORMATION CARDS
+    ====================================== -->
+
+    <section class="journey-info-grid">
+
+      <!-- CURRENT STATUS -->
+
+      <article class="journey-card status-card">
+
+        <div class="card-heading">
+          <span class="card-icon hourglass-icon">⌛</span>
+          <h2>{{ statusTitle }}</h2>
+        </div>
+
+        <p class="card-description">
+          {{ statusDescription }}
+        </p>
+
+        <div class="status-summary">
+
+          <span>
+            {{ tr('Current Status', 'தற்போதைய நிலை') }}
+          </span>
+
+          <strong>{{ currentStageLabel }}</strong>
+
+        </div>
+
+        <a
+          [routerLink]="actionRoute"
+          class="card-action-link"
+        >
+          {{ actionLabel }}
+          <span aria-hidden="true">→</span>
+        </a>
+
+      </article>
+
+      <!-- NOTIFICATION INFORMATION -->
+
+      <article class="journey-card notification-card">
+
+        <div class="card-heading">
+
+          <span class="card-icon notification-heading-icon">
+            ♧
+          </span>
+
+          <h2>
+            {{ tr(
+              'You will be notified',
+              'உங்களுக்கு அறிவிக்கப்படும்'
+            ) }}
+          </h2>
+
+        </div>
+
+        <ul class="notification-list">
+
+          <li>
+            <span class="notification-icon green">✓</span>
+            <span>
+              {{ tr(
+                'When your profile is approved.',
+                'உங்கள் சுயவிவரம் அங்கீகரிக்கப்படும்போது.'
+              ) }}
+            </span>
+          </li>
+
+          <li>
+            <span class="notification-icon amber">●</span>
+            <span>
+              {{ tr(
+                'When your subscription is activated.',
+                'உங்கள் சந்தா செயல்படுத்தப்படும்போது.'
+              ) }}
+            </span>
+          </li>
+
+          <li>
+            <span class="notification-icon rose">●</span>
+            <span>
+              {{ tr(
+                '2 days before your plan expires.',
+                'சந்தா முடிவதற்கு 2 நாட்கள் முன்பு.'
+              ) }}
+            </span>
+          </li>
+
+          <li>
+            <span class="notification-icon amber">●</span>
+            <span>
+              {{ tr(
+                '1 day before your plan expires.',
+                'சந்தா முடிவதற்கு 1 நாள் முன்பு.'
+              ) }}
+            </span>
+          </li>
+
+          <li>
+            <span class="notification-icon purple">↻</span>
+            <span>
+              {{ tr(
+                'When your plan needs renewal.',
+                'சந்தா புதுப்பிக்க வேண்டிய நேரத்தில்.'
+              ) }}
+            </span>
+          </li>
+
+        </ul>
+
+        <div class="decorative-mail" aria-hidden="true">
+          <span class="mail-envelope">✉</span>
+          <span class="mail-heart">♥</span>
+        </div>
+
+      </article>
+
+      <!-- WHAT HAPPENS NEXT -->
+
+      <article class="journey-card next-card">
+
+        <div class="card-heading">
+
+          <span class="card-icon next-heading-icon">➜</span>
+
+          <h2>
+            {{ tr(
+              'What happens next?',
+              'அடுத்து என்ன நடக்கும்?'
+            ) }}
+          </h2>
+
+        </div>
+
+        <div class="next-list">
+
+          <div class="next-item">
+
+            <span class="next-number">1</span>
+
+            <p>
+              {{ tr(
+                'After approval, subscribe to a suitable plan to unlock eligible features.',
+                'ஒப்புதலுக்குப் பிறகு பொருத்தமான சந்தா திட்டத்தைத் தேர்ந்தெடுக்கவும்.'
+              ) }}
+            </p>
+
+          </div>
+
+          <div class="next-item">
+
+            <span class="next-number">2</span>
+
+            <p>
+              {{ tr(
+                'View eligible profiles based on your preferences.',
+                'உங்கள் விருப்பங்களுக்கு ஏற்ற தகுதியான சுயவிவரங்களைப் பார்க்கவும்.'
+              ) }}
+            </p>
+
+          </div>
+
+          <div class="next-item">
+
+            <span class="next-number">3</span>
+
+            <p>
+              {{ tr(
+                'Send interests to suitable profiles and wait for their response.',
+                'பொருத்தமான வரன்களுக்கு விருப்பத்தை அனுப்பி பதிலுக்காகக் காத்திருக்கவும்.'
+              ) }}
+            </p>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </section>
+
+    <!-- =====================================
+         SUPPORT
+    ====================================== -->
+
+    <section class="journey-support">
+
+      <div class="support-copy">
+
+        <span class="support-question">?</span>
+
+        <div>
+          <h3>
+            {{ tr('Need Help?', 'உதவி தேவையா?') }}
+          </h3>
+
+          <p>
+            {{ tr(
+              'Our support team is happy to assist you.',
+              'எங்கள் உதவிக் குழு உங்களுக்கு உதவத் தயாராக உள்ளது.'
+            ) }}
+          </p>
+        </div>
+
+      </div>
+
+      <a routerLink="/contact-us" class="support-button">
+
+        <span aria-hidden="true">☎</span>
+
         {{ tr(
-          'Renew Plan',
-          'சந்தாவைப் புதுப்பிக்க'
-        ) }} →
+          'Contact Support',
+          'உதவிக் குழுவைத் தொடர்புகொள்ள'
+        ) }}
+
       </a>
 
     </section>
 
-  }
-
-
-  <!-- =====================================
-       THREE CARDS
-  ====================================== -->
-
-  <section class="journey-info-grid">
-
-    <!-- CURRENT STATUS -->
-
-    <article class="journey-card status-card">
-
-      <div class="card-heading">
-
-        <span class="card-icon hourglass-icon">⌛</span>
-
-        <h2>{{ statusTitle }}</h2>
-
-      </div>
-
-      <p class="card-description">
-        {{ statusDescription }}
-      </p>
-
-      <div class="status-summary">
-
-        <span>
-          {{ tr(
-            'Current Status',
-            'தற்போதைய நிலை'
-          ) }}
-        </span>
-
-        <strong>{{ currentStageLabel }}</strong>
-
-      </div>
-
-      <a
-        [routerLink]="actionRoute"
-        class="card-action-link">
-
-        {{ actionLabel }}
-        <span aria-hidden="true">→</span>
-
-      </a>
-
-    </article>
-
-
-    <!-- NOTIFICATION INFORMATION -->
-
-    <article class="journey-card notification-card">
-
-      <div class="card-heading">
-
-        <span class="card-icon notification-heading-icon">
-          ♧
-        </span>
-
-        <h2>
-          {{ tr(
-            'You will be notified',
-            'உங்களுக்கு அறிவிக்கப்படும்'
-          ) }}
-        </h2>
-
-      </div>
-
-      <ul class="notification-list">
-
-        <li>
-          <span class="notification-icon green">✓</span>
-
-          <span>
-            {{ tr(
-              'When your profile is approved.',
-              'உங்கள் சுயவிவரம் அங்கீகரிக்கப்படும்போது.'
-            ) }}
-          </span>
-        </li>
-
-        <li>
-          <span class="notification-icon amber">●</span>
-
-          <span>
-            {{ tr(
-              'When your subscription is activated.',
-              'உங்கள் சந்தா செயல்படுத்தப்படும்போது.'
-            ) }}
-          </span>
-        </li>
-
-        <li>
-          <span class="notification-icon rose">●</span>
-
-          <span>
-            {{ tr(
-              '2 days before your plan expires.',
-              'சந்தா முடிவதற்கு 2 நாட்கள் முன்பு.'
-            ) }}
-          </span>
-        </li>
-
-        <li>
-          <span class="notification-icon amber">●</span>
-
-          <span>
-            {{ tr(
-              '1 day before your plan expires.',
-              'சந்தா முடிவதற்கு 1 நாள் முன்பு.'
-            ) }}
-          </span>
-        </li>
-
-        <li>
-          <span class="notification-icon purple">↻</span>
-
-          <span>
-            {{ tr(
-              'When your plan needs renewal.',
-              'சந்தா புதுப்பிக்க வேண்டிய நேரத்தில்.'
-            ) }}
-          </span>
-        </li>
-
-      </ul>
-
-      <div class="decorative-mail" aria-hidden="true">
-        <span class="mail-envelope">✉</span>
-        <span class="mail-heart">♥</span>
-      </div>
-
-    </article>
-
-
-    <!-- WHAT HAPPENS NEXT -->
-
-    <article class="journey-card next-card">
-
-      <div class="card-heading">
-
-        <span class="card-icon next-heading-icon">➜</span>
-
-        <h2>
-          {{ tr(
-            'What happens next?',
-            'அடுத்து என்ன நடக்கும்?'
-          ) }}
-        </h2>
-
-      </div>
-
-      <div class="next-list">
-
-        <div class="next-item">
-
-          <span class="next-number">1</span>
-
-          <p>
-            {{ tr(
-              'After approval, subscribe to a suitable plan to unlock eligible features.',
-              'ஒப்புதலுக்குப் பிறகு பொருத்தமான சந்தா திட்டத்தைத் தேர்ந்தெடுக்கவும்.'
-            ) }}
-          </p>
-
-        </div>
-
-        <div class="next-item">
-
-          <span class="next-number">2</span>
-
-          <p>
-            {{ tr(
-              'View eligible profiles based on your preferences.',
-              'உங்கள் விருப்பங்களுக்கு ஏற்ற தகுதியான சுயவிவரங்களைப் பார்க்கவும்.'
-            ) }}
-          </p>
-
-        </div>
-
-        <div class="next-item">
-
-          <span class="next-number">3</span>
-
-          <p>
-            {{ tr(
-              'Send interests to suitable profiles and wait for their response.',
-              'பொருத்தமான வரன்களுக்கு விருப்பத்தை அனுப்பி பதிலுக்காகக் காத்திருக்கவும்.'
-            ) }}
-          </p>
-
-        </div>
-
-      </div>
-
-    </article>
-
-  </section>
-
-
-  <!-- =====================================
-       SUPPORT
-  ====================================== -->
-
-  <section class="journey-support">
-
-    <div class="support-copy">
-
-      <span class="support-question">?</span>
-
-      <h3>
-        {{ tr(
-          'Need Help?',
-          'உதவி தேவையா?'
-        ) }}
-      </h3>
-
-      <p>
-        {{ tr(
-          'Our support team is happy to assist you.',
-          'எங்கள் உதவிக் குழு உங்களுக்கு உதவத் தயாராக உள்ளது.'
-        ) }}
-      </p>
-
-    </div>
-
-    <a routerLink="/contact-us" class="support-button">
-
-      <span aria-hidden="true">☎</span>
-
-      {{ tr(
-        'Contact Support',
-        'உதவிக் குழுவைத் தொடர்புகொள்ள'
-      ) }}
-
-    </a>
-
-  </section>
-
-</main>
+  </main>
 
 }

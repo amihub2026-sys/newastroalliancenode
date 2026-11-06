@@ -152,19 +152,47 @@ export class PublicProfilePreview implements OnInit, OnDestroy {
     ) || this.t('Name not available', 'பெயர் இல்லை');
   }
 
-  get avatar(): string {
-    const gender = String(this.profile?.gender || '').toLowerCase();
+  
+/* ==========================================
+   DEFAULT AVATAR — SAME AS FREE SEARCH CARD
+========================================== */
 
-    if (gender.includes('female') || gender.includes('பெண்')) {
-      return 'assets/avatars/female.svg';
-    }
+get avatar(): string {
 
-    if (gender.includes('male') || gender.includes('ஆண்')) {
-      return 'assets/avatars/male.svg';
-    }
+  const gender = String(this.profile?.gender || '')
+    .trim()
+    .toLowerCase();
 
-    return 'assets/avatars/person.svg';
+  // Female profile
+  if (
+    [
+      'female',
+      'woman',
+      'bride',
+      'பெண்',
+      'மணமகள்'
+    ].includes(gender)
+  ) {
+    return '/assets/women%20avathar.avif';
   }
+
+  // Male profile
+  if (
+    [
+      'male',
+      'man',
+      'groom',
+      'ஆண்',
+      'மணமகன்'
+    ].includes(gender)
+  ) {
+    return '/assets/men%20avathar.avif';
+  }
+
+  // Unknown gender
+  return '/assets/avatars/person.svg';
+}
+
 
   get publicPhotos(): string[] {
     return [
