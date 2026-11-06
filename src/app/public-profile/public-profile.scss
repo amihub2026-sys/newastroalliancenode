@@ -684,3 +684,29 @@ a:focus-visible {
   background: #fff2f5 !important;
   outline: 6px solid red !important;
 }
+
+
+/* ==========================================
+   PROFILE PHOTO / DEFAULT AVATAR
+========================================== */
+
+.aa-photo-button {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.aa-photo-button img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.aa-photo-id {
+  position: absolute;
+  z-index: 5;
+}

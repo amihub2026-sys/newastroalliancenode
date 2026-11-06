@@ -204,23 +204,147 @@ get isLoggedIn(): boolean {
 
   return this.auth.isLoggedIn();
 }
+
+
+
+/* ==========================================
+   MEMBER AVATAR — NAVBAR
+   Actual biodata photo / gender avatar
+========================================== */
+
 get memberAvatar(): string {
-  if (!this.isBrowser) return 'assets/avatars/person.svg';
+
+  if (!this.isBrowser) {
+    return '/assets/avatars/person.svg';
+  }
+
   try {
-    const user = JSON.parse(localStorage.getItem('matrimony_user') || '{}');
-    const profile = JSON.parse(localStorage.getItem('matrimony_profile') || '{}');
-    const url = String(profile?.profile_image_url || profile?.profileImage || profile?.basic?.profilePhoto || '');
-    if (/^(https?:\/\/|\/assets\/|assets\/)/i.test(url)) return url;
-    const gender = String(user.gender || profile?.basic?.gender || '').toLowerCase();
-    if (gender.includes('female') || gender.includes('பெண்')) return 'assets/avatars/female.svg';
-    if (gender.includes('male') || gender.includes('ஆண்')) return 'assets/avatars/male.svg';
-    return 'assets/avatars/person.svg';
-  } catch { return 'assets/avatars/person.svg'; }
+    const user = JSON.parse(
+      localStorage.getItem('matrimony_user') || '{}'
+    );
+
+    const profile = JSON.parse(
+      localStorage.getItem('matrimony_profile') || '{}'
+    );
+
+    // Find uploaded biodata photo from saved user/profile data
+    const photoFields = [
+      profile?.profile_image_url,
+      profile?.profileImage,
+      profile?.profilePhoto,
+      profile?.photo,
+      profile?.image,
+      profile?.basic?.profilePhoto,
+      profile?.basic?.photo,
+      user?.profile_image_url,
+      user?.profileImage,
+      user?.profilePhoto,
+      user?.photo,
+      user?.image
+    ];
+
+    for (const value of photoFields) {
+
+      if (typeof value !== 'string') continue;
+
+      const url = value.trim();
+
+      if (!url) continue;
+
+      // Full URL or data image
+      if (/^(https?:\/\/|data:image\/|blob:)/i.test(url)) {
+        return url;
+      }
+
+      // Frontend asset
+      if (/^\/?assets\//i.test(url)) {
+        return '/' + url.replace(/^\/+/, '');
+      }
+
+      // Existing backend-relative image path
+      if (url.startsWith('/')) {
+        const apiOrigin =
+          environment.apiUrl.replace(/\/api\/?$/, '');
+
+        return apiOrigin + url;
+      }
+    }
+
+    // No uploaded image — use gender avatar
+    return this.memberDefaultAvatar;
+
+  } catch {
+    return this.memberDefaultAvatar;
+  }
 }
+
+/* ==========================================
+   DEFAULT MALE / FEMALE AVATAR
+========================================== */
+
+get memberDefaultAvatar(): string {
+
+  if (!this.isBrowser) {
+    return '/assets/avatars/person.svg';
+  }
+
+  try {
+    const user = JSON.parse(
+      localStorage.getItem('matrimony_user') || '{}'
+    );
+
+    const profile = JSON.parse(
+      localStorage.getItem('matrimony_profile') || '{}'
+    );
+
+    const gender = String(
+      profile?.basic?.gender ||
+      profile?.gender ||
+      user?.gender ||
+      ''
+    ).trim().toLowerCase();
+
+    if (
+      ['female', 'woman', 'bride', 'பெண்', 'மணமகள்']
+        .includes(gender)
+    ) {
+      return '/assets/women%20avathar.avif';
+    }
+
+    if (
+      ['male', 'man', 'groom', 'ஆண்', 'மணமகன்']
+        .includes(gender)
+    ) {
+      return '/assets/men%20avathar.avif';
+    }
+
+    return '/assets/avatars/person.svg';
+
+  } catch {
+    return '/assets/avatars/person.svg';
+  }
+}
+
+
+
+
 onAvatarError(event: Event): void {
+
   const img = event.target as HTMLImageElement;
-  if (!img.src.endsWith('/assets/avatars/person.svg')) { img.onerror = null; img.src = 'assets/avatars/person.svg'; }
+
+  const fallback = this.memberDefaultAvatar;
+
+  if (!img.src.endsWith(fallback)) {
+    img.src = fallback;
+    return;
+  }
+
+  // Final fallback if the gender avatar cannot load
+  img.onerror = null;
+  img.src = '/assets/avatars/person.svg';
 }
+
+
 /** Controls mobile menu labels only. The server-side guard still owns access decisions. */
 get mobileAccountStage(): 'draft' | 'pending' | 'rejected' | 'approved' {
   if (!this.isBrowser) return 'draft';
@@ -265,7 +389,10 @@ private async syncAccountMenuStage(): Promise<void> {
   } catch { /* Keep last-known display state; backend remains authoritative. */ }
   finally { this.menuStatusChecking = false; }
 }
-
+closeAccountMenu(): void {
+  this.closeMenu();
+  this.mobileAccountMenuOpen = false;
+}
 toggleMobileAccountMenu(): void {
   if (!this.isBrowser || window.innerWidth > 880) return;
   const shouldOpen = !this.mobileAccountMenuOpen;
