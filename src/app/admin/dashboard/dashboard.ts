@@ -96,21 +96,18 @@ cityText(value: string): string {
     await this.loadDashboardData();
   }
 
+
 async loadDashboardData(): Promise<void> {
 
   this.isLoading = true;
+  this.cd.detectChanges();
 
   try {
-
-    const res:any = await this.http
-      .get(
-        `${environment.apiUrl}/admin/dashboard`
-      )
+    const res: any = await this.http
+      .get(`${environment.apiUrl}/admin/dashboard`)
       .toPromise();
 
-
     const data = res?.data || {};
-
 
     this.stats = {
       totalProfiles: data.totalProfiles || 0,
@@ -123,20 +120,16 @@ async loadDashboardData(): Promise<void> {
       totalRevenue: data.totalRevenue || 0
     };
 
-
     this.recentProfiles = data.recentProfiles || [];
 
+  } catch (error) {
+    console.error('DASHBOARD ERROR:', error);
+
+  } finally {
     this.isLoading = false;
-
-
-  } catch(error){
-
-    console.error(error);
-
-    this.isLoading = false;
-
+    this.cd.detectChanges();
   }
-
 }
+
 
 }

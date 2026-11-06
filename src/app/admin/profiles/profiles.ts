@@ -245,13 +245,32 @@ dateText(date: string): string {
     }
   );
 }
+
+formatDOB(dob: string | null | undefined): string {
+  if (!dob) return '-';
+
+  const match = String(dob).match(
+    /^(\d{4})-(\d{2})-(\d{2})/
+  );
+
+  if (!match) return String(dob);
+
+  const [, year, month, day] = match;
+
+  return `${day}-${month}-${year}`;
+}
+
+
 async ngOnInit(): Promise<void> {
   if (!this.isBrowser) return;
 
-  await this.loadMaritalStatuses();
-  await this.loadCities();
-  await this.loadProfiles();
+  await Promise.all([
+    this.loadMaritalStatuses(),
+    this.loadCities(),
+    this.loadProfiles()
+  ]);
 }
+
 async loadCities(): Promise<void> {
 
   try {
@@ -389,16 +408,21 @@ views_count: profile.subscription?.profile_views_used || 0
     console.error('Load profiles error:', err);
     this.snackbar.error(err?.error?.message || 'Failed to load profiles');
     this.profiles = [];
-  } finally {
-    this.ngZone.run(() => {
-      this.isLoading = false;
-      this.cd.detectChanges();
 
-      setTimeout(() => {
-        this.syncTableScroll();
-      }, 300);
-    });
+} finally {
+  this.isLoading = false;
+
+  // Update the loading state immediately
+  this.cd.detectChanges();
+
+  // Update table scroll after profiles render
+  if (this.isBrowser) {
+    setTimeout(() => {
+      this.syncTableScroll();
+    }, 300);
   }
+}
+
 }
 
 loadFilterOptions(): void {

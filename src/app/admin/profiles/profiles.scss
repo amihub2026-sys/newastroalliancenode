@@ -734,3 +734,25 @@ td:nth-child(17) {
   background: #f59e0b;
   color: #fff;
 }
+
+/* =========================================
+   APPROVE / DISAPPROVE DISABLED STATUS
+========================================= */
+
+.action-group .approve-btn:disabled,
+.action-group .disapprove-btn:disabled {
+  background: #e5e7eb !important;
+  color: #8b929e !important;
+  border: 1px solid #d1d5db !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
+/* Prevent hover effects on disabled buttons */
+.action-group .approve-btn:disabled:hover,
+.action-group .disapprove-btn:disabled:hover {
+  transform: none !important;
+  background: #e5e7eb !important;
+}
