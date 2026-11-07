@@ -59,16 +59,12 @@
 
           <!-- FIND YOUR MATCH -->
 
-          <a
-            [routerLink]="
-              isLoggedIn && mobileAccountStage === 'approved'
-                ? '/profiles'
-                : '/free-search'
-            "
-            routerLinkActive="is-active"
-          >
-            {{ profilesNavText }}
-          </a>
+         <a
+  [routerLink]="isLoggedIn ? '/profiles' : '/free-search'"
+  routerLinkActive="is-active"
+>
+  {{ profilesNavText }}
+</a>
 
 
           <!-- PLANS -->
