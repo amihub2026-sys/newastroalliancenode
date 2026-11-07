@@ -1795,14 +1795,22 @@ if (matchesLocation && radiusFilter !== null && radiusFilter > 0) {
   }
 
 
+
 const myCaste = this.normalizeText(this.userCaste);
 
+const aSameCaste =
+  !!myCaste &&
+  (
+    this.normalizeText(a.caste.en) === myCaste ||
+    this.normalizeText(a.caste.ta) === myCaste
+  );
 
-  const casteA = this.normalizeText(this.getText(a.caste));
-  const casteB = this.normalizeText(this.getText(b.caste));
-
-  const aSameCaste = myCaste && casteA === myCaste;
-  const bSameCaste = myCaste && casteB === myCaste;
+const bSameCaste =
+  !!myCaste &&
+  (
+    this.normalizeText(b.caste.en) === myCaste ||
+    this.normalizeText(b.caste.ta) === myCaste
+  );
 
   if (aSameCaste && !bSameCaste) return -1;
   if (!aSameCaste && bSameCaste) return 1;
