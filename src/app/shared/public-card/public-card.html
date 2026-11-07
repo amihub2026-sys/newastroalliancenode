@@ -7,8 +7,7 @@
 
   <!-- MOBILE CARD LINK -->
   <a
-    class="aa-mobile-card-link"
-    [routerLink]="['/free-profile', profile.code]"
+    class="aa-mobile-card-link"[routerLink]="['/profile-view', profile.code]"
     [queryParams]="returnState
       ? { s: returnState, source: searchRoute }
       : null"
@@ -106,7 +105,7 @@
 
       <a
         class="aa-view-profile"
-        [routerLink]="['/free-profile', profile.code]"
+        [routerLink]="['/profile-view', profile.code]"
         [queryParams]="returnState
           ? { s: returnState, source: searchRoute }
           : null"

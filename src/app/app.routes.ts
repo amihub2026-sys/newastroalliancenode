@@ -9,6 +9,12 @@ export const routes: Routes = [
   { path: '', loadComponent: () => import('./home/home').then(m => m.Home) },
   { path: 'free-search', loadComponent: () => import('./free-search/free-search').then(m => m.FreeSearch) },
   { path: 'free-profile/:code', loadComponent: () => import('./public-profile/public-profile').then(m => m.PublicProfilePreview) },
+  {
+  path: 'profile-view/:code',
+  loadComponent: () =>
+    import('./public-profile/public-profile')
+      .then(m => m.PublicProfilePreview)
+},
   { path: 'dashboard', canActivate:[authGuard], loadComponent:()=>import('./member-dashboard/member-dashboard').then(m=>m.MemberDashboard) },
   { path: 'registration-submitted', loadComponent: () => import('./registration-submitted/registration-submitted').then(m => m.RegistrationSubmitted) },
 
