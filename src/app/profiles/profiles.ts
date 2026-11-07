@@ -16,6 +16,8 @@ import { Router } from '@angular/router';
 import { LanguageService } from '../core/services/language.service';
 import { SnackbarService } from '../shared/snackbar.service';
 import { ProfilesService } from '../services/profiles.service';
+import { PublicCard } from '../shared/public-card/public-card';
+import type { PublicProfile } from '../free-search/models/search.models';
 type TabType = 'browse' | 'liked' | 'likedMe';
 
 interface LangText {
@@ -49,10 +51,17 @@ interface ProfileItem {
 @Component({
   selector: 'app-profiles',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+  CommonModule,
+  FormsModule,
+  PublicCard
+],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './profiles.html',
-  styleUrls: ['./profiles.scss']
+  styleUrls: [
+  './profiles.scss',
+  './profiles.responsive.scss'
+]
 })
 export class Profiles implements OnInit, OnDestroy {
   app = inject(LanguageService);
@@ -129,6 +138,7 @@ showProfileLoading = false;
 private destroyed = false;
   shortlistedMeUserIds: string[] = [];
     userProfileImage = '';
+    loggedInProfileId = '';
 userProfileName = '';
 userGender = '';
 userCaste = '';
@@ -663,20 +673,25 @@ private async makeLangText(
   return '';
 }
 
-private isOppositeGender(profileGenderValue: string | null | undefined): boolean {
+
+private isOppositeGender(
+  profileGenderValue: string | null | undefined
+): boolean {
+
+  if (!this.isLoggedIn) {
+    return true;
+  }
+
   const myGender = this.normalizeGender(this.userGender);
   const profileGender = this.normalizeGender(profileGenderValue);
 
-  // If login user has no gender, show ALL profiles
-  if (!myGender) return true;
+  if (!myGender || !profileGender) {
+    return false;
+  }
 
-  // If profile gender is missing, don't hide it
-  if (!profileGender) return true;
-
-  // Male -> Female only
-  // Female -> Male only
   return myGender !== profileGender;
 }
+
 
   private toNullableNumber(value: unknown): number | null {
     if (value === null || value === undefined || value === '') return null;
@@ -954,12 +969,23 @@ const rows = Array.isArray(response)
 if (this.isLoggedIn) {
 
   // Don't show own profile
-  if (
-    (loggedInUserId && rowUserId === loggedInUserId) ||
-    (loggedInName && rowName === loggedInName)
-  ) {
-    return false;
-  }
+
+const rowProfileId = String(
+  row.profile_id || row._id || ''
+).trim();
+
+const isOwnUser =
+  !!loggedInUserId &&
+  rowUserId === loggedInUserId;
+
+const isOwnProfile =
+  !!this.loggedInProfileId &&
+  rowProfileId === this.loggedInProfileId;
+
+if (isOwnUser || isOwnProfile) {
+  return false;
+}
+
 
   // Show only opposite gender
   if (!this.isOppositeGender(row.gender_text)) {
@@ -1491,6 +1517,58 @@ get planStatus(): string {
     return 'plan-default';
   }
 
+  // ==========================================
+  // MEMBER PROFILE -> FREE SEARCH CARD MODEL
+  // Display adapter only. Does not change
+  // matching, subscriptions, likes or API data.
+  // ==========================================
+
+  toPublicCardProfile(profile: ProfileItem): PublicProfile {
+    const image = String(profile.image || '').trim();
+
+    return {
+      code: profile.id,
+      name: profile.name.en,
+      nameTa: profile.name.ta || profile.name.en,
+      age: profile.age > 0 ? profile.age : null,
+      gender: profile.gender.en,
+      city: profile.city.en,
+      district: '',
+      state: profile.state.en,
+      country: '',
+      religion: profile.religion.en,
+      caste: profile.caste.en,
+      subCaste: '',
+      motherTongue: '',
+      maritalStatus: profile.maritalStatus.en,
+      education: profile.education.en,
+      profession: profile.profession.en,
+      heightCm: null,
+      annualIncome: '',
+      rasi: '',
+      nakshatra: profile.nakshatra.en,
+      dosham: '',
+      diet: '',
+      smoking: '',
+      drinking: '',
+      familyType: '',
+      familyValues: '',
+      hobbies: [],
+
+      // Let PublicCard display its gender avatar
+      // when the member has no real photo.
+      image:
+        image === 'assets/default-avatar.png'
+          ? ''
+          : image,
+
+      updatedAt: '',
+      latitude: profile.latitude,
+      longitude: profile.longitude
+    };
+  }
+
+
   get likedProfiles(): ProfileItem[] {
     return this.profiles.filter(profile => profile.liked);
   }
@@ -1716,13 +1794,9 @@ if (matchesLocation && radiusFilter !== null && radiusFilter > 0) {
     return 0;
   }
 
-  const myCaste = this.normalizeText(this.userCaste);
 
-console.log('MY CASTE:', myCaste);
-console.log(
-  'PROFILE CASTES:',
-  sidebarFiltered.map(p => this.normalizeText(this.getText(p.caste)))
-);
+const myCaste = this.normalizeText(this.userCaste);
+
 
   const casteA = this.normalizeText(this.getText(a.caste));
   const casteB = this.normalizeText(this.getText(b.caste));
@@ -2500,10 +2574,16 @@ async loadLoggedInUserProfile(): Promise<void> {
 
   try {
     const response: any = await this.profilesService.getMyProfile().toPromise();
+    
     const data = response?.data;
 
     if (!data) return;
-
+this.loggedInProfileId = String(
+  data._id ||
+  data.profile_id ||
+  data.profileId ||
+  ''
+).trim();
     this.userProfileName =
       data.basic?.fullName?.[this.currentLang] ||
       data.basic?.fullName?.en ||

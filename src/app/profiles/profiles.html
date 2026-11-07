@@ -869,120 +869,37 @@ filteredProfiles.length === 0 &&
 </div>
 <!-- profile content card   -->
 
-    <div class="profiles-content">
-      <div class="profiles-grid">
-        <div
-          class="profile-card"
-*ngFor="let profile of filteredProfiles.slice(0, visibleProfileCount); trackBy: trackByProfile"
-        >
-          <div class="profile-image">
-          <img
-  [src]="profile.image"
-  loading="lazy"
-  decoding="async"
-  [alt]="getText(profile.name)"
-  (error)="profile.image = 'assets/default-avatar.png'"
-/>
+ 
+<!-- PROFILE CONTENT CARDS -->
+<div class="profiles-content">
 
-      <button
-  type="button"
-  class="like-icon"
-  (click)="instantLike($event, profile)"
->
-  {{ profile.liked ? '♥' : '♡' }}
-</button>
-          </div>
+  <div class="profiles-grid aa-member-results-grid">
 
-          <div class="profile-content">
-            <div class="profile-top">
-              <h3>{{ getText(profile.name) }}</h3>
-              <span class="profile-id">{{ profile.id }}</span>
-            </div>
+    <app-public-card
+      *ngFor="let profile of filteredProfiles.slice(0, visibleProfileCount); trackBy: trackByProfile"
+      [profile]="toPublicCardProfile(profile)"
+      searchRoute="profiles">
+    </app-public-card>
 
-   <p class="profile-detail-item mobile-show-detail">
-  <i class="fas fa-calendar"></i>
-  {{ profile.dob || '-' }}
-</p>
-
-  <p class="profile-detail-item mobile-hide-detail">
-  <i class="fas fa-venus-mars"></i>
-  {{ getText(profile.gender) || '-' }}
-</p>
-
-            
-    <p class="profile-detail-item mobile-hide-detail">
-  <i class="fas fa-ring"></i>
-  {{ getText(profile.maritalStatus) || '-' }}
-</p>
-  <p class="profile-detail-item mobile-hide-detail">
-  <i class="fas fa-place-of-worship"></i>
-  {{ getText(profile.religion) || '-' }}
-</p>
-     <p class="profile-detail-item mobile-show-detail">
-  <i class="fas fa-users"></i>
-  {{ getText(profile.caste) || '-' }}
-</p>
-<p class="profile-detail-item mobile-show-detail">
-  <i class="fas fa-location-dot"></i>
-{{ getText(profile.city) || '-' }}
-</p>
-<div class="profile-detail-item mobile-show-detail">
-  <p class="profile-detail-item mobile-show-detail">
-  <i class="far fa-star"></i>
-  {{ getText(profile.nakshatra) || '-' }}
-</p>
-</div>
-
-            <!-- <p><strong>{{ tr.profile.location }}:</strong> {{ getText(profile.location) || '-' }}</p> -->
-     <p class="profile-detail-item mobile-show-detail">
-  <i class="fas fa-graduation-cap"></i>
-  {{ getText(profile.education) || '-' }}
-</p>
-
-     <p class="profile-detail-item mobile-hide-detail">
-  <i class="fas fa-briefcase"></i>
-  {{ getText(profile.profession) || '-' }}
-</p>
-            <p *ngIf="filters.radius">
-              <strong>{{ tr.profile.distance }}:</strong> {{ formatDistance(profile.distanceKm) }}
-            </p>
-
-            <div class="profile-actions">
-              <button
-                class="view-btn"
-                (click)="viewProfile(profile)"
-                type="button"
-              >
-                {{ tr.profile.viewProfile }}
-              </button>
-
-<button
-  type="button"
-  class="like-btn"
-  (click)="instantLike($event, profile)"
->
-  {{ profile.liked ? tr.profile.liked : tr.profile.like }}
-</button>
-
-            
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="profile-loading" *ngIf="showProfileLoading">
-
-  <div class="loader-circle"></div>
-
-  <p>
-    {{ currentLang === 'ta'
-      ? 'மேலும் சுயவிவரங்கள் ஏற்றப்படுகிறது...'
-      : 'Loading more profiles...'
-    }}
-  </p>
-
-</div>
-    </div>
   </div>
+
+  <div class="profile-loading" *ngIf="showProfileLoading">
+    <div class="loader-circle"></div>
+
+    <p>
+      {{
+        currentLang === 'ta'
+          ? 'மேலும் சுயவிவரங்கள் ஏற்றப்படுகிறது...'
+          : 'Loading more profiles...'
+      }}
+    </p>
+  </div>
+
+</div>
+
+<!-- CLOSE MATCHES LAYOUT -->
+</div>
+
 
   <div *ngIf="activeTab === 'liked'">
     <div class="empty-state" *ngIf="likedProfiles.length === 0">

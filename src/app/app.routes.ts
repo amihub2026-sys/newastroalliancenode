@@ -14,14 +14,22 @@ export const routes: Routes = [
 
   { path: 'login', loadComponent: () => import('./login/login').then(m => m.Login) },
   { path: 'register', loadComponent: () => import('./register/register').then(m => m.Register) },
+// {
+//   // Approved member match discovery uses the same modern public card/filter UI,
+//   // but restricts results to the configured opposite gender.
+//   path: 'profiles',
+//   canActivate: [authGuard],
+//   data: { memberMode: true },
+//   loadComponent: () => import('./free-search/free-search').then(m => m.FreeSearch)
+// },
+
 {
-  // Approved member match discovery uses the same modern public card/filter UI,
-  // but restricts results to the configured opposite gender.
   path: 'profiles',
   canActivate: [authGuard],
-  data: { memberMode: true },
-  loadComponent: () => import('./free-search/free-search').then(m => m.FreeSearch)
+  loadComponent: () =>
+    import('./profiles/profiles').then(m => m.Profiles)
 },
+
 {
   // Keep the legacy activity tabs available without showing old search by default.
   path: 'profile-activity',

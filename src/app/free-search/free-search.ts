@@ -164,44 +164,91 @@ private readonly publicHttp = new HttpClient(
   // MEMBER PROFILE MATCHING
   // ==========================================
 
-  get requiredGender(): 'male' | 'female' | '' {
+memberGender = '';
+memberReligion = '';
+memberCaste = '';
+memberUserId = '';
+memberProfileId = '';
 
-    if (
-      !this.memberMode ||
-      !isPlatformBrowser(this.platformId)
-    ) {
-      return '';
-    }
+private async loadMemberDetails(): Promise<void> {
+  if (!this.memberMode || !isPlatformBrowser(this.platformId)) {
+    return;
+  }
 
-    try {
-      const user = JSON.parse(
-        localStorage.getItem('matrimony_user') || '{}'
-      );
+  try {
+    const response: any = await this.http
+      .get(`${environment.apiUrl}/profile/me`)
+      .toPromise();
 
-      const raw = String(
-        user?.gender || user?.gender_text || ''
-      ).trim().toLowerCase();
+    const data = response?.data;
+    if (!data) return;
 
-      if (
-        ['male', 'man', 'groom', 'ஆண்', 'மணமகன்']
-          .includes(raw)
-      ) {
-        return 'female';
-      }
+    this.memberGender = String(
+      data.basic?.gender || data.gender_text || data.gender || ''
+    ).trim();
 
-      if (
-        ['female', 'woman', 'bride', 'பெண்', 'மணமகள்']
-          .includes(raw)
-      ) {
-        return 'male';
-      }
+    this.memberReligion = String(
+      data.religion?.religion ||
+      data.religion?.nameEn ||
+      data.religion_text ||
+      ''
+    ).trim();
 
-    } catch {
-      // Invalid or unavailable session data.
-    }
+    this.memberCaste = String(
+      data.religion?.caste ||
+      data.religion?.otherCaste ||
+      data.caste_text ||
+      ''
+    ).trim();
 
+    this.memberUserId = String(
+      data.userId?._id || data.userId || data.user_id || ''
+    ).trim();
+
+
+this.memberProfileId = String(
+  data.profile_id || data._id || ''
+).trim();
+
+console.log('MEMBER MATCHING DETAILS:', {
+  gender: this.memberGender,
+  religion: this.memberReligion,
+  caste: this.memberCaste
+});
+
+this.cdr.markForCheck();
+
+
+  } catch (error) {
+    console.error('Unable to load member details:', error);
+  }
+}
+
+
+get requiredGender(): 'male' | 'female' | '' {
+  if (!this.memberMode) {
     return '';
   }
+
+  const raw = String(this.memberGender || '')
+    .trim()
+    .toLowerCase();
+
+  if (
+    ['male', 'man', 'groom', 'ஆண்', 'மணமகன்'].includes(raw)
+  ) {
+    return 'female';
+  }
+
+  if (
+    ['female', 'woman', 'bride', 'பெண்', 'மணமகள்'].includes(raw)
+  ) {
+    return 'male';
+  }
+
+  return '';
+}
+
 
   private isEligibleMemberProfile(
     profile: PublicProfile
@@ -232,8 +279,11 @@ private readonly publicHttp = new HttpClient(
   // INITIALIZATION
   // ==========================================
 
-  ngOnInit(): void {
-
+  async ngOnInit(): Promise<void> {
+console.log('MATCHING ROUTE CHECK:', {
+  url: this.router.url,
+  memberMode: this.memberMode
+});
     this.restoreState(
       this.route.snapshot.queryParamMap.get('s')
     );
@@ -248,7 +298,11 @@ private readonly publicHttp = new HttpClient(
         this.persistState();
       });
 
-    this.load();
+    if (this.memberMode) {
+  await this.loadMemberDetails();
+}
+
+this.load();
   }
 
   // ==========================================

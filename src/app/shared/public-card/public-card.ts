@@ -67,6 +67,8 @@ export class PublicCard {
   @Input()
   searchRoute: 'free-search' | 'profiles' = 'free-search';
 
+  
+
   // ==========================================
   // PHOTO STATE
   // ==========================================
