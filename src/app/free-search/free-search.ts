@@ -5,8 +5,10 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
+  ElementRef,
   OnInit,
   PLATFORM_ID,
+  ViewChild,
   inject
 } from '@angular/core';
 
@@ -83,6 +85,58 @@ private readonly publicHttp = new HttpClient(
 
   displayed = this.pageSize;
 
+ 
+  
+/* ==========================================
+   INFINITE SCROLL — AUTO LOAD 12 PROFILES
+========================================== */
+
+private profileObserver: IntersectionObserver | null = null;
+
+@ViewChild('autoLoadTrigger')
+set autoLoadTrigger(
+  element: ElementRef<HTMLElement> | undefined
+) {
+
+  this.profileObserver?.disconnect();
+  this.profileObserver = null;
+
+  if (
+    !element ||
+    !isPlatformBrowser(this.platformId)
+  ) {
+    return;
+  }
+
+  this.profileObserver = new IntersectionObserver(
+    (entries) => {
+
+      const entry = entries[0];
+
+      if (
+  !entry?.isIntersecting ||
+  this.loading ||
+  this.isLoadingMore ||
+  !this.hasMoreProfiles
+) {
+  return;
+}
+
+      // Load the next 12 profiles automatically.
+      this.showMoreProfiles();
+
+    },
+    {
+      root: null,
+      rootMargin: '0px 0px 320px 0px',
+      threshold: 0
+    }
+  );
+
+  this.profileObserver.observe(element.nativeElement);
+}
+
+
   get visibleResults(): PublicProfile[] {
     return this.results.slice(0, this.displayed);
   }
@@ -91,20 +145,45 @@ private readonly publicHttp = new HttpClient(
     return this.displayed < this.results.length;
   }
 
-  showMoreProfiles(): void {
-    if (!this.hasMoreProfiles || this.loading) {
-      return;
-    }
+  
+/* ==========================================
+   INFINITE SCROLL — 2 SECOND LOADING DELAY
+========================================== */
 
-    // Append the next 12 cards to the existing grid.
+isLoadingMore = false;
+
+private loadMoreTimer: ReturnType<typeof setTimeout> | null = null;
+
+showMoreProfiles(): void {
+
+  if (
+    this.loading ||
+    this.isLoadingMore ||
+    !this.hasMoreProfiles
+  ) {
+    return;
+  }
+
+  // Show loading animation immediately.
+  this.isLoadingMore = true;
+  this.cdr.markForCheck();
+
+  // Wait 2 seconds before showing next 12 profiles.
+  this.loadMoreTimer = setTimeout(() => {
+
     this.displayed = Math.min(
       this.displayed + this.pageSize,
       this.results.length
     );
 
-    // Do not navigate, reload, or scroll to the top.
+    this.isLoadingMore = false;
+    this.loadMoreTimer = null;
+
     this.cdr.markForCheck();
-  }
+
+  }, 2000);
+}
+
 
   // Compatibility with any existing loadMore() calls.
   loadMore(): void {

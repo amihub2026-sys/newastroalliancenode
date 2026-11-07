@@ -2325,3 +2325,47 @@
     padding: 11px;
   }
 }
+
+/* Normal dropdown item — no highlight or subtitle */
+.approval-menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 14px;
+
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+
+  color: #50323f;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.approval-menu-item:hover {
+  background: #fff4f2;
+}
+/* Desktop account photo */
+
+.site-member-avatar {
+  display: block;
+  width: 31px;
+  height: 31px;
+  flex-shrink: 0;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+}
+
+/* Mobile profile photo */
+
+.astro-bottom-avatar {
+  display: block;
+  width: 27px;
+  height: 27px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+}

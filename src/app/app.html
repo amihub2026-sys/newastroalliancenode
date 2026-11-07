@@ -215,40 +215,20 @@
                     mobileAccountStage === 'rejected'
                   ) {
 
-                    <a
-                      routerLink="/approval-pending"
-                      class="account-approval-link"
-                      (click)="closeMenu()"
-                    >
+                    
 
-                      <span class="approval-link-icon">
-                        ✓
-                      </span>
 
-                      <span class="approval-link-content">
+<!-- APPROVAL STATUS -->
+<a
+  routerLink="/approval-pending"
+  class="account-menu-item"
+  (click)="closeAccountMenu()"
+>
+  Approval Status
+</a>
 
-                        <strong>
-                          {{ currentLang === 'ta'
-                            ? 'ஒப்புதல் நிலை'
-                            : 'Approval Status' }}
-                        </strong>
+<!-- Keep your existing Logout button below -->
 
-                        <small>
-                          {{ currentLang === 'ta'
-                            ? 'உங்கள் திருமணப் பயண நிலையைப் பார்க்கவும்'
-                            : 'Track your matrimony journey' }}
-                        </small>
-
-                      </span>
-
-                      <span
-                        class="approval-link-arrow"
-                        aria-hidden="true"
-                      >
-                        ›
-                      </span>
-
-                    </a>
 
                   }
 

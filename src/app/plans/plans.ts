@@ -677,19 +677,29 @@ export class Plans implements OnInit {
       // DEVELOPMENT-ONLY ACTIVATION
       // ========================================
 
-      const response = await firstValueFrom(
-        this.http.post<DevActivationResponse>(
-          `${environment.apiUrl}/subscription/free-activate`,
-          {
-            planId: plan.code
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
-      );
+      
+const isLocalDevelopment =
+  window.location.hostname === 'localhost' &&
+  new URL(environment.apiUrl).hostname === 'localhost';
+
+const activationEndpoint = isLocalDevelopment
+  ? 'dev-activate'
+  : 'free-activate';
+
+const response = await firstValueFrom(
+  this.http.post<DevActivationResponse>(
+    `${environment.apiUrl}/subscription/${activationEndpoint}`,
+    {
+      planId: plan.code
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
+);
+
 
       const activated = response.data;
 
