@@ -5,33 +5,7 @@
     <p class="subtitle">{{ tr.header.subtitle }}</p>
   </div>
 
-<div class="profile-tabs">
-    <button
-      [class.active]="activeTab === 'browse'"
-      (click)="setTab('browse')"
-      type="button"
-    >
-      {{ tr.tabs.browse }}
-    </button>
-
-    <button
-      [class.active]="activeTab === 'liked'"
-      (click)="setTab('liked')"
-      type="button"
-    >
-{{ tr.tabs.liked }} ({{ likedProfilesCount }})
-    </button>
-
-    <button
-      [class.active]="activeTab === 'likedMe'"
-
-      (click)="setTab('likedMe')"
-      type="button"
-    >
-      {{ tr.tabs.likedMe }} ({{ likedMeProfiles.length }})
-    </button>
-
-</div>
+<!-- FIND YOUR MATCH - SEARCH AND FILTERS ONLY -->
 
 <div
   class="plan-status-card"
@@ -129,367 +103,7 @@
   </div>
 </div>
 
-  <div class="filter-bar" #filterBar *ngIf="activeTab === 'browse'">
-    <div class="tm-dropdown" data-filter="ageFrom">
-      <div class="tm-dropdown-box" (click)="toggleDropdown('ageFrom', $event)">
-        <span>{{ filters.ageFrom ?? tr.filters.ageFrom }}</span>
-        <span class="arrow">⌄</span>
-      </div>
-
-      <div class="tm-dropdown-panel" *ngIf="openDropdown === 'ageFrom'" (click)="$event.stopPropagation()">
-        <input
-          type="text"
-          class="tm-search-input"
-          [(ngModel)]="searchTerms.ageFrom"
-          [placeholder]="'Search ' + tr.filters.ageFrom"
-        />
-<div class="tm-option default-option" (click)="selectNumberOption('ageFrom', null)">
-  Any Age From
-</div>
-        <div
-          class="tm-option"
-          *ngFor="let item of getFilteredNumberOptions(ageFromOptions, searchTerms.ageFrom)"
-          (click)="selectNumberOption('ageFrom', item)"
-        >
-          {{ item }}
-        </div>
-      </div>
-    </div>
-
-   <div class="tm-dropdown" data-filter="ageTo">
-      <div class="tm-dropdown-box" (click)="toggleDropdown('ageTo', $event)">
-        <span>{{ filters.ageTo ?? tr.filters.ageTo }}</span>
-        <span class="arrow">⌄</span>
-      </div>
-
-      <div class="tm-dropdown-panel" *ngIf="openDropdown === 'ageTo'" (click)="$event.stopPropagation()">
-        <input
-          type="text"
-          class="tm-search-input"
-          [(ngModel)]="searchTerms.ageTo"
-          [placeholder]="'Search ' + tr.filters.ageTo"
-        />
-<div class="tm-option default-option" (click)="selectNumberOption('ageTo', null)">
-  Any Age To
-</div>
-        <div
-          class="tm-option"
-          *ngFor="let item of getFilteredNumberOptions(ageToOptions, searchTerms.ageTo)"
-          (click)="selectNumberOption('ageTo', item)"
-        >
-          {{ item }}
-        </div>
-      </div>
-    </div>
-<div class="tm-dropdown" data-filter="gender" *ngIf="!isLoggedIn">
-  <div class="tm-dropdown-box" (click)="toggleDropdown('gender', $event)">
-    <span>
-{{
- getSelectedFilterText('gender', filters.gender)
- || tr.filters.gender
-}}
-</span>
-    <span class="arrow">⌄</span>
-  </div>
-
-  <div
-    class="tm-dropdown-panel"
-    *ngIf="openDropdown === 'gender'"
-    (click)="$event.stopPropagation()"
-  >
-    <div class="tm-option default-option" (click)="selectOption('gender', '')">
-      All Gender
-    </div>
-
-<div
-  class="tm-option"
-  *ngFor="let item of genderOptions"
-  (click)="selectOption('gender', item.en)"
->
-  {{ getText(item) }}
-</div>
-  </div>
-</div>
-    <div class="tm-dropdown" data-filter="religion">
-      <div class="tm-dropdown-box" (click)="toggleDropdown('religion', $event)">
-       <span>
-{{
-  getSelectedFilterText('religion', filters.religion)
-  || tr.filters.religion
-}}
-</span>
-        <span class="arrow">⌄</span>
-      </div>
-
-      <div class="tm-dropdown-panel" *ngIf="openDropdown === 'religion'" (click)="$event.stopPropagation()">
-        <input
-          type="text"
-          class="tm-search-input"
-          [(ngModel)]="searchTerms.religion"
-          [placeholder]="'Search ' + tr.filters.religion"
-        />
-<div class="tm-option default-option" (click)="selectOption('religion', '')">
-  All Religion
-</div>
-        <div
-          class="tm-option"
-        *ngFor="let item of getFilteredLangOptions(religionOptions, searchTerms.religion)"
-(click)="selectOption('religion', item.en)"
->
-  {{ getText(item) }}
-        </div>
-      </div>
-    </div>
-
-   <div class="tm-dropdown" data-filter="caste">
-      <div class="tm-dropdown-box" (click)="toggleDropdown('caste', $event)">
-        <span>
-{{
- getSelectedFilterText('caste', filters.caste)
- || tr.filters.caste
-}}
-</span>
-        <span class="arrow">⌄</span>
-      </div>
-
-      <div class="tm-dropdown-panel" *ngIf="openDropdown === 'caste'" (click)="$event.stopPropagation()">
-        <input
-          type="text"
-          class="tm-search-input"
-          [(ngModel)]="searchTerms.caste"
-          [placeholder]="'Search ' + tr.filters.caste"
-        />
-<div class="tm-option default-option" (click)="selectOption('caste', '')">
-  All Caste
-</div>
-        <div
-          class="tm-option"
-        *ngFor="let item of getFilteredCasteOptions()"
-(click)="selectOption('caste', item.en)"
->
-  {{ getText(item) }}
-        </div>
-      </div>
-    </div>
-
-    
-
-    <div class="tm-dropdown" data-filter="maritalStatus">
-      <div class="tm-dropdown-box" (click)="toggleDropdown('maritalStatus', $event)">
-      <span>
-{{
- getSelectedFilterText('maritalStatus', filters.maritalStatus)
- || tr.filters.maritalStatus
-}}
-</span>
-        <span class="arrow">⌄</span>
-      </div>
-
-      <div class="tm-dropdown-panel" *ngIf="openDropdown === 'maritalStatus'" (click)="$event.stopPropagation()">
-        <input
-          type="text"
-          class="tm-search-input"
-          [(ngModel)]="searchTerms.maritalStatus"
-          [placeholder]="'Search ' + tr.filters.maritalStatus"
-        />
-<div class="tm-option default-option" (click)="selectOption('maritalStatus', '')">
-  All Marital Status
-</div>
-        <div
-          class="tm-option"
-        *ngFor="let item of getFilteredLangOptions(maritalStatusOptions, searchTerms.maritalStatus)"
-(click)="selectOption('maritalStatus', item.en)"
->
-  {{ getText(item) }}
-        </div>
-      </div>
-    </div>
-
-        <div class="tm-dropdown" data-filter="state">
-
-  <div class="tm-dropdown-box" (click)="toggleDropdown('state', $event)">
-    <span>{{ filters.state || tr.filters.state }}</span>
-    <span class="arrow">⌄</span>
-  </div>
-
-  <div
-    class="tm-dropdown-panel"
-    *ngIf="openDropdown === 'state'"
-    (click)="$event.stopPropagation()"
-  >
-
-    <input
-      type="text"
-      class="tm-search-input"
-      [(ngModel)]="searchTerms.state"
-      placeholder="Search State"
-    />
-
-    <div
-      class="tm-option default-option"
-      (click)="selectOption('state', '')"
-    >
-      All State
-    </div>
-
-    <div
-      class="tm-option"
-    *ngFor="let item of getFilteredLangOptions(stateOptions, searchTerms.state)"
-(click)="selectOption('state', item.en)"
->
-  {{ getText(item) }}
-    </div>
-
-  </div>
-
-</div>
-
-    <div class="tm-dropdown" data-filter="location">
-      <div class="tm-dropdown-box" (click)="toggleDropdown('location', $event)">
-        <span>
-{{
- getSelectedFilterText('location', filters.location)
- || tr.filters.location
-}}
-</span>
-        <span class="arrow">⌄</span>
-      </div>
-
-      <div class="tm-dropdown-panel" *ngIf="openDropdown === 'location'" (click)="$event.stopPropagation()">
-        <input
-          type="text"
-          class="tm-search-input"
-          [(ngModel)]="searchTerms.location"
-          [placeholder]="'Search ' + tr.filters.location"
-        />
-<div class="tm-option default-option" (click)="selectOption('location', '')">
-  All City
-</div>
-        <div
-          class="tm-option"
-         *ngFor="let item of getFilteredCityOptions()"
-(click)="selectOption('location', item.en)"
->
-  {{ getText(item) }}
-        </div>
-      </div>
-    </div>
-
-
-
-    <div class="tm-dropdown" data-filter="radius">
-      <div class="tm-dropdown-box" (click)="toggleDropdown('radius', $event)">
-        <span>{{ filters.radius ? (filters.radius + ' km') : tr.filters.radius }}</span>
-        <span class="arrow">⌄</span>
-      </div>
-
-      <div class="tm-dropdown-panel" *ngIf="openDropdown === 'radius'" (click)="$event.stopPropagation()">
-        <input
-          type="text"
-          class="tm-search-input"
-          [(ngModel)]="searchTerms.radius"
-          [placeholder]="'Search ' + tr.filters.radius"
-        />
-<div class="tm-option default-option" (click)="selectNumberOption('radius', null)">
-  Any Radius
-</div>
-        <div
-          class="tm-option"
-          *ngFor="let item of getFilteredNumberOptions(radiusOptions, searchTerms.radius)"
-          (click)="selectNumberOption('radius', item)"
-        >
-          {{ item }} km
-        </div>
-      </div>
-    </div>
-
-    <div class="tm-dropdown" data-filter="education">
-      <div class="tm-dropdown-box" (click)="toggleDropdown('education', $event)">
-       <span>
-{{
- getSelectedFilterText('education', filters.education)
- || tr.filters.education
-}}
-</span>
-        <span class="arrow">⌄</span>
-      </div>
-
-      <div class="tm-dropdown-panel" *ngIf="openDropdown === 'education'" (click)="$event.stopPropagation()">
-        <input
-          type="text"
-          class="tm-search-input"
-          [(ngModel)]="searchTerms.education"
-          [placeholder]="'Search ' + tr.filters.education"
-        />
-<div class="tm-option default-option" (click)="selectOption('education', '')">
-  All Education
-</div>
-        <div
-          class="tm-option"
-        *ngFor="let item of getFilteredLangOptions(educationOptions, searchTerms.education)"
-(click)="selectOption('education', item.en)"
->
-  {{ getText(item) }}
-        </div>
-      </div>
-    </div>
-<div class="tm-dropdown" data-filter="profession">
-  <div class="tm-dropdown-box" (click)="toggleDropdown('profession', $event)">
-  <span>
-{{
- getSelectedFilterText('profession', filters.profession)
- || tr.profile.profession
-}}
-</span>
-    <span class="arrow">⌄</span>
-  </div>
-
-  <div
-    class="tm-dropdown-panel"
-    *ngIf="openDropdown === 'profession'"
-    (click)="$event.stopPropagation()"
-  >
-
-    <input
-      type="text"
-      class="tm-search-input"
-      [(ngModel)]="searchTerms.profession"
-     [placeholder]="'Search ' + tr.profile.profession"
-    />
-
-    <div
-      class="tm-option default-option"
-      (click)="selectOption('profession', '')"
-    >
-      {{ currentLang === 'ta' ? 'அனைத்து தொழில்' : 'All Profession' }}
-    </div>
-
-    <div
-      class="tm-option"
-    *ngFor="let item of getFilteredLangOptions(professionOptions, searchTerms.profession)"
-(click)="selectOption('profession', item.en)"
->
-  {{ getText(item) }}
-    </div>
-
-  </div>
-</div>
-
-<button
-  data-filter="apply"
-  type="button"
-  (click)="applyFilters()">
-  {{ tr.filters.search }}
-</button>
-
-<button
-  data-filter="reset"
-  type="button"
-  (click)="resetFilters()">
-  {{ tr.filters.reset }}
-</button>
-
-  </div>
+ 
 
 <div
   class="geo-hint"
@@ -675,6 +289,20 @@ filteredProfiles.length === 0 &&
 </p>
 
 </div>
+
+<!-- NEW FIND YOUR MATCH FILTERS -->
+<div class="member-advanced-filters">
+  <app-public-search-filters
+    mode="member"
+    [filters]="memberSearchFilters"
+    [options]="memberFilterOptions"
+    [facetProfiles]="memberFilterProfiles"
+    [lang]="currentLang === 'ta' ? 'ta' : 'en'"
+    (filtersChange)="memberSearchFilters = $event"
+    (closeRequested)="mobileFilterOpen = false">
+  </app-public-search-filters>
+</div>
+<div *ngIf="false">
 
 <div class="sidebar-title">{{ tr.sidebar.allMatches }}</div>
 
@@ -866,8 +494,11 @@ filteredProfiles.length === 0 &&
     </div>
   </div>
 
-</div>
-<!-- profile content card   -->
+
+
+</div> <!-- END OLD SIDEBAR CATEGORIES -->
+
+</div> <!-- END MATCH SIDEBAR -->
 
  
 <!-- PROFILE CONTENT CARDS -->

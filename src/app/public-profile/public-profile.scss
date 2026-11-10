@@ -710,3 +710,96 @@ a:focus-visible {
   position: absolute;
   z-index: 5;
 }
+/* ==========================================
+   PROFILE VIEW PHOTO WATERMARK
+========================================== */
+
+.aa-photo-frame {
+  position: relative;
+}
+
+.aa-full-photo-watermark {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  z-index: 5;
+
+  transform: translate(-50%, -50%) rotate(-25deg);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+
+  max-width: 90%;
+
+  color: rgba(255, 255, 255, 0.48);
+  text-align: center;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.aa-full-photo-watermark span {
+  font-size: clamp(12px, 1.6vw, 20px);
+  font-weight: 800;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+
+.aa-full-photo-watermark small {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   FULL PROFILE DETAILS WATERMARK
+   DESKTOP
+========================================== */
+
+.aa-main-card {
+  position: relative;
+  isolation: isolate;
+}
+
+.aa-profile-screen-watermark {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+
+  align-items: center;
+  justify-items: center;
+
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.aa-profile-screen-watermark > span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+
+  transform: rotate(-25deg);
+
+  color: rgba(110, 20, 55, 0.28);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.aa-profile-screen-watermark small {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}

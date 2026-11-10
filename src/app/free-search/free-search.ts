@@ -71,8 +71,7 @@ private readonly publicHttp = new HttpClient(
 
   private readonly searchChanges = new Subject<void>();
 
-  readonly memberMode =
-    this.route.snapshot.data['memberMode'] === true;
+ 
 
   private readonly apiOrigin =
     environment.apiUrl.replace(/\/api\/?$/, '');
@@ -249,120 +248,13 @@ memberCaste = '';
 memberUserId = '';
 memberProfileId = '';
 
-private async loadMemberDetails(): Promise<void> {
-  if (!this.memberMode || !isPlatformBrowser(this.platformId)) {
-    return;
-  }
-
-  try {
-    const response: any = await this.http
-      .get(`${environment.apiUrl}/profile/me`)
-      .toPromise();
-
-    const data = response?.data;
-    if (!data) return;
-
-    this.memberGender = String(
-      data.basic?.gender || data.gender_text || data.gender || ''
-    ).trim();
-
-    this.memberReligion = String(
-      data.religion?.religion ||
-      data.religion?.nameEn ||
-      data.religion_text ||
-      ''
-    ).trim();
-
-    this.memberCaste = String(
-      data.religion?.caste ||
-      data.religion?.otherCaste ||
-      data.caste_text ||
-      ''
-    ).trim();
-
-    this.memberUserId = String(
-      data.userId?._id || data.userId || data.user_id || ''
-    ).trim();
-
-
-this.memberProfileId = String(
-  data.profile_id || data._id || ''
-).trim();
-
-console.log('MEMBER MATCHING DETAILS:', {
-  gender: this.memberGender,
-  religion: this.memberReligion,
-  caste: this.memberCaste
-});
-
-this.cdr.markForCheck();
-
-
-  } catch (error) {
-    console.error('Unable to load member details:', error);
-  }
-}
-
-
-get requiredGender(): 'male' | 'female' | '' {
-  if (!this.memberMode) {
-    return '';
-  }
-
-  const raw = String(this.memberGender || '')
-    .trim()
-    .toLowerCase();
-
-  if (
-    ['male', 'man', 'groom', 'ஆண்', 'மணமகன்'].includes(raw)
-  ) {
-    return 'female';
-  }
-
-  if (
-    ['female', 'woman', 'bride', 'பெண்', 'மணமகள்'].includes(raw)
-  ) {
-    return 'male';
-  }
-
-  return '';
-}
-
-
-  private isEligibleMemberProfile(
-    profile: PublicProfile
-  ): boolean {
-
-    if (!this.memberMode) {
-      return true;
-    }
-
-    const raw = String(
-      profile.gender || ''
-    ).trim().toLowerCase();
-
-    const gender =
-      ['female', 'woman', 'bride', 'பெண்', 'மணமகள்']
-        .includes(raw)
-        ? 'female'
-        : ['male', 'man', 'groom', 'ஆண்', 'மணமகன்']
-            .includes(raw)
-          ? 'male'
-          : '';
-
-    return !!this.requiredGender &&
-      gender === this.requiredGender;
-  }
 
   // ==========================================
   // INITIALIZATION
   // ==========================================
 
   async ngOnInit(): Promise<void> {
-console.log('MATCHING ROUTE CHECK:', {
-  url: this.router.url,
-  memberMode: this.memberMode
-});
+
     this.restoreState(
       this.route.snapshot.queryParamMap.get('s')
     );
@@ -377,11 +269,7 @@ console.log('MATCHING ROUTE CHECK:', {
         this.persistState();
       });
 
-    if (this.memberMode) {
-  await this.loadMemberDetails();
-}
-
-this.load();
+   this.load();
   }
 
   // ==========================================
@@ -572,12 +460,9 @@ this.load();
               )
             )
             .filter(
-              (p): p is PublicProfile =>
-                p !== null
-            )
-            .filter(profile =>
-              this.isEligibleMemberProfile(profile)
-            );
+  (p): p is PublicProfile =>
+    p !== null
+);
 
           this.options = makeOptions(
             this.profiles

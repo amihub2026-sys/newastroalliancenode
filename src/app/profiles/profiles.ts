@@ -17,7 +17,14 @@ import { LanguageService } from '../core/services/language.service';
 import { SnackbarService } from '../shared/snackbar.service';
 import { ProfilesService } from '../services/profiles.service';
 import { PublicCard } from '../shared/public-card/public-card';
-import type { PublicProfile } from '../free-search/models/search.models';
+import { PublicSearchFilters } from '../free-search/search-filters/search-filters';
+import {
+  EMPTY_FILTERS,
+  makeOptions,
+  type FilterOptions,
+  type PublicProfile,
+  type SearchFilters
+} from '../free-search/models/search.models';
 type TabType = 'browse' | 'liked' | 'likedMe';
 
 interface LangText {
@@ -51,10 +58,11 @@ interface ProfileItem {
 @Component({
   selector: 'app-profiles',
   standalone: true,
-  imports: [
+imports: [
   CommonModule,
   FormsModule,
-  PublicCard
+  PublicCard,
+  PublicSearchFilters
 ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './profiles.html',
@@ -64,6 +72,14 @@ interface ProfileItem {
 ]
 })
 export class Profiles implements OnInit, OnDestroy {
+    // Shared Free Search filter data for Find Your Match
+  memberSearchFilters: SearchFilters = {
+    ...EMPTY_FILTERS,
+    hobbies: []
+  };
+
+  memberFilterOptions: FilterOptions = makeOptions([]);
+  memberFilterProfiles: PublicProfile[] = [];
   app = inject(LanguageService);
   router = inject(Router);
   platformId = inject(PLATFORM_ID);
@@ -734,22 +750,20 @@ private getLoggedInUserId(): string | null {
     return userId ? `${key}_${userId}` : key;
   }
 
-  private getDaysLeft(endDate: string | null | undefined): number {
-    if (!endDate) return 0;
 
-    const today = new Date();
-    const end = new Date(endDate);
+private getDaysLeft(endDate: string | null | undefined): number {
+  if (!endDate) return 0;
 
-    if (isNaN(end.getTime())) return 0;
+  const expiryTime = new Date(endDate).getTime();
 
-    today.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
+  if (!Number.isFinite(expiryTime)) return 0;
 
-    const diffMs = end.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  const remainingMs = expiryTime - Date.now();
 
-    return Math.max(diffDays, 0);
-  }
+  if (remainingMs <= 0) return 0;
+
+  return Math.ceil(remainingMs / (1000 * 60 * 60 * 24));
+}
 
   get isLoggedIn(): boolean {
     return !!this.getLoggedInUserId();
@@ -935,7 +949,11 @@ const activeSubscription = response?.data || null;
       contactLimit: Number(activeSubscription.total_contacts_allowed || 0),
       contactsUsed: Number(activeSubscription.contacts_used || 0),
       daysLeft,
-      expired: !activeSubscription.is_active || daysLeft <= 0
+      expired:
+  activeSubscription.is_active !== true ||
+  activeSubscription.subscription_status_id !== 'ACTIVE' ||
+  !Number.isFinite(new Date(activeSubscription.end_date).getTime()) ||
+  new Date(activeSubscription.end_date).getTime() <= Date.now()
     };
 
     this.cdr.detectChanges();
@@ -943,6 +961,21 @@ const activeSubscription = response?.data || null;
     console.error('Load current plan error:', error);
   }
 }
+
+/* ==========================================
+   AUTO REFRESH MEMBERSHIP PLAN
+========================================== */
+
+@HostListener('window:focus')
+onMembershipPageFocus(): void {
+
+  if (!this.isBrowser || !this.isLoggedIn || this.destroyed) {
+    return;
+  }
+
+  void this.loadCurrentPlan();
+}
+
   async loadProfilesFromApi(): Promise<void> {
     this.isLoading = true;
     this.cdr.detectChanges();

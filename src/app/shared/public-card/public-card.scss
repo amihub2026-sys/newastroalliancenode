@@ -619,3 +619,55 @@
   letter-spacing: 0.3px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
 }
+
+/* ==========================================
+   ASTRO ALLIANCE PHOTO WATERMARK
+========================================== */
+
+.aa-photo-watermark {
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  z-index: 4;
+
+  transform: translate(-50%, -50%) rotate(-25deg);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  width: max-content;
+  max-width: 90%;
+
+  color: rgba(255, 255, 255, 0.48);
+  text-align: center;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.aa-photo-watermark span {
+  font-size: clamp(12px, 1.8vw, 19px);
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.aa-photo-watermark small {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* MOBILE WATERMARK */
+@media (max-width: 600px) {
+  .aa-photo-watermark span {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .aa-photo-watermark small {
+    font-size: 8px;
+  }
+}

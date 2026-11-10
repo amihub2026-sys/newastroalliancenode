@@ -36,7 +36,7 @@ import {
 
 import { PhotoLightbox } from '../shared/photo-lightbox/photo-lightbox';
 import { PublicProfileValuePipe } from '../shared/public-profile-value.pipe';
-
+import { ProfilePrivacyDirective } from '../shared/profile-privacy/profile-privacy.directive';
 type ProfileTab = 'basic' | 'family' | 'horoscope' | 'contact';
 
 type PremiumField = {
@@ -48,12 +48,13 @@ type PremiumField = {
 @Component({
   selector: 'app-public-profile',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    PublicProfileValuePipe,
-    PhotoLightbox
-  ],
+ imports: [
+  CommonModule,
+  RouterLink,
+  PublicProfileValuePipe,
+  PhotoLightbox,
+  ProfilePrivacyDirective
+],
   templateUrl: './public-profile.html',
   styleUrls: [
     './public-profile.scss',

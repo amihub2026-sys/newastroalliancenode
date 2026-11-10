@@ -12,6 +12,10 @@ import { EMPTY_FILTERS, FilterOptions, FilterStringKey, HOBBIES, PublicProfile, 
   styleUrl: './search-filters.scss'
 })
 export class PublicSearchFilters {
+
+  // public = Free Search
+  // member = Find Your Match
+  @Input() mode: 'public' | 'member' = 'public';
   @Input({required: true}) filters: SearchFilters = {...EMPTY_FILTERS, hobbies: []};
   @Input({required: true}) options!: FilterOptions;
   @Input() facetProfiles: readonly PublicProfile[] = [];

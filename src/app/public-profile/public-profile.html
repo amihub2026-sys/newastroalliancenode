@@ -25,9 +25,22 @@
       </div>
     } @else if (!profile) {
       <div class="aa-message">{{ t('Approved profile not available.', 'அங்கீகரிக்கப்பட்ட சுயவிவரம் கிடைக்கவில்லை.') }}</div>
-    } @else {
-      <div class="aa-main-card">
-        <aside class="aa-left">
+   
+} @else {
+  <div class="aa-main-card" appProfilePrivacy>
+
+    <!-- WATERMARK ACROSS COMPLETE PROFILE -->
+    <div class="aa-profile-screen-watermark" aria-hidden="true">
+      @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]; track item) {
+        <span>
+          ASTRO ALLIANCE
+          <small>{{ profile.code }}</small>
+        </span>
+      }
+    </div>
+
+    <aside class="aa-left">
+
           <div class="aa-photo-card">
             <div class="aa-photo-frame">
               <button type="button" class="aa-photo-button" (click)="openPhoto()" [attr.aria-label]="t('View full photo', 'முழு புகைப்படம் பார்க்க')">
@@ -35,6 +48,13 @@
               </button>
               <span class="aa-approved"><span aria-hidden="true">✓</span> {{ t('Approved', 'அங்கீகரிக்கப்பட்டது') }}</span>
               <div class="aa-photo-id">{{ profile.code }}</div>
+              <!-- PROFILE PHOTO WATERMARK -->
+@if (profile.image && !photoFailed) {
+  <div class="aa-full-photo-watermark" aria-hidden="true">
+    <span>ASTRO ALLIANCE</span>
+    <small>{{ profile.code }}</small>
+  </div>
+}
             </div>
           </div>
           <div class="aa-profile-actions">

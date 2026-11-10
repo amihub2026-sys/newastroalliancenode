@@ -813,3 +813,55 @@
     font-size: 10px;
   }
 }
+/* ==========================================
+   MOBILE PROFILE PHOTO WATERMARK
+========================================== */
+
+@media (max-width: 600px) {
+  .aa-full-photo-watermark {
+    top: 44%;
+    left: 50%;
+    max-width: 90%;
+  }
+
+  .aa-full-photo-watermark span {
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .aa-full-photo-watermark small {
+    font-size: 9px;
+  }
+}
+
+/* ==========================================
+   FULL PROFILE WATERMARK
+   MOBILE AND TABLET
+========================================== */
+
+@media (max-width: 900px) {
+  .aa-profile-screen-watermark {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(8, minmax(0, 1fr));
+  }
+
+  .aa-profile-screen-watermark > span {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  .aa-profile-screen-watermark small {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 600px) {
+  .aa-profile-screen-watermark > span {
+    font-size: 9px;
+    letter-spacing: 0;
+  }
+
+  .aa-profile-screen-watermark small {
+    font-size: 8px;
+  }
+}

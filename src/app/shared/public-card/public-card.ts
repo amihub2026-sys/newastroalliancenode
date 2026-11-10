@@ -5,15 +5,16 @@ import { RouterLink } from '@angular/router';
 
 import { PublicProfile } from '../../free-search/models/search.models';
 import { LanguageService } from '../../core/services/language.service';
-
+import { ProfilePrivacyDirective } from '../profile-privacy/profile-privacy.directive';
 @Component({
   selector: 'app-public-card',
   standalone: true,
 
-  imports: [
-    CommonModule,
-    RouterLink
-  ],
+imports: [
+  CommonModule,
+  RouterLink,
+  ProfilePrivacyDirective
+],
 
   templateUrl: './public-card.html',
 

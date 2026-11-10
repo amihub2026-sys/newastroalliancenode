@@ -1,11 +1,14 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, EventEmitter, HostListener, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
-
+import { ProfilePrivacyDirective } from '../profile-privacy/profile-privacy.directive';
 /** Use only photos provided by a permitted endpoint. Never fetch a protected gallery from a public preview. */
 @Component({
   selector: 'app-photo-lightbox',
   standalone: true,
-  imports: [CommonModule],
+ imports: [
+  CommonModule,
+  ProfilePrivacyDirective
+],
   templateUrl: './photo-lightbox.html',
   styleUrl: './photo-lightbox.scss'
 })

@@ -1661,24 +1661,27 @@ if (isAdminCreatePage) {
 }
   }
 
-await this.loadGenders();
-await this.loadReligions();
-await this.loadMaritalStatuses();
-await this.loadColors();
-await this.loadKudumbaNilai();
-await this.loadSecondMarriageReasons();
 
-await this.loadThisaiIruppu();
-  await this.loadCastes();
-  await this.loadCountries();
-  await this.loadStates();
-  await this.loadCities();
+await Promise.all([
+  this.loadGenders(),
+  this.loadReligions(),
+  this.loadMaritalStatuses(),
+  this.loadColors(),
+  this.loadKudumbaNilai(),
+  this.loadSecondMarriageReasons(),
+  this.loadThisaiIruppu(),
+  this.loadCastes(),
+  this.loadCountries(),
+  this.loadStates(),
+  this.loadCities(),
+  this.loadDhoshamList(),
+  this.loadRasiList(),
+  this.loadNakshatraList(),
+  this.loadLagnamList()
+]);
 
-await this.loadDhoshamList();
-await this.loadRasiList();
-await this.loadNakshatraList();
-await this.loadLagnamList();
-  await this.loadExistingBiodata();
+await this.loadExistingBiodata();
+
 
 
   if (this.currentLang === 'ta') {
@@ -1842,16 +1845,38 @@ this.formData.additionalMobile =
   data.basic?.additionalMobile?.length
     ? data.basic.additionalMobile
     : [''];
-    this.selectedReligionId =
+   
+const savedReligion =
+  String(
+    data.religion?.religion ||
+    this.getStoredLoggedInUser()?.religion ||
+    ''
+  ).trim();
+
+const savedReligionId =
   data.religion?.religionId?._id ||
   data.religion?.religionId ||
   '';
 
+const matchedReligion = this.religionList.find(
+  (r: any) =>
+    String(r._id) === String(savedReligionId) ||
+    String(r.nameEn || '').trim().toLowerCase() ===
+      savedReligion.toLowerCase() ||
+    String(r.nameTa || '').trim() === savedReligion
+);
+
+this.selectedReligionId = matchedReligion?._id || '';
+this.formData.religion = matchedReligion?.nameEn || savedReligion;
+
 if (this.selectedReligionId) {
-  this.onReligionChange();
+  this.casteList = this.allCastes.filter((c: any) =>
+    String(c.religionId?._id || c.religionId) ===
+    String(this.selectedReligionId)
+  );
+  this.filteredCasteList = [...this.casteList];
 }
 
-this.formData.religion = data.religion?.religion || '';
 
 this.formData.caste = data.religion?.caste || '';
 this.formData.otherCaste = '';

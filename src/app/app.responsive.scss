@@ -941,3 +941,20 @@
   }
 }
 
+/* MOBILE GUEST NAVIGATION - 4 BUTTONS */
+@media (max-width: 768px) {
+  .astro-mobile-bottom-nav.guest-navigation {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    align-items: center;
+  }
+
+  .astro-mobile-bottom-nav.guest-navigation
+  > .astro-bottom-nav-item {
+    display: flex !important;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}

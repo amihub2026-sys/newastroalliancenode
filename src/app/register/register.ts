@@ -361,6 +361,7 @@ next: (res) => {
         // ONLY so the member can complete their own eight-step Biodata.
         // Both the route guard and backend must restrict draft users to onboarding.
         if (!res?.data?.token || !res?.data?.user || !res?.data?.profile) {
+          this.isLoading = false;
           this.snackbar.error(this.currentLang === 'ta'
             ? 'பதிவு சேமிக்கப்பட்டது; சுயவிவரத்தைத் தொடங்க முடியவில்லை. உதவியைத் தொடர்புகொள்ளவும்.'
             : 'Registration was received, but the Biodata session could not be opened. Contact support.');
@@ -373,11 +374,13 @@ next: (res) => {
           : 'Registration successful. Now complete your Biodata.');
         void this.router.navigate(['/biodata']);
       },
-      error: (err) => {
-        this.snackbar.error(
-          err?.error?.message || this.tr.alerts.somethingWrong
-        );
-      },
+    error: (err) => {
+  this.isLoading = false;
+
+  this.snackbar.error(
+    err?.error?.message || this.tr.alerts.somethingWrong
+  );
+},
       complete: () => {
         this.isLoading = false;
       }

@@ -1,5 +1,6 @@
 
 <article
+  appProfilePrivacy
   class="aa-match-card"
   [class.is-compact]="compact"
   [class.has-placeholder]="!hasPhoto"
@@ -72,12 +73,22 @@
     }
 
       
-      <span class="profile-code-badge">
-  {{ profile.code }}
-</span>
-    
 
-  </div>
+  <span class="profile-code-badge">
+    {{ profile.code }}
+  </span>
+
+  <!-- WATERMARK ON REAL PROFILE PHOTOS -->
+  @if (hasPhoto) {
+    <div class="aa-photo-watermark" aria-hidden="true">
+      <span>ASTRO ALLIANCE</span>
+      <small>{{ profile.code }}</small>
+    </div>
+  }
+
+</div>
+
+
 
   <!-- MEMBER DETAILS -->
   <div class="aa-member-details">
