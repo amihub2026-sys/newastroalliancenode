@@ -1,84 +1,170 @@
-<section class="home-discovery" [class.recommendations-mode]="mode === 'recommended'" [attr.aria-labelledby]="headingId">
+<section
+  class="home-discovery"
+  [class.recommendations-mode]="mode === 'recommended'"
+  [attr.aria-labelledby]="headingId"
+>
   <div class="home-discovery-inner">
     <header class="discovery-header">
       <div>
-        <span>{{ t('DISCOVER THE POSSIBILITIES','புதிய வாய்ப்புகள்') }}</span>
+        <span>{{ t('DISCOVER THE POSSIBILITIES', 'புதிய வாய்ப்புகள்') }}</span>
         <h2 [id]="headingId">{{ sectionTitle }}</h2>
-        <p>{{ t('Explore approved and published member profiles.','அங்கீகரிக்கப்பட்ட உறுப்பினர்களைக் காணுங்கள்.') }}</p>
+        <p>
+          {{
+            t(
+              'Explore approved and published member profiles.',
+              'அங்கீகரிக்கப்பட்ட உறுப்பினர்களைக் காணுங்கள்.'
+            )
+          }}
+        </p>
       </div>
-      <a routerLink="/free-search">{{t('View All','அனைத்தும்')}} <span aria-hidden="true">›</span></a>
+      <a routerLink="/free-search"
+        >{{ t('View All', 'அனைத்தும்') }} <span aria-hidden="true">›</span></a
+      >
     </header>
 
-    @if(mode === 'recent') {
-      <div class="discovery-filters" role="group" [attr.aria-label]="t('Filter profiles','வரன்கள் வடிகட்டி')">
-        <button type="button" [class.active]="genderFilter==='all'" (click)="setGender('all')">{{t('All','அனைத்தும்')}}</button>
-        <button type="button" [class.active]="genderFilter==='female'" (click)="setGender('female')">{{t('Women','பெண்கள்')}}</button>
-        <button type="button" [class.active]="genderFilter==='male'" (click)="setGender('male')">{{t('Men','ஆண்கள்')}}</button>
+    @if (mode === 'recent' && !auth.isLoggedIn()) {
+      <div
+        class="discovery-filters"
+        role="group"
+        [attr.aria-label]="t('Filter profiles', 'வரன்கள் வடிகட்டி')"
+      >
+        <button type="button" [class.active]="genderFilter === 'all'" (click)="setGender('all')">
+          {{ t('All', 'அனைத்தும்') }}
+        </button>
+        <button
+          type="button"
+          [class.active]="genderFilter === 'female'"
+          (click)="setGender('female')"
+        >
+          {{ t('Women', 'பெண்கள்') }}
+        </button>
+        <button type="button" [class.active]="genderFilter === 'male'" (click)="setGender('male')">
+          {{ t('Men', 'ஆண்கள்') }}
+        </button>
       </div>
     }
 
-    @if(loading){
+    @if (loading) {
       <div class="home-skeleton-grid" role="status" aria-label="Loading profiles">
-        @for(item of [1,2,3];track item){<div class="home-skeleton"><div></div><span></span><span></span></div>}
+        @for (item of [1, 2, 3]; track item) {
+          <div class="home-skeleton">
+            <div></div>
+            <span></span><span></span>
+          </div>
+        }
       </div>
-    } @else if(carouselProfiles.length) {
-      <div class="astro-expand-grid astro-mobile-stack" [class.recommended-grid]="mode === 'recommended'"
-        (touchstart)="onProfileTouchStart($event)" (touchend)="onProfileTouchEnd($event)"
-        (touchcancel)="onProfileTouchCancel()" (mouseenter)="pauseProfileSlider()" (mouseleave)="resumeProfileSlider()">
-        @for(p of carouselProfiles;track p.code;let i=$index) {
-          <article class="astro-expand-card" [class.is-active]="activeProfileIndex===i" [class.is-next]="isNextProfile(i)"
-            [class.is-prev]="isPreviousProfile(i)" (mouseenter)="setActiveProfile(i)" (click)="onProfileCardClick(i,p)"
-            (keydown.enter)="onProfileCardClick(i,p)" (keydown.space)="$event.preventDefault();onProfileCardClick(i,p)"
-            tabindex="0" [attr.aria-label]="t('View profile ','சுயவிவரம் ') + (p.name || p.code)">
+    } @else if (carouselProfiles.length) {
+      <div
+        class="astro-expand-grid astro-mobile-stack"
+        [class.recommended-grid]="mode === 'recommended'"
+        (touchstart)="onProfileTouchStart($event)"
+        (touchend)="onProfileTouchEnd($event)"
+        (touchcancel)="onProfileTouchCancel()"
+        (mouseenter)="pauseProfileSlider()"
+        (mouseleave)="resumeProfileSlider()"
+      >
+        @for (p of carouselProfiles; track p.code; let i = $index) {
+          <article
+            class="astro-expand-card"
+            [class.is-active]="activeProfileIndex === i"
+            [class.is-next]="isNextProfile(i)"
+            [class.is-prev]="isPreviousProfile(i)"
+            (mouseenter)="setActiveProfile(i)"
+            (click)="onProfileCardClick(i, p)"
+            (keydown.enter)="onProfileCardClick(i, p)"
+            (keydown.space)="$event.preventDefault(); onProfileCardClick(i, p)"
+            tabindex="0"
+            [attr.aria-label]="t('View profile ', 'சுயவிவரம் ') + (p.name || p.code)"
+          >
             <div class="astro-expand-photo">
-              
-
               <img
-  [src]="getProfilePhoto(p)"
-  [alt]="p.name"
-  (error)="onProfilePhotoError($event, p)"
-/>
-
+                [src]="getProfilePhoto(p)"
+                [alt]="p.name"
+                (error)="onProfilePhotoError($event, p)"
+              />
 
               <div class="astro-photo-shade"></div>
-              <span class="astro-photo-name">{{p.name || p.code}}</span>
+              <span class="astro-photo-name">{{ p.name || p.code }}</span>
             </div>
             <div class="astro-expand-details">
-              <span class="astro-profile-id">PROFILE #{{p.code}}</span>
-              <h3>{{p.name || p.code}} @if(p.age !== null){<span>, {{p.age}}</span>}</h3>
-              <div class="astro-profile-location">{{p.city || p.district || p.state}}</div>
-              <div class="astro-profile-info"><span>{{t('Education','கல்வி')}}</span><strong>{{p.education || '—'}}</strong></div>
-              <div class="astro-profile-info"><span>{{t('Profession','தொழில்')}}</span><strong>{{p.profession || '—'}}</strong></div>
-              <div class="astro-profile-info"><span>{{t('Age','வயது')}}</span><strong>{{p.age !== null ? p.age : '—'}}</strong></div>
-              <a class="astro-view-profile" [routerLink]="['/free-profile',p.code]" (click)="$event.stopPropagation()">{{t('View Profile','சுயவிவரம் காண')}} <span>↗</span></a>
+              <span class="astro-profile-id">PROFILE #{{ p.code }}</span>
+              <h3>
+                {{ p.name || p.code }}
+                @if (p.age !== null) {
+                  <span>, {{ p.age }}</span>
+                }
+              </h3>
+              <div class="astro-profile-location">{{ p.city || p.district || p.state }}</div>
+              <div class="astro-profile-info">
+                <span>{{ t('Education', 'கல்வி') }}</span
+                ><strong>{{ p.education || '—' }}</strong>
+              </div>
+              <div class="astro-profile-info">
+                <span>{{ t('Profession', 'தொழில்') }}</span
+                ><strong>{{ p.profession || '—' }}</strong>
+              </div>
+              <div class="astro-profile-info">
+                <span>{{ t('Age', 'வயது') }}</span
+                ><strong>{{ p.age !== null ? p.age : '—' }}</strong>
+              </div>
+              <a
+                class="astro-view-profile"
+                [routerLink]="['/free-profile', p.code]"
+                (click)="$event.stopPropagation()"
+                >{{ t('View Profile', 'சுயவிவரம் காண') }} <span>↗</span></a
+              >
             </div>
             <div class="astro-mobile-profile-overlay">
-              <span class="astro-mobile-approved">✓ {{t('Approved Profile','அங்கீகரிக்கப்பட்டவர்')}}</span>
-              <span class="astro-mobile-profile-code">{{p.code}}</span>
-              <h3>{{p.name || p.code}}</h3>
+              <span class="astro-mobile-approved"
+                >✓ {{ t('Approved Profile', 'அங்கீகரிக்கப்பட்டவர்') }}</span
+              >
+              <span class="astro-mobile-profile-code">{{ p.code }}</span>
+              <h3>{{ p.name || p.code }}</h3>
               <div class="astro-mobile-profile-meta">
-                <span>{{p.age !== null ? p.age : '—'}} {{t('Years','வயது')}}</span>
-                <span>{{p.profession || p.education || '—'}}</span>
-                <span>{{p.city || p.district || p.state || '—'}}</span>
+                <span>{{ p.age !== null ? p.age : '—' }} {{ t('Years', 'வயது') }}</span>
+                <span>{{ p.profession || p.education || '—' }}</span>
+                <span>{{ p.city || p.district || p.state || '—' }}</span>
               </div>
-              <span class="astro-mobile-profile-hint">{{t('View Profile','சுயவிவரம் காண')}} →</span>
+              <span class="astro-mobile-profile-hint"
+                >{{ t('View Profile', 'சுயவிவரம் காண') }} →</span
+              >
             </div>
           </article>
         }
       </div>
-      <div class="astro-mobile-carousel-controls" *ngIf="carouselProfiles.length>1">
+      <div class="astro-mobile-carousel-controls" *ngIf="carouselProfiles.length > 1">
         <div class="astro-mobile-dots">
-          @for(p of carouselProfiles;track p.code;let i=$index){
-            <button type="button" class="astro-mobile-dot" [class.active]="activeProfileIndex===i" [attr.aria-label]="'Show profile '+(i+1)" (click)="setActiveProfile(i)"></button>
+          @for (p of displayedProfiles; track p.code; let i = $index) {
+            <button
+              type="button"
+              class="astro-mobile-dot"
+              [class.active]="activeProfileIndex === i"
+              [attr.aria-label]="'Show profile ' + (i + 1)"
+              (click)="setActiveProfile(i)"
+            ></button>
           }
         </div>
-        <div class="astro-mobile-navigation"><button type="button" (click)="previousProfile()">‹</button><button type="button" (click)="nextProfile()">›</button></div>
+        <div class="astro-mobile-navigation">
+          <button type="button" (click)="previousProfile()">‹</button
+          ><button type="button" (click)="nextProfile()">›</button>
+        </div>
       </div>
-      <div class="home-show-more-wrap"><a class="home-show-more" routerLink="/free-search">{{t('Show More Profiles','மேலும் காண')}} →</a></div>
-    } @else if(error) {
-      <div class="home-status" role="alert"><p>{{t('Profiles could not be loaded.','வரன்களை ஏற்ற முடியவில்லை.')}}</p><button class="home-retry" type="button" (click)="load()">{{t('Retry','மீண்டும் முயலவும்')}}</button></div>
+      <div class="home-show-more-wrap">
+        <a class="home-show-more" routerLink="/free-search"
+          >{{ t('Show More Profiles', 'மேலும் காண') }} →</a
+        >
+      </div>
+    } @else if (error) {
+      <div class="home-status" role="alert">
+        <p>{{ t('Profiles could not be loaded.', 'வரன்களை ஏற்ற முடியவில்லை.') }}</p>
+        <button class="home-retry" type="button" (click)="load()">
+          {{ t('Retry', 'மீண்டும் முயலவும்') }}
+        </button>
+      </div>
     } @else {
-      <p class="home-status">{{t('No approved profiles available.','அங்கீகரிக்கப்பட்ட வரன்கள் இல்லை.')}}</p>
+      <p class="home-status">
+        {{ t('No approved profiles available.', 'அங்கீகரிக்கப்பட்ட வரன்கள் இல்லை.') }}
+      </p>
     }
   </div>
 </section>

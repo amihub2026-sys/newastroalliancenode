@@ -22,7 +22,7 @@ import {
 } from '../../free-search/models/search.models';
 
 import { LanguageService } from '../../core/services/language.service';
-
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-home-discovery',
   standalone: true,
@@ -41,7 +41,7 @@ export class HomeDiscovery implements OnInit, OnDestroy {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   private readonly language = inject(LanguageService);
-
+readonly auth = inject(AuthService);
   private readonly isBrowser = isPlatformBrowser(
     inject(PLATFORM_ID)
   );
@@ -56,7 +56,7 @@ export class HomeDiscovery implements OnInit, OnDestroy {
   activeProfileIndex = 0;
 
   genderFilter: 'all' | 'female' | 'male' = 'all';
-
+loggedInGender: 'male' | 'female' | null = null;
   private timer: ReturnType<typeof setInterval> | null = null;
 
   private touchX = 0;
@@ -102,44 +102,103 @@ export class HomeDiscovery implements OnInit, OnDestroy {
   // PROFILE FILTERING
   // ==========================================
 
-  get carouselProfiles(): PublicProfile[] {
 
-    const selected = this.mode === 'recent'
-      ? this.profiles.slice(0, 6)
-      : this.profiles.slice(6, 12);
+get carouselProfiles(): PublicProfile[] {
 
-    if (
-      this.mode !== 'recent' ||
-      this.genderFilter === 'all'
-    ) {
-      return selected;
+  // Separate women and men from approved profiles.
+  const women = this.profiles.filter(p => {
+    const gender = String(p.gender || '')
+      .trim()
+      .toLowerCase();
+
+    return [
+      'female',
+      'woman',
+      'bride',
+      'பெண்',
+      'மணமகள்'
+    ].includes(gender);
+  });
+
+  const men = this.profiles.filter(p => {
+    const gender = String(p.gender || '')
+      .trim()
+      .toLowerCase();
+
+    return [
+      'male',
+      'man',
+      'groom',
+      'ஆண்',
+      'மணமகன்'
+    ].includes(gender);
+  });
+
+  // =====================================
+  // AFTER LOGIN - OPPOSITE GENDER ONLY
+  // =====================================
+
+  if (this.auth.isLoggedIn()) {
+
+    // Hide profiles until gender is verified.
+    if (!this.loggedInGender) {
+      return [];
     }
 
-    return selected.filter(profile => {
-      const gender = String(
-        profile.gender || ''
-      ).trim().toLowerCase();
+    const matchingProfiles =
+      this.loggedInGender === 'male'
+        ? women
+        : men;
 
-      if (this.genderFilter === 'male') {
-        return [
-          'male',
-          'man',
-          'groom',
-          'ஆண்',
-          'மணமகன்'
-        ].includes(gender);
-      }
+    // Recent: first 10 opposite-gender profiles.
+    // Recommended: next 10 opposite-gender profiles.
+    const start = this.mode === 'recent' ? 0 : 10;
 
-      return [
-        'female',
-        'woman',
-        'bride',
-        'பெண்',
-        'மணமகள்'
-      ].includes(gender);
-    });
+    return matchingProfiles.slice(start, start + 10);
   }
 
+  // =====================================
+  // BEFORE LOGIN - BALANCED PROFILES
+  // =====================================
+
+  const start = this.mode === 'recent' ? 0 : 5;
+
+  const selectedWomen = women.slice(start, start + 5);
+  const selectedMen = men.slice(start, start + 5);
+
+  // Gender filters for guests.
+  if (this.mode === 'recent') {
+    if (this.genderFilter === 'female') {
+      return selectedWomen;
+    }
+
+    if (this.genderFilter === 'male') {
+      return selectedMen;
+    }
+  }
+
+  // Alternate five women and five men.
+  const balanced: PublicProfile[] = [];
+
+  for (let i = 0; i < 5; i++) {
+    if (selectedWomen[i]) {
+      balanced.push(selectedWomen[i]);
+    }
+
+    if (selectedMen[i]) {
+      balanced.push(selectedMen[i]);
+    }
+  }
+
+  return balanced;
+}
+get displayedProfiles(): PublicProfile[] {
+  if (this.isBrowser && window.innerWidth > 880) {
+    return this.carouselProfiles.slice(0, 5);
+  }
+
+  return this.carouselProfiles;
+}
   get total(): number {
     return this.carouselProfiles.length;
   }
@@ -148,9 +207,34 @@ export class HomeDiscovery implements OnInit, OnDestroy {
   // LIFECYCLE
   // ==========================================
 
-  ngOnInit(): void {
-    this.load();
+ngOnInit(): void {
+  this.load();
+
+  if (this.auth.isLoggedIn()) {
+    this.auth.getUserFlowStatus(true).subscribe({
+      next: (response: any) => {
+        const gender = String(response?.data?.gender || '')
+          .trim()
+          .toLowerCase();
+
+        if (['male', 'man', 'groom', 'ஆண்', 'மணமகன்'].includes(gender)) {
+          this.loggedInGender = 'male';
+        } else if (['female', 'woman', 'bride', 'பெண்', 'மணமகள்'].includes(gender)) {
+          this.loggedInGender = 'female';
+        } else {
+          this.loggedInGender = null;
+        }
+
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        console.error('Unable to load member gender:', error);
+        this.loggedInGender = null;
+        this.cdr.markForCheck();
+      }
+    });
   }
+}
 
   ngOnDestroy(): void {
     this.stop();
