@@ -31,6 +31,9 @@ import { ReviewSubmit } from './sections/review-submit/review-submit';
 import { environment } from '../../environments/environment';
 import { BIODATA_STEPS, firstMissingStepField, StepField } from './biodata.steps';
 import { suggestBilingualName, hasTamilScript } from './biodata.names';
+import { NgZone } from '@angular/core';
+
+
 @Component({
   selector: 'app-biodata',
   standalone: true,
@@ -45,6 +48,7 @@ export class Biodata implements OnInit {
 
   app = inject(LanguageService);
   cdr = inject(ChangeDetectorRef);
+  private readonly ngZone = inject(NgZone);
   snackbar = inject(SnackbarService);
   route = inject(ActivatedRoute);
 router = inject(Router);
@@ -86,6 +90,9 @@ private motherNameTranslateTimer: any;
 showAlternateSpelling = true;
 nameSpellingManuallyCorrected = false;
 nameNeedsReview = false;
+
+private fatherNameVersion = 0;
+private motherNameVersion = 0;
 
 
 
@@ -312,18 +319,34 @@ onUserNameInput(value: string): void {
         return;
       }
 
-      if (
-        hasTamilScript(tamil) &&
-        !/[a-zA-Z]/.test(tamil)
-      ) {
-        this.formDataTa.fullName = tamil;
-        this.nameNeedsReview = false;
-      } else {
-        this.nameNeedsReview =
-          !hasTamilScript(this.formDataTa.fullName);
-      }
+      
+this.ngZone.run(() => {
+  // Ignore an old result if the user has
+  // already entered a different English name.
+  if (version !== this.englishNameVersion) {
+    return;
+  }
 
-      this.cdr.detectChanges();
+  // Preserve manual Tamil spelling corrections.
+  if (this.nameSpellingManuallyCorrected) {
+    return;
+  }
+
+  if (
+    hasTamilScript(tamil) &&
+    !/[a-zA-Z]/.test(tamil)
+  ) {
+    this.formDataTa.fullName = tamil;
+    this.nameNeedsReview = false;
+  } else {
+    this.nameNeedsReview =
+      !hasTamilScript(this.formDataTa.fullName);
+  }
+
+  this.cdr.markForCheck();
+  this.cdr.detectChanges();
+});
+
 
     } catch (error) {
       console.error(
@@ -455,42 +478,129 @@ private requiredWizardFields(index: number): StepField[] {
   }
   return fields;
 }
+
+
 nextWizardStep(): void {
-  if (this.isAdminBiodataMode() || this.activeStep >= this.wizardSteps.length - 1 || this.isSaving) return;
-  const missing = firstMissingStepField(this.requiredWizardFields(this.activeStep));
-  if (missing) {
-    this.submitted = true;
-    this.fieldErrors = { [missing.key]: true };
-    this.snackbar.error(this.currentLang === 'ta'
-      ? `${missing.labelTa} நிரப்பவும்` : `Please complete ${missing.labelEn}`);
+  if (
+    this.isAdminBiodataMode() ||
+    this.isSaving ||
+    this.activeStep >= this.wizardSteps.length - 1
+  ) {
     return;
   }
-  this.submitted = false;
-  this.fieldErrors = {};
-  this.stopStepAudio();
-  this.activeStep++;
-  this.scrollToWizardTop();
+
+  this.editWizardStep(this.activeStep + 1);
 }
+
 previousWizardStep(): void {
-  if (this.isAdminBiodataMode() || this.activeStep === 0 || this.isSaving) return;
+  if (
+    this.isAdminBiodataMode() ||
+    this.isSaving ||
+    this.activeStep <= 0
+  ) {
+    return;
+  }
+
+  this.editWizardStep(this.activeStep - 1);
+}
+
+editWizardStep(index: number): void {
+  if (
+    this.isAdminBiodataMode() ||
+    this.isSaving ||
+    index < 0 ||
+    index >= this.wizardSteps.length
+  ) {
+    return;
+  }
+
   this.stopStepAudio();
-  this.activeStep--;
+
+  this.activeStep = index;
+
+  // Don't erase previously entered form values.
+  // Reset only the previous validation display.
   this.submitted = false;
   this.fieldErrors = {};
+
+  this.cdr.detectChanges();
+
   this.scrollToWizardTop();
 }
-editWizardStep(index: number): void {
-  if (!this.isAdminBiodataMode() && index >= 0 && index < this.activeStep) {
-    this.stopStepAudio();
-  this.activeStep = index;
-    this.scrollToWizardTop();
-  }
-}
+
+
 private scrollToWizardTop(): void {
   if (typeof window !== 'undefined') {
     window.requestAnimationFrame(() => document.getElementById('biodata-wizard-heading')?.scrollIntoView({behavior:'smooth',block:'start'}));
   }
 }
+
+
+private goToMissingRequiredField(): void {
+  const key = Object.keys(this.fieldErrors)
+    .find(field => this.fieldErrors[field]);
+
+  if (!key || this.isAdminBiodataMode()) {
+    return;
+  }
+
+  const fieldStep: Record<string, number> = {
+    fullName: 0,
+    gender: 0,
+    dob: 0,
+    maritalStatus: 0,
+    mobile: 0,
+    religion: 0,
+    caste: 0,
+
+    education: 2,
+
+    address: 3,
+    country: 3,
+    state: 3,
+    city: 3,
+
+    rasi: 4,
+    nakshatra: 4
+  };
+
+  const targetStep = fieldStep[key];
+
+  if (targetStep === undefined) {
+    return;
+  }
+
+  this.stopStepAudio();
+  this.activeStep = targetStep;
+
+  // Keep validation active so the
+  // missing field remains highlighted.
+  this.submitted = true;
+
+  this.cdr.detectChanges();
+
+  requestAnimationFrame(() => {
+    const field = document.querySelector<HTMLElement>(
+      `[data-field-key="${key}"], ` +
+      `[name="${key}"], ` +
+      `#${key}`
+    );
+
+    if (field) {
+      field.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+      field.focus({
+        preventScroll: true
+      });
+    } else {
+      this.scrollToWizardTop();
+    }
+  });
+}
+
 
 
 rasiChart: string[] = Array(12).fill('');
@@ -1233,24 +1343,50 @@ async onFullNameChange(value: string) {
     this.cdr.detectChanges();
   }, 400);
 }
+
 async googleTamilInput(text: string): Promise<string> {
-  if (!text || !text.trim()) return '';
+  const name = String(text || '').trim();
+
+  if (!name) return '';
 
   try {
     const url =
       'https://inputtools.google.com/request' +
-      '?text=' + encodeURIComponent(text) +
+      '?text=' + encodeURIComponent(name) +
       '&itc=ta-t-i0-und' +
       '&num=1';
 
     const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(
+        `Transliteration request failed: ${response.status}`
+      );
+    }
+
     const data = await response.json();
 
-    return data?.[1]?.[0]?.[1]?.[0] || text;
+    const tamil = String(
+      data?.[1]?.[0]?.[1]?.[0] || ''
+    ).trim();
+
+    console.log('Tamil transliteration:', {
+      english: name,
+      tamil
+    });
+
+    return tamil;
+
   } catch (error) {
-    return text;
+    console.error(
+      'Tamil transliteration unavailable:',
+      error
+    );
+
+    return '';
   }
 }
+
 async googleEnglishInput(text: string): Promise<string> {
   return text || '';
 }
@@ -1368,20 +1504,71 @@ onTamilNameChange(value: string) {
   }, 300);
 }
 
-async onFatherNameChange(value: string) {
-  this.formData.fatherName = value;
 
-  if (this.isAdminBiodataMode()) return;
+onFatherNameChange(value: string): void {
+  const english = String(value ?? '');
 
-  if (this.formData.fatherNameTaManuallyEdited) return;
+  this.formData.fatherName = english;
+
+  if (this.isAdminBiodataMode()) {
+    return;
+  }
+
+  const version = ++this.fatherNameVersion;
 
   clearTimeout(this.fatherNameTranslateTimer);
 
+  // A new English name should generate a new
+  // Tamil suggestion.
+  this.familySpellingCorrected.fatherName = false;
+  this.formData.fatherNameTaManuallyEdited = false;
+
+  if (!english.trim()) {
+    this.formDataTa.fatherName = '';
+    this.cdr.markForCheck();
+    return;
+  }
+
   this.fatherNameTranslateTimer = setTimeout(async () => {
-    this.formDataTa.fatherName = await this.googleTamilInput(value);
-    this.cdr.detectChanges();
-  }, 400);
+    try {
+      const tamil = await this.googleTamilInput(
+        english.trim()
+      );
+
+      // Ignore an old response if the user
+      // has typed a newer name.
+      if (version !== this.fatherNameVersion) {
+        return;
+      }
+
+      // Don't overwrite a manual Tamil correction.
+      if (this.familySpellingCorrected.fatherName) {
+        return;
+      }
+
+      this.formDataTa.fatherName =
+        hasTamilScript(tamil) && !/[a-zA-Z]/.test(tamil)
+          ? tamil
+          : '';
+
+      // Notify Angular after the asynchronous result.
+      this.cdr.markForCheck();
+
+    } catch (error) {
+      console.error(
+        'Father name transliteration failed:',
+        error
+      );
+
+      if (version === this.fatherNameVersion) {
+        this.cdr.markForCheck();
+      }
+    }
+  }, 450);
 }
+
+
+
 
 onTamilFatherNameInput(event: Event) {
   setTimeout(() => {
@@ -1390,36 +1577,150 @@ onTamilFatherNameInput(event: Event) {
   }, 0);
 }
 
-onTamilFatherNameChange(value: string) {
-  this.formDataTa.fatherName = value;
-  this.formData.fatherNameTaManuallyEdited = true;
 
-  if (!this.isAdminBiodataMode()) return;
+onTamilFatherNameChange(value: string): void {
+  const input = String(value || '');
+
+  const version = ++this.fatherNameVersion;
 
   clearTimeout(this.fatherNameTranslateTimer);
 
-  this.fatherNameTranslateTimer = setTimeout(() => {
-    this.formData.fatherName = this.tamilToEnglishName(value);
-    this.cdr.detectChanges();
-  }, 300);
+  this.formDataTa.fatherName = input;
+
+  this.familySpellingCorrected.fatherName =
+    !!input.trim();
+
+  this.formData.fatherNameTaManuallyEdited =
+    !!input.trim();
+
+  // Already entered entirely in Tamil.
+  if (!/[a-zA-Z]/.test(input)) {
+    if (
+      this.currentLang === 'ta' &&
+      hasTamilScript(input)
+    ) {
+      this.formData.fatherName =
+        this.tamilToEnglishName(input);
+    }
+
+    this.cdr.markForCheck();
+    return;
+  }
+
+  // Convert English keyboard input while
+  // preserving any existing Tamil characters.
+  this.fatherNameTranslateTimer = setTimeout(async () => {
+    try {
+      const words = input.match(/[a-zA-Z]+/g) || [];
+
+      const converted = await Promise.all(
+        words.map(word => this.googleTamilInput(word))
+      );
+
+      if (version !== this.fatherNameVersion) return;
+
+      if (
+        converted.some(
+          word =>
+            !hasTamilScript(word) ||
+            /[a-zA-Z]/.test(word)
+        )
+      ) {
+        return;
+      }
+
+      let index = 0;
+
+      const tamilName = input.replace(
+        /[a-zA-Z]+/g,
+        () => converted[index++]
+      );
+
+      this.formDataTa.fatherName = tamilName;
+
+      if (this.currentLang === 'ta') {
+        this.formData.fatherName =
+          this.tamilToEnglishName(tamilName);
+      }
+
+      this.cdr.detectChanges();
+
+    } catch (error) {
+      console.error(
+        'Father Tamil spelling conversion failed:',
+        error
+      );
+    }
+  }, 450);
 }
 
 
 
-async onMotherNameChange(value: string) {
-  this.formData.motherName = value;
 
-  if (this.isAdminBiodataMode()) return;
+onMotherNameChange(value: string): void {
+  const english = String(value ?? '');
 
-  if (this.formData.motherNameTaManuallyEdited) return;
+  this.formData.motherName = english;
+
+  if (this.isAdminBiodataMode()) {
+    return;
+  }
+
+  const version = ++this.motherNameVersion;
 
   clearTimeout(this.motherNameTranslateTimer);
 
+  // A new English name should generate a new
+  // Tamil suggestion.
+  this.familySpellingCorrected.motherName = false;
+  this.formData.motherNameTaManuallyEdited = false;
+
+  if (!english.trim()) {
+    this.formDataTa.motherName = '';
+    this.cdr.markForCheck();
+    return;
+  }
+
   this.motherNameTranslateTimer = setTimeout(async () => {
-    this.formDataTa.motherName = await this.googleTamilInput(value);
-    this.cdr.detectChanges();
-  }, 400);
+    try {
+      const tamil = await this.googleTamilInput(
+        english.trim()
+      );
+
+      // Ignore outdated transliteration responses.
+      if (version !== this.motherNameVersion) {
+        return;
+      }
+
+      // Don't overwrite a manual Tamil correction.
+      if (this.familySpellingCorrected.motherName) {
+        return;
+      }
+
+      this.formDataTa.motherName =
+        hasTamilScript(tamil) && !/[a-zA-Z]/.test(tamil)
+          ? tamil
+          : '';
+
+      // Notify Angular after the asynchronous result.
+      this.cdr.markForCheck();
+
+    } catch (error) {
+      console.error(
+        'Mother name transliteration failed:',
+        error
+      );
+
+      if (version === this.motherNameVersion) {
+        this.cdr.markForCheck();
+      }
+    }
+  }, 450);
 }
+
+
+
+
 onTamilMotherNameInput(event: Event) {
   setTimeout(() => {
     const value = (event.target as HTMLInputElement).value;
@@ -1427,19 +1728,104 @@ onTamilMotherNameInput(event: Event) {
   }, 0);
 }
 
-onTamilMotherNameChange(value: string) {
-  this.formDataTa.motherName = value;
-  this.formData.motherNameTaManuallyEdited = true;
 
-  if (!this.isAdminBiodataMode()) return;
+onTamilMotherNameChange(value: string): void {
+  const input = String(value || '');
+
+  const version = ++this.motherNameVersion;
 
   clearTimeout(this.motherNameTranslateTimer);
 
-  this.motherNameTranslateTimer = setTimeout(() => {
-    this.formData.motherName = this.tamilToEnglishName(value);
-    this.cdr.detectChanges();
-  }, 300);
+  this.formDataTa.motherName = input;
+
+  this.familySpellingCorrected.motherName =
+    !!input.trim();
+
+  this.formData.motherNameTaManuallyEdited =
+    !!input.trim();
+
+  if (!/[a-zA-Z]/.test(input)) {
+    if (
+      this.currentLang === 'ta' &&
+      hasTamilScript(input)
+    ) {
+      this.formData.motherName =
+        this.tamilToEnglishName(input);
+    }
+
+    this.cdr.markForCheck();
+    return;
+  }
+
+  this.motherNameTranslateTimer = setTimeout(async () => {
+    try {
+      const words = input.match(/[a-zA-Z]+/g) || [];
+
+      const converted = await Promise.all(
+        words.map(word => this.googleTamilInput(word))
+      );
+
+      if (version !== this.motherNameVersion) return;
+
+      if (
+        converted.some(
+          word =>
+            !hasTamilScript(word) ||
+            /[a-zA-Z]/.test(word)
+        )
+      ) {
+        return;
+      }
+
+      let index = 0;
+
+      const tamilName = input.replace(
+        /[a-zA-Z]+/g,
+        () => converted[index++]
+      );
+
+      this.formDataTa.motherName = tamilName;
+
+      if (this.currentLang === 'ta') {
+        this.formData.motherName =
+          this.tamilToEnglishName(tamilName);
+      }
+
+      this.cdr.detectChanges();
+
+    } catch (error) {
+      console.error(
+        'Mother Tamil spelling conversion failed:',
+        error
+      );
+    }
+  }, 450);
 }
+
+
+
+correctFatherEnglishName(value: string): void {
+  this.formData.fatherName = value;
+
+  ++this.fatherNameVersion;
+  clearTimeout(this.fatherNameTranslateTimer);
+
+  this.familySpellingCorrected.fatherName = true;
+
+  this.cdr.markForCheck();
+}
+
+correctMotherEnglishName(value: string): void {
+  this.formData.motherName = value;
+
+  ++this.motherNameVersion;
+  clearTimeout(this.motherNameTranslateTimer);
+
+  this.familySpellingCorrected.motherName = true;
+
+  this.cdr.markForCheck();
+}
+
 
 onChartInput(
   type: 'rasi' | 'amsam',
@@ -1680,16 +2066,30 @@ await Promise.all([
   this.loadLagnamList()
 ]);
 
+
 await this.loadExistingBiodata();
 
+// ==========================================
+// AUTOMATIC TAMIL NAME ON FIRST LOAD
+// ==========================================
 
+if (
+  !this.isAdminBiodataMode() &&
+  this.currentLang === 'en' &&
+  this.formData.fullName?.trim() &&
+  !this.formDataTa.fullName?.trim() &&
+  !this.nameSpellingManuallyCorrected &&
+  !this.formData.nameTaManuallyEdited
+) {
+  // Registration values are assigned directly,
+  // so ngModelChange does not fire automatically.
+  this.onUserNameInput(this.formData.fullName);
+}
 
-  if (this.currentLang === 'ta') {
-    await this.prepareTamilValues();
-  }
-//   setTimeout(() => {
-//   this.loadGoogleTamilTyping();
-// }, 1000);
+if (this.currentLang === 'ta') {
+  await this.prepareTamilValues();
+}
+
 }
   private getStoredLoggedInUser(): any | null {
     if (!this.isBrowser) return null;
@@ -2630,7 +3030,9 @@ if (this.currentLang === 'ta') {
 
   // Preserve the previously entered Tamil version, if any.
 }
- const missingField = this.markRequiredErrors();
+
+
+const missingField = this.markRequiredErrors();
 
 if (missingField) {
   this.isSaving = false;
@@ -2641,8 +3043,18 @@ if (missingField) {
       : `Please fill ${missingField}`
   );
 
+  // Navigate to the step containing
+  // the first incomplete required field.
+  if (!this.isAdminBiodataMode()) {
+    this.goToMissingRequiredField();
+  }
+
   return;
 }
+
+
+
+
 const selectedCity = this.cityList.find(
   (x: any) => x._id === this.selectedCityId
 );

@@ -1,9 +1,34 @@
 <section class="profiles-page">
-  <div class="profiles-header">
-    <p class="mini-title">{{ tr.header.miniTitle }}</p>
-    <h1>{{ tr.header.title }}</h1>
-    <p class="subtitle">{{ tr.header.subtitle }}</p>
+
+
+<!-- FREE SEARCH STYLE HERO -->
+
+<div class="member-search-hero">
+  <div class="member-search-hero-inner">
+
+    <span class="member-search-eyebrow">
+      ASTRO ALLIANCE MATRIMONY
+    </span>
+
+    <h1>
+      {{
+        currentLang === 'ta'
+          ? 'உங்கள் வாழ்க்கைத் துணையைத் தேடுங்கள்'
+          : 'Find Your Match'
+      }}
+    </h1>
+
+    <p>
+      {{
+        currentLang === 'ta'
+          ? 'உங்களுக்குப் பொருத்தமான சரிபார்க்கப்பட்ட வரன்களைத் தேடுங்கள்'
+          : 'Discover verified matches for your happy married life'
+      }}
+    </p>
+
   </div>
+</div>
+
 
 <!-- FIND YOUR MATCH - SEARCH AND FILTERS ONLY -->
 
@@ -114,25 +139,7 @@
 </div>
 
 
-<div
-  class="lottie-loader-wrap"
-  *ngIf="activeTab === 'browse' && isLoading && filteredProfiles.length === 0"
->
 
-  <dotlottie-player
-    src="assets/paper-plane-heart.lottie"
-    background="transparent"
-    speed="1"
-    style="width: 240px; height: 240px;"
-    loop
-    autoplay>
-  </dotlottie-player>
-
-
-
-
-
-</div>
 
 
 
@@ -197,7 +204,7 @@ filteredProfiles.length === 0 &&
   </div>
 </div>
 
-<div class="matches-layout" *ngIf="activeTab === 'browse' && !isLoading && filteredProfiles.length > 0">
+<div class="matches-layout" *ngIf="activeTab === 'browse'">
 
 <div
   class="match-sidebar"
@@ -501,32 +508,166 @@ filteredProfiles.length === 0 &&
 </div> <!-- END MATCH SIDEBAR -->
 
  
-<!-- PROFILE CONTENT CARDS -->
+
+<!-- ==========================================
+     MATCHING PROFILES RESULTS
+========================================== -->
+
 <div class="profiles-content">
 
-  <div class="profiles-grid aa-member-results-grid">
+  <div class="member-results-heading">
+
+    <div>
+      <span class="member-results-eyebrow">
+        DISCOVER YOUR MATCH
+      </span>
+
+      <h2>
+        {{
+          currentLang === 'ta'
+            ? 'பொருத்தமான சுயவிவரங்கள்'
+            : 'Matching Profiles'
+        }}
+      </h2>
+
+      <p>
+        {{
+          currentLang === 'ta'
+            ? 'நிர்வாகத்தால் அங்கீகரிக்கப்பட்ட சுயவிவரங்கள் மட்டும்'
+            : 'Only admin-approved and published profiles appear here.'
+        }}
+      </p>
+    </div>
+
+    <span class="member-results-count" *ngIf="!isLoading">
+      {{ filteredProfiles.length }}
+      {{ currentLang === 'ta' ? 'முடிவுகள்' : 'results' }}
+    </span>
+
+  </div>
+
+  <!-- HEART RING LOADER -->
+
+  <div
+    class="member-heart-loading"
+    *ngIf="isLoading"
+    role="status"
+    aria-live="polite"
+  >
+  
+<!-- FREE SEARCH STYLE HEART LOADER -->
+
+<div class="member-heart-ring" aria-hidden="true">
+  <span class="member-heart" style="--i:0">♥</span>
+  <span class="member-heart" style="--i:1">♥</span>
+  <span class="member-heart" style="--i:2">♥</span>
+  <span class="member-heart" style="--i:3">♥</span>
+  <span class="member-heart" style="--i:4">♥</span>
+  <span class="member-heart" style="--i:5">♥</span>
+  <span class="member-heart" style="--i:6">♥</span>
+  <span class="member-heart" style="--i:7">♥</span>
+  <span class="member-heart" style="--i:8">♥</span>
+  <span class="member-heart" style="--i:9">♥</span>
+  <span class="member-heart" style="--i:10">♥</span>
+  <span class="member-heart" style="--i:11">♥</span>
+</div>
+
+
+    <p>
+      {{
+        currentLang === 'ta'
+          ? 'அங்கீகரிக்கப்பட்ட சுயவிவரங்கள் ஏற்றப்படுகின்றன...'
+          : 'Loading approved profiles...'
+      }}
+    </p>
+
+  </div>
+
+  <!-- MATCHING PROFILE CARDS -->
+
+  <div
+    class="profiles-grid aa-member-results-grid"
+    *ngIf="!isLoading && filteredProfiles.length > 0"
+  >
 
     <app-public-card
-      *ngFor="let profile of filteredProfiles.slice(0, visibleProfileCount); trackBy: trackByProfile"
+      *ngFor="
+        let profile of filteredProfiles.slice(0, visibleProfileCount);
+        trackBy: trackByProfile
+      "
       [profile]="toPublicCardProfile(profile)"
       searchRoute="profiles">
     </app-public-card>
 
   </div>
 
-  <div class="profile-loading" *ngIf="showProfileLoading">
-    <div class="loader-circle"></div>
+
+
+<!-- ==========================================
+     LOAD MORE — THREE DOTS
+========================================== -->
+
+<div
+  class="member-more-loading"
+  *ngIf="!isLoading && showProfileLoading"
+  role="status"
+  aria-live="polite"
+>
+  <div class="member-loading-dots" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <p>
+    {{
+      currentLang === 'ta'
+        ? 'மேலும் சுயவிவரங்கள் ஏற்றப்படுகின்றன...'
+        : 'Loading more profiles...'
+    }}
+  </p>
+</div>
+
+
+
+
+  <!-- EMPTY STATE INSIDE RESULTS PANEL -->
+
+  <div
+    class="member-results-empty"
+    *ngIf="
+      !isLoading &&
+      filteredProfiles.length === 0 &&
+      !showApprovalMessage
+    "
+  >
+    <h3>
+      {{
+        currentLang === 'ta'
+          ? 'பொருத்தமான சுயவிவரங்கள் இல்லை'
+          : 'No matching profiles found'
+      }}
+    </h3>
 
     <p>
       {{
         currentLang === 'ta'
-          ? 'மேலும் சுயவிவரங்கள் ஏற்றப்படுகிறது...'
-          : 'Loading more profiles...'
+          ? 'மேலும் முடிவுகளுக்கு வடிகட்டிகளை மாற்றவும்.'
+          : 'Try adjusting your filters to find more matches.'
       }}
     </p>
+
+    <button
+      type="button"
+      (click)="applySidebarFilter('all')"
+    >
+      {{ currentLang === 'ta' ? 'அனைத்தையும் பார்க்க' : 'All Matches' }}
+    </button>
+
   </div>
 
 </div>
+
 
 <!-- CLOSE MATCHES LAYOUT -->
 </div>

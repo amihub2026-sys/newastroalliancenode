@@ -59,34 +59,245 @@
     >
   </div>
 </ng-container>
+
+
+<!-- ==========================================
+     USER BIODATA — FATHER / MOTHER NAMES
+========================================== -->
+
+
+
+
 <ng-template #normalParentFields>
-  <div class="field">
-    <label for="user-father-name">{{ vm.tr.labels.fatherName }}</label>
-    <input id="user-father-name" type="text" name="userFatherName"
-      [ngModel]="userFamilyName('fatherName')"
-      (ngModelChange)="onUserFamilyNameInput('fatherName', $event)"
-      [attr.lang]="vm.currentLang" [placeholder]="vm.tr.placeholders.fatherName" />
-    <details class="bilingual-correction">
-      <summary>{{ vm.currentLang === 'ta' ? 'ஆங்கில எழுத்தைச் சரிசெய்யவும்' : 'Correct Tamil spelling' }}</summary>
-      <input type="text" name="correctFatherName" [ngModel]="alternateFamilyName('fatherName')"
-        (ngModelChange)="correctAlternateName('fatherName', $event)" [attr.lang]="vm.currentLang === 'en' ? 'ta' : 'en'"
-        [placeholder]="vm.currentLang === 'ta' ? 'Correct English name' : 'தமிழ் பெயரை உள்ளிடவும்'" />
-    </details>
-    <small class="wizard-name-note">{{ vm.currentLang === 'ta' ? 'ஒருமுறை மட்டும் உள்ளிடவும்; மொழி மாறினாலும் பெயர் இருக்கும்.' : 'Enter once; the name stays when you switch languages.' }}</small>
+
+  <!-- ======================================
+       FATHER NAME
+  ======================================= -->
+
+  <div class="field family-bilingual-name">
+
+    <!-- PRIMARY NAME INPUT -->
+    <label for="user-father-name">
+      {{ vm.tr.labels.fatherName }}
+    </label>
+
+    <input
+      id="user-father-name"
+      type="text"
+      name="userFatherName"
+      [ngModel]="
+        vm.currentLang === 'en'
+          ? vm.formData.fatherName
+          : vm.formDataTa.fatherName
+      "
+      (ngModelChange)="
+        vm.currentLang === 'en'
+          ? vm.onFatherNameChange($event)
+          : vm.onTamilFatherNameChange($event)
+      "
+      [attr.lang]="vm.currentLang"
+      [placeholder]="vm.tr.placeholders.fatherName"
+      autocomplete="off"
+    />
+
+    <!-- AUTOMATIC NAME SUGGESTION -->
+    <div class="family-name-suggestion">
+
+      <span>
+        {{
+          vm.currentLang === 'en'
+            ? 'Name in Tamil (suggestion):'
+            : 'Name in English (suggestion):'
+        }}
+      </span>
+
+      <strong>
+        {{
+          (
+            vm.currentLang === 'en'
+              ? vm.formDataTa.fatherName
+              : vm.formData.fatherName
+          ) ||
+          (
+            vm.currentLang === 'en'
+              ? 'Tamil spelling not available'
+              : 'English spelling not available'
+          )
+        }}
+      </strong>
+
+      <button
+        type="button"
+        (click)="fatherCorrection.focus()"
+      >
+        {{
+          vm.currentLang === 'en'
+            ? 'Correct Tamil spelling'
+            : 'Correct English spelling'
+        }}
+      </button>
+
+    </div>
+
+    <!-- EDITABLE CORRECTION -->
+    <div class="family-name-correction">
+
+      <label for="correct-father-name">
+        {{
+          vm.currentLang === 'en'
+            ? 'Correct Tamil spelling'
+            : 'Correct English spelling'
+        }}
+      </label>
+
+      <input
+        #fatherCorrection
+        id="correct-father-name"
+        type="text"
+        name="correctFatherName"
+        [ngModel]="
+          vm.currentLang === 'en'
+            ? vm.formDataTa.fatherName
+            : vm.formData.fatherName
+        "
+        (ngModelChange)="
+          vm.currentLang === 'en'
+            ? vm.onTamilFatherNameChange($event)
+            : vm.onFatherNameChange($event)
+        "
+        [attr.lang]="vm.currentLang === 'en' ? 'ta' : 'en'"
+        [placeholder]="vm.currentLang === 'en'
+          ? 'தமிழ் பெயரை உள்ளிடவும்'
+          : 'Enter English spelling'"
+        autocomplete="off"
+      />
+
+    </div>
+
+    <small class="wizard-name-note">
+      {{
+        vm.currentLang === 'ta'
+          ? 'பெயரின் எழுத்துப்பிழையைச் சரிபார்த்து திருத்தலாம்.'
+          : 'Names are transliterated, not translated. Check and correct the spelling if necessary.'
+      }}
+    </small>
+
   </div>
-  <div class="field">
-    <label for="user-mother-name">{{ vm.tr.labels.motherName }}</label>
-    <input id="user-mother-name" type="text" name="userMotherName"
-      [ngModel]="userFamilyName('motherName')"
-      (ngModelChange)="onUserFamilyNameInput('motherName', $event)"
-      [attr.lang]="vm.currentLang" [placeholder]="vm.tr.placeholders.motherName" />
-    <details class="bilingual-correction">
-      <summary>{{ vm.currentLang === 'ta' ? 'ஆங்கில எழுத்தைச் சரிசெய்யவும்' : 'Correct Tamil spelling' }}</summary>
-      <input type="text" name="correctMotherName" [ngModel]="alternateFamilyName('motherName')"
-        (ngModelChange)="correctAlternateName('motherName', $event)" [attr.lang]="vm.currentLang === 'en' ? 'ta' : 'en'"
-        [placeholder]="vm.currentLang === 'ta' ? 'Correct English name' : 'தமிழ் பெயரை உள்ளிடவும்'" />
-    </details>
+
+  <!-- ======================================
+       MOTHER NAME
+  ======================================= -->
+
+  <div class="field family-bilingual-name">
+
+    <!-- PRIMARY NAME INPUT -->
+    <label for="user-mother-name">
+      {{ vm.tr.labels.motherName }}
+    </label>
+
+    <input
+      id="user-mother-name"
+      type="text"
+      name="userMotherName"
+      [ngModel]="
+        vm.currentLang === 'en'
+          ? vm.formData.motherName
+          : vm.formDataTa.motherName
+      "
+      (ngModelChange)="
+        vm.currentLang === 'en'
+          ? vm.onMotherNameChange($event)
+          : vm.onTamilMotherNameChange($event)
+      "
+      [attr.lang]="vm.currentLang"
+      [placeholder]="vm.tr.placeholders.motherName"
+      autocomplete="off"
+    />
+
+    <!-- AUTOMATIC NAME SUGGESTION -->
+    <div class="family-name-suggestion">
+
+      <span>
+        {{
+          vm.currentLang === 'en'
+            ? 'Name in Tamil (suggestion):'
+            : 'Name in English (suggestion):'
+        }}
+      </span>
+
+      <strong>
+        {{
+          (
+            vm.currentLang === 'en'
+              ? vm.formDataTa.motherName
+              : vm.formData.motherName
+          ) ||
+          (
+            vm.currentLang === 'en'
+              ? 'Tamil spelling not available'
+              : 'English spelling not available'
+          )
+        }}
+      </strong>
+
+      <button
+        type="button"
+        (click)="motherCorrection.focus()"
+      >
+        {{
+          vm.currentLang === 'en'
+            ? 'Correct Tamil spelling'
+            : 'Correct English spelling'
+        }}
+      </button>
+
+    </div>
+
+    <!-- EDITABLE CORRECTION -->
+    <div class="family-name-correction">
+
+      <label for="correct-mother-name">
+        {{
+          vm.currentLang === 'en'
+            ? 'Correct Tamil spelling'
+            : 'Correct English spelling'
+        }}
+      </label>
+
+      <input
+        #motherCorrection
+        id="correct-mother-name"
+        type="text"
+        name="correctMotherName"
+        [ngModel]="
+          vm.currentLang === 'en'
+            ? vm.formDataTa.motherName
+            : vm.formData.motherName
+        "
+        (ngModelChange)="
+          vm.currentLang === 'en'
+            ? vm.onTamilMotherNameChange($event)
+            : vm.onMotherNameChange($event)
+        "
+        [attr.lang]="vm.currentLang === 'en' ? 'ta' : 'en'"
+        [placeholder]="vm.currentLang === 'en'
+          ? 'தமிழ் பெயரை உள்ளிடவும்'
+          : 'Enter English spelling'"
+        autocomplete="off"
+      />
+
+    </div>
+
+    <small class="wizard-name-note">
+      {{
+        vm.currentLang === 'ta'
+          ? 'பெயரின் எழுத்துப்பிழையைச் சரிபார்த்து திருத்தலாம்.'
+          : 'Names are transliterated, not translated. Check and correct the spelling if necessary.'
+      }}
+    </small>
+
   </div>
+
 </ng-template>
 
 
