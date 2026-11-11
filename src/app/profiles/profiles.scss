@@ -574,22 +574,29 @@ button {
 
 .profiles-grid.aa-member-results-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 280px));
-  justify-content: center;
-  align-items: start;
 
-  gap: 16px;
+  grid-template-columns: repeat(
+    3,
+    minmax(0, 1fr)
+  );
+
+  justify-content: stretch;
+  align-items: stretch;
+
   width: 100%;
+  max-width: none;
+
   margin: 0;
+  gap: 18px;
 }
 
 .aa-member-results-grid app-public-card {
   display: block;
+
   width: 100%;
   min-width: 0;
-  max-width: 280px;
+  max-width: none;
 }
-
 /* ==========================================
    LIKED / LIKED ME PROFILE CARDS
 ========================================== */
@@ -1129,6 +1136,239 @@ button {
   }
 }
 
+
+
+
+/* ==========================================
+   FIND YOUR MATCH — FREE SEARCH STYLE
+========================================== */
+
+
+.member-search-hero {
+  width: calc(100% + 48px);
+  margin: -28px -24px 24px;
+  padding: 24px 0;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      110deg,
+      #44071e 0%,
+      #711e41 65%,
+      #3c0b25 100%
+    );
+
+  border-bottom: 3px solid #d6a454;
+}
+
+.member-search-hero-inner {
+  width: min(100% - 48px, 1240px);
+  margin: 0 auto;
+}
+
+
+.member-search-eyebrow,
+.member-results-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #f1c47a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.member-search-hero h1 {
+  margin: 0 0 8px;
+  color: #fff6e8;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(30px, 3vw, 43px);
+  line-height: 1.15;
+}
+
+.member-search-hero p {
+  margin: 0;
+  color: #f5e0e7;
+  font-size: 13px;
+}
+
+/* ==========================================
+   RESULTS HEADING
+========================================== */
+
+.member-results-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.member-results-heading h2 {
+  margin: 0 0 7px;
+  color: #fff3dc;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(25px, 2.5vw, 35px);
+  line-height: 1.2;
+}
+
+.member-results-heading p {
+  margin: 0;
+  color: #eed6de;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.member-results-count {
+  flex-shrink: 0;
+  padding: 9px 14px;
+  background: #6a2944;
+  border: 1px solid rgba(237, 195, 127, 0.3);
+  border-radius: 30px;
+  color: #f9d997;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* ==========================================
+   ROUND HEART LOADER
+========================================== */
+
+.member-heart-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 285px;
+  padding: 40px 16px;
+  border: 1px solid rgba(224, 174, 189, 0.19);
+  border-radius: 17px;
+  background: #322530;
+  box-sizing: border-box;
+}
+
+.member-heart-loading p,
+.member-more-loading p {
+  margin: 16px 0 0;
+  color: #fff0f5;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Animated circular arrangement of hearts */
+
+.member-heart-ring {
+  --ring-size: 112px;
+  position: relative;
+  width: var(--ring-size);
+  height: var(--ring-size);
+  flex-shrink: 0;
+  animation: aa-heart-rotate 2.4s linear infinite;
+}
+
+.member-heart {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  color: #f5d7e0;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1;
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--i) * 45deg))
+    translateY(-44px)
+    rotate(calc(var(--i) * -45deg));
+  opacity: calc(0.22 + var(--i) * 0.1);
+}
+
+.member-heart-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #efba79;
+  font-size: 23px;
+}
+
+@keyframes aa-heart-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================
+   LOAD MORE — SMALL HEART RING
+========================================== */
+
+.member-more-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 24px 12px;
+}
+
+.member-heart-ring-small {
+  --ring-size: 75px;
+}
+
+.member-heart-ring-small .member-heart {
+  font-size: 13px;
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--i) * 45deg))
+    translateY(-29px)
+    rotate(calc(var(--i) * -45deg));
+}
+
+.member-heart-ring-small .member-heart-center {
+  font-size: 18px;
+}
+
+/* ==========================================
+   EMPTY SEARCH RESULT
+========================================== */
+
+.member-results-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 50px 20px;
+  text-align: center;
+  background: #322530;
+  border: 1px solid rgba(234, 193, 205, 0.2);
+  border-radius: 16px;
+}
+
+.member-results-empty h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 22px;
+}
+
+.member-results-empty p {
+  margin: 0;
+  color: #efdbe2;
+  font-size: 13px;
+}
+
+.member-results-empty button {
+  padding: 11px 18px;
+  border: 1px solid #d8a75e;
+  border-radius: 10px;
+  background: #943058;
+  color: #fff;
+
 /* ==========================================
    FIND YOUR MATCH - EMPTY RESULTS
    INSIDE MAROON RESULTS PANEL
@@ -1175,9 +1415,102 @@ button {
   border-radius: 10px;
 
   font-size: 13px;
+
   font-weight: 700;
   cursor: pointer;
 }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .member-heart-ring {
+    animation: none;
+  }
+}
+
+/* ==========================================
+   FREE SEARCH STYLE — HEART RING LOADER
+========================================== */
+
+.member-heart-ring {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+
+  animation: aa-heart-rotate 1.6s linear infinite;
+}
+
+.member-heart {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  display: block;
+
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1;
+
+  color: #fff0f4;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--i) * 30deg))
+    translateY(-37px)
+    rotate(calc(var(--i) * -30deg));
+
+  opacity: calc(0.12 + var(--i) * 0.075);
+}
+
+@keyframes aa-heart-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Loading text */
+
+.member-heart-loading p {
+  margin: 14px 0 0;
+
+  color: #ffffff;
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .member-heart-ring {
+    width: 90px;
+    height: 90px;
+  }
+
+  .member-heart {
+    font-size: 14px;
+    transform:
+      translate(-50%, -50%)
+      rotate(calc(var(--i) * 30deg))
+      translateY(-33px)
+      rotate(calc(var(--i) * -30deg));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .member-heart-ring {
+    animation: none;
+  }
+}
+
+
+
+
 
 @media (max-width: 600px) {
   .profiles-content .member-empty-state {

@@ -37,7 +37,7 @@
     gap: 13px;
   }
 
-  .profiles-grid.aa-member-results-grid {
+.profiles-grid.aa-member-results-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -353,10 +353,10 @@
      MEMBER PROFILE GRID
   ========================================== */
 
-  .profiles-grid.aa-member-results-grid {
+ .profiles-grid.aa-member-results-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
-  }
+ }
 
   .aa-member-results-grid app-public-card {
     min-width: 0;
@@ -556,4 +556,127 @@
     animation: none;
   }
 
+}
+
+
+
+/* ==========================================
+   NEW MATCHING HERO & HEART LOADER
+   TABLET
+========================================== */
+
+@media (max-width: 992px) {
+    .member-search-hero {
+    width: calc(100% + 32px);
+    margin: -20px -16px 20px;
+    padding: 22px 0;
+  }
+
+  .member-search-hero-inner {
+    width: calc(100% - 32px);
+  }
+
+  .member-results-heading h2 {
+    font-size: 28px;
+  }
+
+  .member-heart-loading {
+    min-height: 250px;
+  }
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+    .member-search-hero {
+    width: calc(100% + 18px);
+    margin: -12px -9px 15px;
+    padding: 20px 0;
+  }
+
+  .member-search-hero-inner {
+    width: calc(100% - 30px);
+  }
+
+  .member-search-eyebrow {
+    font-size: 9px;
+    letter-spacing: 1.3px;
+  }
+
+  .member-search-hero h1 {
+    font-size: 29px;
+  }
+
+  .member-search-hero p {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  .profiles-content {
+    padding: 10px;
+    border-radius: 15px;
+  }
+
+  .member-results-heading {
+    align-items: flex-start;
+    gap: 9px;
+    margin-bottom: 15px;
+  }
+
+  .member-results-eyebrow {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
+  .member-results-heading h2 {
+    font-size: 23px;
+  }
+
+  .member-results-heading p {
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  .member-results-count {
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+
+  .member-heart-loading {
+    min-height: 210px;
+    padding: 24px 12px;
+    border-radius: 12px;
+  }
+
+  .member-heart-ring {
+    --ring-size: 90px;
+  }
+
+  .member-heart-ring:not(.member-heart-ring-small)
+  .member-heart {
+    transform:
+      translate(-50%, -50%)
+      rotate(calc(var(--i) * 45deg))
+      translateY(-35px)
+      rotate(calc(var(--i) * -45deg));
+  }
+
+  .member-heart-ring-small {
+    --ring-size: 75px;
+  }
+
+  .member-heart-loading p,
+  .member-more-loading p {
+    font-size: 11px;
+  }
+
+  .member-results-empty {
+    padding: 35px 13px;
+  }
+
+  .member-results-empty h3 {
+    font-size: 18px;
+  }
 }
