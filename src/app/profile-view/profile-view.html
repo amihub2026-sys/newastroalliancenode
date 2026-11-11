@@ -636,8 +636,8 @@
 
   <!-- PRIVATE ADDRESS LOCK -->
 
-  <div *ngIf="!contactUnlocked"
-       class="premium-lock-box">
+<div *ngIf="unlocked && !contactUnlocked"
+     class="premium-lock-box">
 
     <div class="lock-icon">🔒</div>
 
@@ -649,13 +649,13 @@
       }}
     </h3>
 
-    <p>
-      {{
-        currentLang === 'ta'
-          ? 'விருப்பக் கோரிக்கை ஏற்கப்பட்ட பிறகும் செயலில் உள்ள உறுப்பினர் திட்டம் இருக்கும்போதும் மட்டுமே முழு முகவரியைப் பார்க்க முடியும்.'
-          : 'The full address becomes available after an interest is accepted, while your membership remains active.'
-      }}
-    </p>
+ <p>
+  {{
+    currentLang === 'ta'
+      ? 'தொடர்பு விவரங்களைத் திறந்த பிறகு முழு முகவரியைப் பார்க்கலாம்.'
+      : 'The full address becomes available after unlocking contact details.'
+  }}
+</p>
 
   </div>
 
@@ -736,8 +736,8 @@
     <p class="contact-access-note">
       {{
         currentLang === 'ta'
-          ? 'ஏற்கப்பட்ட விருப்பக் கோரிக்கையின் மூலம் தொடர்பு விவரங்களைப் பார்க்க அனுமதி வழங்கப்பட்டுள்ளது.'
-          : 'Contact access is authorized through an accepted interest.'
+         ? 'இந்த சுயவிவரத்தின் தொடர்பு விவரங்கள் திறக்கப்பட்டுள்ளன.'
+: 'Contact details for this profile are unlocked.'
       }}
     </p>
 
@@ -745,11 +745,10 @@
 
   <!-- CONTACT LOCKED -->
 
-  <div
-    *ngIf="!contactUnlocked"
-    class="premium-lock-box"
-  >
-
+<div
+  *ngIf="unlocked && !contactUnlocked"
+  class="premium-lock-box"
+>
     <div class="lock-icon">🔒</div>
 
     <h3>
@@ -760,57 +759,41 @@
       }}
     </h3>
 
-    <p>
-      {{
-        currentLang === 'ta'
-          ? 'தொடர்பு விவரங்களைப் பார்க்க முதலில் விருப்பக் கோரிக்கை ஏற்கப்பட வேண்டும். விருப்பக் கோரிக்கை அனுப்பும்போது மட்டுமே ஒரு எண்ணிக்கை கழிக்கப்படும்.'
-          : 'Contact details become available after an interest is accepted. One credit is used when sending the interest, not when viewing contacts.'
-      }}
-    </p>
+<p>
+  {{
+    currentLang === 'ta'
+      ? 'தொலைபேசி எண் மற்றும் முழு முகவரியைத் திறக்க ஒரு சுயவிவர கிரெடிட் பயன்படுத்தப்படும்.'
+      : 'Unlock the phone number and full address using one profile credit.'
+  }}
+</p>
 
-    <!-- SHOW ACTION ONLY IF INTEREST ACCEPTED -->
+    <!-- UNLOCK CONTACT WITH ONE PROFILE CREDIT -->
 
     <button
-      *ngIf="interestStatus === 'accepted' && unlocked"
+     *ngIf="unlocked && !contactUnlocked"
       type="button"
       class="unlock-premium-btn"
       (click)="unlockContact()"
       [disabled]="unlockingContact"
     >
-      {{
-        unlockingContact
-          ? (
-              currentLang === 'ta'
-                ? 'சரிபார்க்கப்படுகிறது...'
-                : 'Verifying...'
-            )
-          : (
-              currentLang === 'ta'
-                ? 'தொடர்பு அனுமதியைச் சரிபார்க்கவும்'
-                : 'Verify Contact Access'
-            )
-      }}
+   {{
+  unlockingContact
+    ? (
+        currentLang === 'ta'
+          ? 'திறக்கப்படுகிறது...'
+          : 'Unlocking...'
+      )
+    : (
+        currentLang === 'ta'
+          ? 'தொடர்பு விவரங்களைத் திறக்கவும்'
+          : 'Unlock Contact Details'
+      )
+}}
     </button>
 
-    <!-- INTEREST PENDING -->
+ 
 
-    <p *ngIf="interestStatus === 'pending'">
-      {{
-        currentLang === 'ta'
-          ? 'உங்கள் விருப்பக் கோரிக்கை பதிலுக்காக காத்திருக்கிறது.'
-          : 'Your interest request is awaiting a response.'
-      }}
-    </p>
 
-    <!-- INTEREST NOT SENT -->
-
-    <p *ngIf="!alreadySent && interestStatus !== 'accepted'">
-      {{
-        currentLang === 'ta'
-          ? 'தொடர்பு விவரங்களை அணுக இந்தச் சுயவிவரத்திற்கு விருப்பக் கோரிக்கை அனுப்பலாம்.'
-          : 'You can send an interest to this profile to request contact access.'
-      }}
-    </p>
 
   </div>
 

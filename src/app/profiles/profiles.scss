@@ -1138,6 +1138,7 @@ button {
 
 
 
+
 /* ==========================================
    FIND YOUR MATCH — FREE SEARCH STYLE
 ========================================== */
@@ -1367,9 +1368,58 @@ button {
   border-radius: 10px;
   background: #943058;
   color: #fff;
+
+/* ==========================================
+   FIND YOUR MATCH - EMPTY RESULTS
+   INSIDE MAROON RESULTS PANEL
+========================================== */
+
+.profiles-content .member-empty-state {
+  width: 100%;
+  max-width: 100%;
+
+  margin: 0;
+  padding: 52px 24px;
+
+  background: #34212d;
+  border: 1px solid #765064;
+  border-radius: 15px;
+
+  box-shadow: none;
+  text-align: center;
+}
+
+.profiles-content .member-empty-state h3 {
+  margin: 0 0 12px;
+
+  color: #f6d6a3;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.profiles-content .member-empty-state p {
+  margin: 0 0 20px;
+
+  color: #e8d3dc;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.profiles-content .member-empty-state .back-btn {
+  padding: 11px 19px;
+
+  background: #893251;
+  color: #fff;
+
+  border: 1px solid #b7708c;
+  border-radius: 10px;
+
+  font-size: 13px;
+
   font-weight: 700;
   cursor: pointer;
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   .member-heart-ring {
@@ -1462,3 +1512,16 @@ button {
 
 
 
+@media (max-width: 600px) {
+  .profiles-content .member-empty-state {
+    padding: 32px 14px;
+  }
+
+  .profiles-content .member-empty-state h3 {
+    font-size: 19px;
+  }
+
+  .profiles-content .member-empty-state p {
+    font-size: 12px;
+  }
+}

@@ -267,7 +267,7 @@ appliedFilters = {
         likedText: 'You can like a profile and see it listed here.',
         likedMeTitle: 'No likes received yet',
         likedMeText: 'Profiles that like you will appear here.',
-        browseTitle: 'No matching profiles found',
+        browseTitle: '',
         browseText: 'Try changing your filters to see more profiles.'
       },
       alerts: {
@@ -681,6 +681,24 @@ private async makeLangText(
   return {
     en: en || ta,
     ta: ta || en
+
+  const originalEn = String(enValue || '').trim();
+  const originalTa = String(taValue || '').trim();
+
+  // Use existing Tamil text when available.
+  if (originalTa) {
+    return {
+      en: originalEn || originalTa,
+      ta: originalTa
+    };
+  }
+
+  // Avoid calling the translation API for every profile.
+  // Preserve the original value as a safe fallback.
+  return {
+    en: originalEn,
+    ta: originalEn
+
   };
 }
 
@@ -1045,72 +1063,39 @@ if (isOwnUser || isOwnProfile) {
     const usableId = row.profile_id || '';
     return !!usableId;
   });
-//         .map((row: any) => {
-//           const usableId = row.profile_code || row.user_id || row.profile_id || '';
 
-//           const cityValue =
-//             String(row.city_text || '').trim() ||
-//             String(row.location_text || '').split(',')[0]?.trim() ||
-//             '';
+console.log('REAL PROFILE CHECK', {
+  totalFromApi: rows.length,
+  femaleFromApi: rows.filter(
+    (r: any) =>
+      this.normalizeGender(r.gender_text) === 'female'
+  ).length,
+  maleFromApi: rows.filter(
+    (r: any) =>
+      this.normalizeGender(r.gender_text) === 'male'
+  ).length,
+  afterFiltering: filteredRows.length,
+  loggedInGender: this.userGender
+});
 
-//           const fullLocation =
-//             String(row.location_text || '').trim() ||
-//             [row.city_text, row.state_text, row.country_text]
-//               .filter(Boolean)
-//               .map((item: any) => String(item).trim())
-//               .filter(Boolean)
-//               .join(', ');
+/* PROFILE LOADING DIAGNOSTIC */
 
-//           return {
-//             id: String(usableId).trim(),
-//             userId: String(row.user_id || '').trim(),
-//           name: this.asLangTextTa(
-//   row.full_name,
-//   row.full_name_ta
-// ),
+console.log('MATCH DIAGNOSTIC', {
+  apiTotal: rows.length,
+  afterInitialFilters: filteredRows.length,
+  loggedInGender: this.normalizeGender(this.userGender),
+  apiGenderValues: [
+    ...new Set(
+      rows.map((row: any) =>
+        String(row.gender_text || '').trim()
+      )
+    )
+  ],
+  missingProfileIds: rows.filter(
+    (row: any) => !row.profile_id
+  ).length
+});
 
-
-//             age: Number(row.age || 0),
-//            religion: this.asLangTextTa(
-//   row.religion_text,
-//   this.getTamilProfileValue('religion', row.religion_text)
-// ),
-
-// profession: this.asLangTextTa(
-//   row.occupation_text,
-//   row.occupation_text_ta ||
-//   this.getTamilProfileValue('profession', row.occupation_text)
-// ),
-
-// education: this.asLangTextTa(
-//   row.education_text,
-//   row.education_text_ta ||
-//   this.getTamilProfileValue('education', row.education_text)
-// ),
-
-// maritalStatus: this.asLangTextTa(
-//   row.marital_status_text,
-//   this.getTamilProfileValue('maritalStatus', row.marital_status_text)
-// ),
-
-// caste: this.asLangTextTa(
-//   row.caste_text,
-//   this.casteMap[
-//     String(row.caste_text || '').trim().toLowerCase()
-//   ] || row.caste_text
-// ),
-// gender: this.asLangTextTa(
-//   row.gender_text,
-//   this.getTamilProfileValue('gender', row.gender_text)
-// ),
-
-//             image: row.profile_image_url || 'assets/default-avatar.png',
-//             liked: false,
-//             latitude: this.toNullableNumber(row.latitude),
-//             longitude: this.toNullableNumber(row.longitude),
-//             distanceKm: null
-//           } as ProfileItem;
-//         });
 this.profiles = await Promise.all(
   filteredRows.map(async (row: any) => {
   const usableId = row.profile_code || row.user_id || row.profile_id || '';

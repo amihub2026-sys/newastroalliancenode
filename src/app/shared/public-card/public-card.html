@@ -8,7 +8,11 @@
 
   <!-- MOBILE CARD LINK -->
   <a
-    class="aa-mobile-card-link"[routerLink]="['/profile-view', profile.code]"
+    class="aa-mobile-card-link"
+[routerLink]="[
+  searchRoute === 'profiles' ? '/profile-view' : '/free-profile',
+  profile.code
+]"
     [queryParams]="returnState
       ? { s: returnState, source: searchRoute }
       : null"
@@ -114,9 +118,12 @@
     <!-- VIEW PROFILE BUTTON -->
     <div class="aa-match-actions">
 
-      <a
-        class="aa-view-profile"
-        [routerLink]="['/profile-view', profile.code]"
+     <a
+  class="aa-view-profile"
+ [routerLink]="[
+  searchRoute === 'profiles' ? '/profile-view' : '/free-profile',
+  profile.code
+]"
         [queryParams]="returnState
           ? { s: returnState, source: searchRoute }
           : null"

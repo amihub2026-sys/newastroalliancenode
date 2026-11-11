@@ -210,7 +210,11 @@ showPrevPhoto() {
     this.unlocked = false;
    
     this.selectedPlan = params.get('selectedPlan') || '';
-    this.selectedProfileId = (params.get('profileId') || '').trim();
+    this.selectedProfileId = (
+  this.route.snapshot.paramMap.get('code') ||
+  params.get('profileId') ||
+  ''
+).trim();
     await this.loadProfile();
    if (typeof window !== 'undefined') {
   (window as any).activeProfileViewComponent = this;
@@ -784,17 +788,28 @@ private getStoredLoggedInUser(): any | null {
   
 
 
-  async unlockContact(): Promise<void> {
-  if (this.unlockingContact) return;
 
-  if (!this.unlocked) {
+async unlockContact(): Promise<void> {
+  if (this.unlockingContact || this.contactUnlocked) {
+    return;
+  }
+
+  if (!this.unlocked || !this.selectedProfileId) {
     this.snackbar.error(
       this.currentLang === 'ta'
-        ? 'முழு சுயவிவரத்தைப் பார்க்க செயலில் உள்ள உறுப்பினர் திட்டம் தேவை.'
-        : 'Active membership is required to view full biodata.'
+        ? 'செயலில் உள்ள உறுப்பினர் திட்டம் தேவை.'
+        : 'An active membership is required.'
     );
     return;
   }
+
+  const confirmed = window.confirm(
+    this.currentLang === 'ta'
+      ? 'தொலைபேசி எண் மற்றும் முழு முகவரியைத் திறக்க ஒரு கிரெடிட் பயன்படுத்தப்படும். தொடர வேண்டுமா?'
+      : 'Unlock phone number and full address? One credit will be deducted for a new unlock.'
+  );
+
+  if (!confirmed) return;
 
   this.unlockingContact = true;
 
@@ -811,34 +826,46 @@ private getStoredLoggedInUser(): any | null {
       )
     );
 
-    if (!response?.contactUnlocked) {
-      throw new Error('Contact access not authorized');
+    if (
+      response?.success !== true ||
+      response?.contactUnlocked !== true
+    ) {
+      throw new Error('Contact unlock failed');
     }
 
     await this.loadProfile();
 
-    this.snackbar.success(
-      this.currentLang === 'ta'
-        ? 'ஏற்கப்பட்ட விருப்பக் கோரிக்கையின் தொடர்பு விவரங்கள் திறக்கப்பட்டன.'
-        : 'Accepted interest contact details are available.'
-    );
+    if (this.contactUnlocked) {
+      this.snackbar.success(
+        this.currentLang === 'ta'
+          ? 'தொலைபேசி எண் மற்றும் முகவரி திறக்கப்பட்டன.'
+          : 'Phone number and address unlocked successfully.'
+      );
+    }
 
   } catch (error: any) {
-    const code = error?.error?.code;
+    const code = error?.error?.code || '';
 
-    this.snackbar.error(
-      code === 'INTEREST_NOT_ACCEPTED'
+    const message =
+      code === 'PROFILE_VIEW_LIMIT_REACHED'
         ? (
             this.currentLang === 'ta'
-              ? 'விருப்பக் கோரிக்கை ஏற்கப்பட்ட பிறகே தொடர்பு விவரங்களைப் பார்க்க முடியும்.'
-              : 'Contact details are available only after an interest is accepted.'
+              ? 'உங்கள் கிரெடிட்கள் முடிந்துவிட்டன.'
+              : 'Your profile unlock credits are exhausted.'
           )
-        : (
-            this.currentLang === 'ta'
-              ? 'தொடர்பு விவரங்களை அணுக முடியவில்லை.'
-              : 'Unable to access contact details.'
-          )
-    );
+        : code === 'NO_ACTIVE_PLAN'
+          ? (
+              this.currentLang === 'ta'
+                ? 'செயலில் உள்ள உறுப்பினர் திட்டம் தேவை.'
+                : 'An active membership is required.'
+            )
+          : (
+              this.currentLang === 'ta'
+                ? 'தொடர்பு விவரங்களைத் திறக்க முடியவில்லை.'
+                : 'Unable to unlock contact details.'
+            );
+
+    this.snackbar.error(message);
 
   } finally {
     this.unlockingContact = false;
@@ -846,6 +873,21 @@ private getStoredLoggedInUser(): any | null {
   }
 }
 
+private async recordProfileView(viewedProfileId: string): Promise<void> {
+  if (!viewedProfileId) return;
+
+  try {
+    await firstValueFrom(
+      this.http.post(
+        `${this.apiUrl}/profile-view`,
+        { viewedProfileId },
+        { headers: this.getMemberHeaders() }
+      )
+    );
+  } catch (error) {
+    console.error('Profile view history error:', error);
+  }
+}
 
   async loadProfile(): Promise<void> {
     this.isLoading = true;
@@ -876,20 +918,40 @@ this.http.get(
 )
 );
 
-let data: any = res?.profile || res?.data || res;
 
-      if (!data) {
-        this.snackbar.error('Profile ID missing');
-        this.router.navigate(['/profiles']);
-        return;
-      }
+if (
+  res?.success !== true ||
+  res?.profileUnlocked !== true ||
+  !res?.profile
+) {
+  this.unlocked = false;
+  this.contactUnlocked = false;
+  this.profile = null;
+  this.loadedProfileRow = null;
+
+  this.snackbar.error(
+    'Full profile access is not available. Please check your membership.'
+  );
+
+  await this.router.navigate([
+    '/free-profile',
+    this.selectedProfileId
+  ]);
+
+  return;
+}
+
+// Backend has authorized the full profile.
+const data = res.profile;
+
+this.unlocked = true;
+this.contactUnlocked = res.contactUnlocked === true;
 
 this.loadedProfileRow = data;
-
 this.profile = this.mapRowToProfile(data);
-
-this.unlocked = res?.profileUnlocked === true;
-this.contactUnlocked = res?.contactUnlocked === true;
+if (data._id) {
+  await this.recordProfileView(String(data._id));
+}
 // await this.loadAstroMatch();
 await this.checkInterest();
 await this.checkShortlist();

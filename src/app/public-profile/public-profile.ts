@@ -720,12 +720,7 @@ get avatar(): string {
 
       this.cdr.markForCheck();
 
-      if (this.hasActiveMembership) {
-        await this.loadPremiumDetails(
-          version,
-          checkVersion
-        );
-      }
+   
 
     } catch (error) {
       if (
