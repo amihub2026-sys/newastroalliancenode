@@ -525,73 +525,81 @@ assistedMatchesText:
     }
   };
 
-  async ngOnInit(): Promise<void> {
-    // Keep Likes / Liked Me accessible on the legacy activity page.
-    const requestedTab = this.router.parseUrl(this.router.url).queryParams['tab'];
-    this.activeTab = requestedTab === 'liked' || requestedTab === 'likedMe' ? requestedTab : 'browse';
-    await this.loadAgeOptions();
-    await this.loadGenderOptions();
-    await this.loadReligionOptions();
-    this.sidebarFilter = 'all';
-    this.resetFilters();
+  
+async ngOnInit(): Promise<void> {
+  const requestedTab =
+    this.router.parseUrl(this.router.url)
+      .queryParams['tab'];
 
-    this.isLoading = true;
-    this.cdr.detectChanges();
+  this.activeTab =
+    requestedTab === 'liked' || requestedTab === 'likedMe'
+      ? requestedTab
+      : 'browse';
 
+  this.sidebarFilter = 'all';
+  this.resetFilters();
 
-if (this.isBrowser) {
-  await this.loadCurrentPlan();
-  await this.loadLoggedInUserProfile();
-  await this.refreshUserProfileLanguage();
-}
+  if (!this.isBrowser) return;
 
-await Promise.all([
-  this.loadEducationOptions(),
-  this.loadFilterTables()
-]);
+  this.isLoading = this.activeTab === 'browse';
+  this.cdr.markForCheck();
 
-if (this.isBrowser) {
+  // Start independent data loading concurrently.
+  // These requests no longer block the main profiles API.
+  const optionsPromise = Promise.allSettled([
+    this.loadAgeOptions(),
+    this.loadGenderOptions(),
+    this.loadReligionOptions(),
+    this.loadEducationOptions(),
+    this.loadFilterTables(),
+    this.loadCurrentPlan()
+  ]);
 
-  if (!this.isLoggedIn) {
+  // Logged-in gender and profile ID are required
+  // to exclude the user's own profile and show
+  // only opposite-gender matches.
+  if (this.isLoggedIn) {
+    await this.loadLoggedInUserProfile();
+  }
 
-    // Guest free search
-    await this.loadProfilesFromApi();
-
-  } 
-  else {
-
-    const canViewProfiles =
-      await this.checkUserApprovalStatus();
-
-
-    if (canViewProfiles) {
-
+  // Load the actual matches without waiting
+  // for all dropdown filter tables.
+  if (this.activeTab === 'browse') {
+    if (!this.isLoggedIn) {
       await this.loadProfilesFromApi();
+    } else {
+      const canViewProfiles =
+        await this.checkUserApprovalStatus();
 
+      if (canViewProfiles) {
+        await this.loadProfilesFromApi();
+      } else {
+        this.isLoading = false;
+      }
     }
-
+  } else {
+    this.isLoading = false;
   }
 
-}
-if(this.isLoggedIn){
+  this.cdr.markForCheck();
 
-  await this.loadLikedProfiles();
+  // Complete the remaining noncritical data.
+  void optionsPromise.then(() => {
+    if (!this.destroyed) {
+      this.cdr.markForCheck();
+    }
+  });
 
-  await this.loadLikedMeProfiles();
-
-await this.loadShortlistedByYou();
-
-await this.loadShortlistedMe();
-
-}
-
-
-    this.cdr.detectChanges();
-
-    setTimeout(() => {
-      this.cdr.detectChanges();
-    }, 0);
+  if (this.isLoggedIn) {
+    void Promise.allSettled([
+      this.loadLikedProfiles(),
+      this.loadLikedMeProfiles(),
+      this.loadShortlistedByYou(),
+      this.loadShortlistedMe()
+    ]);
   }
+}
+
 
 get currentLang(): 'en' | 'ta' {
   return this.app.currentLang;
@@ -658,23 +666,24 @@ private async translateText(
 
 }
 
+
 private async makeLangText(
   enValue: string | null | undefined,
   taValue: string | null | undefined
 ): Promise<LangText> {
-  let en = String(enValue || '').trim();
-  let ta = String(taValue || '').trim();
 
-  if (this.hasTamilText(en)) {
-    en = await this.translateText(en, 'en');
-  }
+  const en = String(enValue || '').trim();
+  const ta = String(taValue || '').trim();
 
-  if (!ta && en) {
-    ta = await this.translateText(en, 'ta');
-  }
-
-  return { en, ta: ta || en };
+  // Use already-saved bilingual values immediately.
+  // Do not make external translation requests
+  // while building the profile grid.
+  return {
+    en: en || ta,
+    ta: ta || en
+  };
 }
+
 
   private normalizeText(value: string | null | undefined): string {
     return String(value || '').toLowerCase().trim();
