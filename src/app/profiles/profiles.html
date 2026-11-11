@@ -163,41 +163,11 @@ class="approval-box"
   </p>
 
 </div>
- <div class="empty-state"
-*ngIf="
-activeTab === 'browse' &&
-!isLoading &&
-filteredProfiles.length === 0 &&
-!showApprovalMessage
-">
- <h3>
-  {{
-    sidebarFilter === 'viewedByYou'
-      ? 'No viewed profiles yet'
-      : tr.empty.browseTitle
-  }}
-</h3>
 
-<p>
-  {{
-    sidebarFilter === 'viewedByYou'
-      ? 'Profiles you view will appear here.'
-      : tr.empty.browseText
-  }}
-</p>
 
-  <div class="empty-actions">
-    <!-- <button type="button" class="reset-btn" (click)="resetFilters()">
-      🔄 Reset Filters
-    </button> -->
-
-    <button type="button" class="back-btn" (click)="applySidebarFilter('all')">
-      ⬅ Back to All Matches
-    </button>
-  </div>
-</div>
-
-<div class="matches-layout" *ngIf="activeTab === 'browse' && !isLoading && filteredProfiles.length > 0">
+<div
+  class="matches-layout"
+  *ngIf="activeTab === 'browse' && !isLoading && !showApprovalMessage">
 
 <div
   class="match-sidebar"
@@ -501,10 +471,57 @@ filteredProfiles.length === 0 &&
 </div> <!-- END MATCH SIDEBAR -->
 
  
+
 <!-- PROFILE CONTENT CARDS -->
 <div class="profiles-content">
 
+  <!-- EMPTY MATCHING RESULTS -->
+  <div
+    class="empty-state member-empty-state"
+    *ngIf="filteredProfiles.length === 0">
+
+    <h3>
+      {{
+        sidebarFilter === 'viewedByYou'
+          ? (currentLang === 'ta'
+              ? 'பார்த்த சுயவிவரங்கள் இல்லை'
+              : 'No viewed profiles yet')
+          : (currentLang === 'ta'
+              ? 'சுயவிவரங்கள் கிடைக்கவில்லை'
+              : 'No profiles available')
+      }}
+    </h3>
+
+    <p>
+      {{
+        sidebarFilter === 'viewedByYou'
+          ? (currentLang === 'ta'
+              ? 'நீங்கள் பார்த்த சுயவிவரங்கள் இங்கே தோன்றும்.'
+              : 'Profiles you view will appear here.')
+          : tr.empty.browseText
+      }}
+    </p>
+
+    <div class="empty-actions">
+      <button
+        type="button"
+        class="back-btn"
+        (click)="applySidebarFilter('all')">
+
+        {{
+          currentLang === 'ta'
+            ? 'அனைத்து பொருத்தங்களுக்கும் திரும்பு'
+            : 'Back to All Matches'
+        }}
+
+      </button>
+    </div>
+
+  </div>
+
+  <!-- EXISTING PROFILE GRID -->
   <div class="profiles-grid aa-member-results-grid">
+
 
     <app-public-card
       *ngFor="let profile of filteredProfiles.slice(0, visibleProfileCount); trackBy: trackByProfile"
