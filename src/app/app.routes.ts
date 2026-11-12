@@ -161,6 +161,16 @@ export const routes: Routes = [
     import('./admin/advertisements/advertisements')
       .then(m => m.Advertisements)
 },
+// ==========================================
+// TESTIMONIALS MANAGEMENT — NEW
+// ==========================================
+
+{
+  path: 'testimonials',
+  loadComponent: () =>
+    import('./admin/testimonials/testimonials')
+      .then(m => m.Testimonials)
+},
     {
       path: 'settings',
       loadComponent: () =>

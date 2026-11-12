@@ -16,6 +16,7 @@ import { environment } from '../../environments/environment';
 import { SUCCESS_STORY_PHOTOS, SuccessStoryPhoto } from './success-stories.data';
 import { HomeDiscovery } from './home-discovery/home-discovery';
 import { AdvertisementSlider } from './advertisement-slider/advertisement-slider';
+import { TestimonialSlider } from './testimonial-slider/testimonial-slider';
 import { finalize, timeout } from 'rxjs';
 
 
@@ -32,12 +33,15 @@ type Language = 'en' | 'ta';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
+ 
+imports: [
   CommonModule,
   RouterLink,
   HomeDiscovery,
-  AdvertisementSlider
+  AdvertisementSlider,
+  TestimonialSlider
 ],
+
   templateUrl: './home.html',
   styleUrls: [
   './home.scss',
@@ -738,88 +742,6 @@ selectCommunity(community: MatrimonyCommunity): void {
       : community;
 }
 
-readonly testimonials = [
-  {
-    id: 1,
-    image: '/assets/testimonial-1.jpg',
-    nameEn: 'Sample Member 01',
-    nameTa: 'மாதிரி உறுப்பினர் 01',
-    quoteEn: 'Friendly and welcoming.',
-    quoteTa: 'அன்பான அணுகுமுறை.',
-    textEn:
-      'The team made the experience comfortable with their kind and helpful approach.',
-    textTa:
-      'அன்பான அணுகுமுறையும் உதவிகரமான வழிகாட்டுதலும் இந்த அனுபவத்தை இனிமையாக்கின.'
-  },
-  {
-    id: 2,
-    image: '/assets/testimonial-2.jpg',
-    nameEn: 'Sample Member 02',
-    nameTa: 'மாதிரி உறுப்பினர் 02',
-    quoteEn: 'A thoughtful experience.',
-    quoteTa: 'சிறந்த அனுபவம்.',
-    textEn:
-      'Clear communication and personal attention made the process straightforward.',
-    textTa:
-      'தெளிவான தகவல் தொடர்பும் தனிப்பட்ட கவனிப்பும் பயணத்தை எளிதாக்கின.'
-  },
-  {
-    id: 3,
-    image: '/assets/testimonial-3.jpg',
-    nameEn: 'Sample Member 03',
-    nameTa: 'மாதிரி உறுப்பினர் 03',
-    quoteEn: 'Support at every step.',
-    quoteTa: 'ஒவ்வொரு நிலையிலும் ஆதரவு.',
-    textEn:
-      'A welcoming approach and helpful guidance throughout the journey.',
-    textTa:
-      'ஒவ்வொரு நிலையிலும் அன்பான அணுகுமுறையும் பயனுள்ள வழிகாட்டுதலும் கிடைத்தன.'
-  },
-  {
-    id: 4,
-    image: '/assets/testimonial-4.jpg',
-    nameEn: 'Sample Member 04',
-    nameTa: 'மாதிரி உறுப்பினர் 04',
-    quoteEn: 'A comfortable journey.',
-    quoteTa: 'மனநிறைவான பயணம்.',
-    textEn:
-      'An approachable team and a simple experience made exploring options easier.',
-    textTa:
-      'நட்பான குழுவினரும் எளிய நடைமுறைகளும் தேடலை வசதியாக்கின.'
-  },
-  {
-    id: 5,
-    image: '/assets/testimonial-5.jpg',
-    nameEn: 'Sample Member 05',
-    nameTa: 'மாதிரி உறுப்பினர் 05',
-    quoteEn: 'Personal attention matters.',
-    quoteTa: 'தனிப்பட்ட கவனிப்பு.',
-    textEn:
-      'The friendly support and guidance made the matrimonial search feel more reassuring.',
-    textTa:
-      'நட்பான ஆதரவும் வழிகாட்டுதலும் திருமணத் தேடலில் நம்பிக்கையை அளித்தன.'
-  },
-  {
-    id: 6,
-    image: '/assets/testimonial-6.jpg',
-    nameEn: 'Sample Member 06',
-    nameTa: 'மாதிரி உறுப்பினர் 06',
-    quoteEn: 'Simple and helpful.',
-    quoteTa: 'எளிமையான சேவை.',
-    textEn:
-      'A straightforward experience with thoughtful guidance and clear explanations.',
-    textTa:
-      'எளிய நடைமுறைகளும் தெளிவான விளக்கங்களும் பயனுள்ளதாக இருந்தன.'
-  }
-];
 
-onTestimonialImageError(event: Event): void {
-  const img = event.target as HTMLImageElement;
-  const fallback = '/assets/matrimony-fallback.jpeg';
-
-  if (!img.src.endsWith(fallback)) {
-    img.src = fallback;
-  }
-}
 
 }

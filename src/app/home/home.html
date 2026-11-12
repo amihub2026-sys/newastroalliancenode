@@ -644,139 +644,18 @@
   </div>
 </section>
 
+
 <!-- ==========================================
-     ASTRO ALLIANCE TESTIMONIALS
-     AUTO SCROLL + INFINITE REPEAT
+     ASTRO ALLIANCE MATRIMONY
+     DYNAMIC TESTIMONIALS FROM ADMIN PANEL
 ========================================== -->
 
-<section
-  class="astro-testimonials-section"
-  [class.tamil-section]="currentLang === 'ta'"
-  aria-labelledby="astro-testimonial-heading"
->
-  <div class="astro-testimonials-header">
+<app-testimonial-slider />
 
-    <span class="astro-testimonials-kicker">
-      {{ currentLang === 'ta'
-        ? '✦ அன்பான வார்த்தைகளும் அழகான பயணங்களும் ✦'
-        : '✦ KIND WORDS & BEAUTIFUL JOURNEYS ✦' }}
-    </span>
+<!-- ==========================================
+     FINAL REGISTRATION CTA
+========================================== -->
 
-    <h2 id="astro-testimonial-heading">
-      @if (currentLang === 'ta') {
-        எங்களைப் பற்றி
-        <em>அவர்கள் கூறுவது.</em>
-      } @else {
-        What people
-        <em>say about us.</em>
-      }
-    </h2>
-
-    <p>
-      {{ currentLang === 'ta'
-        ? 'அர்த்தமுள்ள உறவுகள். இனிய புதிய தொடக்கங்கள்.'
-        : 'Meaningful connections. Memorable beginnings.' }}
-    </p>
-
-  </div>
-
-  <!-- SCROLL WINDOW -->
-  <div class="astro-testimonials-window">
-
-    <div class="astro-testimonials-track">
-
-      <!-- TWO IDENTICAL SETS FOR SEAMLESS LOOP -->
-      @for (copy of [0, 1]; track copy) {
-
-        <div
-          class="astro-testimonials-set"
-          [attr.aria-hidden]="copy === 1 ? 'true' : null"
-        >
-
-          @for (review of testimonials; track review.id) {
-
-            <article class="astro-testimonial-card">
-
-              <!-- PROFILE PHOTO -->
-              <div class="astro-testimonial-person">
-
-                <img
-                  [src]="review.image"
-                  [alt]="currentLang === 'ta'
-                    ? 'மாதிரி சுயவிவரப் படம்'
-                    : 'Illustrative profile photo'"
-                  (error)="onTestimonialImageError($event)"
-                  width="58"
-                  height="58"
-                  loading="lazy"
-                  decoding="async"
-                />
-
-                <div class="astro-testimonial-person-info">
-                  <strong>
-                    {{ currentLang === 'ta'
-                      ? review.nameTa
-                      : review.nameEn }}
-                  </strong>
-
-                  <small>
-                    {{ currentLang === 'ta'
-                      ? 'மாதிரி கருத்து'
-                      : 'Illustrative review' }}
-                  </small>
-                </div>
-
-              </div>
-
-              <!-- SAMPLE STARS -->
-              <div
-                class="astro-testimonial-stars"
-                aria-label="Illustrative five-star graphic"
-              >
-                ★★★★★
-              </div>
-
-              <!-- QUOTE -->
-              <h3 class="astro-testimonial-quote">
-                “{{ currentLang === 'ta'
-                  ? review.quoteTa
-                  : review.quoteEn }}”
-              </h3>
-
-              <!-- REVIEW DESCRIPTION -->
-              <p class="astro-testimonial-description">
-                {{ currentLang === 'ta'
-                  ? review.textTa
-                  : review.textEn }}
-              </p>
-
-              <div class="astro-testimonial-line"></div>
-
-            </article>
-
-          }
-
-        </div>
-
-      }
-
-    </div>
-
-  </div>
-
-  <p class="astro-testimonials-note">
-    {{ currentLang === 'ta'
-      ? 'இவை வடிவமைப்புக்கான மாதிரி கருத்துகளும் படங்களும் மட்டுமே; உண்மையான வாடிக்கையாளர் மதிப்புரைகள் அல்ல.'
-      : 'Illustrative photos and sample testimonials only — not verified customer reviews.' }}
-  </p>
-
-</section>
-
-
-
-
-
-<!-- FINAL REGISTRATION CTA -->
 <section
   class="cta"
   [class.tamil-section]="currentLang === 'ta'"

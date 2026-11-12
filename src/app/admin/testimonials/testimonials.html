@@ -1,0 +1,786 @@
+
+<section class="testimonials-admin-page">
+
+  <!-- ======================================
+       PAGE HEADER
+  ======================================= -->
+
+  <div class="testimonials-header">
+
+    <div class="header-content">
+
+      <span class="header-eyebrow">
+        ASTRO ALLIANCE MATRIMONY
+      </span>
+
+      <h1>{{ pageTitle }}</h1>
+
+      <p>
+        {{
+          t(
+            'Manage happy couples, customer reviews and success stories.',
+            'மகிழ்ச்சியான தம்பதிகள், வாடிக்கையாளர் கருத்துகள் மற்றும் வெற்றிக் கதைகளை நிர்வகிக்கவும்.'
+          )
+        }}
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="add-testimonial-btn"
+      *ngIf="!showForm"
+      (click)="addNewTestimonial()"
+    >
+      <span>+</span>
+
+      {{
+        t(
+          'Add Testimonial',
+          'புதிய கருத்தைச் சேர்க்க'
+        )
+      }}
+    </button>
+
+  </div>
+
+
+  <!-- ======================================
+       SUCCESS / ERROR MESSAGES
+  ======================================= -->
+
+  <div
+    class="testimonial-alert success-alert"
+    *ngIf="successMessage"
+    role="status"
+  >
+    <span>✓</span>
+    {{ successMessage }}
+  </div>
+
+  <div
+    class="testimonial-alert error-alert"
+    *ngIf="errorMessage"
+    role="alert"
+  >
+    <span>!</span>
+    {{ errorMessage }}
+  </div>
+
+
+  <!-- ======================================
+       ADD / EDIT TESTIMONIAL FORM
+  ======================================= -->
+
+  <div
+    class="testimonial-form-card"
+    *ngIf="showForm"
+  >
+
+    <div class="form-heading">
+
+      <div>
+        <span class="form-eyebrow">
+          {{
+            editingId
+              ? t('EDIT RECORD', 'பதிவைத் திருத்த')
+              : t('NEW RECORD', 'புதிய பதிவு')
+          }}
+        </span>
+
+        <h2>
+          {{
+            editingId
+              ? t(
+                  'Edit Testimonial',
+                  'கருத்தைத் திருத்த'
+                )
+              : t(
+                  'Add New Testimonial',
+                  'புதிய கருத்தைச் சேர்க்க'
+                )
+          }}
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        class="form-close-btn"
+        (click)="cancelForm()"
+        [disabled]="saving || uploading"
+        aria-label="Close testimonial form"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <form
+      #testimonialForm="ngForm"
+      (ngSubmit)="saveTestimonial()"
+      novalidate
+    >
+
+      <!-- ==================================
+           COUPLE NAMES
+      =================================== -->
+
+      <div class="form-section">
+
+        <h3>
+          {{
+            t(
+              'Couple Information',
+              'தம்பதிகள் விவரங்கள்'
+            )
+          }}
+        </h3>
+
+        <div class="testimonial-form-grid">
+
+          <div class="form-group">
+
+            <label for="coupleNameEnglish">
+              {{
+                t(
+                  'Couple Name (English)',
+                  'தம்பதிகள் பெயர் (ஆங்கிலம்)'
+                )
+              }}
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="coupleNameEnglish"
+              type="text"
+              name="coupleNameEnglish"
+              [(ngModel)]="form.coupleNameEnglish"
+              required
+              maxlength="150"
+              [placeholder]="t(
+                'Example: Arun & Priya',
+                'உதாரணம்: Arun & Priya'
+              )"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="coupleNameTamil">
+              {{
+                t(
+                  'Couple Name (Tamil)',
+                  'தம்பதிகள் பெயர் (தமிழ்)'
+                )
+              }}
+            </label>
+
+            <input
+              id="coupleNameTamil"
+              type="text"
+              name="coupleNameTamil"
+              [(ngModel)]="form.coupleNameTamil"
+              maxlength="150"
+              [placeholder]="t(
+                'Enter couple name in Tamil',
+                'தம்பதிகளின் பெயரைத் தமிழில் உள்ளிடவும்'
+              )"
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================================
+           TESTIMONIAL REVIEWS
+      =================================== -->
+
+      <div class="form-section">
+
+        <h3>
+          {{
+            t(
+              'Customer Review',
+              'வாடிக்கையாளர் கருத்து'
+            )
+          }}
+        </h3>
+
+        <div class="testimonial-form-grid">
+
+          <div class="form-group">
+
+            <label for="reviewEnglish">
+              {{
+                t(
+                  'Testimonial (English)',
+                  'கருத்து (ஆங்கிலம்)'
+                )
+              }}
+              <span class="required">*</span>
+            </label>
+
+            <textarea
+              id="reviewEnglish"
+              name="reviewEnglish"
+              [(ngModel)]="form.reviewEnglish"
+              required
+              rows="5"
+              maxlength="2000"
+              [placeholder]="t(
+                'Enter the couple’s review...',
+                'தம்பதிகளின் கருத்தை உள்ளிடவும்...'
+              )"
+            ></textarea>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="reviewTamil">
+              {{
+                t(
+                  'Testimonial (Tamil)',
+                  'கருத்து (தமிழ்)'
+                )
+              }}
+            </label>
+
+            <textarea
+              id="reviewTamil"
+              name="reviewTamil"
+              [(ngModel)]="form.reviewTamil"
+              rows="5"
+              maxlength="2000"
+              [placeholder]="t(
+                'Enter the Tamil review...',
+                'தமிழ் கருத்தை உள்ளிடவும்...'
+              )"
+            ></textarea>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================================
+           PHOTO UPLOAD
+      =================================== -->
+
+      <div class="form-section">
+
+        <h3>
+          {{
+            t(
+              'Couple Photo',
+              'தம்பதிகள் புகைப்படம்'
+            )
+          }}
+        </h3>
+
+        <div class="testimonial-photo-section">
+
+          <div class="testimonial-photo-preview">
+
+            <img
+              *ngIf="form.photoUrl"
+              [src]="form.photoUrl"
+              alt="Couple photo preview"
+            />
+
+            <div
+              class="photo-placeholder"
+              *ngIf="!form.photoUrl"
+            >
+              <span class="photo-placeholder-icon">
+                ♡
+              </span>
+
+              <p>
+                {{
+                  t(
+                    'No photo uploaded',
+                    'புகைப்படம் பதிவேற்றப்படவில்லை'
+                  )
+                }}
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="testimonial-photo-controls">
+
+            <label
+              for="testimonialPhoto"
+              class="upload-photo-label"
+            >
+              {{
+                t(
+                  'Choose Couple Photo',
+                  'தம்பதிகள் புகைப்படத்தைத் தேர்ந்தெடுக்கவும்'
+                )
+              }}
+            </label>
+
+            <input
+              id="testimonialPhoto"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              (change)="onPhotoSelected($event)"
+              [disabled]="uploading || saving"
+            />
+
+            <p class="upload-hint">
+              {{
+                t(
+                  'JPG, PNG or WebP. Maximum 5 MB.',
+                  'JPG, PNG அல்லது WebP. அதிகபட்சம் 5 MB.'
+                )
+              }}
+            </p>
+
+            <p
+              class="uploading-text"
+              *ngIf="uploading"
+            >
+              {{
+                t(
+                  'Uploading photo...',
+                  'புகைப்படம் பதிவேற்றப்படுகிறது...'
+                )
+              }}
+            </p>
+
+            <p
+              class="selected-file-name"
+              *ngIf="selectedPhotoName"
+            >
+              {{ selectedPhotoName }}
+            </p>
+
+            <button
+              type="button"
+              class="remove-photo-btn"
+              *ngIf="form.photoUrl"
+              (click)="removePhoto()"
+              [disabled]="uploading || saving"
+            >
+              {{
+                t(
+                  'Remove Photo',
+                  'புகைப்படத்தை நீக்கு'
+                )
+              }}
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================================
+           RATING / WEDDING DATE
+      =================================== -->
+
+      <div class="form-section">
+
+        <h3>
+          {{
+            t(
+              'Additional Details',
+              'கூடுதல் விவரங்கள்'
+            )
+          }}
+        </h3>
+
+        <div class="testimonial-form-grid">
+
+          <div class="form-group">
+
+            <label for="testimonialRating">
+              {{
+                t(
+                  'Star Rating',
+                  'நட்சத்திர மதிப்பீடு'
+                )
+              }}
+            </label>
+
+            <select
+              id="testimonialRating"
+              name="rating"
+              [(ngModel)]="form.rating"
+            >
+              <option
+                *ngFor="let rating of ratingOptions"
+                [ngValue]="rating"
+              >
+                {{ rating }} / 5
+              </option>
+            </select>
+
+            <div class="rating-preview">
+              <span
+                *ngFor="let star of getStarArray(form.rating)"
+              >
+                ★
+              </span>
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="weddingDate">
+              {{
+                t(
+                  'Wedding Date (Optional)',
+                  'திருமண தேதி (விருப்பம்)'
+                )
+              }}
+            </label>
+
+            <input
+              id="weddingDate"
+              type="date"
+              name="weddingDate"
+              [(ngModel)]="form.weddingDate"
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================================
+           PUBLICATION STATUS
+      =================================== -->
+
+      <div class="form-section">
+
+        <div class="testimonial-publish-option">
+
+          <label class="publish-checkbox-label">
+
+            <input
+              type="checkbox"
+              name="published"
+              [(ngModel)]="form.published"
+            />
+
+            <span>
+              {{
+                t(
+                  'Publish Testimonial',
+                  'கருத்தை வெளியிடு'
+                )
+              }}
+            </span>
+
+          </label>
+
+          <p>
+            {{
+              t(
+                'Only published testimonials will appear on the homepage.',
+                'வெளியிடப்பட்ட கருத்துகள் மட்டுமே முகப்புப் பக்கத்தில் தோன்றும்.'
+              )
+            }}
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================================
+           FORM ACTIONS
+      =================================== -->
+
+      <div class="testimonial-form-actions">
+
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="cancelForm()"
+          [disabled]="saving || uploading"
+        >
+          {{ t('Cancel', 'ரத்து செய்') }}
+        </button>
+
+        <button
+          type="submit"
+          class="save-btn"
+          [disabled]="saving || uploading"
+        >
+          {{
+            saving
+              ? t('Saving...', 'சேமிக்கப்படுகிறது...')
+              : editingId
+                ? t('Update Testimonial', 'கருத்தைப் புதுப்பி')
+                : t('Save Testimonial', 'கருத்தைச் சேமி')
+          }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+
+  <!-- ======================================
+       TESTIMONIALS LIST
+  ======================================= -->
+
+  <div class="testimonial-list-section">
+
+    <div class="testimonial-list-heading">
+
+      <div>
+
+        <h2>
+          {{
+            t(
+              'All Testimonials',
+              'அனைத்து வாடிக்கையாளர் கருத்துகள்'
+            )
+          }}
+        </h2>
+
+        <p>
+          {{
+            t(
+              'View and manage your success stories.',
+              'உங்கள் வெற்றிக் கதைகளை நிர்வகிக்கவும்.'
+            )
+          }}
+        </p>
+
+      </div>
+
+      <span class="testimonial-count">
+        {{ testimonials.length }}
+        {{ t('Records', 'பதிவுகள்') }}
+      </span>
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    <div
+      class="testimonial-loading"
+      *ngIf="loading"
+      role="status"
+    >
+      <div class="testimonial-spinner"></div>
+
+      <p>
+        {{
+          t(
+            'Loading testimonials...',
+            'வாடிக்கையாளர் கருத்துகள் ஏற்றப்படுகின்றன...'
+          )
+        }}
+      </p>
+
+    </div>
+
+
+    <!-- EMPTY STATE -->
+
+    <div
+      class="testimonial-empty-state"
+      *ngIf="!loading && testimonials.length === 0"
+    >
+
+      <span class="empty-heart">
+        ♡
+      </span>
+
+      <h3>
+        {{
+          t(
+            'No Testimonials Yet',
+            'இதுவரை கருத்துகள் இல்லை'
+          )
+        }}
+      </h3>
+
+      <p>
+        {{
+          t(
+            'Add your first success story to get started.',
+            'முதல் வெற்றிக் கதையைச் சேர்க்கவும்.'
+          )
+        }}
+      </p>
+
+      <button
+        type="button"
+        (click)="addNewTestimonial()"
+      >
+        {{ t('Add Testimonial', 'கருத்தைச் சேர்') }}
+      </button>
+
+    </div>
+
+
+    <!-- TESTIMONIAL CARDS -->
+
+    <div
+      class="testimonial-admin-grid"
+      *ngIf="!loading && testimonials.length > 0"
+    >
+
+      <article
+        class="testimonial-admin-card"
+        *ngFor="
+          let item of testimonials;
+          trackBy: trackByTestimonial
+        "
+      >
+
+        <!-- PHOTO -->
+
+        <div class="testimonial-card-image">
+
+          <img
+            *ngIf="item.photoUrl"
+            [src]="item.photoUrl"
+            [alt]="getCoupleName(item)"
+            loading="lazy"
+          />
+
+          <div
+            class="testimonial-card-placeholder"
+            *ngIf="!item.photoUrl"
+          >
+            ♡
+          </div>
+
+          <span
+            class="testimonial-status"
+            [class.status-published]="item.published"
+            [class.status-draft]="!item.published"
+          >
+            {{
+              item.published
+                ? t('Published', 'வெளியிடப்பட்டது')
+                : t('Unpublished', 'வெளியிடப்படவில்லை')
+            }}
+          </span>
+
+        </div>
+
+
+        <!-- DETAILS -->
+
+        <div class="testimonial-card-content">
+
+          <div class="testimonial-card-rating">
+
+            <span
+              *ngFor="let star of getStarArray(item.rating)"
+            >
+              ★
+            </span>
+
+            <span class="rating-number">
+              {{ item.rating }} / 5
+            </span>
+
+          </div>
+
+          <h3>
+            {{ getCoupleName(item) }}
+          </h3>
+
+          <p class="testimonial-card-review">
+            {{ getReview(item) }}
+          </p>
+
+          <p
+            class="testimonial-wedding-date"
+            *ngIf="item.weddingDate"
+          >
+            {{
+              t(
+                'Wedding Date:',
+                'திருமண தேதி:'
+              )
+            }}
+
+            {{ item.weddingDate | date:'dd MMM yyyy':'UTC' }}
+          </p>
+
+
+          <!-- CARD ACTIONS -->
+
+          <div class="testimonial-card-actions">
+
+            <button
+              type="button"
+              class="edit-btn"
+              (click)="editTestimonial(item)"
+              [disabled]="saving || uploading"
+            >
+              {{ t('Edit', 'திருத்து') }}
+            </button>
+
+            <button
+              type="button"
+              class="publish-btn"
+              [class.unpublish-btn]="item.published"
+              (click)="togglePublish(item)"
+              [disabled]="publishingId === item._id"
+            >
+              {{
+                publishingId === item._id
+                  ? t('Updating...', 'புதுப்பிக்கப்படுகிறது...')
+                  : item.published
+                    ? t('Unpublish', 'வெளியீட்டை நீக்கு')
+                    : t('Publish', 'வெளியிடு')
+              }}
+            </button>
+
+            <button
+              type="button"
+              class="delete-btn"
+              (click)="deleteTestimonial(item)"
+              [disabled]="deletingId === item._id"
+            >
+              {{
+                deletingId === item._id
+                  ? t('Deleting...', 'நீக்கப்படுகிறது...')
+                  : t('Delete', 'நீக்கு')
+              }}
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>

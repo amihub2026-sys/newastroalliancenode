@@ -1,0 +1,409 @@
+
+<!-- ==========================================
+     ASTRO ALLIANCE MATRIMONY
+     FULL PHOTO TESTIMONIAL SLIDER
+========================================== -->
+
+<section
+  *ngIf="!loading && hasTestimonials"
+  class="aa-testimonials"
+  [class.tamil-mode]="currentLang === 'ta'"
+  aria-labelledby="aa-testimonials-heading"
+>
+
+  <div class="aa-testimonials-inner">
+
+    <!-- HEADING -->
+
+    <header class="aa-testimonials-heading">
+
+      <span class="aa-heading-kicker">
+        {{
+          t(
+            '✦ REAL STORIES & BEAUTIFUL JOURNEYS ✦',
+            '✦ உண்மையான அனுபவங்களும் அழகான பயணங்களும் ✦'
+          )
+        }}
+      </span>
+
+      <h2 id="aa-testimonials-heading">
+        @if (currentLang === 'ta') {
+          எங்கள் தம்பதிகளின்
+          <em>அன்பான அனுபவங்கள்</em>
+        } @else {
+          Real Stories from
+          <em>Our Couples</em>
+        }
+      </h2>
+
+      <p>
+        {{
+          t(
+            'Beautiful beginnings, shared in their own words.',
+            'அழகான தொடக்கங்கள், அவர்களின் சொந்த வார்த்தைகளில்.'
+          )
+        }}
+      </p>
+
+    </header>
+
+    <!-- SLIDER -->
+
+    <div class="aa-testimonials-slider">
+
+      <button
+        *ngIf="canSlide"
+        class="aa-slider-arrow"
+        type="button"
+        (click)="prevSlide()"
+        [attr.aria-label]="
+          t('Previous testimonials', 'முந்தைய கருத்துகள்')
+        "
+      >
+        <span aria-hidden="true">&#10094;</span>
+      </button>
+
+      <div class="aa-testimonials-window">
+
+        <div class="aa-testimonials-grid">
+
+          <article
+            *ngFor="
+              let item of visibleTestimonials;
+              trackBy: trackByTestimonial
+            "
+            class="aa-story-card"
+            [class.is-open]="isStoryOpen(item)"
+            [class.is-expanded]="expandedReviewId === item._id"
+            (mouseenter)="onCardEnter(item)"
+            (mouseleave)="onCardLeave(item)"
+            (focusin)="onCardFocusIn(item)"
+            (focusout)="onCardFocusOut($event, item)"
+          >
+
+            <!-- ==================================
+                 COUPLE PHOTO
+                 ALWAYS VISIBLE
+            =================================== -->
+
+            <button
+              class="aa-story-photo"
+              type="button"
+              (click)="openLightbox(item)"
+              [disabled]="!hasPhoto(item)"
+              [attr.aria-label]="
+                t(
+                  'View large couple photo: ',
+                  'தம்பதிகளின் பெரிய புகைப்படம்: '
+                ) + getCoupleName(item)
+              "
+            >
+
+              <img
+                *ngIf="hasPhoto(item)"
+                [src]="item.photoUrl"
+                [alt]="getCoupleName(item)"
+                (error)="onPhotoError(item)"
+                loading="lazy"
+                decoding="async"
+              />
+
+              <span
+                *ngIf="!hasPhoto(item)"
+                class="aa-photo-fallback"
+                aria-hidden="true"
+              >
+                ♥
+              </span>
+
+            </button>
+
+            <!-- ZOOM ICON -->
+
+            <button
+              *ngIf="hasPhoto(item)"
+              type="button"
+              class="aa-photo-zoom"
+              (click)="openLightbox(item)"
+              [attr.aria-label]="
+                t(
+                  'Enlarge couple photo',
+                  'தம்பதிகளின் புகைப்படத்தை பெரிதாக்கு'
+                )
+              "
+            >
+              <span aria-hidden="true">⛶</span>
+            </button>
+
+            <!-- ==================================
+                 HOVER / TAP CONTENT OVERLAY
+            =================================== -->
+
+            <div
+              class="aa-story-overlay"
+              [class.is-visible]="isOverlayVisible(item)"
+              [attr.aria-hidden]="
+                isOverlayVisible(item) ? null : 'true'
+              "
+              [attr.inert]="
+                isOverlayVisible(item) ? null : ''
+              "
+            >
+
+              <div class="aa-story-content">
+
+                <span class="aa-story-kicker">
+                  {{
+                    t(
+                      'OUR HAPPY COUPLE',
+                      'எங்கள் மகிழ்ச்சியான தம்பதிகள்'
+                    )
+                  }}
+                </span>
+
+                <h3 class="aa-story-name">
+                  {{ getCoupleName(item) }}
+                </h3>
+
+                <div class="aa-story-divider" aria-hidden="true">
+                  <span></span>
+                  ♥
+                  <span></span>
+                </div>
+
+                <!-- FULL REVIEW TEXT -->
+
+                <p
+                  class="aa-story-review"
+                  [class.is-full]="expandedReviewId === item._id"
+                  [id]="'aa-review-' + item._id"
+                  tabindex="-1"
+                >
+                  {{ getReview(item) }}
+                </p>
+
+                <button
+                  class="aa-read-more"
+                  type="button"
+                  (click)="toggleReview(item)"
+                  [attr.aria-expanded]="
+                    expandedReviewId === item._id
+                  "
+                  [attr.aria-controls]="
+                    'aa-review-' + item._id
+                  "
+                >
+                  @if (expandedReviewId === item._id) {
+                    {{ t('Read Less', 'குறைவாகப் படிக்க') }}
+                    <span aria-hidden="true">↑</span>
+                  } @else {
+                    {{ t('Read More', 'மேலும் படிக்க') }}
+                    <span aria-hidden="true">↓</span>
+                  }
+                </button>
+
+                <div
+                  *ngIf="item.weddingDate"
+                  class="aa-story-date"
+                >
+                  <span aria-hidden="true">♥</span>
+
+                  {{ t('Married:', 'திருமணம்:') }}
+
+                  {{
+                    item.weddingDate
+                      | date:'dd MMM yyyy':'UTC'
+                  }}
+                </div>
+
+                <!-- TOUCH DEVICE CLOSE BUTTON -->
+
+                <button
+                  class="aa-story-close"
+                  type="button"
+                  (click)="closeStory(item)"
+                >
+                  {{ t('Close Story', 'கருத்தை மூடு') }}
+                  <span aria-hidden="true">×</span>
+                </button>
+
+              </div>
+
+            </div>
+
+            <!-- MOBILE / TOUCH REVEAL BUTTON -->
+
+            <button
+              *ngIf="!isOverlayVisible(item)"
+              type="button"
+              class="aa-mobile-read-story"
+              (click)="openStory(item)"
+              [attr.aria-label]="
+                t(
+                  'Read testimonial: ',
+                  'கருத்தைப் படிக்க: '
+                ) + getCoupleName(item)
+              "
+            >
+              {{ t('Read Story', 'கருத்தைப் படிக்க') }}
+              <span aria-hidden="true">↑</span>
+            </button>
+
+          </article>
+
+        </div>
+
+      </div>
+
+      <button
+        *ngIf="canSlide"
+        class="aa-slider-arrow"
+        type="button"
+        (click)="nextSlide()"
+        [attr.aria-label]="
+          t('Next testimonials', 'அடுத்த கருத்துகள்')
+        "
+      >
+        <span aria-hidden="true">&#10095;</span>
+      </button>
+
+    </div>
+
+    <!-- SLIDER DOTS -->
+
+    <div
+      *ngIf="canSlide"
+      class="aa-slider-dots"
+      role="group"
+      [attr.aria-label]="
+        t('Testimonial navigation', 'கருத்துகள் வழிசெலுத்தல்')
+      "
+    >
+
+      <button
+        *ngFor="let item of testimonials; let i = index"
+        type="button"
+        class="aa-slider-dot"
+        [class.active]="activeIndex === i"
+        [attr.aria-current]="
+          activeIndex === i ? 'true' : null
+        "
+        [attr.aria-label]="
+          t('Show testimonial', 'கருத்தைக் காண்க')
+          + ' ' + (i + 1)
+        "
+        (click)="goToSlide(i)"
+      >
+      </button>
+
+    </div>
+
+    <p class="aa-bottom-message">
+      {{
+        t(
+          'Every beautiful beginning starts with trust.',
+          'ஒவ்வொரு அழகான தொடக்கமும் நம்பிக்கையிலிருந்தே தொடங்குகிறது.'
+        )
+      }}
+    </p>
+
+  </div>
+
+</section>
+
+<!-- ==========================================
+     ENLARGED COUPLE PHOTO VIEWER
+========================================== -->
+
+<div
+  *ngIf="lightboxItem as photo"
+  class="aa-lightbox"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="
+    t(
+      'Couple photo viewer',
+      'தம்பதிகளின் புகைப்படக் காட்சி'
+    )
+  "
+>
+
+  <button
+    type="button"
+    class="aa-lightbox-backdrop"
+    (click)="closeLightbox()"
+    tabindex="-1"
+    [attr.aria-label]="t('Close photo', 'புகைப்படத்தை மூடு')"
+  ></button>
+
+  <div
+    #lightboxPanel
+    class="aa-lightbox-panel"
+  >
+
+    <button
+      #lightboxClose
+      type="button"
+      class="aa-lightbox-close"
+      (click)="closeLightbox()"
+      [attr.aria-label]="t('Close', 'மூடு')"
+    >
+      ×
+    </button>
+
+    <div class="aa-lightbox-photo-area">
+
+      <button
+        *ngIf="hasMultiplePhotos"
+        type="button"
+        class="aa-lightbox-arrow aa-lightbox-prev"
+        (click)="changeLightboxPhoto(-1)"
+        [attr.aria-label]="
+          t('Previous photo', 'முந்தைய புகைப்படம்')
+        "
+      >
+        &#10094;
+      </button>
+
+      <div class="aa-lightbox-photo-frame">
+
+        <img
+          [src]="photo.photoUrl"
+          [alt]="getCoupleName(photo)"
+          (error)="onPhotoError(photo); closeLightbox()"
+        />
+
+      </div>
+
+      <button
+        *ngIf="hasMultiplePhotos"
+        type="button"
+        class="aa-lightbox-arrow aa-lightbox-next"
+        (click)="changeLightboxPhoto(1)"
+        [attr.aria-label]="
+          t('Next photo', 'அடுத்த புகைப்படம்')
+        "
+      >
+        &#10095;
+      </button>
+
+    </div>
+
+    <div class="aa-lightbox-caption">
+
+      <h3>{{ getCoupleName(photo) }}</h3>
+
+      <p *ngIf="photo.weddingDate">
+        ♥ {{ t('Married:', 'திருமணம்:') }}
+
+        {{
+          photo.weddingDate
+            | date:'dd MMM yyyy':'UTC'
+        }}
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,412 @@
+
+/* ==========================================
+   ASTRO ALLIANCE MATRIMONY
+   RESPONSIVE COMPACT PHOTO CARDS
+========================================== */
+
+/* ==========================================
+   TABLET — TWO CARDS
+========================================== */
+
+@media (max-width: 1024px) {
+
+  .aa-testimonials {
+    padding: 55px 18px 48px;
+  }
+
+  .aa-testimonials-heading h2 {
+    font-size: 35px;
+  }
+
+  .aa-testimonials-window {
+    max-width: 600px;
+  }
+
+  .aa-testimonials-grid {
+    gap: 18px;
+  }
+
+  .aa-story-card {
+    flex: 0 1 290px;
+    max-width: 290px;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+
+  .aa-story-card.is-expanded {
+    height: 420px;
+    aspect-ratio: auto;
+  }
+
+  .aa-story-name {
+    font-size: 17px;
+  }
+
+  .aa-story-content {
+    padding-inline: 15px;
+  }
+
+  .aa-story-review {
+    font-size: 12px;
+  }
+
+}
+
+/* ==========================================
+   MOBILE — ONE CARD
+========================================== */
+
+@media (max-width: 600px) {
+
+  .aa-testimonials {
+    padding: 45px 12px 40px;
+  }
+
+  .aa-testimonials-heading {
+    margin-bottom: 27px;
+  }
+
+  .aa-heading-kicker {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
+  .aa-testimonials-heading h2 {
+    font-size: clamp(25px, 7vw, 33px);
+  }
+
+  .aa-testimonials-heading h2 em {
+    display: block;
+  }
+
+  .aa-testimonials-heading p {
+    margin-top: 11px;
+    font-size: 12px;
+  }
+
+  /* ONE COMPACT CARD */
+
+  .aa-testimonials-window {
+    max-width: 305px;
+  }
+
+  .aa-testimonials-grid {
+    gap: 0;
+  }
+
+  .aa-story-card {
+    flex: 0 1 305px;
+
+    width: 100%;
+    max-width: 305px;
+    min-height: 0;
+
+    aspect-ratio: 4 / 5;
+    border-radius: 17px;
+  }
+
+  .aa-story-card.is-expanded {
+    aspect-ratio: auto;
+    height: 425px;
+  }
+
+  .aa-story-content {
+    padding: 45px 15px 19px;
+  }
+
+  .aa-story-name {
+    font-size: 17px;
+  }
+
+  .aa-story-review {
+    font-size: 12px;
+    line-height: 1.65;
+
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+
+  .aa-story-review.is-full {
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
+  .aa-read-more {
+    padding: 8px 15px;
+    font-size: 11px;
+  }
+
+  .aa-story-date {
+    font-size: 10px;
+  }
+
+  /* TAP TO REVEAL STORY */
+
+  .aa-mobile-read-story {
+    position: absolute;
+
+    bottom: 15px;
+    left: 50%;
+
+    z-index: 4;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    min-width: 145px;
+    padding: 10px 15px;
+
+    border: 1px solid var(--aa-gold);
+    border-radius: 30px;
+
+    background: rgba(62, 5, 31, 0.9);
+    color: white;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transform: translateX(-50%);
+  }
+
+  /* CLOSE OVERLAY */
+
+  .aa-story-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    gap: 8px;
+
+    margin-top: 11px;
+    padding: 5px 8px;
+
+    border: 0;
+
+    background: transparent;
+    color: var(--aa-gold-light);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .aa-story-close span {
+    font-size: 16px;
+  }
+
+  /* PHOTO ZOOM */
+
+  .aa-photo-zoom {
+    top: 11px;
+    right: 11px;
+
+    width: 34px;
+    height: 34px;
+
+    font-size: 19px;
+  }
+
+  /* SLIDER ARROWS OVER CARD EDGES */
+
+  .aa-testimonials-slider {
+    gap: 0;
+  }
+
+  .aa-slider-arrow {
+    position: absolute;
+    top: 50%;
+
+    z-index: 6;
+
+    flex: none;
+
+    width: 34px;
+    height: 34px;
+
+    background: rgba(65, 6, 31, 0.9);
+    color: white;
+
+    transform: translateY(-50%);
+  }
+
+  .aa-slider-arrow:first-child {
+    left: 1px;
+  }
+
+  .aa-slider-arrow:last-child {
+    right: 1px;
+  }
+
+  .aa-slider-dots {
+    margin-top: 22px;
+  }
+
+  .aa-bottom-message {
+    margin-top: 22px;
+    font-size: 11px;
+  }
+
+  /* PHOTO LIGHTBOX */
+
+  .aa-lightbox {
+    padding: 13px;
+  }
+
+  .aa-lightbox-panel {
+    max-width: 100%;
+    max-height: calc(100dvh - 26px);
+
+    padding: 10px;
+    border-radius: 13px;
+  }
+
+  .aa-lightbox-close {
+    top: -10px;
+    right: -7px;
+
+    width: 35px;
+    height: 35px;
+
+    font-size: 22px;
+  }
+
+  .aa-lightbox-photo-frame {
+    max-height: calc(100dvh - 135px);
+    border-radius: 9px;
+  }
+
+  .aa-lightbox-photo-frame img {
+    max-height: calc(100dvh - 139px);
+  }
+
+  .aa-lightbox-arrow {
+    width: 33px;
+    height: 33px;
+    font-size: 13px;
+  }
+
+  .aa-lightbox-prev {
+    left: 4px;
+  }
+
+  .aa-lightbox-next {
+    right: 4px;
+  }
+
+  .aa-lightbox-caption h3 {
+    font-size: 15px;
+  }
+
+}
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media (max-width: 380px) {
+
+  .aa-testimonials {
+    padding-inline: 9px;
+  }
+
+  .aa-story-card {
+    max-width: 290px;
+  }
+
+  .aa-story-name {
+    font-size: 15px;
+  }
+
+  .aa-story-content {
+    padding: 40px 13px 16px;
+  }
+
+  .aa-story-review {
+    font-size: 11.5px;
+  }
+
+  .aa-story-card.is-expanded {
+    height: 410px;
+  }
+
+}
+
+/* ==========================================
+   TOUCH TABLET
+   ENABLE TAP TO REVEAL
+========================================== */
+
+@media (hover: none) and (min-width: 601px) {
+
+  .aa-mobile-read-story {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+
+    z-index: 4;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 9px 16px;
+
+    border: 1px solid var(--aa-gold);
+    border-radius: 30px;
+
+    background: rgba(62, 5, 31, 0.9);
+    color: white;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transform: translateX(-50%);
+  }
+
+  .aa-story-close {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+
+    margin-top: 12px;
+    padding: 8px;
+
+    border: 0;
+
+    background: transparent;
+    color: var(--aa-gold-light);
+
+    font-size: 11px;
+
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+}
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .aa-story-card,
+  .aa-story-overlay,
+  .aa-read-more {
+    transition: none !important;
+  }
+
+}
