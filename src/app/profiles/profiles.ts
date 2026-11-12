@@ -667,45 +667,36 @@ private async translateText(
 }
 
 
+
+/* ==========================================
+   PROFILE LANGUAGE VALUES
+   FAST LOADING — ENGLISH + TAMIL
+========================================== */
+
 private async makeLangText(
   enValue: string | null | undefined,
   taValue: string | null | undefined
 ): Promise<LangText> {
 
-  const en = String(enValue || '').trim();
-  const ta = String(taValue || '').trim();
+  const en = String(enValue ?? '').trim();
+  const ta = String(taValue ?? '').trim();
 
-  // Use already-saved bilingual values immediately.
-  // Do not make external translation requests
-  // while building the profile grid.
+  // Use the saved English and Tamil values.
+  // Do not delay profile loading with
+  // unnecessary translation API requests.
+
   return {
     en: en || ta,
     ta: ta || en
-
-  const originalEn = String(enValue || '').trim();
-  const originalTa = String(taValue || '').trim();
-
-  // Use existing Tamil text when available.
-  if (originalTa) {
-    return {
-      en: originalEn || originalTa,
-      ta: originalTa
-    };
-  }
-
-  // Avoid calling the translation API for every profile.
-  // Preserve the original value as a safe fallback.
-  return {
-    en: originalEn,
-    ta: originalEn
-
   };
 }
 
 
-  private normalizeText(value: string | null | undefined): string {
-    return String(value || '').toLowerCase().trim();
-  }
+ private normalizeText(
+  value: string | null | undefined
+): string {
+  return String(value || '').toLowerCase().trim();
+}
 
   private normalizeGender(value: string | null | undefined): 'male' | 'female' | '' {
   const gender = String(value || '').toLowerCase().trim();
