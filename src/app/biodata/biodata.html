@@ -44,12 +44,30 @@
     <div class="wizard-progress-track" role="progressbar" [attr.aria-valuenow]="activeStep + 1" aria-valuemin="1" [attr.aria-valuemax]="wizardSteps.length" [attr.aria-label]="currentLang === 'ta' ? 'சுயவிவர முன்னேற்றம்' : 'Profile progress'">
       <div class="wizard-progress-fill" [style.width.%]="(activeStep+1)*100/wizardSteps.length"></div>
     </div>
-    <nav class="wizard-step-links" [attr.aria-label]="currentLang === 'ta' ? 'படிகள்' : 'Steps'">
-      <button *ngFor="let step of wizardSteps; index as i" type="button" [class.active]="i===activeStep" [class.completed]="activeStep > i" [disabled]="i > activeStep" [attr.aria-current]="i===activeStep ? 'step' : null" (click)="editWizardStep(i)">
-        <span class="wizard-step-number">{{ activeStep > i ? '✓' : i + 1 }}</span>
-        <span class="wizard-step-name">{{ step[currentLang] }}</span>
-      </button>
-    </nav>
+    
+<nav
+  class="wizard-step-links"
+  [attr.aria-label]="currentLang === 'ta' ? 'படிகள்' : 'Steps'"
+>
+  <button
+    *ngFor="let step of wizardSteps; index as i"
+    type="button"
+    [class.active]="i === activeStep"
+    [class.completed]="i < activeStep"
+    [disabled]="isSaving"
+    [attr.aria-current]="i === activeStep ? 'step' : null"
+    (click)="editWizardStep(i)"
+  >
+    <span class="wizard-step-number">
+      {{ i < activeStep ? '✓' : i + 1 }}
+    </span>
+
+    <span class="wizard-step-name">
+      {{ step[currentLang] }}
+    </span>
+  </button>
+</nav>
+
   </header>
 
 

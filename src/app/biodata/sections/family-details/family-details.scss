@@ -1,2 +1,313 @@
-/* Layout and field styles are shared through the scoped Biodata stylesheet. */
-:host { display: contents; }
+
+/* ==========================================
+   FATHER & MOTHER — BILINGUAL NAME UI
+========================================== */
+
+.family-bilingual-name {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.family-bilingual-name > label {
+  color: #8c1642;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.family-bilingual-name > input {
+  width: 100%;
+  min-width: 0;
+  min-height: 47px;
+  padding: 12px 14px;
+  border: 1px solid #ded6d9;
+  border-radius: 10px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+/* Tamil / English suggestion */
+
+.family-name-suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.family-name-suggestion span {
+  color: #684257;
+  font-size: 12px;
+}
+
+.family-name-suggestion strong {
+  color: #6b2943;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.family-name-suggestion button {
+  padding: 7px 11px;
+  border: 0;
+  border-radius: 9px;
+  background: #f8e5ed;
+  color: #98264c;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Always visible spelling correction */
+
+.family-name-correction {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 13px;
+  min-width: 0;
+  border: 1px solid #f2d0dc;
+  border-radius: 11px;
+  background: #fff8fa;
+}
+
+.family-name-correction label {
+  color: #a6154b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.family-name-correction input {
+  width: 100%;
+  min-width: 0;
+  min-height: 47px;
+  padding: 12px 14px;
+  border: 1px solid #ddd4d9;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.family-name-correction input:focus,
+.family-bilingual-name > input:focus {
+  outline: none;
+  border-color: #a32e5b;
+  box-shadow: 0 0 0 3px rgba(163, 46, 91, 0.1);
+}
+
+.family-bilingual-name .wizard-name-note {
+  color: #795769;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+  .family-bilingual-name {
+    grid-column: 1 / -1;
+  }
+
+  .family-name-correction {
+    padding: 11px;
+  }
+}
+
+
+
+/* ==========================================
+   PARENT NAME FIELDS
+========================================== */
+
+.form-grid .field.family-bilingual-name {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+  grid-template-columns: none;
+}
+
+.form-grid .field.family-bilingual-name > label {
+  width: 100%;
+  margin: 0;
+  text-align: left;
+}
+
+.form-grid .field.family-bilingual-name > input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.form-grid .family-bilingual-name .family-name-suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.form-grid .family-bilingual-name .family-name-correction {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  padding: 14px;
+  box-sizing: border-box;
+  border: 1px solid #f0ceda;
+  border-radius: 11px;
+  background: #fff8fa;
+}
+
+.form-grid .family-bilingual-name .family-name-correction label {
+  width: 100%;
+  margin: 0;
+  color: #a6154b;
+  text-align: left;
+}
+
+.form-grid .family-bilingual-name .family-name-correction input {
+  width: 100%;
+  min-width: 0;
+  height: 47px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 700px) {
+  .form-grid .field.family-bilingual-name {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ==========================================
+   PARENT NAME BILINGUAL LAYOUT
+========================================== */
+
+.form-grid > .family-bilingual-name {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: none;
+}
+
+.family-bilingual-name > label {
+  display: block;
+  width: 100%;
+  color: #941341;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.family-bilingual-name > input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 47px;
+  padding: 11px 14px;
+  box-sizing: border-box;
+  border: 1px solid #ded4da;
+  border-radius: 10px;
+  background: #fff;
+  color: #32212a;
+  font-size: 14px;
+}
+
+.family-name-suggestion {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.family-name-suggestion span {
+  color: #735569;
+  font-size: 12px;
+}
+
+.family-name-suggestion strong {
+  color: #6e2945;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.family-name-suggestion button {
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: #f8e4ed;
+  color: #98214e;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.family-name-correction {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 9px;
+  width: 100%;
+  min-width: 0;
+  padding: 13px;
+  box-sizing: border-box;
+  border: 1px solid #f0cddd;
+  border-radius: 11px;
+  background: #fff8fa;
+}
+
+.family-name-correction > label {
+  display: block;
+  width: 100%;
+  color: #a4164d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.family-name-correction > input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 47px;
+  padding: 11px 14px;
+  box-sizing: border-box;
+  border: 1px solid #ded4da;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+}
+
+.family-bilingual-name input:focus {
+  outline: none;
+  border-color: #a52b59;
+  box-shadow: 0 0 0 3px rgba(165, 43, 89, 0.09);
+}
+
+.family-bilingual-name .wizard-name-note {
+  display: block;
+  width: 100%;
+  color: #765768;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .form-grid > .family-bilingual-name {
+    grid-column: 1 / -1;
+  }
+}

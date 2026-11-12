@@ -4,7 +4,8 @@ import {
   Component,
   HostListener,
   inject,
-  PLATFORM_ID
+  PLATFORM_ID,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
@@ -15,6 +16,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd } fro
 import { SnackbarComponent } from './shared/snackbar/snackbar';
 import { AstroGalaxy } from './shared/astro-galaxy/astro-galaxy';
 import { SnackbarService } from './shared/snackbar.service';
+import { ApiService } from './services/api.service';
 
 
 import { MembershipReminderService } from './core/services/membership-reminder.service';
@@ -38,6 +40,9 @@ imports: [
   './app.responsive.scss'
 ]
 })
+
+
+
 export class App {
     private platformId = inject(PLATFORM_ID);
   private router = inject(Router);
@@ -58,8 +63,11 @@ private confirmedStageToken = '';
 private lastMenuStatusCheck = 0;
 private menuStatusChecking = false;
 private readonly language = inject(LanguageService);
+private readonly profileApi = inject(ApiService);
+private readonly cdr = inject(ChangeDetectorRef);
 private readonly membershipReminder =
   inject(MembershipReminderService);
+
 get currentLang(): Language { return this.language.currentLang; }
 set currentLang(value: Language) { this.language.currentLang = value; }
 isNavigating = false;
@@ -138,6 +146,132 @@ hasBiodataStatus = false;
 
 
 
+/* ==========================================
+   MY ACCOUNT PROFILE PHOTO
+========================================== */
+
+accountProfilePhoto = '';
+accountProfileGender = '';
+accountPhotoFailed = false;
+
+
+async loadAccountProfilePhoto(): Promise<void> {
+  if (!this.isBrowser) return;
+
+  if (!this.auth.isLoggedIn()) {
+    this.accountProfilePhoto = '';
+    this.accountProfileGender = '';
+    this.accountPhotoFailed = false;
+    this.cdr.markForCheck();
+    return;
+  }
+
+  try {
+    // Uses the same authenticated profile API
+    // as the existing Biodata component.
+    const response: any = await firstValueFrom(
+      this.profileApi.getMyProfile().pipe(
+        timeout(10000)
+      )
+    );
+
+    // Do not apply an old response after logout.
+    if (!this.auth.isLoggedIn()) return;
+
+    const profile =
+      response?.data?.profile ??
+      response?.data ??
+      null;
+
+    if (!profile) {
+      this.accountProfilePhoto = '';
+      this.accountPhotoFailed = false;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    // The existing Biodata form saves the photo
+    // under media.profileImage.
+    const savedPhoto = String(
+      profile.media?.profileImage || ''
+    ).trim();
+
+    const savedGender = String(
+      profile.basic?.gender ||
+      profile.gender ||
+      ''
+    ).trim();
+
+    this.accountProfileGender = savedGender;
+
+    // Full uploaded image URL.
+    if (/^(https?:\/\/|data:image\/|blob:)/i.test(savedPhoto)) {
+      this.accountProfilePhoto = savedPhoto;
+    }
+
+    // Relative path stored by the existing backend.
+    else if (savedPhoto) {
+      const backendOrigin = environment.apiUrl.replace(
+        /\/api\/?$/,
+        ''
+      );
+
+      this.accountProfilePhoto =
+        backendOrigin +
+        (savedPhoto.startsWith('/')
+          ? savedPhoto
+          : '/' + savedPhoto);
+    }
+
+    // No uploaded photo.
+    else {
+      this.accountProfilePhoto = '';
+    }
+
+    this.accountPhotoFailed = false;
+    this.cdr.markForCheck();
+
+  } catch (error) {
+    console.warn(
+      'Unable to refresh My Account photo:',
+      error
+    );
+
+    // Preserve the last successfully loaded photo.
+    this.cdr.markForCheck();
+  }
+}
+
+
+get accountDefaultAvatar(): string {
+  const gender = String(this.accountProfileGender || '')
+    .trim()
+    .toLowerCase();
+
+  if (['female', 'woman', 'bride', 'பெண்'].includes(gender)) {
+    return 'assets/women avathar.avif';
+  }
+
+  if (['male', 'man', 'groom', 'ஆண்'].includes(gender)) {
+    return 'assets/men avathar.avif';
+  }
+
+  return 'assets/avatars/person.svg';
+}
+
+get accountDisplayPhoto(): string {
+  if (this.accountProfilePhoto && !this.accountPhotoFailed) {
+    return this.accountProfilePhoto;
+  }
+
+  return this.accountDefaultAvatar;
+}
+
+onAccountPhotoError(): void {
+  this.accountPhotoFailed = true;
+}
+
+
 constructor() {
   this.updateSiteChrome(this.router.url);
   this.membershipReminder.start();
@@ -174,6 +308,10 @@ constructor() {
 
         this.updateSiteChrome(event.urlAfterRedirects);
         this.closeMenu();
+
+        if (this.auth.isLoggedIn()) {
+  void this.loadAccountProfilePhoto();
+}
       }
     });
 
@@ -214,71 +352,22 @@ get isLoggedIn(): boolean {
    Actual biodata photo / gender avatar
 ========================================== */
 
-get memberAvatar(): string {
 
+get memberAvatar(): string {
   if (!this.isBrowser) {
     return '/assets/avatars/person.svg';
   }
 
-  try {
-    const user = JSON.parse(
-      localStorage.getItem('matrimony_user') || '{}'
-    );
-
-    const profile = JSON.parse(
-      localStorage.getItem('matrimony_profile') || '{}'
-    );
-
-    // Find uploaded biodata photo from saved user/profile data
-    const photoFields = [
-      profile?.profile_image_url,
-      profile?.profileImage,
-      profile?.profilePhoto,
-      profile?.photo,
-      profile?.image,
-      profile?.basic?.profilePhoto,
-      profile?.basic?.photo,
-      user?.profile_image_url,
-      user?.profileImage,
-      user?.profilePhoto,
-      user?.photo,
-      user?.image
-    ];
-
-    for (const value of photoFields) {
-
-      if (typeof value !== 'string') continue;
-
-      const url = value.trim();
-
-      if (!url) continue;
-
-      // Full URL or data image
-      if (/^(https?:\/\/|data:image\/|blob:)/i.test(url)) {
-        return url;
-      }
-
-      // Frontend asset
-      if (/^\/?assets\//i.test(url)) {
-        return '/' + url.replace(/^\/+/, '');
-      }
-
-      // Existing backend-relative image path
-      if (url.startsWith('/')) {
-        const apiOrigin =
-          environment.apiUrl.replace(/\/api\/?$/, '');
-
-        return apiOrigin + url;
-      }
-    }
-
-    // No uploaded image — use gender avatar
-    return this.memberDefaultAvatar;
-
-  } catch {
-    return this.memberDefaultAvatar;
+  if (
+    this.accountProfilePhoto &&
+    !this.accountPhotoFailed
+  ) {
+    return this.accountProfilePhoto;
   }
+
+  return this.memberDefaultAvatar;
 }
+
 
 /* ==========================================
    DEFAULT MALE / FEMALE AVATAR
@@ -300,11 +389,12 @@ get memberDefaultAvatar(): string {
     );
 
     const gender = String(
-      profile?.basic?.gender ||
-      profile?.gender ||
-      user?.gender ||
-      ''
-    ).trim().toLowerCase();
+  this.accountProfileGender ||
+  profile?.basic?.gender ||
+  profile?.gender ||
+  user?.gender ||
+  ''
+).trim().toLowerCase();
 
     if (
       ['female', 'woman', 'bride', 'பெண்', 'மணமகள்']
@@ -330,21 +420,26 @@ get memberDefaultAvatar(): string {
 
 
 
-onAvatarError(event: Event): void {
 
+onAvatarError(event: Event): void {
   const img = event.target as HTMLImageElement;
 
   const fallback = this.memberDefaultAvatar;
 
-  if (!img.src.endsWith(fallback)) {
+  if (!this.accountPhotoFailed) {
+    this.accountPhotoFailed = true;
     img.src = fallback;
+    this.cdr.markForCheck();
     return;
   }
 
-  // Final fallback if the gender avatar cannot load
+  // Gender avatar could not be loaded either.
   img.onerror = null;
   img.src = '/assets/avatars/person.svg';
 }
+
+
+
 
 
 /** Controls mobile menu labels only. The server-side guard still owns access decisions. */
@@ -382,6 +477,7 @@ private async syncAccountMenuStage(): Promise<void> {
   try {
     const result = await firstValueFrom(this.auth.getUserFlowStatus().pipe(timeout(7000)));
     if (token !== (localStorage.getItem('matrimony_token') || '')) return;
+
     const flow = result?.data;
     if (!result?.success || !flow) return;
     const status = String(flow.profileStatus || '').toLowerCase();
@@ -390,6 +486,7 @@ private async syncAccountMenuStage(): Promise<void> {
     this.confirmedStageToken = token;
   } catch { /* Keep last-known display state; backend remains authoritative. */ }
   finally { this.menuStatusChecking = false; }
+  
 }
 closeAccountMenu(): void {
   this.closeMenu();
@@ -473,6 +570,9 @@ async changeLanguage(lang: Language): Promise<void> {
   this.currentLang = lang;
 
   if (this.isBrowser) {
+    if (this.auth.isLoggedIn()) {
+  void this.loadAccountProfilePhoto();
+}
     localStorage.setItem('tm_language', lang);
 
     window.dispatchEvent(
