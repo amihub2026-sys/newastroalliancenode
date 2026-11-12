@@ -1,0 +1,663 @@
+
+<section class="advertisements-page">
+
+  <!-- ==========================================
+       PAGE HEADER
+  ========================================== -->
+  <div class="ads-header">
+    <div>
+      <span class="ads-eyebrow">
+        ASTRO ALLIANCE MATRIMONY
+      </span>
+
+      <h1>{{ pageTitle }}</h1>
+
+      <p>
+        {{ t(
+          'Create, schedule, publish and manage website advertisements.',
+          'இணையதள விளம்பரங்களை உருவாக்கவும், திட்டமிடவும், வெளியிடவும் மற்றும் நிர்வகிக்கவும்.'
+        ) }}
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="ads-add-button"
+      [disabled]="saving"
+      (click)="showForm ? resetForm() : showForm = true"
+    >
+      {{
+        showForm
+          ? t('Cancel', 'ரத்து செய்')
+          : t('+ Add Advertisement', '+ விளம்பரம் சேர்')
+      }}
+    </button>
+  </div>
+
+  <!-- ==========================================
+       ERROR / SUCCESS MESSAGES
+  ========================================== -->
+  @if (errorMessage) {
+    <div
+      class="ads-message ads-message-error"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (successMessage) {
+    <div
+      class="ads-message ads-message-success"
+      role="status"
+    >
+      {{ successMessage }}
+    </div>
+  }
+
+  <!-- ==========================================
+       CREATE / EDIT ADVERTISEMENT FORM
+  ========================================== -->
+  @if (showForm) {
+
+    <div class="ads-panel">
+
+      <h2>
+        {{
+          editingId
+            ? t(
+                'Edit Advertisement',
+                'விளம்பரத்தைத் திருத்து'
+              )
+            : t(
+                'New Advertisement',
+                'புதிய விளம்பரம்'
+              )
+        }}
+      </h2>
+
+      <form (ngSubmit)="saveAdvertisement()">
+
+        <div class="ads-form-grid">
+
+          <!-- ==================================
+               ENGLISH ADVERTISEMENT TITLE
+          ================================== -->
+          <div class="ads-field">
+
+            <label for="ad-title">
+              Advertisement Title English
+            </label>
+
+            <input
+              id="ad-title"
+              type="text"
+              name="title"
+              [(ngModel)]="form.title"
+              placeholder="Enter English title"
+              maxlength="150"
+              required
+            />
+
+          </div>
+
+          <!-- ==================================
+               TAMIL ADVERTISEMENT TITLE
+          ================================== -->
+          <div class="ads-field">
+
+            <label for="ad-title-tamil">
+              Advertisement Title Tamil
+            </label>
+
+            <input
+              id="ad-title-tamil"
+              type="text"
+              name="titleTamil"
+              [(ngModel)]="form.titleTamil"
+              placeholder="தமிழ் தலைப்பை உள்ளிடவும்"
+              maxlength="150"
+            />
+
+          </div>
+
+          <!-- ==================================
+               ADVERTISEMENT PLACEMENT
+          ================================== -->
+          <div class="ads-field">
+
+            <label for="ad-placement">
+              {{
+                t(
+                  'Advertisement Placement',
+                  'விளம்பரம் காட்டும் இடம்'
+                )
+              }}
+            </label>
+
+            <select
+              id="ad-placement"
+              name="placement"
+              [(ngModel)]="form.placement"
+            >
+
+              <option value="home-banner">
+                {{
+                  t(
+                    'Homepage Banner',
+                    'முகப்புப் பக்க பேனர்'
+                  )
+                }}
+              </option>
+
+              <option value="between-profiles">
+                {{
+                  t(
+                    'Between Profile Sections',
+                    'சுயவிவரப் பகுதிகளுக்கு இடையில்'
+                  )
+                }}
+              </option>
+
+              <option value="home-bottom">
+                {{
+                  t(
+                    'Homepage Bottom',
+                    'முகப்புப் பக்கத்தின் கீழே'
+                  )
+                }}
+              </option>
+
+            </select>
+
+          </div>
+
+          <!-- ==================================
+               DESTINATION URL
+          ================================== -->
+          <div class="ads-field">
+
+            <label for="ad-url">
+              {{
+                t(
+                  'Destination URL (Optional)',
+                  'இணைப்பு முகவரி (விருப்பத்தேர்வு)'
+                )
+              }}
+            </label>
+
+            <input
+              id="ad-url"
+              type="url"
+              name="destinationUrl"
+              [(ngModel)]="form.destinationUrl"
+              placeholder="https://example.com"
+            />
+
+          </div>
+
+          <!-- ==================================
+               BANNER DEVICE DISPLAY
+          ================================== -->
+          <div class="ads-field">
+
+            <label for="ad-device">
+              {{
+                t(
+                  'Banner Display',
+                  'பேனர் காட்சி'
+                )
+              }}
+            </label>
+
+            <select
+              id="ad-device"
+              name="device"
+              [(ngModel)]="form.device"
+            >
+
+              <option value="all">
+                {{
+                  t(
+                    'Desktop & Mobile',
+                    'கணினி மற்றும் மொபைல்'
+                  )
+                }}
+              </option>
+
+              <option value="desktop">
+                {{
+                  t(
+                    'Desktop Only',
+                    'கணினியில் மட்டும்'
+                  )
+                }}
+              </option>
+
+              <option value="mobile">
+                {{
+                  t(
+                    'Mobile Only',
+                    'மொபைலில் மட்டும்'
+                  )
+                }}
+              </option>
+
+            </select>
+
+          </div>
+
+          <!-- ==================================
+               START DATE
+          ================================== -->
+          <div class="ads-field">
+
+            <label for="ad-start">
+              {{
+                t(
+                  'Start Date',
+                  'தொடக்க தேதி'
+                )
+              }}
+            </label>
+
+            <input
+              id="ad-start"
+              type="date"
+              name="startDate"
+              [(ngModel)]="form.startDate"
+            />
+
+          </div>
+
+          <!-- ==================================
+               END DATE
+          ================================== -->
+          <div class="ads-field">
+
+            <label for="ad-end">
+              {{
+                t(
+                  'End Date',
+                  'முடிவு தேதி'
+                )
+              }}
+            </label>
+
+            <input
+              id="ad-end"
+              type="date"
+              name="endDate"
+              [(ngModel)]="form.endDate"
+              [min]="form.startDate || null"
+            />
+
+          </div>
+
+          <!-- ==================================
+               ADVERTISEMENT BANNER UPLOAD
+          ================================== -->
+          <div class="ads-field ads-field-full">
+
+            <label for="ad-image">
+              {{
+                t(
+                  'Advertisement Banner',
+                  'விளம்பரப் பேனர்'
+                )
+              }}
+            </label>
+
+            <input
+              id="ad-image"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              [disabled]="saving"
+              (change)="onFileSelected($event)"
+            />
+
+            <small>
+              {{
+                t(
+                  'Supported: JPG, PNG, WebP. Maximum 5 MB.',
+                  'JPG, PNG, WebP கோப்புகள் மட்டும். அதிகபட்ச அளவு 5 MB.'
+                )
+              }}
+            </small>
+
+            @if (imagePreview) {
+              <img
+                class="ads-preview"
+                [src]="imagePreview"
+                [alt]="t(
+                  'Advertisement banner preview',
+                  'விளம்பரப் பேனர் முன்னோட்டம்'
+                )"
+              />
+            }
+
+          </div>
+
+        </div>
+
+        <!-- ==================================
+             PUBLISH OPTION
+        ================================== -->
+        <label class="ads-checkbox">
+
+          <input
+            type="checkbox"
+            name="published"
+            [(ngModel)]="form.published"
+          />
+
+          {{
+            t(
+              'Publish Advertisement',
+              'விளம்பரத்தை வெளியிடு'
+            )
+          }}
+
+        </label>
+
+        <!-- ==================================
+             SAVE / UPDATE BUTTON
+        ================================== -->
+        <button
+          type="submit"
+          class="ads-save-button"
+          [disabled]="saving"
+        >
+
+          @if (saving) {
+
+            {{
+              t(
+                'Uploading / Saving...',
+                'பதிவேற்றம் / சேமிப்பு நடைபெறுகிறது...'
+              )
+            }}
+
+          } @else {
+
+            {{
+              editingId
+                ? t(
+                    'Update Advertisement',
+                    'விளம்பரத்தைப் புதுப்பி'
+                  )
+                : t(
+                    'Save Advertisement',
+                    'விளம்பரத்தைச் சேமி'
+                  )
+            }}
+
+          }
+
+        </button>
+
+      </form>
+    </div>
+  }
+
+  <!-- ==========================================
+       ADVERTISEMENT LIST
+  ========================================== -->
+  <div class="ads-panel">
+
+    <h2>
+      {{
+        t(
+          'Advertisements',
+          'விளம்பரங்கள்'
+        )
+      }}
+    </h2>
+
+    @if (loading) {
+
+      <p class="ads-empty" role="status">
+        {{
+          t(
+            'Loading advertisements...',
+            'விளம்பரங்கள் ஏற்றப்படுகின்றன...'
+          )
+        }}
+      </p>
+
+    } @else if (advertisements.length === 0) {
+
+      <p class="ads-empty">
+        {{
+          t(
+            'No advertisements added yet.',
+            'இதுவரை விளம்பரங்கள் சேர்க்கப்படவில்லை.'
+          )
+        }}
+      </p>
+
+    } @else {
+
+      <div class="ads-list">
+
+        @for (ad of advertisements; track ad._id) {
+
+          <div class="ads-item">
+
+            <!-- ==================================
+                 ADVERTISEMENT IMAGE
+            ================================== -->
+            <img
+              [src]="ad.imageUrl"
+              [alt]="currentLang === 'ta' && ad.titleTamil
+                ? ad.titleTamil
+                : ad.title"
+              loading="lazy"
+            />
+
+            <!-- ==================================
+                 ADVERTISEMENT DETAILS
+            ================================== -->
+            <div class="ads-item-content">
+
+              <!-- LANGUAGE-BASED TITLE -->
+              <h3>
+                {{
+                  currentLang === 'ta' && ad.titleTamil
+                    ? ad.titleTamil
+                    : ad.title
+                }}
+              </h3>
+
+              <!-- PLACEMENT + DEVICE -->
+              <p>
+
+                @switch (ad.placement) {
+
+                  @case ('home-banner') {
+                    {{
+                      t(
+                        'Homepage Banner',
+                        'முகப்புப் பக்க பேனர்'
+                      )
+                    }}
+                  }
+
+                  @case ('between-profiles') {
+                    {{
+                      t(
+                        'Between Profile Sections',
+                        'சுயவிவரப் பகுதிகளுக்கு இடையில்'
+                      )
+                    }}
+                  }
+
+                  @case ('home-bottom') {
+                    {{
+                      t(
+                        'Homepage Bottom',
+                        'முகப்புப் பக்கத்தின் கீழே'
+                      )
+                    }}
+                  }
+
+                  @default {
+                    {{ ad.placement }}
+                  }
+
+                }
+
+                ·
+
+                @switch (ad.device) {
+
+                  @case ('all') {
+                    {{
+                      t(
+                        'Desktop & Mobile',
+                        'கணினி மற்றும் மொபைல்'
+                      )
+                    }}
+                  }
+
+                  @case ('desktop') {
+                    {{
+                      t(
+                        'Desktop Only',
+                        'கணினியில் மட்டும்'
+                      )
+                    }}
+                  }
+
+                  @case ('mobile') {
+                    {{
+                      t(
+                        'Mobile Only',
+                        'மொபைலில் மட்டும்'
+                      )
+                    }}
+                  }
+
+                }
+
+              </p>
+
+              <!-- ADVERTISEMENT DATES -->
+              @if (ad.startDate || ad.endDate) {
+
+                <p>
+
+                  {{
+                    ad.startDate
+                      ? (ad.startDate | date:'dd MMM yyyy')
+                      : t(
+                          'No start date',
+                          'தொடக்க தேதி இல்லை'
+                        )
+                  }}
+
+                  —
+
+                  {{
+                    ad.endDate
+                      ? (ad.endDate | date:'dd MMM yyyy')
+                      : t(
+                          'No end date',
+                          'முடிவு தேதி இல்லை'
+                        )
+                  }}
+
+                </p>
+
+              }
+
+              <!-- PUBLISH STATUS -->
+              <span>
+                {{
+                  ad.published
+                    ? t(
+                        'Published',
+                        'வெளியிடப்பட்டது'
+                      )
+                    : t(
+                        'Unpublished',
+                        'வெளியிடப்படவில்லை'
+                      )
+                }}
+              </span>
+
+            </div>
+
+            <!-- ==================================
+                 ACTION BUTTONS
+            ================================== -->
+            <div class="ads-actions">
+
+              <!-- EDIT -->
+              <button
+                type="button"
+                class="ads-edit-button"
+                [disabled]="saving || deletingId !== null"
+                (click)="editAdvertisement(ad)"
+              >
+                {{
+                  t(
+                    'Edit',
+                    'திருத்து'
+                  )
+                }}
+              </button>
+
+              <!-- PUBLISH / UNPUBLISH -->
+              <button
+                type="button"
+                class="ads-publish-button"
+                [disabled]="saving || deletingId !== null"
+                (click)="togglePublish(ad)"
+              >
+                {{
+                  ad.published
+                    ? t(
+                        'Unpublish',
+                        'வெளியீட்டை நிறுத்து'
+                      )
+                    : t(
+                        'Publish',
+                        'வெளியிடு'
+                      )
+                }}
+              </button>
+
+              <!-- DELETE -->
+              <button
+                type="button"
+                class="ads-delete-button"
+                [disabled]="saving || deletingId !== null"
+                (click)="deleteAdvertisement(ad._id)"
+              >
+                {{
+                  deletingId === ad._id
+                    ? t(
+                        'Deleting...',
+                        'நீக்கப்படுகிறது...'
+                      )
+                    : t(
+                        'Delete',
+                        'நீக்கு'
+                      )
+                }}
+              </button>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+
+</section>

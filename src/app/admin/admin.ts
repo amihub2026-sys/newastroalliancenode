@@ -35,6 +35,10 @@ export class Admin {
       { label: 'Subscriptions', path: '/admin/subscriptions', icon: '◷' },
       { label: 'Payments', path: '/admin/payments', icon: '₹' }
     ] },
+    
+{ title: 'Advertisement Management', items: [
+  { label: 'Advertisements', path: '/admin/advertisements', icon: '▣' }
+] },
     { title: 'Master data', items: [
       { label: 'Religion', path: '/admin/religion-list', icon: '◈' },
       { label: 'Caste', path: '/admin/caste-list', icon: '◇' },

@@ -156,6 +156,12 @@ export const routes: Routes = [
         import('./admin/payments/payments').then(m => m.Payments)
     },
     {
+  path: 'advertisements',
+  loadComponent: () =>
+    import('./admin/advertisements/advertisements')
+      .then(m => m.Advertisements)
+},
+    {
       path: 'settings',
       loadComponent: () =>
         import('./admin/settings/settings').then(m => m.Settings)

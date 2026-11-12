@@ -79,6 +79,18 @@ getAuthHeaders(): HttpHeaders {
     Authorization: `Bearer ${token}`
   });
 }
+
+getAdminAuthHeaders(): HttpHeaders {
+  const token =
+    typeof window === 'undefined'
+      ? ''
+      : localStorage.getItem('admin_token') || '';
+
+  return new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+}
+
 getCurrentUserId(): string {
   const raw = typeof window === 'undefined' ? null : localStorage.getItem('matrimony_user');
 

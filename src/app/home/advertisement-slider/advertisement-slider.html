@@ -1,0 +1,188 @@
+
+<!-- ==========================================
+     ASTRO ALLIANCE MATRIMONY
+     ADVERTISEMENT CARDS - DESKTOP
+     AUTO SLIDER - MOBILE
+     ENGLISH / TAMIL
+========================================== -->
+
+@if (!loading && advertisements.length > 0) {
+
+  <section
+    class="astro-advertisement-section"
+    [attr.aria-label]="t(
+      'Sponsored advertisements',
+      'விளம்பரதாரர் விளம்பரங்கள்'
+    )"
+  >
+
+    <div class="astro-advertisement-container">
+
+      <!-- SECTION HEADER -->
+      <div class="astro-advertisement-header">
+
+        <div class="astro-advertisement-heading">
+
+          <span class="astro-advertisement-kicker">
+            ASTRO ALLIANCE MATRIMONY
+          </span>
+
+          <h2>
+            {{ t('Advertisements', 'விளம்பரங்கள்') }}
+          </h2>
+
+        </div>
+
+        <span class="astro-sponsored-label">
+          {{ t('Sponsored', 'விளம்பரம்') }}
+        </span>
+
+      </div>
+
+      <!-- ADVERTISEMENT CARDS -->
+      <div
+        class="astro-advertisement-slider"
+        (touchstart)="onTouchStart($event)"
+        (touchend)="onTouchEnd($event)"
+      >
+
+        @for (
+          ad of advertisements;
+          track ad._id;
+          let i = $index
+        ) {
+
+          <article
+            class="astro-advertisement-slide"
+            [class.is-active]="activeIndex === i"
+          >
+
+            <!-- IMAGE WITH DESTINATION LINK -->
+            @if (getAdvertisementLink(ad); as link) {
+
+              <a
+                class="astro-advertisement-link"
+                [href]="link"
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+                [attr.aria-label]="
+                  t(
+                    'Visit advertiser: ',
+                    'விளம்பரதாரரைப் பார்வையிட: '
+                  ) + getAdvertisementTitle(ad)
+                "
+              >
+
+                <img
+                  class="astro-advertisement-image"
+                  [src]="ad.imageUrl"
+                  [alt]="getAdvertisementTitle(ad)"
+                  loading="lazy"
+                />
+
+              </a>
+
+            } @else {
+
+              <div class="astro-advertisement-link">
+
+                <img
+                  class="astro-advertisement-image"
+                  [src]="ad.imageUrl"
+                  [alt]="getAdvertisementTitle(ad)"
+                  loading="lazy"
+                />
+
+              </div>
+
+            }
+
+            <!-- VISIBLE ENGLISH / TAMIL TITLE -->
+            <div class="astro-advertisement-card-content">
+
+              <h3>
+                {{ getAdvertisementTitle(ad) }}
+              </h3>
+
+            </div>
+
+          </article>
+
+        }
+
+        <!-- MOBILE PREVIOUS / NEXT ARROWS -->
+        @if (advertisements.length > 1) {
+
+          <button
+            type="button"
+            class="astro-advertisement-arrow astro-advertisement-prev"
+            [attr.aria-label]="t(
+              'Previous advertisement',
+              'முந்தைய விளம்பரம்'
+            )"
+            (click)="previousSlide()"
+          >
+            &#10094;
+          </button>
+
+          <button
+            type="button"
+            class="astro-advertisement-arrow astro-advertisement-next"
+            [attr.aria-label]="t(
+              'Next advertisement',
+              'அடுத்த விளம்பரம்'
+            )"
+            (click)="nextSlide()"
+          >
+            &#10095;
+          </button>
+
+        }
+
+      </div>
+
+      <!-- MOBILE SLIDER DOTS -->
+      @if (advertisements.length > 1) {
+
+        <div
+          class="astro-advertisement-dots"
+          role="group"
+          [attr.aria-label]="t(
+            'Advertisement navigation',
+            'விளம்பர வழிசெலுத்தல்'
+          )"
+        >
+
+          @for (
+            ad of advertisements;
+            track ad._id;
+            let i = $index
+          ) {
+
+            <button
+              type="button"
+              class="astro-advertisement-dot"
+              [class.is-active]="activeIndex === i"
+              [attr.aria-label]="
+                t(
+                  'Show advertisement ',
+                  'விளம்பரத்தைக் காட்டு '
+                ) + (i + 1)
+              "
+              [attr.aria-current]="
+                activeIndex === i ? 'true' : null
+              "
+              (click)="goToSlide(i)"
+            ></button>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+
+  </section>
+
+}

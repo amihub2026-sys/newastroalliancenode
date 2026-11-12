@@ -15,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { SUCCESS_STORY_PHOTOS, SuccessStoryPhoto } from './success-stories.data';
 import { HomeDiscovery } from './home-discovery/home-discovery';
+import { AdvertisementSlider } from './advertisement-slider/advertisement-slider';
 import { finalize, timeout } from 'rxjs';
 
 
@@ -31,7 +32,12 @@ type Language = 'en' | 'ta';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, HomeDiscovery],
+  imports: [
+  CommonModule,
+  RouterLink,
+  HomeDiscovery,
+  AdvertisementSlider
+],
   templateUrl: './home.html',
   styleUrls: [
   './home.scss',
