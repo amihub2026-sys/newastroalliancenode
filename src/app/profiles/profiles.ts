@@ -21,6 +21,7 @@ import { PublicSearchFilters } from '../free-search/search-filters/search-filter
 import {
   EMPTY_FILTERS,
   makeOptions,
+  toPublicProfile,
   type FilterOptions,
   type PublicProfile,
   type SearchFilters
@@ -33,6 +34,8 @@ interface LangText {
 }
 
 interface ProfileItem {
+  country: string;
+noCastePreference: boolean | null;
   profileId: string;
   id: string;
   userId: string;
@@ -49,6 +52,7 @@ interface ProfileItem {
   caste: LangText;
   gender: LangText;
   nakshatra: LangText;
+  rasi: LangText;
   image: string;
   liked: boolean;
   latitude: number | null;
@@ -75,7 +79,7 @@ export class Profiles implements OnInit, OnDestroy {
     // Shared Free Search filter data for Find Your Match
   memberSearchFilters: SearchFilters = {
     ...EMPTY_FILTERS,
-    hobbies: []
+   
   };
 
   memberFilterOptions: FilterOptions = makeOptions([]);
@@ -105,7 +109,7 @@ casteOptions: (LangText & { religion: string })[] = [];
 genderOptions: LangText[] = [];
 professionOptions: LangText[] = [];
 casteMap: Record<string, string> = {};
-  openDropdown: string | null = null;
+  
   mobileFilterOpen = false;
   @ViewChild('filterBar') filterBarRef?: ElementRef<HTMLDivElement>;
 
@@ -152,6 +156,8 @@ likedProfileIdSet = new Set<string>();
 visibleProfileTimer: any = null;
 showProfileLoading = false;
 private destroyed = false;
+private startupProfileResponse: any | null = null;
+private profilesFetchPromise: Promise<any> | null = null;
   shortlistedMeUserIds: string[] = [];
     userProfileImage = '';
     loggedInProfileId = '';
@@ -544,16 +550,27 @@ async ngOnInit(): Promise<void> {
   this.isLoading = this.activeTab === 'browse';
   this.cdr.markForCheck();
 
+if (this.activeTab === 'browse') {
+  this.profilesFetchPromise = this.profilesService
+    .getProfiles()
+    .toPromise()
+    .then(
+      data => ({ success: true, data }),
+      error => ({ success: false, error })
+    );
+}
+
   // Start independent data loading concurrently.
   // These requests no longer block the main profiles API.
-  const optionsPromise = Promise.allSettled([
-    this.loadAgeOptions(),
-    this.loadGenderOptions(),
-    this.loadReligionOptions(),
-    this.loadEducationOptions(),
-    this.loadFilterTables(),
-    this.loadCurrentPlan()
-  ]);
+
+
+
+const optionsPromise = Promise.allSettled([
+  this.loadReligionOptions(),
+  this.loadFilterTables(),
+  this.loadCurrentPlan()
+]);
+
 
   // Logged-in gender and profile ID are required
   // to exclude the user's own profile and show
@@ -800,14 +817,14 @@ private getDaysLeft(endDate: string | null | undefined): number {
     this.geoLocationDenied = false;
 
     // ✅ ADD THIS PART ONLY
-    this.profiles = this.profiles.map(profile => ({
-      ...profile,
-      distanceKm: this.getDistanceForProfile(profile)
-    }));
+  
+this.profiles = this.profiles.map(profile => ({
+  ...profile,
+  distanceKm: this.getDistanceForProfile(profile)
+}));
 
-    this.applyFilters?.();
+this.cdr.detectChanges();
 
-    this.cdr.detectChanges();
   },
       (error) => {
         console.warn('Geolocation error:', error);
@@ -936,10 +953,9 @@ async loadCurrentPlan(): Promise<void> {
   }
 
   try {
-    const response: any = await this.profilesService
-      .getUserSubscription(userId)
-      .toPromise();
-
+   const response: any = await this.profilesService
+  .getCurrentPlan(userId)
+  .toPromise();
 const activeSubscription = response?.data || null;
 
     if (!activeSubscription) {
@@ -999,7 +1015,31 @@ onMembershipPageFocus(): void {
     this.cdr.detectChanges();
 
     try {
-const response: any = await this.profilesService.getProfiles().toPromise();
+
+console.time('PROFILE_API_TIME');
+
+
+const result = this.profilesFetchPromise
+  ? await this.profilesFetchPromise
+  : await this.profilesService
+      .getProfiles()
+      .toPromise()
+      .then(
+        data => ({ success: true, data }),
+        error => ({ success: false, error })
+      );
+
+this.profilesFetchPromise = null;
+
+if (!result.success) {
+  throw result.error;
+}
+
+const response: any = result.data;
+
+
+console.timeEnd('PROFILE_API_TIME');
+
 if (this.destroyed) return;
 const rows = Array.isArray(response)
   ? response
@@ -1087,6 +1127,33 @@ console.log('MATCH DIAGNOSTIC', {
   ).length
 });
 
+// Build Member Search filter options from existing API data.
+// No additional API request.
+
+this.memberFilterProfiles = filteredRows
+  .map(
+    (row: unknown): PublicProfile | null =>
+      toPublicProfile(row, '')
+  )
+  .filter(
+    (profile: PublicProfile | null): profile is PublicProfile =>
+      profile !== null
+  );
+
+this.memberFilterOptions = makeOptions(
+  this.memberFilterProfiles
+);
+
+console.log('SUBCASTE DEBUG', {
+  apiValues: filteredRows.slice(0, 5).map((row: any) => ({
+    caste: row.caste_text,
+    sub_caste_text: row.sub_caste_text,
+    subCaste: row.subCaste
+  })),
+  mappedProfiles: this.memberFilterProfiles.length,
+  dropdownOptions: this.memberFilterOptions.subCaste
+});
+
 this.profiles = await Promise.all(
   filteredRows.map(async (row: any) => {
   const usableId = row.profile_code || row.user_id || row.profile_id || '';
@@ -1123,6 +1190,10 @@ nakshatra: await this.makeLangText(
   row.nakshatra_text,
   row.nakshatra_text_ta || row.nakshatra_text
 ),
+rasi: await this.makeLangText(
+  row.rasi_text || '',
+  row.rasi_text_ta || row.rasi_text || ''
+),
 location: await this.makeLangText(
   row.city_text || row.location_text,
   this.getTamilFromOptions(this.cityOptions, row.city_text || row.location_text)
@@ -1137,6 +1208,30 @@ state: await this.makeLangText(
   row.state_text,
   this.getTamilFromOptions(this.stateOptions, row.state_text)
 ),
+
+country: String(row.country_text || '').trim(),
+
+
+noCastePreference: (() => {
+  const value =
+    row.no_caste_preference ??
+    row.noCastePreference ??
+    row.religion?.noCastePreference ??
+    row.religion?.no_caste_preference;
+
+  if (value === true || value === 1 ||
+      value === '1' || value === 'true') {
+    return true;
+  }
+
+  if (value === false || value === 0 ||
+      value === '0' || value === 'false') {
+    return false;
+  }
+
+  return null;
+})(),
+
 
 education: await this.makeLangText(
   row.education_text || '-',
@@ -1402,7 +1497,7 @@ loadMoreProfilesAfterScroll(): void {
 
     this.cdr.detectChanges();
     this.cdr.markForCheck();
-  }, 1500);
+  }, 100);
 }
 @HostListener('window:scroll', [])
 onWindowScroll(): void {
@@ -1552,12 +1647,15 @@ get planStatus(): string {
       gender: profile.gender.en,
       city: profile.city.en,
       district: '',
-      state: profile.state.en,
-      country: '',
-      religion: profile.religion.en,
-      caste: profile.caste.en,
-      subCaste: '',
-      motherTongue: '',
+   state: profile.state.en,
+
+country: profile.country,
+religion: profile.religion.en,
+caste: profile.caste.en,
+noCastePreference: profile.noCastePreference,
+subCaste: '',
+motherTongue: '',
+
       maritalStatus: profile.maritalStatus.en,
       education: profile.education.en,
       profession: profile.profession.en,
@@ -1663,11 +1761,20 @@ const gender = this.normalizeText(profile.gender.en);
       const radiusFilter = this.appliedFilters.radius;
 
       const matchesCaste = !casteFilter || caste === casteFilter;
+
+const matchesNoCastePreference =
+  !this.memberSearchFilters.noCastePreferenceOnly ||
+  profile.noCastePreference === true;
+
       const matchesReligion = !religionFilter || religion === religionFilter;
       const matchesGender = !genderFilter || gender === genderFilter;
       const matchesMaritalStatus = !maritalStatusFilter || maritalStatus === maritalStatusFilter;
       const matchesEducation = !educationFilter || education === educationFilter;
       const matchesProfession = !professionFilter || profession === professionFilter;
+      const matchesRasi =
+  !this.memberSearchFilters.rasi ||
+  this.normalizeText(profile.rasi.en) ===
+    this.normalizeText(this.memberSearchFilters.rasi);
       const matchesState = !stateFilter || state === stateFilter;
       const matchesAgeFrom =
         this.appliedFilters.ageFrom === null || profile.age >= this.appliedFilters.ageFrom;
@@ -1705,19 +1812,40 @@ if (matchesLocation && radiusFilter !== null && radiusFilter > 0) {
   }
 }
 
-      return (
-        matchesOppositeGender &&
-        matchesCaste &&
-        matchesReligion &&
-        matchesGender &&
-        matchesMaritalStatus &&
-        matchesLocation &&
-        matchesState &&
-        matchesEducation &&
-        matchesProfession &&
-        matchesAgeFrom &&
-        matchesAgeTo
-      );
+  
+
+
+return (
+  matchesOppositeGender &&
+  matchesCaste &&
+  matchesNoCastePreference &&
+  matchesReligion &&
+  matchesGender &&
+  matchesMaritalStatus &&
+  matchesLocation &&
+  matchesState &&
+
+  (
+    !this.memberSearchFilters.country ||
+    this.normalizeText(profile.country) ===
+      this.normalizeText(this.memberSearchFilters.country)
+  ) &&
+
+  (
+    !this.memberSearchFilters.photoOnly ||
+    (
+      !!profile.image &&
+      profile.image !== 'assets/default-avatar.png'
+    )
+  ) &&
+
+matchesEducation &&
+matchesProfession &&
+matchesRasi &&
+matchesAgeFrom &&
+matchesAgeTo
+);
+
     });
 
     const sidebarFiltered = result.filter((profile) => {
@@ -2020,37 +2148,7 @@ catch(error){
  );
 
 }
-try {
 
-  const religionResponse:any =
-    await this.profilesService
-    .getReligionOptions()
-    .toPromise();
-
-
-  this.religionOptions =
-    (religionResponse.data || [])
-    .map((x:string)=>({
-
-      en:x,
-
-      ta:this.getTamilProfileValue(
-        'religion',
-        x
-      )
-
-    }));
-
-
-}
-catch(error){
-
- console.error(
-   "Religion loading error",
-   error
- );
-
-}
 
 try {
 
@@ -2202,18 +2300,7 @@ catch(error){
 }
   this.cdr.detectChanges();
 }
-getFilteredCasteOptions(): (LangText & { religion: string })[] {
-  const search = String(this.searchTerms.caste || '').toLowerCase().trim();
-  const selectedReligion = String(this.filters.religion || '').toLowerCase().trim();
 
-  return this.casteOptions.filter((item) => {
-    const casteName = this.getText(item).toLowerCase();
-    const matchesSearch = !search || casteName.includes(search);
-    const matchesReligion = !selectedReligion || item.religion === selectedReligion;
-
-    return matchesSearch && matchesReligion;
-  });
-}
   getText(value: string | LangText): string {
     if (typeof value === 'string') return value;
     return value?.[this.currentLang] || value?.en || '';
@@ -2229,170 +2316,8 @@ getDistrictOnly(location: string): string {
 
   return parts[0] || '-';
 }
-getUniqueOptions(list: ProfileItem[], key: keyof ProfileItem): string[] {
-  const values = list
-    .map(item => this.getText(item[key] as string | LangText))
-    .map(value => {
-      const text = String(value || '').trim().toLowerCase();
 
-      if (
-        text === '' ||
-        text === '-' ||
-        text === 'null' ||
-        text === 'nil' ||
-        text === 'nill' ||
-        text === 'undefined' ||
-        text === 'n/a' ||
-        text === 'unworking' ||
-        text === 'no job'
-      ) {
-        return 'Not Working';
-      }
 
-      return String(value || '').trim();
-    })
-    .filter(Boolean);
-
-  return [...new Set(values)].sort((a, b) => a.localeCompare(b));
-}
-
-  toggleDropdown(name: string, event: Event): void {
-    event.stopPropagation();
-    this.openDropdown = this.openDropdown === name ? null : name;
-  }
-private getNextDropdown(field: string): string | null {
-
-  const order: Record<string, string | null> = {
-
-    ageFrom: 'ageTo',
-
-    ageTo: 'religion',
-
-    religion: 'caste',
-
-    caste: 'gender',
-
-    gender: 'maritalStatus',
-
-    maritalStatus: 'state',
-
-    state: 'location',
-
-    location: 'radius',
-
-    radius: 'education',
-
-    education: 'profession',
-
-    profession: null
-
-  };
-
-  return order[field] || null;
-}
-selectOption(
-  field:
-    | 'caste'
-    | 'religion'
-    | 'gender'
-    | 'maritalStatus'
-    | 'location'
-    | 'education'
-    | 'profession'
-    | 'state',
-
-  value: string
-): void {
-
-  this.filters[field] = value;
-
-  this.appliedFilters = {
-    ...this.filters
-  };
-
-const next = this.getNextDropdown(field);
-
-this.openDropdown = next;
-
-this.cdr.detectChanges();
-
-if (next) {
-  this.scrollFilterToDropdown(next);
-} else {
-  this.scrollFilterToDropdown('apply');
-}
-}
-
-selectNumberOption(
-  field: 'ageFrom' | 'ageTo' | 'radius',
-  value: number | null
-): void {
-
-  this.filters[field] = value;
-
-  this.appliedFilters = {
-    ...this.filters
-  };
-
-const next = this.getNextDropdown(field);
-
-this.openDropdown = next;
-
-this.cdr.detectChanges();
-
-if (next) {
-  this.scrollFilterToDropdown(next);
-} else {
-  this.scrollFilterToDropdown('apply');
-}
-}
-  getFilteredOptions(options: string[], search: string): string[] {
-    const term = String(search || '').toLowerCase().trim();
-    if (!term) return options;
-    return options.filter(item =>
-      String(item || '').toLowerCase().includes(term)
-    );
-  }
-getFilteredLangOptions(options: LangText[], search: string): LangText[] {
-  const term = String(search || '').toLowerCase().trim();
-
-  if (!term) return options;
-
-  return options.filter(item =>
-    this.getText(item).toLowerCase().includes(term)
-  );
-}
-getFilteredCityOptions(): LangText[] {
-  const search = String(this.searchTerms.location || '').toLowerCase().trim();
-  const selectedState = String(this.filters.state || '').toLowerCase().trim();
-
-  return this.cityOptions.filter((item: any) => {
-
-    const cityName = this.getText(item).toLowerCase();
-
-    const cityState = String(item.state || '').toLowerCase().trim();
-
-    const matchesSearch =
-      !search || cityName.includes(search);
-
-    const matchesState =
-      !selectedState || cityState === selectedState;
-
-    return matchesSearch && matchesState;
-  });
-}
-  getFilteredNumberOptions(options: number[], search: string): number[] {
-    const term = String(search || '').toLowerCase().trim();
-    if (!term) return options;
-    return options.filter(item =>
-      String(item).toLowerCase().includes(term)
-    );
-  }
-
-  @HostListener('document:click')
-  closeDropdown(): void {
-    this.openDropdown = null;
-  }
 
   trackByProfile(index: number, profile: ProfileItem): string {
     return profile.id || String(index);
@@ -2406,38 +2331,72 @@ private scrollFilterToStart(): void {
     }
   }, 150);
 }
-private scrollFilterToDropdown(name: string): void {
-  setTimeout(() => {
-    const item = document.querySelector(
-      `[data-filter="${name}"]`
-    ) as HTMLElement | null;
 
-    if (item) {
-      item.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'start',
-        block: 'nearest'
-      });
-    }
-  }, 100);
-}
 
   setTab(tab: TabType): void {
     this.activeTab = tab;
-    this.openDropdown = null;
+    
     this.cdr.detectChanges();
   }
+
+onMemberFiltersChange(next: SearchFilters): void {
+  this.memberSearchFilters = { ...next };
+
+  // Connect shared filters to existing matching logic.
+  this.appliedFilters = {
+    ...this.appliedFilters,
+    gender: next.gender || null,
+    religion: next.religion || null,
+    caste: next.caste || null,
+    maritalStatus: next.maritalStatus || null,
+    location: next.city || null,
+    state: next.state || null,
+    education: next.education || null,
+    profession: next.profession || null,
+
+ageFrom: next.ageFrom,
+ageTo: next.ageTo
+};
+
+// Keep the existing filter bar synchronized.
+this.filters = { ...this.appliedFilters };
+
+// Restart pagination when filters change.
+this.visibleProfileCount = 9;
+
+
+  this.cdr.markForCheck();
+}
 
 applyFilters(forceClose?: boolean): void {
 
   this.appliedFilters = { ...this.filters };
 
-  this.openDropdown = null;
+  // Synchronize the shared Find Your Match filters.
+  this.memberSearchFilters = {
+    ...this.memberSearchFilters,
+    gender: this.appliedFilters.gender ?? '',
+    religion: this.appliedFilters.religion ?? '',
+    caste: this.appliedFilters.caste ?? '',
+    maritalStatus: this.appliedFilters.maritalStatus ?? '',
+    city: this.appliedFilters.location ?? '',
+    state: this.appliedFilters.state ?? '',
+    education: this.appliedFilters.education ?? '',
+    profession: this.appliedFilters.profession ?? '',
+    ageFrom: this.appliedFilters.ageFrom,
+    ageTo: this.appliedFilters.ageTo
+  };
+
+  // Restart pagination from the first 9 matching profiles.
+  this.visibleProfileCount = 9;
+
+
 
   this.cdr.detectChanges();
 
   this.scrollFilterToStart();
 }
+
 
   resetFilters(): void {
     this.filters = {
@@ -2456,6 +2415,11 @@ applyFilters(forceClose?: boolean): void {
 
     this.appliedFilters = { ...this.filters };
 
+this.memberSearchFilters = {
+  ...EMPTY_FILTERS,
+  
+};
+
 this.searchTerms = {
   ageFrom: '',
   ageTo: '',
@@ -2469,7 +2433,7 @@ this.searchTerms = {
   state: '',
   radius: ''
 };
-   this.openDropdown = null;
+   
 this.mobileFilterOpen = false;
 this.cdr.detectChanges();
 
@@ -2600,7 +2564,7 @@ async loadLoggedInUserProfile(): Promise<void> {
 
   try {
     const response: any = await this.profilesService.getMyProfile().toPromise();
-    
+    this.startupProfileResponse = response;
     const data = response?.data;
 
     if (!data) return;
@@ -2679,10 +2643,13 @@ async refreshUserProfileLanguage(): Promise<void> {
 
   try {
 
-    const response:any =
-      await this.profilesService
-      .getMyProfile()
-      .toPromise();
+const response: any =
+  this.startupProfileResponse ??
+  await this.profilesService
+    .getMyProfile()
+    .toPromise();
+
+this.startupProfileResponse = null;
 
 
     const data =
@@ -2742,10 +2709,13 @@ private async checkUserApprovalStatus(): Promise<boolean> {
 
   try {
 
- const response:any =
+
+const response: any =
+  this.startupProfileResponse ??
   await this.profilesService
-  .getMyProfile()
-  .toPromise();
+    .getMyProfile()
+    .toPromise();
+
 
 
     const profile =
@@ -2893,58 +2863,5 @@ async loadReligionOptions(){
   }
 
 }
-getSelectedFilterText(
- type:string,
- value:string|null
-):string {
 
- if(!value) return '';
-
- let list:any[] = [];
-
- switch(type){
-
- case 'gender':
-   list = this.genderOptions;
-   break;
-
- case 'religion':
-   list = this.religionOptions;
-   break;
-
- case 'caste':
-   list = this.casteOptions;
-   break;
-
- case 'maritalStatus':
-   list = this.maritalStatusOptions;
-   break;
-
- case 'education':
-   list = this.educationOptions;
-   break;
-
- case 'profession':
-   list = this.professionOptions;
-   break;
-
- case 'state':
-   list = this.stateOptions;
-   break;
-
- case 'location':
-   list = this.cityOptions;
-   break;
- }
-
-
- const item = list.find(
-   x =>
-   x.en?.toLowerCase() === value.toLowerCase()
- );
-
-
- return item ? this.getText(item) : value;
-
-}
 }

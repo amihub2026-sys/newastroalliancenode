@@ -1,8 +1,15 @@
+
 <div class="filters-heading">
   <div>
-    <p class="eyebrow">{{ text('FIND THE RIGHT PERSON', 'சரியான துணையைத் தேடுங்கள்') }}</p>
-    <h2>{{ text('Refine your search', 'தேடலை வடிகட்டுங்கள்') }}</h2>
+    <p class="eyebrow">
+      {{ text('MATCH PREFERENCES', 'வரன் தேடல் விருப்பங்கள்') }}
+    </p>
+
+    <h2>
+      {{ text('Refine your search', 'தேடலை வடிகட்டுங்கள்') }}
+    </h2>
   </div>
+
   <button
     type="button"
     class="close-mobile"
@@ -12,462 +19,397 @@
     ✕
   </button>
 </div>
-<div class="filter-help">
+
+<p class="filter-help">
   {{
     text(
-      'Choose only what matters to you. Leave the rest blank.',
+      'Choose only what matters to you.',
       'உங்களுக்கு முக்கியமானவற்றை மட்டும் தேர்வு செய்யுங்கள்.'
     )
   }}
-</div>
+</p>
 
+<!-- BASIC DETAILS -->
 <details open>
-  <summary>{{ text('01  Basic details', '01  அடிப்படை விவரங்கள்') }}</summary>
+  <summary>
+    {{ text('01 · Basic Details', '01 · அடிப்படை விவரங்கள்') }}
+  </summary>
+
   <div class="filter-fields">
-    <label
-      >{{ text('Looking for', 'யாரைத் தேடுகிறீர்கள்?') }}
-      <select [ngModel]="filters.gender" (ngModelChange)="setValue('gender', $event)">
-        <option value="">{{ text('Bride or groom', 'மணமகள் / மணமகன்') }}</option>
+    <label *ngIf="mode === 'public'">
+      {{ text('Looking for', 'யாரைத் தேடுகிறீர்கள்?') }}
+
+      <select
+        [ngModel]="filters.gender"
+        (ngModelChange)="setValue('gender', $event)"
+      >
+        <option value="">
+          {{ text('Bride or Groom', 'மணமகள் / மணமகன்') }}
+        </option>
+
         @for (item of values('gender'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
         }
       </select>
     </label>
-  
-<!-- AGE RANGE SLIDER -->
-<div class="age-range-filter">
 
-  <div class="age-range-header">
-    <span>
-      {{ text('Preferred Age', 'விருப்பமான வயது') }}
-    </span>
+    <div class="two-fields">
+      <label>
+        {{ text('Age From', 'வயது முதல்') }}
 
-    <strong>
-      {{ filters.ageFrom ?? 18 }}
-      –
-      {{ filters.ageTo ?? 70 }}
-      {{ text('Years', 'வயது') }}
-    </strong>
-  </div>
+        <select
+          [ngModel]="filters.ageFrom"
+          (ngModelChange)="setNumber('ageFrom', $event)"
+        >
+          <option [ngValue]="null">
+            {{ text('Any', 'எதுவும்') }}
+          </option>
 
-  <div class="age-range-slider">
+          @for (age of ages; track age) {
+            <option [ngValue]="age">{{ age }}</option>
+          }
+        </select>
+      </label>
 
-    <div class="age-slider-track"></div>
+      <label>
+        {{ text('Age To', 'வயது வரை') }}
 
-    <div
-      class="age-slider-progress"
-      [style.left.%]="((filters.ageFrom ?? 18) - 18) / 52 * 100"
-      [style.right.%]="(70 - (filters.ageTo ?? 70)) / 52 * 100">
+        <select
+          [ngModel]="filters.ageTo"
+          (ngModelChange)="setNumber('ageTo', $event)"
+        >
+          <option [ngValue]="null">
+            {{ text('Any', 'எதுவும்') }}
+          </option>
+
+          @for (age of ages; track age) {
+            <option [ngValue]="age">{{ age }}</option>
+          }
+        </select>
+      </label>
     </div>
 
-    <input
-      type="range"
-      class="age-slider-input age-min"
-      min="18"
-      max="70"
-      step="1"
-      [ngModel]="filters.ageFrom ?? 18"
-      (ngModelChange)="setNumber('ageFrom', $event)"
-      [attr.aria-label]="text('Minimum age', 'குறைந்த வயது')"
-    />
+    <label>
+      {{ text('Marital Status', 'திருமண நிலை') }}
 
-    <input
-      type="range"
-      class="age-slider-input age-max"
-      min="18"
-      max="70"
-      step="1"
-      [ngModel]="filters.ageTo ?? 70"
-      (ngModelChange)="setNumber('ageTo', $event)"
-      [attr.aria-label]="text('Maximum age', 'அதிக வயது')"
-    />
+      <select
+        [ngModel]="filters.maritalStatus"
+        (ngModelChange)="setValue('maritalStatus', $event)"
+      >
+        <option value="">
+          {{ text('All Statuses', 'அனைத்தும்') }}
+        </option>
 
-  </div>
-
-  <div class="age-range-limits">
-    <span>18</span>
-    <span>70</span>
-  </div>
-
-</div>
-
-    <label
-      >{{ text('Marital status', 'திருமண நிலை') }}
-      <select [ngModel]="filters.maritalStatus" (ngModelChange)="setValue('maritalStatus', $event)">
-        <option value="">{{ text('All statuses', 'அனைத்தும்') }}</option>
         @for (item of values('maritalStatus'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
         }
       </select>
     </label>
-   <div
-  class="two-fields"
-  *ngIf="mode === 'member'"
-  [class.unavailable]="!hasHeights"
->
-      <label
-        >{{ text('Height from (cm)', 'உயரம் முதல் (செ.மீ.)')
-        }}<select
-          [disabled]="!hasHeights"
-          [ngModel]="filters.heightFrom"
-          (ngModelChange)="setNumber('heightFrom', $event)"
-        >
-          <option [ngValue]="null">{{ text('Any', 'எதுவும்') }}</option>
-          @for (h of heights; track h) {
-            <option [ngValue]="h">{{ h }}</option>
-          }
-        </select></label
-      >
-      <label
-        >{{ text('Height to (cm)', 'உயரம் வரை (செ.மீ.)')
-        }}<select
-          [disabled]="!hasHeights"
-          [ngModel]="filters.heightTo"
-          (ngModelChange)="setNumber('heightTo', $event)"
-        >
-          <option [ngValue]="null">{{ text('Any', 'எதுவும்') }}</option>
-          @for (h of heights; track h) {
-            <option [ngValue]="h">{{ h }}</option>
-          }
-        </select></label
-      >
-    </div>
-   @if (mode === 'member' && !hasHeights) {
-      <small>{{
-        text(
-          'Height filtering will appear when height is available in public profile data.',
-          'பொது சுயவிவரத்தில் உயர விவரம் கிடைக்கும்போது வடிகட்டி இயங்கும்.'
-        )
-      }}</small>
-    }
-    <label class="inline-check"
-      ><input
+
+    <label class="inline-check">
+      <input
         type="checkbox"
         [checked]="filters.photoOnly"
         (change)="setPhoto($any($event.target).checked)"
-      />{{ text('Show profiles with photos', 'புகைப்படம் உள்ளவர்கள் மட்டும்') }}</label
-    >
+      />
+
+      {{
+        text(
+          'Profiles with photos only',
+          'புகைப்படம் உள்ளவர்கள் மட்டும்'
+        )
+      }}
+    </label>
   </div>
 </details>
 
+<!-- RELIGION & CASTE -->
 <details open>
-  <summary>{{ text('02  Religion & community', '02  மதம் மற்றும் சமூகம்') }}</summary>
+  <summary>
+    {{ text('02 · Religion & Caste', '02 · மதம் மற்றும் ஜாதி') }}
+  </summary>
+
   <div class="filter-fields">
-    <label
-      >{{ text('Religion', 'மதம்')
-      }}<select [ngModel]="filters.religion" (ngModelChange)="setValue('religion', $event)">
-        <option value="">{{ text('All religions', 'அனைத்து மதங்கள்') }}</option>
+    <label>
+      {{ text('Religion', 'மதம்') }}
+
+      <select
+        [ngModel]="filters.religion"
+        (ngModelChange)="setValue('religion', $event)"
+      >
+        <option value="">
+          {{ text('All Religions', 'அனைத்து மதங்களும்') }}
+        </option>
+
         @for (item of values('religion'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
         }
-      </select></label
-    >
-    <label
-      >{{ text('Caste', 'சாதி')
-      }}<select [ngModel]="filters.caste" (ngModelChange)="setValue('caste', $event)">
-        <option value="">{{ text('All castes', 'அனைத்து சாதிகள்') }}</option>
+      </select>
+    </label>
+
+    <label>
+      {{ text('Caste', 'ஜாதி') }}
+
+      <select
+        [ngModel]="filters.caste"
+        (ngModelChange)="setValue('caste', $event)"
+      >
+        <option value="">
+          {{ text('All Castes', 'அனைத்து ஜாதிகளும்') }}
+        </option>
+
         @for (item of values('caste'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
         }
-      </select></label
-    >
-   <label *ngIf="mode === 'member'"
-  >{{ text('Subcaste', 'உட்பிரிவு')
-      }}<select
-        [disabled]="!values('subCaste').length"
+      </select>
+    </label>
+
+    <!-- IMPORTANT: NO CASTE PREFERENCE -->
+    <label class="inline-check no-caste-preference">
+      <input
+        type="checkbox"
+        [checked]="hasNoCastePreferenceData && filters.noCastePreferenceOnly"
+        [disabled]="!hasNoCastePreferenceData"
+        (change)="setNoCastePreference($any($event.target).checked)"
+      />
+
+      <span>
+        <strong>
+          {{
+            text(
+              'No Caste Preference',
+              'ஜாதி தடை இல்லை'
+            )
+          }}
+        </strong>
+
+        <small>
+          {{
+            text(
+              'Only profiles open to any caste',
+              'அனைத்து ஜாதிகளையும் ஏற்கும் சுயவிவரங்கள்'
+            )
+          }}
+        </small>
+      </span>
+    </label>
+
+    @if (facetProfiles.length > 0 && !hasNoCastePreferenceData) {
+      <small class="filter-unavailable" role="status">
+        {{
+          text(
+            'This filter requires No Caste Preference data from the profile API.',
+            'இந்த வடிகட்டிக்கு சுயவிவர API-யில் ஜாதி விருப்பத் தகவல் தேவை.'
+          )
+        }}
+      </small>
+    }
+
+    <label *ngIf="mode === 'member'">
+      {{ text('Sub-caste', 'உட்பிரிவு') }}
+
+      <select
         [ngModel]="filters.subCaste"
         (ngModelChange)="setValue('subCaste', $event)"
       >
-        <option value="">{{ text('Any subcaste', 'எதுவும்') }}</option>
+        <option value="">
+          {{ text('Any Sub-caste', 'அனைத்து உட்பிரிவுகளும்') }}
+        </option>
+
         @for (item of values('subCaste'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
         }
-      </select></label
-    >
-  <label *ngIf="mode === 'member'"
-  >{{ text('Mother tongue', 'தாய்மொழி')
-      }}<select
-        [disabled]="!values('motherTongue').length"
-        [ngModel]="filters.motherTongue"
-        (ngModelChange)="setValue('motherTongue', $event)"
-      >
-        <option value="">{{ text('Any language', 'எந்த மொழியும்') }}</option>
-        @for (item of values('motherTongue'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
+      </select>
+    </label>
   </div>
 </details>
 
+<!-- LOCATION -->
 <details open>
-  <summary>{{ text('03  Location', '03  இருப்பிடம்') }}</summary>
+  <summary>
+    {{ text('03 · Location', '03 · இருப்பிடம்') }}
+  </summary>
+
   <div class="filter-fields">
-   <label *ngIf="mode === 'member'"
-  >{{ text('Country', 'நாடு')
-      }}<select
-        [disabled]="!values('country').length"
+    <label>
+      {{ text('Country', 'நாடு') }}
+
+      <select
         [ngModel]="filters.country"
         (ngModelChange)="setValue('country', $event)"
       >
-        <option value="">{{ text('Any country', 'எந்த நாடும்') }}</option>
+        <option value="">
+          {{ text('All Countries', 'அனைத்து நாடுகளும்') }}
+        </option>
+
         @for (item of values('country'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
         }
-      </select></label
-    >
-    <label
-      >{{ text('State', 'மாநிலம்')
-      }}<select [ngModel]="filters.state" (ngModelChange)="setValue('state', $event)">
-        <option value="">{{ text('All states', 'அனைத்து மாநிலங்கள்') }}</option>
+      </select>
+    </label>
+
+    <label>
+      {{ text('State', 'மாநிலம்') }}
+
+      <select
+        [ngModel]="filters.state"
+        (ngModelChange)="setValue('state', $event)"
+      >
+        <option value="">
+          {{ text('All States', 'அனைத்து மாநிலங்களும்') }}
+        </option>
+
         @for (item of values('state'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
         }
-      </select></label
-    >
-    <label *ngIf="mode === 'member'"
-  >{{ text('District', 'மாவட்டம்')
-      }}<select
-        [disabled]="!values('district').length"
-        [ngModel]="filters.district"
-        (ngModelChange)="setValue('district', $event)"
+      </select>
+    </label>
+
+    <label>
+      {{ text('City / District', 'நகரம் / மாவட்டம்') }}
+
+      <select
+        [ngModel]="filters.city"
+        (ngModelChange)="setValue('city', $event)"
       >
-        <option value="">{{ text('Any district', 'அனைத்து மாவட்டங்களும்') }}</option>
-        @for (item of values('district'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-    <label
-      >{{ text('City', 'நகரம்')
-      }}<select [ngModel]="filters.city" (ngModelChange)="setValue('city', $event)">
-        <option value="">{{ text('All cities', 'அனைத்து ஊர்கள்') }}</option>
+        <option value="">
+          {{
+            text(
+              'All Cities / Districts',
+              'அனைத்து நகரங்கள் / மாவட்டங்கள்'
+            )
+          }}
+        </option>
+
         @for (item of values('city'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
         }
-      </select></label
-    >
-    <div class="nearby-box" *ngIf="mode === 'member'">
-      <button class="nearby-button" type="button" (click)="nearbyRequested.emit()">
-        ◎ {{ text('Use my location', 'என் இருப்பிடத்தைப் பயன்படுத்து') }}
-      </button>
-      @if (nearbyError) {
-        <small role="status">{{ nearbyError }}</small>
-      }
-      @if (nearbyReady) {
-        <label
-          >{{ text('Within distance (km)', 'தூர வரம்பு (கி.மீ.)')
-          }}<select [ngModel]="filters.nearbyKm" (ngModelChange)="setNumber('nearbyKm', $event)">
-            <option [ngValue]="null">{{ text('Any distance', 'எந்த தூரமும்') }}</option>
-            @for (km of distances; track km) {
-              <option [ngValue]="km">{{ km }} km</option>
-            }
-          </select></label
-        >
-      }
-    </div>
+      </select>
+    </label>
   </div>
 </details>
 
+<!-- ADVANCED FILTERS -->
 <details *ngIf="mode === 'member'">
-  <summary>{{ text('04  Education & career', '04  கல்வி மற்றும் தொழில்') }}</summary>
-  <div class="filter-fields">
-    <label
-      >{{ text('Education', 'கல்வித்தகுதி')
-      }}<select [ngModel]="filters.education" (ngModelChange)="setValue('education', $event)">
-        <option value="">{{ text('Any education', 'எதுவும்') }}</option>
-        @for (item of values('education'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-    <label
-      >{{ text('Profession', 'தொழில்')
-      }}<select [ngModel]="filters.profession" (ngModelChange)="setValue('profession', $event)">
-        <option value="">{{ text('Any profession', 'எந்த தொழிலும்') }}</option>
-        @for (item of values('profession'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-    <label
-      >{{ text('Annual income', 'ஆண்டு வருமானம்')
-      }}<select
-        [disabled]="!values('annualIncome').length"
-        [ngModel]="filters.annualIncome"
-        (ngModelChange)="setValue('annualIncome', $event)"
-      >
-        <option value="">{{ text('Not available yet', 'இன்னும் கிடைக்கவில்லை') }}</option>
-        @for (item of values('annualIncome'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-  </div>
-</details>
-<details *ngIf="mode === 'member'">
-  <summary>{{ text('05  Horoscope', '05  ஜாதக விவரங்கள்') }}</summary>
-  <div class="filter-fields">
-    <label
-      >{{ text('Rasi', 'ராசி')
-      }}<select [ngModel]="filters.rasi" (ngModelChange)="setValue('rasi', $event)">
-        <option value="">{{ text('Any Rasi', 'எந்த ராசியும்') }}</option>
-        @for (item of values('rasi'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-    <label
-      >{{ text('Nakshatra / Star', 'நட்சத்திரம்')
-      }}<select [ngModel]="filters.nakshatra" (ngModelChange)="setValue('nakshatra', $event)">
-        <option value="">{{ text('Any star', 'எந்த நட்சத்திரமும்') }}</option>
-        @for (item of values('nakshatra'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-    <label
-      >{{ text('Dosham', 'தோஷம்')
-      }}<select
-        [disabled]="!values('dosham').length"
-        [ngModel]="filters.dosham"
-        (ngModelChange)="setValue('dosham', $event)"
-      >
-        <option value="">{{ text('Not available yet', 'இன்னும் கிடைக்கவில்லை') }}</option>
-        @for (item of values('dosham'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-  </div>
-</details>
-
-<details *ngIf="mode === 'member'">
-  <summary>{{ text('06  Family preferences', '06  குடும்ப விருப்பங்கள்') }}</summary>
-  <div class="filter-fields">
-    <label
-      >{{ text('Family type', 'குடும்ப வகை')
-      }}<select
-        [disabled]="!values('familyType').length"
-        [ngModel]="filters.familyType"
-        (ngModelChange)="setValue('familyType', $event)"
-      >
-        <option value="">{{ text('Not available yet', 'இன்னும் கிடைக்கவில்லை') }}</option>
-        @for (item of values('familyType'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-    <label
-      >{{ text('Family values', 'குடும்பப் பண்புகள்')
-      }}<select
-        [disabled]="!values('familyValues').length"
-        [ngModel]="filters.familyValues"
-        (ngModelChange)="setValue('familyValues', $event)"
-      >
-        <option value="">{{ text('Not available yet', 'இன்னும் கிடைக்கவில்லை') }}</option>
-        @for (item of values('familyValues'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-  </div>
-</details>
-<details *ngIf="mode === 'member'">
-  <summary>{{ text('07  Lifestyle', '07  வாழ்க்கை முறை') }}</summary>
-  <div class="filter-fields">
-    <label
-      >{{ text('Food habits', 'உணவுப் பழக்கம்')
-      }}<select
-        [disabled]="!values('diet').length"
-        [ngModel]="filters.diet"
-        (ngModelChange)="setValue('diet', $event)"
-      >
-        <option value="">{{ text('Not available yet', 'இன்னும் கிடைக்கவில்லை') }}</option>
-        @for (item of values('diet'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-    <label
-      >{{ text('Smoking', 'புகைப்பழக்கம்')
-      }}<select
-        [disabled]="!values('smoking').length"
-        [ngModel]="filters.smoking"
-        (ngModelChange)="setValue('smoking', $event)"
-      >
-        <option value="">{{ text('Not available yet', 'இன்னும் கிடைக்கவில்லை') }}</option>
-        @for (item of values('smoking'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-    <label
-      >{{ text('Drinking', 'மது அருந்தும் பழக்கம்')
-      }}<select
-        [disabled]="!values('drinking').length"
-        [ngModel]="filters.drinking"
-        (ngModelChange)="setValue('drinking', $event)"
-      >
-        <option value="">{{ text('Not available yet', 'இன்னும் கிடைக்கவில்லை') }}</option>
-        @for (item of values('drinking'); track item) {
-          <option [value]="item">{{ item | publicValue: lang }}</option>
-        }
-      </select></label
-    >
-  </div>
-</details>
-
-<details *ngIf="mode === 'member'" open>
   <summary>
-    {{ text('08  Hobby Match', '08  பொழுதுபோக்கு பொருத்தம்') }}
-    <span class="new-mark">{{ text('NEW', 'புதியது') }}</span>
+    {{
+      text(
+        '04 · Advanced Matching',
+        '04 · கூடுதல் பொருத்தங்கள்'
+      )
+    }}
   </summary>
+
   <div class="filter-fields">
-    <p class="helper">
-      {{
-        text(
-          'Choose your interests to see shared hobbies when members have published them.',
-          'உங்கள் விருப்பங்களைத் தேர்ந்தெடுங்கள். உறுப்பினர்கள் பகிர்ந்திருக்கும் பொழுதுபோக்குகளை ஒப்பிடலாம்.'
-        )
-      }}
-    </p>
-    @if (!hasHobbies) {
-      <div class="coming-soon" role="status">
-        {{
-          text(
-            'Hobby data is not yet provided by your current backend. Enable public hobby fields to activate this filter.',
-            'தற்போதைய சேவையகத்தில் பொழுதுபோக்கு விவரங்கள் இல்லை. அவை சேர்க்கப்பட்டதும் இந்த வடிகட்டி இயங்கும்.'
-          )
-        }}
-      </div>
-    }
-    <div class="hobbies-list" [class.unavailable]="!hasHobbies">
-      @for (hobby of hobbies; track hobby.value) {
-        <label class="hobby-option"
-          ><input
-            type="checkbox"
-            [disabled]="!hasHobbies"
-            [checked]="isSelectedHobby(hobby.value)"
-            (change)="setHobby(hobby.value, $any($event.target).checked)"
-          /><span>{{ lang === 'ta' ? hobby.ta : hobby.en }}</span></label
-        >
-      }
-    </div>
-    @if (hasHobbies && filters.hobbies.length) {
-      <small>{{
-        text(
-          'Show members sharing at least one of your interests.',
-          'குறைந்தபட்சம் ஒரு விருப்பம் பொருந்தும் உறுப்பினர்கள் காட்டப்படுவார்கள்.'
-        )
-      }}</small>
-    }
+    <label>
+      {{ text('Education', 'கல்வி') }}
+
+      <select
+        [ngModel]="filters.education"
+        (ngModelChange)="setValue('education', $event)"
+      >
+        <option value="">
+          {{ text('Any Education', 'அனைத்து கல்விகளும்') }}
+        </option>
+
+        @for (item of values('education'); track item) {
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
+        }
+      </select>
+    </label>
+
+    <label>
+      {{ text('Occupation', 'தொழில்') }}
+
+      <select
+        [ngModel]="filters.profession"
+        (ngModelChange)="setValue('profession', $event)"
+      >
+        <option value="">
+          {{ text('Any Occupation', 'அனைத்து தொழில்களும்') }}
+        </option>
+
+        @for (item of values('profession'); track item) {
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
+        }
+      </select>
+    </label>
+
+    <label>
+      {{ text('Rasi', 'ராசி') }}
+
+      <select
+        [ngModel]="filters.rasi"
+        (ngModelChange)="setValue('rasi', $event)"
+      >
+        <option value="">
+          {{ text('Any Rasi', 'அனைத்து ராசிகளும்') }}
+        </option>
+
+        @for (item of values('rasi'); track item) {
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
+        }
+      </select>
+    </label>
+
+    <label>
+      {{ text('Nakshatra / Star', 'நட்சத்திரம்') }}
+
+      <select
+        [ngModel]="filters.nakshatra"
+        (ngModelChange)="setValue('nakshatra', $event)"
+      >
+        <option value="">
+          {{ text('Any Star', 'அனைத்து நட்சத்திரங்களும்') }}
+        </option>
+
+        @for (item of values('nakshatra'); track item) {
+          <option [value]="item">
+            {{ item | publicValue: lang }}
+          </option>
+        }
+      </select>
+    </label>
+
   </div>
 </details>
+
 <div class="sidebar-footer">
-  <button type="button" class="clear-btn" (click)="clear()">
-    {{ text('Clear all filters', 'அனைத்தையும் நீக்கு') }}</button
-  ><button type="button" class="mobile-apply" (click)="closeRequested.emit()">
-    {{ text('View results', 'முடிவுகளைக் காட்டு') }}
+  <button
+    type="button"
+    class="clear-btn"
+    (click)="clear()"
+  >
+    {{ text('Clear Filters', 'வடிகட்டிகளை நீக்கு') }}
+  </button>
+
+  <button
+    type="button"
+    class="mobile-apply"
+    (click)="closeRequested.emit()"
+  >
+    {{ text('View Results', 'முடிவுகளைக் காட்டு') }}
   </button>
 </div>

@@ -31,13 +31,11 @@ import { PublicCard } from '../shared/public-card/public-card';
 import {
   EMPTY_FILTERS,
   FilterOptions,
-  GeoPoint,
   PublicProfile,
   SearchFilters,
   countFilters,
   makeOptions,
   matchesProfile,
-  sharedHobbyCount,
   toPublicProfile
 } from './models/search.models';
 
@@ -58,10 +56,12 @@ import {
 export class FreeSearch implements OnInit {
 
   private readonly http = inject(HttpClient);
-  // Public profile requests do not need login headers
-private readonly publicHttp = new HttpClient(
-  inject(HttpBackend)
-);
+
+  // Public profile requests do not need login headers.
+  private readonly publicHttp = new HttpClient(
+    inject(HttpBackend)
+  );
+
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly language = inject(LanguageService);
   private readonly route = inject(ActivatedRoute);
@@ -71,8 +71,6 @@ private readonly publicHttp = new HttpClient(
 
   private readonly searchChanges = new Subject<void>();
 
- 
-
   private readonly apiOrigin =
     environment.apiUrl.replace(/\/api\/?$/, '');
 
@@ -81,60 +79,53 @@ private readonly publicHttp = new HttpClient(
   // ==========================================
 
   readonly pageSize = 12;
-
   displayed = this.pageSize;
 
- 
-  
-/* ==========================================
-   INFINITE SCROLL — AUTO LOAD 12 PROFILES
-========================================== */
+  // ==========================================
+  // INFINITE SCROLL — AUTO LOAD 12 PROFILES
+  // ==========================================
 
-private profileObserver: IntersectionObserver | null = null;
+  private profileObserver: IntersectionObserver | null = null;
 
-@ViewChild('autoLoadTrigger')
-set autoLoadTrigger(
-  element: ElementRef<HTMLElement> | undefined
-) {
-
-  this.profileObserver?.disconnect();
-  this.profileObserver = null;
-
-  if (
-    !element ||
-    !isPlatformBrowser(this.platformId)
+  @ViewChild('autoLoadTrigger')
+  set autoLoadTrigger(
+    element: ElementRef<HTMLElement> | undefined
   ) {
-    return;
-  }
+    this.profileObserver?.disconnect();
+    this.profileObserver = null;
 
-  this.profileObserver = new IntersectionObserver(
-    (entries) => {
-
-      const entry = entries[0];
-
-      if (
-  !entry?.isIntersecting ||
-  this.loading ||
-  this.isLoadingMore ||
-  !this.hasMoreProfiles
-) {
-  return;
-}
-
-      // Load the next 12 profiles automatically.
-      this.showMoreProfiles();
-
-    },
-    {
-      root: null,
-      rootMargin: '0px 0px 320px 0px',
-      threshold: 0
+    if (
+      !element ||
+      !isPlatformBrowser(this.platformId)
+    ) {
+      return;
     }
-  );
 
-  this.profileObserver.observe(element.nativeElement);
-}
+    this.profileObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
 
+        if (
+          !entry?.isIntersecting ||
+          this.loading ||
+          this.isLoadingMore ||
+          !this.hasMoreProfiles
+        ) {
+          return;
+        }
+
+        // Load the next 12 profiles automatically.
+        this.showMoreProfiles();
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px 320px 0px',
+        threshold: 0
+      }
+    );
+
+    this.profileObserver.observe(element.nativeElement);
+  }
 
   get visibleResults(): PublicProfile[] {
     return this.results.slice(0, this.displayed);
@@ -144,47 +135,43 @@ set autoLoadTrigger(
     return this.displayed < this.results.length;
   }
 
-  
-/* ==========================================
-   INFINITE SCROLL — 2 SECOND LOADING DELAY
-========================================== */
+  // ==========================================
+  // INFINITE SCROLL — 2 SECOND LOADING DELAY
+  // ==========================================
 
-isLoadingMore = false;
+  isLoadingMore = false;
 
-private loadMoreTimer: ReturnType<typeof setTimeout> | null = null;
+  private loadMoreTimer:
+    ReturnType<typeof setTimeout> | null = null;
 
-showMoreProfiles(): void {
+  showMoreProfiles(): void {
+    if (
+      this.loading ||
+      this.isLoadingMore ||
+      !this.hasMoreProfiles
+    ) {
+      return;
+    }
 
-  if (
-    this.loading ||
-    this.isLoadingMore ||
-    !this.hasMoreProfiles
-  ) {
-    return;
-  }
-
-  // Show loading animation immediately.
-  this.isLoadingMore = true;
-  this.cdr.markForCheck();
-
-  // Wait 2 seconds before showing next 12 profiles.
-  this.loadMoreTimer = setTimeout(() => {
-
-    this.displayed = Math.min(
-      this.displayed + this.pageSize,
-      this.results.length
-    );
-
-    this.isLoadingMore = false;
-    this.loadMoreTimer = null;
-
+    // Show loading animation immediately.
+    this.isLoadingMore = true;
     this.cdr.markForCheck();
 
-  }, 2000);
-}
+    // Wait 2 seconds before showing next 12 profiles.
+    this.loadMoreTimer = setTimeout(() => {
+      this.displayed = Math.min(
+        this.displayed + this.pageSize,
+        this.results.length
+      );
 
+      this.isLoadingMore = false;
+      this.loadMoreTimer = null;
 
-  // Compatibility with any existing loadMore() calls.
+      this.cdr.markForCheck();
+    }, 2000);
+  }
+
+  // Compatibility with existing loadMore() calls.
   loadMore(): void {
     this.showMoreProfiles();
   }
@@ -201,8 +188,7 @@ showMoreProfiles(): void {
   results: PublicProfile[] = [];
 
   filters: SearchFilters = {
-    ...EMPTY_FILTERS,
-    hobbies: []
+    ...EMPTY_FILTERS
   };
 
   loading = true;
@@ -210,16 +196,10 @@ showMoreProfiles(): void {
 
   search = '';
 
-  sortBy: 'recent' | 'ageAsc' | 'ageDesc' | 'hobbies' =
-    'recent';
+  sortBy: 'recent' | 'ageAsc' | 'ageDesc' = 'recent';
 
   mobileFilterOpen = false;
-
-  hasHobbies = false;
   hasHeights = false;
-
-  nearPosition: GeoPoint | null = null;
-  nearbyError = '';
 
   // ==========================================
   // LANGUAGE
@@ -234,27 +214,27 @@ showMoreProfiles(): void {
   }
 
   get activeFilters(): number {
-    return countFilters(this.filters) +
-      (this.search.trim() ? 1 : 0);
+    return (
+      countFilters(this.filters) +
+      (this.search.trim() ? 1 : 0)
+    );
   }
 
   // ==========================================
   // MEMBER PROFILE MATCHING
   // ==========================================
 
-memberGender = '';
-memberReligion = '';
-memberCaste = '';
-memberUserId = '';
-memberProfileId = '';
-
+  memberGender = '';
+  memberReligion = '';
+  memberCaste = '';
+  memberUserId = '';
+  memberProfileId = '';
 
   // ==========================================
   // INITIALIZATION
   // ==========================================
 
   async ngOnInit(): Promise<void> {
-
     this.restoreState(
       this.route.snapshot.queryParamMap.get('s')
     );
@@ -269,7 +249,7 @@ memberProfileId = '';
         this.persistState();
       });
 
-   this.load();
+    this.load();
   }
 
   // ==========================================
@@ -286,7 +266,6 @@ memberProfileId = '';
   }
 
   private restoreState(raw: string | null): void {
-
     if (!raw || raw.length > 4500) {
       return;
     }
@@ -308,56 +287,42 @@ memberProfileId = '';
         typeof state['filters'] === 'object' &&
         !Array.isArray(state['filters'])
       ) {
-
         const incoming =
           state['filters'] as Record<string, unknown>;
 
         const next: SearchFilters = {
-          ...EMPTY_FILTERS,
-          hobbies: []
+          ...EMPTY_FILTERS
         };
 
         for (
           const key of Object.keys(next) as
             (keyof SearchFilters)[]
         ) {
-
           const val = incoming[key];
 
-          if (key === 'hobbies') {
-
-            next.hobbies = Array.isArray(val)
-              ? val.filter(
-                  (x): x is string =>
-                    typeof x === 'string'
-                ).slice(0, 16)
-              : [];
-
-          } else if (
-            key === 'sharedHobbiesOnly' ||
-            key === 'photoOnly'
+          if (
+            key === 'hobbies' ||
+            key === 'sharedHobbiesOnly'
           ) {
-
+            // Ignore old hobby filters from saved URLs.
+            continue;
+          } else if (
+            key === 'photoOnly' ||
+            key === 'noCastePreferenceOnly'
+          ) {
             (
-              next as unknown as
-              Record<string, unknown>
+              next as unknown as Record<string, unknown>
             )[key] = val === true;
-
           } else if (typeof next[key] === 'string') {
-
             (
-              next as unknown as
-              Record<string, unknown>
+              next as unknown as Record<string, unknown>
             )[key] =
               typeof val === 'string'
                 ? val.slice(0, 150)
                 : '';
-
           } else {
-
             (
-              next as unknown as
-              Record<string, unknown>
+              next as unknown as Record<string, unknown>
             )[key] =
               typeof val === 'number' &&
               Number.isFinite(val)
@@ -379,8 +344,7 @@ memberProfileId = '';
       if (
         sort === 'recent' ||
         sort === 'ageAsc' ||
-        sort === 'ageDesc' ||
-        sort === 'hobbies'
+        sort === 'ageDesc'
       ) {
         this.sortBy = sort;
       }
@@ -396,14 +360,12 @@ memberProfileId = '';
           Math.min(240, visible)
         );
       }
-
     } catch {
       // Ignore invalid saved state.
     }
   }
 
   private persistState(): void {
-
     const s = this.returnState;
 
     void this.router.navigate([], {
@@ -419,14 +381,11 @@ memberProfileId = '';
   // ==========================================
 
   load(): void {
-
     this.loading = true;
     this.error = false;
 
-   this.publicHttp
-  .get<unknown>(
-    `${environment.apiUrl}/profile`
-  )
+    this.publicHttp
+      .get<unknown>(`${environment.apiUrl}/profile`)
       .pipe(
         timeout(30000),
         takeUntilDestroyed(this.destroyRef),
@@ -436,9 +395,7 @@ memberProfileId = '';
         })
       )
       .subscribe({
-
         next: (response) => {
-
           const data = response as {
             data?: unknown;
             profiles?: unknown;
@@ -460,17 +417,31 @@ memberProfileId = '';
               )
             )
             .filter(
-  (p): p is PublicProfile =>
-    p !== null
-);
+              (p): p is PublicProfile => p !== null
+            );
 
-          this.options = makeOptions(
-            this.profiles
+          // Check whether the existing API provides
+          // No Caste Preference information.
+          const hasNoCastePreferenceData = this.profiles.some(
+            profile =>
+              typeof profile.noCastePreference === 'boolean'
           );
 
-          this.hasHobbies = this.profiles.some(
-            p => p.hobbies.length > 0
-          );
+          // Disable the active preference filter if the
+          // API does not provide the required information.
+          if (
+            !hasNoCastePreferenceData &&
+            this.filters.noCastePreferenceOnly
+          ) {
+            this.filters = {
+              ...this.filters,
+              noCastePreferenceOnly: false
+            };
+
+            this.persistState();
+          }
+
+          this.options = makeOptions(this.profiles);
 
           this.hasHeights = this.profiles.some(
             p => p.heightCm !== null
@@ -480,12 +451,10 @@ memberProfileId = '';
           this.refresh(false);
 
           this.cdr.markForCheck();
-
           this.restoreScrollPosition();
         },
 
         error: (err) => {
-
           console.error(
             'Unable to load public profiles:',
             err
@@ -498,7 +467,6 @@ memberProfileId = '';
 
           this.cdr.markForCheck();
         }
-
       });
   }
 
@@ -507,26 +475,21 @@ memberProfileId = '';
   // ==========================================
 
   private restoreScrollPosition(): void {
-
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
     try {
-
       const saved = Number(
         sessionStorage.getItem('astro_search_scroll')
       );
 
-      sessionStorage.removeItem(
-        'astro_search_scroll'
-      );
+      sessionStorage.removeItem('astro_search_scroll');
 
       if (
         Number.isFinite(saved) &&
         saved > 0
       ) {
-
         setTimeout(() => {
           window.scrollTo({
             top: saved,
@@ -534,7 +497,6 @@ memberProfileId = '';
           });
         }, 120);
       }
-
     } catch {
       // Ignore restricted session storage.
     }
@@ -554,66 +516,45 @@ memberProfileId = '';
   }
 
   changeFilters(next: SearchFilters): void {
-
     this.filters = {
-      ...next,
-      hobbies: [...next.hobbies]
+      ...next
     };
 
     this.refresh();
     this.persistState();
   }
 
-  private refresh(
-    resetPage = true
-  ): void {
-
+  private refresh(resetPage = true): void {
     const items = this.profiles.filter(
       p => matchesProfile(
         p,
         this.filters,
         this.search,
-        this.nearPosition
+        null
       )
     );
 
-    this.results = [...items].sort(
-      (a, b) => {
+    this.results = [...items].sort((a, b) => {
+      switch (this.sortBy) {
+        case 'ageAsc':
+          return (
+            (a.age ?? 999) -
+            (b.age ?? 999)
+          );
 
-        switch (this.sortBy) {
+        case 'ageDesc':
+          return (
+            (b.age ?? 0) -
+            (a.age ?? 0)
+          );
 
-          case 'ageAsc':
-            return (
-              (a.age ?? 999) -
-              (b.age ?? 999)
-            );
-
-          case 'ageDesc':
-            return (
-              (b.age ?? 0) -
-              (a.age ?? 0)
-            );
-
-          case 'hobbies':
-            return (
-              sharedHobbyCount(
-                b,
-                this.filters.hobbies
-              ) -
-              sharedHobbyCount(
-                a,
-                this.filters.hobbies
-              )
-            );
-
-          default:
-            return (
-              (Date.parse(b.updatedAt) || 0) -
-              (Date.parse(a.updatedAt) || 0)
-            );
-        }
+        default:
+          return (
+            (Date.parse(b.updatedAt) || 0) -
+            (Date.parse(a.updatedAt) || 0)
+          );
       }
-    );
+    });
 
     // Reset pagination only when filters or
     // sorting change, not on Show More.
@@ -629,86 +570,14 @@ memberProfileId = '';
   // ==========================================
 
   reset(): void {
-
     this.search = '';
     this.sortBy = 'recent';
 
     this.filters = {
-      ...EMPTY_FILTERS,
-      hobbies: []
+      ...EMPTY_FILTERS
     };
-
-    this.nearPosition = null;
-    this.nearbyError = '';
 
     this.refresh();
     this.persistState();
-  }
-
-  // ==========================================
-  // HOBBIES
-  // ==========================================
-
-  hobbyCount(
-    profile: PublicProfile
-  ): number {
-
-    return sharedHobbyCount(
-      profile,
-      this.filters.hobbies
-    );
-  }
-
-  // ==========================================
-  // NEARBY SEARCH
-  // ==========================================
-
-  enableNearby(): void {
-
-    if (
-      !isPlatformBrowser(this.platformId) ||
-      !navigator.geolocation
-    ) {
-
-      this.nearbyError = this.text(
-        'Location not supported by this device.',
-        'இந்தச் சாதனத்தில் இருப்பிட வசதி இல்லை.'
-      );
-
-      return;
-    }
-
-    this.nearbyError = '';
-
-    navigator.geolocation.getCurrentPosition(
-
-      (position) => {
-
-        this.nearPosition = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-
-        this.refresh();
-        this.persistState();
-        this.cdr.markForCheck();
-      },
-
-      () => {
-
-        this.nearbyError = this.text(
-          'Location permission denied. You can filter by city instead.',
-          'இருப்பிட அனுமதி இல்லை. நகரத்தைத் தேர்வு செய்யலாம்.'
-        );
-
-        this.cdr.markForCheck();
-      },
-
-      {
-        enableHighAccuracy: false,
-        timeout: 8000,
-        maximumAge: 300000
-      }
-    );
   }
 }

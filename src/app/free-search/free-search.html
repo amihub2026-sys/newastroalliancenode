@@ -61,12 +61,11 @@
         [filters]="filters"
         [options]="options"
         [facetProfiles]="profiles"
-        [hasHobbies]="hasHobbies"
+        
         [hasHeights]="hasHeights"
-        [nearbyReady]="nearPosition !== null"
-        [nearbyError]="nearbyError"
+       
         (filtersChange)="changeFilters($event)"
-        (nearbyRequested)="enableNearby()"
+        
         (closeRequested)="mobileFilterOpen = false"
       />
     </aside>

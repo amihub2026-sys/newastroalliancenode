@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
+import { shareReplay } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,20 +10,59 @@ export class ProfilesService {
 
   private apiUrl = `${environment.apiUrl}/profile`;
   private likeApiUrl = `${environment.apiUrl}/likes`;
-  private masterApiUrl = `${environment.apiUrl}/masters`;
-  constructor(private http: HttpClient) {}
+  
+private masterApiUrl = `${environment.apiUrl}/masters`;
 
-  getProfiles(): Observable<any> {
-    return this.http.get(this.apiUrl);
+private profilesCache$: Observable<any> | null = null;
+private profilesCacheTime = 0;
+private profilesCacheToken = '';
+
+constructor(private http: HttpClient) {}
+
+
+
+getProfiles(): Observable<any> {
+  const token =
+    typeof window !== 'undefined'
+      ? localStorage.getItem('matrimony_token') || ''
+      : '';
+
+  const now = Date.now();
+
+  const cacheValid =
+    this.profilesCache$ !== null &&
+    this.profilesCacheToken === token &&
+    now - this.profilesCacheTime < 120000;
+
+  if (cacheValid) {
+    return this.profilesCache$!;
   }
+
+  this.profilesCacheToken = token;
+  this.profilesCacheTime = now;
+
+  this.profilesCache$ = this.http.get(this.apiUrl).pipe(
+    shareReplay({ bufferSize: 1, refCount: false })
+  );
+
+  return this.profilesCache$;
+}
+
 
   getMyProfile(): Observable<any> {
     return this.http.get(`${this.apiUrl}/me`);
   }
 
-  getCurrentPlan(userId: string): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/subscriptions/current/${userId}`);
-  }
+ 
+getCurrentPlan(_userId: string): Observable<any> {
+  return this.http.get(
+    `${environment.apiUrl}/subscription/me`,
+    {
+      headers: this.getHeaders()
+    }
+  );
+}
+
 
   getUserSubscription(userId: string): Observable<any> {
     return this.http.get(`${environment.apiUrl}/subscription/user/${userId}`);

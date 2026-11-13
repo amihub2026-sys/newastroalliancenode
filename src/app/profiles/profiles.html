@@ -206,23 +206,6 @@
 
 
   <!-- ==========================================
-       LOCATION FILTER INDICATOR
-  ========================================== -->
-
-  <div
-    class="geo-hint"
-    *ngIf="
-      activeTab === 'browse' &&
-      filters.radius &&
-      geoLocationReady
-    "
-  >
-    📍 {{ tr.filters.nearbyOnly }}:
-    {{ filters.radius }} km
-  </div>
-
-
-  <!-- ==========================================
        MOBILE FILTER BUTTON
   ========================================== -->
 
@@ -427,7 +410,7 @@
           [options]="memberFilterOptions"
           [facetProfiles]="memberFilterProfiles"
           [lang]="currentLang === 'ta' ? 'ta' : 'en'"
-          (filtersChange)="memberSearchFilters = $event"
+          (filtersChange)="onMemberFiltersChange($event)"
           (closeRequested)="mobileFilterOpen = false"
         >
         </app-public-search-filters>
