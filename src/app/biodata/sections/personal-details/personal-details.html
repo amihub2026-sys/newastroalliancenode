@@ -159,9 +159,12 @@
 
          <div class="field" [class.invalid]="vm.isInvalid('gender')">
   <label>{{ vm.tr.labels.gender }} <span class="required">*</span></label>
+
 <select
   [(ngModel)]="vm.formData.gender"
-  name="gender">
+  name="gender"
+  [disabled]="!vm.isAdminBiodataMode()">
+
 
   <option value="">{{ vm.tr.labels.selectGender }}</option>
 

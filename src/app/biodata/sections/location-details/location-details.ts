@@ -17,6 +17,26 @@ import { FormsModule, ControlContainer } from '@angular/forms';
     deps: [[new SkipSelf(), ControlContainer]]
   }]
 })
+
 export class LocationDetails {
   @Input({ required: true }) vm!: Biodata;
+
+  openDropdown: 'country' | 'state' | 'city' | null = null;
+
+  countryQuery = '';
+  stateQuery = '';
+  cityQuery = '';
+
+  toggleDropdown(type: 'country' | 'state' | 'city'): void {
+    if (this.openDropdown === type) {
+      this.openDropdown = null;
+      return;
+    }
+
+    this.openDropdown = type;
+
+    if (type === 'country') this.countryQuery = '';
+    if (type === 'state') this.stateQuery = '';
+    if (type === 'city') this.cityQuery = '';
+  }
 }

@@ -26,40 +26,86 @@
 
 
 <!-- COUNTRY -->
+
 <!-- COUNTRY -->
-<div class="field country-field" [class.invalid]="vm.isInvalid('country')">
-  <label>{{ vm.tr.labels.country }} <span class="required">*</span></label>
+<div class="field country-field"
+     [class.invalid]="vm.isInvalid('country')">
 
-  <div class="country-select-wrap">
-    <input
-      type="text"
-      [(ngModel)]="vm.countrySearch"
-      name="countrySearch"
-      [placeholder]="vm.currentLang === 'ta' ? 'நாட்டை தேடவும் / உள்ளிடவும்' : 'Search / Enter country'"
-      autocomplete="off"
-      (focus)="vm.onCountrySearchChange()"
-      (blur)="vm.hideCountryDropdown()"
-      (keypress)="vm.handleTyping($event)"
-      (input)="vm.onCountrySearchChange()"
-    >
+  <label>
+    {{ vm.tr.labels.country }}
+    <span class="required">*</span>
+  </label>
 
-    <div class="country-dropdown" *ngIf="vm.showCountryDropdown">
-      <div
-        class="country-option"
-        *ngFor="let country of vm.filteredCountryList"
-        (mousedown)="vm.selectCountry(country)"
-      >
-        {{
-          vm.currentLang === 'ta'
-            ? (country.nameTa || country.nameEn)
-            : country.nameEn
-        }}
+  <div class="country-select-wrap location-picker">
+
+    <button
+      type="button"
+      class="location-trigger"
+      (click)="toggleDropdown('country')">
+
+      <span>
+        {{ vm.countrySearch ||
+          (vm.currentLang === 'ta'
+            ? 'நாட்டை தேர்வு செய்யவும்'
+            : 'Select Country') }}
+      </span>
+
+      <span>⌄</span>
+    </button>
+
+    <div
+      class="location-menu"
+      *ngIf="openDropdown === 'country'">
+
+      <input
+        type="search"
+        [(ngModel)]="countryQuery"
+        [ngModelOptions]="{ standalone: true }"
+        [placeholder]="vm.currentLang === 'ta'
+          ? 'நாட்டை தேடவும்'
+          : 'Search country'"
+        (keydown.enter)="$event.preventDefault()"
+      />
+
+      <div class="location-options">
+
+        <ng-container *ngFor="let country of vm.countryList">
+          <button
+            *ngIf="
+              (country.nameEn || '').toLowerCase() !== 'other' &&
+              (country.nameEn || '').toLowerCase() !== 'others' &&
+              (
+                !countryQuery ||
+                (country.nameEn || '').toLowerCase().includes(countryQuery.toLowerCase()) ||
+                (country.nameTa || '').toLowerCase().includes(countryQuery.toLowerCase())
+              )
+            "
+            type="button"
+            class="location-option"
+            (click)="vm.selectCountry(country); openDropdown = null">
+
+            {{
+              vm.currentLang === 'ta'
+                ? (country.nameTa || country.nameEn)
+                : country.nameEn
+            }}
+
+          </button>
+        </ng-container>
+
       </div>
     </div>
+
   </div>
 
-  <small class="field-error" *ngIf="vm.isInvalid('country')">{{ vm.currentLang === 'ta' && !vm.isAdminBiodataMode() ? 'தேவையான விவரம்' : 'Required' }}</small>
+  <small
+    class="field-error"
+    *ngIf="vm.isInvalid('country')">
+    {{ vm.currentLang === 'ta' ? 'தேவையான விவரம்' : 'Required' }}
+  </small>
+
 </div>
+
 
 <!-- STATE -->
 <!-- STATE -->
