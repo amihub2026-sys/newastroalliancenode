@@ -794,20 +794,26 @@ async unlockContact(): Promise<void> {
     return;
   }
 
-  if (!this.unlocked || !this.selectedProfileId) {
-    this.snackbar.error(
-      this.currentLang === 'ta'
-        ? 'செயலில் உள்ள உறுப்பினர் திட்டம் தேவை.'
-        : 'An active membership is required.'
-    );
-    return;
-  }
+if (!this.unlocked || !this.selectedProfileId) {
 
-  const confirmed = window.confirm(
+  this.snackbar.info(
     this.currentLang === 'ta'
-      ? 'தொலைபேசி எண் மற்றும் முழு முகவரியைத் திறக்க ஒரு கிரெடிட் பயன்படுத்தப்படும். தொடர வேண்டுமா?'
-      : 'Unlock phone number and full address? One credit will be deducted for a new unlock.'
+      ? 'மொபைல் நம்பர் மற்றும் முகவரியை பார்க்க உங்கள் மெம்பர்ஷிப் ஆக்டிவாக இருக்க வேண்டும். உங்கள் மெம்பர்ஷிப் பிளானை சரிபார்க்கவும்.'
+      : 'An active membership is required to unlock the mobile number and address. Please check your membership plan.',
+
+    this.currentLang === 'ta'
+      ? 'மெம்பர்ஷிப் தேவை'
+      : 'Membership required'
   );
+
+  return;
+}
+
+const confirmed = window.confirm(
+  this.currentLang === 'ta'
+    ? 'இந்த வரனின் மொபைல் நம்பர் மற்றும் முழு முகவரியை பார்க்க உங்கள் அக்கவுண்ட்டிலிருந்து 1 காண்டாக்ட் கிரெடிட் கழிக்கப்படும். தொடர்பு விவரங்களை அன்லாக் செய்ய விரும்புகிறீர்களா?'
+    : 'To unlock the mobile number and full address of this profile, 1 contact credit will be deducted from your account. Do you want to continue?'
+);
 
   if (!confirmed) return;
 
@@ -835,37 +841,63 @@ async unlockContact(): Promise<void> {
 
     await this.loadProfile();
 
-    if (this.contactUnlocked) {
-      this.snackbar.success(
-        this.currentLang === 'ta'
-          ? 'தொலைபேசி எண் மற்றும் முகவரி திறக்கப்பட்டன.'
-          : 'Phone number and address unlocked successfully.'
-      );
-    }
+  if (this.contactUnlocked) {
 
-  } catch (error: any) {
-    const code = error?.error?.code || '';
+  this.snackbar.success(
+    this.currentLang === 'ta'
+      ? 'இந்த வரனின் தொடர்பு விவரங்கள் வெற்றிகரமாக அன்லாக் செய்யப்பட்டுள்ளது. இப்போது மொபைல் நம்பர் மற்றும் முழு முகவரியை பார்க்கலாம்.'
+      : 'Contact details have been successfully unlocked. You can now view the mobile number and full address of this profile.',
 
-    const message =
-      code === 'PROFILE_VIEW_LIMIT_REACHED'
-        ? (
-            this.currentLang === 'ta'
-              ? 'உங்கள் கிரெடிட்கள் முடிந்துவிட்டன.'
-              : 'Your profile unlock credits are exhausted.'
-          )
-        : code === 'NO_ACTIVE_PLAN'
-          ? (
-              this.currentLang === 'ta'
-                ? 'செயலில் உள்ள உறுப்பினர் திட்டம் தேவை.'
-                : 'An active membership is required.'
-            )
-          : (
-              this.currentLang === 'ta'
-                ? 'தொடர்பு விவரங்களைத் திறக்க முடியவில்லை.'
-                : 'Unable to unlock contact details.'
-            );
+    this.currentLang === 'ta'
+      ? 'தொடர்பு விவரங்கள் அன்லாக் செய்யப்பட்டது!'
+      : 'Contact details unlocked!'
+  );
 
-    this.snackbar.error(message);
+}
+
+} catch (error: any) {
+
+  const code = error?.error?.code || '';
+
+  const message =
+    code === 'PROFILE_VIEW_LIMIT_REACHED'
+      ? (
+          this.currentLang === 'ta'
+            ? 'உங்கள் காண்டாக்ட் கிரெடிட்ஸ் அனைத்தும் முடிந்துவிட்டது. மேலும் தொடர்பு விவரங்களை பார்க்க உங்கள் மெம்பர்ஷிப் பிளானை சரிபார்க்கவும் அல்லது எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+            : 'You have used all your available contact credits. Please check your membership plan or contact our support team.'
+        )
+      : code === 'NO_ACTIVE_PLAN'
+      ? (
+          this.currentLang === 'ta'
+            ? 'தொடர்பு விவரங்களை பார்க்க உங்கள் மெம்பர்ஷிப் ஆக்டிவாக இருக்க வேண்டும். உங்கள் மெம்பர்ஷிப் பிளானை சரிபார்க்கவும்.'
+            : 'An active membership is required to unlock contact details. Please check your membership plan.'
+        )
+      : (
+          this.currentLang === 'ta'
+            ? 'தற்போது தொடர்பு விவரங்களை அன்லாக் செய்ய முடியவில்லை. மீண்டும் முயற்சி செய்வதற்கு முன் உங்கள் கிரெடிட்ஸ் மற்றும் தொடர்பு விவரங்களை சரிபார்க்கவும்.'
+            : 'Unable to unlock contact details at the moment. Please check your remaining credits and contact details before trying again.'
+        );
+
+  const title =
+    code === 'PROFILE_VIEW_LIMIT_REACHED'
+      ? (
+          this.currentLang === 'ta'
+            ? 'காண்டாக்ட் கிரெடிட்ஸ் முடிந்துவிட்டது'
+            : 'Contact credits exhausted'
+        )
+      : code === 'NO_ACTIVE_PLAN'
+      ? (
+          this.currentLang === 'ta'
+            ? 'மெம்பர்ஷிப் தேவை'
+            : 'Membership required'
+        )
+      : (
+          this.currentLang === 'ta'
+            ? 'அன்லாக் செய்ய முடியவில்லை'
+            : 'Unable to unlock contact details'
+        );
+
+  this.snackbar.warning(message, title);
 
   } finally {
     this.unlockingContact = false;
@@ -903,11 +935,22 @@ private async recordProfileView(viewedProfileId: string): Promise<void> {
       //   return;
       // }
 
-      if (!this.selectedProfileId) {
-        this.snackbar.error('Profile ID missing');
-        this.router.navigate(['/profiles']);
-        return;
-      }
+ if (!this.selectedProfileId) {
+
+  this.snackbar.warning(
+    this.currentLang === 'ta'
+      ? 'நீங்கள் தேர்வு செய்த வரனின் பயோடேட்டாவை திறக்க முடியவில்லை. வரன்கள் பட்டியலுக்கு சென்று மீண்டும் வரனை தேர்வு செய்யுங்கள்.'
+      : 'Unable to open the selected profile. Please return to the profiles list and select a profile again.',
+
+    this.currentLang === 'ta'
+      ? 'பயோடேட்டாவை திறக்க முடியவில்லை'
+      : 'Unable to open profile'
+  );
+
+  this.router.navigate(['/profiles']);
+
+  return;
+}
 
 const res: any = await firstValueFrom(
 this.http.get(
@@ -929,9 +972,15 @@ if (
   this.profile = null;
   this.loadedProfileRow = null;
 
-  this.snackbar.error(
-    'Full profile access is not available. Please check your membership.'
-  );
+this.snackbar.warning(
+  this.currentLang === 'ta'
+    ? 'இந்த வரனின் முழு பயோடேட்டா விவரங்களை தற்போது பார்க்க முடியவில்லை. உங்கள் மெம்பர்ஷிப் பிளானை சரிபார்க்கவும். அடிப்படை பயோடேட்டா விவரங்களை இலவசமாக பார்க்கலாம்.'
+    : 'Full biodata details are currently unavailable. Please check your membership plan. You can still view the basic biodata details for free.',
+
+  this.currentLang === 'ta'
+    ? 'முழு பயோடேட்டாவை பார்க்க முடியவில்லை'
+    : 'Full biodata access unavailable'
+);
 
   await this.router.navigate([
     '/free-profile',
@@ -966,14 +1015,29 @@ await this.checkShortlist();
     )
   ) {
 
-    this.snackbar.error(error?.error?.message || 'Premium details are locked. The basic profile is free to view.');
+this.snackbar.warning(
+  this.currentLang === 'ta'
+    ? 'கூடுதல் பயோடேட்டா விவரங்களை பார்க்க உங்கள் மெம்பர்ஷிப் ஆக்டிவாக இருக்க வேண்டும். உங்கள் மெம்பர்ஷிப் பிளான் மற்றும் கிரெடிட்ஸை சரிபார்க்கவும். அடிப்படை பயோடேட்டா விவரங்களை இலவசமாக பார்க்கலாம்.'
+    : 'Please check your membership status and available credits to access additional biodata details. Basic biodata details are available for free.',
 
+  this.currentLang === 'ta'
+    ? 'மெம்பர்ஷிப் பிளானை சரிபார்க்கவும்'
+    : 'Check your membership'
+);
     // Paid endpoint rejected access: fall back to the non-paid basic preview.
     this.router.navigate(['/free-profile', this.selectedProfileId]);
     return;
   }
 
-  this.snackbar.error(error?.error?.message || 'Failed to load full profile');
+  this.snackbar.error(
+  this.currentLang === 'ta'
+    ? 'தற்போது இந்த வரனின் முழு பயோடேட்டா விவரங்களை பார்க்க முடியவில்லை. சிறிது நேரம் கழித்து மீண்டும் முயற்சி செய்யுங்கள். தொடர்ந்து இந்த பிரச்சனை இருந்தால் எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+    : 'Unable to load the full biodata details at the moment. Please try again after some time. If the issue continues, contact our support team.',
+
+  this.currentLang === 'ta'
+    ? 'பயோடேட்டாவை பார்க்க முடியவில்லை'
+    : 'Unable to load biodata'
+);
   // Preserve the chosen profile rather than sending the user to the old search page.
   this.router.navigate(this.selectedProfileId
     ? ['/free-profile', this.selectedProfileId]
@@ -1053,12 +1117,15 @@ goToLoginOrRegister(): void {
   const loggedInUser = this.getStoredLoggedInUser();
 
   if (!loggedInUser?.user_id) {
-    this.snackbar.error(
-      this.currentLang === 'ta'
-        ? 'முதலில் லாகின் செய்யவும் அல்லது ரிஜிஸ்டர் செய்யவும்'
-        : 'Please login or register first'
-    );
+  this.snackbar.info(
+  this.currentLang === 'ta'
+    ? 'கூடுதல் பயோடேட்டா விவரங்களை பார்க்க உங்கள் அக்கவுண்ட்டில் லாகின் செய்யுங்கள். அக்கவுண்ட் இல்லையென்றால் புதிதாக ரெஜிஸ்டர் செய்யுங்கள்.'
+    : 'To view additional biodata details, please log in to your account. If you do not have an account, please register first.',
 
+  this.currentLang === 'ta'
+    ? 'லாகின் அல்லது ரெஜிஸ்டர் செய்யுங்கள்'
+    : 'Login or registration required'
+);
     this.router.navigate(['/login'], {
       queryParams: {
         from: 'profile-view',
@@ -1079,25 +1146,36 @@ async sendInterest(): Promise<void> {
 
   const token = localStorage.getItem('matrimony_token');
 
-  if (!token) {
-    this.snackbar.error(
-      this.currentLang === 'ta'
-        ? 'முதலில் உள்நுழையவும்.'
-        : 'Please log in first.'
-    );
+ if (!token) {
 
-    await this.router.navigate(['/login']);
-    return;
-  }
+  this.snackbar.info(
+    this.currentLang === 'ta'
+      ? 'இந்த வரனுக்கு இன்ட்ரஸ்ட் அனுப்ப முதலில் உங்கள் அக்கவுண்ட்டில் லாகின் செய்யுங்கள்.'
+      : 'To send an interest request to this profile, please log in to your account first.',
 
-  if (this.alreadySent) {
-    this.snackbar.error(
-      this.currentLang === 'ta'
-        ? 'இந்த சுயவிவரத்திற்கு ஏற்கனவே விருப்பக் கோரிக்கை அனுப்பியுள்ளீர்கள்.'
-        : 'You have already sent interest to this profile.'
-    );
-    return;
-  }
+    this.currentLang === 'ta'
+      ? 'லாகின் செய்யுங்கள்'
+      : 'Login required'
+  );
+
+  await this.router.navigate(['/login']);
+  return;
+}
+
+if (this.alreadySent) {
+
+  this.snackbar.info(
+    this.currentLang === 'ta'
+      ? 'இந்த வரனுக்கு ஏற்கனவே இன்ட்ரஸ்ட் அனுப்பியுள்ளீர்கள். மீண்டும் இன்ட்ரஸ்ட் அனுப்ப தேவையில்லை. நீங்கள் அனுப்பிய இன்ட்ரஸ்ட் பட்டியலில் அதன் தற்போதைய நிலையை பார்க்கலாம்.'
+      : 'You have already sent an interest request to this profile. There is no need to send another request. You can check its current status in your sent interests list.',
+
+    this.currentLang === 'ta'
+      ? 'ஏற்கனவே இன்ட்ரஸ்ட் அனுப்பப்பட்டுள்ளது'
+      : 'Interest already sent'
+  );
+
+  return;
+}
 
   try {
     const result: any = await firstValueFrom(
@@ -1119,52 +1197,75 @@ async sendInterest(): Promise<void> {
     this.alreadySent = true;
     this.interestStatus = 'pending';
 
-    this.snackbar.success(
-      this.currentLang === 'ta'
-        ? 'விருப்பக் கோரிக்கை அனுப்பப்பட்டது. ஒரு விருப்ப எண்ணிக்கை பயன்படுத்தப்பட்டது.'
-        : 'Interest sent successfully. 1 interest credit used.'
-    );
+  this.snackbar.success(
+  this.currentLang === 'ta'
+    ? 'இந்த வரனுக்கு உங்கள் இன்ட்ரஸ்ட் வெற்றிகரமாக அனுப்பப்பட்டுள்ளது. உங்கள் அக்கவுண்ட்டிலிருந்து 1 இன்ட்ரஸ்ட் கிரெடிட் கழிக்கப்பட்டுள்ளது. அவர்களின் பதிலுக்காக காத்திருக்கவும்.'
+    : 'Your interest request has been sent successfully. One interest credit has been deducted from your account. Please wait for their response.',
 
+  this.currentLang === 'ta'
+    ? 'இன்ட்ரஸ்ட் அனுப்பப்பட்டது!'
+    : 'Interest sent successfully!'
+);
     this.cdr.detectChanges();
 
   } catch (error: any) {
     const code = error?.error?.code;
 
-    const messages: Record<string, [string, string]> = {
-      ALREADY_SENT: [
-        'You have already sent interest to this profile.',
-        'இந்த சுயவிவரத்திற்கு ஏற்கனவே விருப்பக் கோரிக்கை அனுப்பியுள்ளீர்கள்.'
-      ],
-      NO_ACTIVE_PLAN: [
-        'Activate or renew your membership first.',
-        'முதலில் உறுப்பினர் திட்டத்தை செயல்படுத்தவும் அல்லது புதுப்பிக்கவும்.'
-      ],
-      INTEREST_LIMIT_REACHED: [
-        'Your interest credits are exhausted.',
-        'உங்கள் விருப்பக் கோரிக்கை எண்ணிக்கை முடிந்துவிட்டது.'
-      ],
-      PROFILE_NOT_APPROVED: [
-        'Your biodata must be approved first.',
-        'முதலில் உங்கள் பயோடேட்டா நிர்வாகியால் அங்கீகரிக்கப்பட வேண்டும்.'
-      ],
-      GENDER_NOT_ELIGIBLE: [
-        'You cannot send interest to this profile.',
-        'இந்த சுயவிவரத்திற்கு விருப்பக் கோரிக்கை அனுப்ப முடியாது.'
-      ]
-    };
 
-    const pair = messages[code] || [
-      'Unable to send interest. Please try again.',
-      'விருப்பக் கோரிக்கையை அனுப்ப முடியவில்லை. மீண்டும் முயற்சிக்கவும்.'
-    ];
+   const messages: Record<string, [string, string, string, string]> = {
 
-    if (code === 'ALREADY_SENT') {
-      this.alreadySent = true;
-    }
+  ALREADY_SENT: [
+    'You have already sent an interest request to this profile. Please check your sent interests list.',
+    'இந்த வரனுக்கு ஏற்கனவே இன்ட்ரஸ்ட் அனுப்பியுள்ளீர்கள். நீங்கள் அனுப்பிய இன்ட்ரஸ்ட் பட்டியலை பார்க்கவும்.',
+    'Interest already sent',
+    'ஏற்கனவே இன்ட்ரஸ்ட் அனுப்பப்பட்டுள்ளது'
+  ],
 
-    this.snackbar.error(
-      this.currentLang === 'ta' ? pair[1] : pair[0]
-    );
+  NO_ACTIVE_PLAN: [
+    'An active membership is required to send interest requests. Please purchase or renew your membership plan.',
+    'இன்ட்ரஸ்ட் அனுப்ப உங்கள் மெம்பர்ஷிப் ஆக்டிவாக இருக்க வேண்டும். மெம்பர்ஷிப் பிளானை வாங்குங்கள் அல்லது புதுப்பிக்கவும்.',
+    'Membership required',
+    'மெம்பர்ஷிப் தேவை'
+  ],
+
+  INTEREST_LIMIT_REACHED: [
+    'You have used all your available interest credits. Please check your membership plan or contact our support team.',
+    'உங்கள் இன்ட்ரஸ்ட் கிரெடிட்ஸ் அனைத்தும் முடிந்துவிட்டது. உங்கள் மெம்பர்ஷிப் பிளானை சரிபார்க்கவும் அல்லது எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.',
+    'Interest credits exhausted',
+    'இன்ட்ரஸ்ட் கிரெடிட்ஸ் முடிந்துவிட்டது'
+  ],
+
+  PROFILE_NOT_APPROVED: [
+    'Your biodata must be approved by the admin before you can send interest requests.',
+    'இன்ட்ரஸ்ட் அனுப்ப முதலில் உங்கள் பயோடேட்டாவிற்கு அட்மின் அப்ரூவல் கிடைக்க வேண்டும்.',
+    'Admin approval required',
+    'அட்மின் அப்ரூவல் தேவை'
+  ],
+
+  GENDER_NOT_ELIGIBLE: [
+    'You are not eligible to send an interest request to this profile. Please select another profile.',
+    'இந்த வரனுக்கு இன்ட்ரஸ்ட் அனுப்ப முடியாது. வேறு வரனை தேர்வு செய்யுங்கள்.',
+    'Interest not allowed',
+    'இன்ட்ரஸ்ட் அனுப்ப முடியாது'
+  ]
+
+};
+
+const pair = messages[code] || [
+  'Unable to send your interest request at the moment. Please check your sent interests before trying again.',
+  'தற்போது இன்ட்ரஸ்ட் அனுப்ப முடியவில்லை. மீண்டும் முயற்சி செய்வதற்கு முன் நீங்கள் அனுப்பிய இன்ட்ரஸ்ட் பட்டியலை சரிபார்க்கவும்.',
+  'Unable to send interest',
+  'இன்ட்ரஸ்ட் அனுப்ப முடியவில்லை'
+];
+
+if (code === 'ALREADY_SENT') {
+  this.alreadySent = true;
+}
+
+this.snackbar.warning(
+  this.currentLang === 'ta' ? pair[1] : pair[0],
+  this.currentLang === 'ta' ? pair[3] : pair[2]
+);
 
     this.cdr.detectChanges();
   }
@@ -1177,7 +1278,15 @@ async shortlistProfile(): Promise<void> {
   const loggedInUser = this.getStoredLoggedInUser();
 
   if (!loggedInUser?.user_id) {
-    this.snackbar.error('Please login first');
+    this.snackbar.info(
+  this.currentLang === 'ta'
+    ? 'இந்த வரனை உங்களுக்கு பிடித்த வரன்கள் பட்டியலில் சேர்க்க முதலில் உங்கள் அக்கவுண்ட்டில் லாகின் செய்யுங்கள்.'
+    : 'To add this profile to your favourites, please log in to your account first.',
+
+  this.currentLang === 'ta'
+    ? 'லாகின் செய்யுங்கள்'
+    : 'Login required'
+);
     this.router.navigate(['/login']);
     return;
   }
@@ -1191,11 +1300,27 @@ async shortlistProfile(): Promise<void> {
     );
 
     this.alreadyShortlisted = true;
-    this.snackbar.success('Profile shortlisted successfully');
+    this.snackbar.success(
+  this.currentLang === 'ta'
+    ? 'இந்த வரன் உங்களுக்கு பிடித்த வரன்கள் பட்டியலில் வெற்றிகரமாக சேர்க்கப்பட்டுள்ளது. எப்போது வேண்டுமானாலும் அந்த பட்டியலில் இந்த வரனை பார்க்கலாம்.'
+    : 'This profile has been successfully added to your favourites. You can view it anytime from your shortlisted profiles.',
+
+  this.currentLang === 'ta'
+    ? 'பிடித்த வரன்களில் சேர்க்கப்பட்டது!'
+    : 'Added to favourites!'
+);
     this.cdr.detectChanges();
   } catch (error: any) {
     this.alreadyShortlisted = true;
-    this.snackbar.error(error?.error?.message || 'This profile is already shortlisted');
+    this.snackbar.warning(
+  this.currentLang === 'ta'
+    ? 'இந்த வரன் பிடித்த வரன்கள் பட்டியலில் சேர்க்கப்பட்டுள்ளதா என்பதை சரிபார்க்கவும். சேர்க்கப்படவில்லை என்றால் மீண்டும் முயற்சி செய்யுங்கள்.'
+    : 'Please check whether this profile is already in your favourites. If it is not listed, please try again.',
+
+  this.currentLang === 'ta'
+    ? 'பிடித்த வரன்கள் பட்டியலை சரிபார்க்கவும்'
+    : 'Check your favourites'
+);
     this.cdr.detectChanges();
   }
 }
@@ -1250,7 +1375,15 @@ async checkShortlist() {
 }
 async downloadProfile() {
   if (!this.unlocked) {
-    this.snackbar.error('Please unlock this profile to download');
+    this.snackbar.warning(
+  this.currentLang === 'ta'
+    ? 'இந்த பயோடேட்டாவை டவுன்லோட் செய்ய தேவையான அனுமதி தற்போது இல்லை.'
+    : 'You do not currently have permission to download this biodata.',
+
+  this.currentLang === 'ta'
+    ? 'டவுன்லோட் செய்ய அனுமதி இல்லை'
+    : 'Download access required'
+);
     return;
   }
 
@@ -1260,7 +1393,15 @@ async downloadProfile() {
   const element = document.querySelector('.profile-view-page') as HTMLElement;
 
   if (!element) {
-    this.snackbar.error('Profile not found');
+    this.snackbar.error(
+  this.currentLang === 'ta'
+    ? 'இந்த வரனின் பயோடேட்டா விவரங்களை தற்போது பெற முடியவில்லை. பக்கத்தை ரெஃப்ரெஷ் செய்து மீண்டும் முயற்சி செய்யுங்கள்.'
+    : 'Unable to retrieve this biodata at the moment. Please refresh the page and try again.',
+
+  this.currentLang === 'ta'
+    ? 'பயோடேட்டா கிடைக்கவில்லை'
+    : 'Biodata not found'
+);
     return;
   }
 
@@ -1349,6 +1490,14 @@ const fileName =
 
 pdf.save(fileName.replace(/[^\w\-]+/g, '_'));
 
-this.snackbar.success('Profile downloaded successfully');
+this.snackbar.success(
+  this.currentLang === 'ta'
+    ? 'பயோடேட்டா வெற்றிகரமாக டவுன்லோட் செய்யப்பட்டுள்ளது. உங்கள் டவுன்லோட்ஸ் ஃபோல்டரில் PDF ஃபைலை பார்க்கலாம்.'
+    : 'The biodata has been downloaded successfully. You can find the PDF file in your downloads folder.',
+
+  this.currentLang === 'ta'
+    ? 'பயோடேட்டா டவுன்லோட் செய்யப்பட்டது!'
+    : 'Biodata downloaded successfully!'
+);
 }
 }

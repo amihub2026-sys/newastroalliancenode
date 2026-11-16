@@ -151,107 +151,91 @@ export class Plans implements OnInit {
   // ==========================================
   // TRANSLATIONS
   // ==========================================
+translations = {
+  en: {
+    hero: {
+      miniTitle: 'FIND YOUR PERFECT MATCH',
 
-  translations = {
+      title: 'Choose Your Membership Plan',
 
-    en: {
-
-      hero: {
-        miniTitle:
-          'CHOOSE YOUR PERFECT MEMBERSHIP',
-
-        title:
-          'Affordable Matrimony Plans for Every Journey',
-
-        subtitle:
-          'Review available membership plans and continue viewing profiles. Premium details require an active membership.'
-      },
-
-      section: {
-        title: 'Our Membership Plans',
-
-        subtitle:
-          'Choose the best plan for your matrimony journey'
-      },
-
-      labels: {
-        mostPopular: 'Most Popular',
-
-        choosePlan: 'Choose Plan',
-
-        unlockTitle:
-          'Unlock Full Profile Access',
-
-        unlockText:
-          'Choose a membership plan and complete payment to access eligible premium profile details.',
-
-        selectedProfile: 'Selected Profile',
-
-        profileId: 'Profile ID',
-
-        backToProfiles: 'Back to Profiles',
-
-        activatedTitle: 'Membership activated',
-
-        activatedText:
-          'Your verified membership gives you access to eligible premium details. Contact credits still apply.',
-
-        viewProfile: 'View Profile'
-      }
-
+      subtitle:
+        'Browse profiles for free. Choose a membership plan to access additional profile details and membership benefits.'
     },
 
-    ta: {
+    section: {
+      title: 'Our Membership Plans',
 
-      hero: {
-        miniTitle:
-          'உங்களுக்கு பொருத்தமான உறுப்பினர் திட்டத்தை தேர்வு செய்யுங்கள்',
+      subtitle:
+        'Choose a membership plan that suits your needs.'
+    },
 
-        title:
-          'ஒவ்வொரு திருமண பயணத்திற்கும் மலிவான மேட்ரிமோனி திட்டங்கள்',
+    labels: {
+      mostPopular: 'Most Popular',
 
-        subtitle:
-          'உறுப்பினர் திட்டங்களைப் பார்த்து சுயவிவரங்களைத் தொடரலாம். கூடுதல் விவரங்களுக்கு செயலில் உள்ள உறுப்பினர் திட்டம் தேவை.'
-      },
+      choosePlan: 'Choose Plan',
 
-      section: {
-        title: 'எங்கள் உறுப்பினர் திட்டங்கள்',
+      unlockTitle: 'Unlock Additional Profile Details',
 
-        subtitle:
-          'உங்கள் திருமண பயணத்திற்கான சிறந்த திட்டத்தை தேர்வு செய்யுங்கள்'
-      },
+      unlockText:
+        'Choose a membership plan and complete your payment. Contact numbers and addresses require contact credits.',
 
-      labels: {
-        mostPopular: 'பிரபலமானது',
+      selectedProfile: 'Selected Profile',
 
-        choosePlan: 'திட்டத்தை தேர்வு செய்க',
+      profileId: 'Profile ID',
 
-        unlockTitle:
-          'முழு சுயவிவர அணுகலை திறக்கவும்',
+      backToProfiles: 'Back to Profiles',
 
-        unlockText:
-          'உறுப்பினர் திட்டத்தைத் தேர்வு செய்து கட்டணம் செலுத்திய பிறகு அனுமதிக்கப்பட்ட கூடுதல் சுயவிவர விவரங்களைப் பார்க்கலாம்.',
+      activatedTitle: 'Membership Activated Successfully!',
 
-        selectedProfile:
-          'தேர்ந்தெடுத்த சுயவிவரம்',
+      activatedText:
+        'Your membership is active. You can now view eligible additional profile details. Use your contact credits to unlock mobile numbers and addresses.',
 
-        profileId: 'சுயவிவர எண்',
-
-        backToProfiles:
-          'சுயவிவரங்களுக்கு திரும்பு',
-
-        activatedTitle:
-          'உறுப்பினர் திட்டம் செயல்படுத்தப்பட்டது',
-
-        activatedText:
-          'உறுதிப்படுத்தப்பட்ட உறுப்பினர் திட்டத்தின் மூலம் அனுமதிக்கப்பட்ட கூடுதல் விவரங்களைப் பார்க்கலாம். தொடர்பு எண்ணுக்கான கிரெடிட்கள் பொருந்தும்.',
-
-        viewProfile: 'சுயவிவரம் பார்க்க'
-      }
-
+      viewProfile: 'View Profile'
     }
+  },
 
-  };
+  ta: {
+    hero: {
+      miniTitle: 'உங்களுக்கு பொருத்தமான வரனை தேடுங்கள்',
+
+      title: 'மெம்பர்ஷிப் பிளானை தேர்வு செய்யுங்கள்',
+
+      subtitle:
+        'இலவசமாக வரன்களை பார்க்கலாம். கூடுதல் பயோடேட்டா விவரங்களை பார்க்க மெம்பர்ஷிப் பிளானை தேர்வு செய்யுங்கள்.'
+    },
+
+    section: {
+      title: 'எங்கள் மெம்பர்ஷிப் பிளான்கள்',
+
+      subtitle:
+        'உங்களுக்கு ஏற்ற மெம்பர்ஷிப் பிளானை தேர்வு செய்யுங்கள்.'
+    },
+
+    labels: {
+      mostPopular: 'அதிகம் தேர்வு செய்யப்படும் பிளான்',
+
+      choosePlan: 'பிளானை தேர்வு செய்யுங்கள்',
+
+      unlockTitle: 'கூடுதல் பயோடேட்டா விவரங்களை பார்க்க',
+
+      unlockText:
+        'மெம்பர்ஷிப் பிளானை தேர்வு செய்து பேமெண்ட் செய்யுங்கள். மொபைல் நம்பர் மற்றும் முகவரியை பார்க்க காண்டாக்ட் கிரெடிட்ஸ் தேவை.',
+
+      selectedProfile: 'தேர்வு செய்த பயோடேட்டா',
+
+      profileId: 'பயோடேட்டா எண்',
+
+      backToProfiles: 'மற்ற வரன்களை பார்க்க',
+
+      activatedTitle: 'மெம்பர்ஷிப் ஆக்டிவாகிவிட்டது!',
+
+      activatedText:
+        'உங்கள் மெம்பர்ஷிப் ஆக்டிவாக உள்ளது. இனி கூடுதல் பயோடேட்டா விவரங்களை பார்க்கலாம். மொபைல் நம்பர் மற்றும் முகவரியை பார்க்க காண்டாக்ட் கிரெடிட்ஸை பயன்படுத்துங்கள்.',
+
+      viewProfile: 'பயோடேட்டாவை பார்க்க'
+    }
+  }
+};
 
   // ==========================================
   // CONSTRUCTOR
@@ -493,19 +477,20 @@ export class Plans implements OnInit {
         error
       );
 
-      this.ngZone.run(() => {
+ this.ngZone.run(() => {
 
-        this.snackbar.error(
+  this.snackbar.error(
+    this.currentLang === 'ta'
+      ? 'உங்கள் தற்போதைய மெம்பர்ஷிப் விவரங்களை சரிபார்க்க முடியவில்லை. புதிய பிளான் வாங்குவதற்கு முன் மீண்டும் முயற்சி செய்யுங்கள்.'
 
-          this.currentLang === 'ta'
+      : 'Unable to verify your current membership. Please try again before purchasing a new plan.',
 
-            ? 'தற்போதைய உறுப்பினர் திட்டத்தை சரிபார்க்க முடியவில்லை.'
+    this.currentLang === 'ta'
+      ? 'மெம்பர்ஷிப்பை சரிபார்க்க முடியவில்லை'
+      : 'Unable to verify membership'
+  );
 
-            : 'Could not verify your current membership.'
-
-        );
-
-      });
+});
 
       return false;
 
@@ -655,16 +640,15 @@ export class Plans implements OnInit {
 
       });
 
-      this.snackbar.error(
+   this.snackbar.error(
+  this.currentLang === 'ta'
+    ? 'தற்போது மெம்பர்ஷிப் பிளான்களை பார்க்க முடியவில்லை. இந்த பக்கத்தை ரெஃப்ரெஷ் செய்து மீண்டும் முயற்சி செய்யுங்கள்.'
+    : 'Unable to load membership plans at the moment. Please refresh this page and try again.',
 
-        this.currentLang === 'ta'
-
-          ? 'உறுப்பினர் திட்டங்களை ஏற்ற முடியவில்லை.'
-
-          : 'Failed to load membership plans.'
-
-      );
-
+  this.currentLang === 'ta'
+    ? 'மெம்பர்ஷிப் பிளான்களை பார்க்க முடியவில்லை'
+    : 'Unable to load membership plans'
+);
     }
 
   }
@@ -795,45 +779,45 @@ export class Plans implements OnInit {
         // PAYMENT SUCCESS MESSAGE
         // ======================================
 
-        this.snackbar.success(
+this.snackbar.success(
+  this.currentLang === 'ta'
+    ? (
+        recovered
+          ? 'உங்கள் முந்தைய பேமெண்ட் சரிபார்க்கப்பட்டது. உங்கள் மெம்பர்ஷிப் ஆக்டிவாக உள்ளது. மீண்டும் பேமெண்ட் செய்ய தேவையில்லை.'
+          : 'உங்கள் பேமெண்ட் வெற்றிகரமாக முடிந்தது. மெம்பர்ஷிப் ஆக்டிவாகிவிட்டது. இனி உங்களுக்கு பொருத்தமான வரன்களின் கூடுதல் விவரங்களை பார்க்கலாம். மொபைல் நம்பர் மற்றும் முகவரியை பார்க்க காண்டாக்ட் கிரெடிட்ஸ் தேவை.'
+      )
+    : (
+        recovered
+          ? 'Your previous payment has been verified. Your membership is active. You do not need to pay again.'
+          : 'Your payment is successful and your membership is now active. You can view eligible additional profile details. Contact credits are required to unlock mobile numbers and addresses.'
+      ),
 
-          this.currentLang === 'ta'
-
-            ? (
-
-                recovered
-
-                  ? 'முந்தைய கட்டணம் மீட்டெடுக்கப்பட்டது. உறுப்பினர் திட்டம் செயல்பாட்டில் உள்ளது.'
-
-                  : 'கட்டணம் வெற்றி! உறுப்பினர் திட்டம் செயல்பாட்டில் உள்ளது.'
-
-              )
-
-            : (
-
-                recovered
-
-                  ? 'Previous payment recovered. Your membership is active.'
-
-                  : 'Payment successful! Your membership is now active.'
-
-              )
-
-        );
+  this.currentLang === 'ta'
+    ? (
+        recovered
+          ? 'முந்தைய பேமெண்ட் உறுதி செய்யப்பட்டது!'
+          : 'பேமெண்ட் வெற்றிகரமாக முடிந்தது!'
+      )
+    : (
+        recovered
+          ? 'Previous payment verified!'
+          : 'Payment successful!'
+      )
+);
 
       } else {
 
         this.selectedPlanName = '';
 
-        this.snackbar.error(
+  this.snackbar.warning(
+  this.currentLang === 'ta'
+    ? 'உங்கள் பேமெண்ட் உறுதி செய்யப்பட்டுள்ளது. ஆனால் மெம்பர்ஷிப் ஆக்டிவானதா என்பதை இன்னும் உறுதி செய்ய முடியவில்லை. மீண்டும் பேமெண்ட் செய்ய வேண்டாம். எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+    : 'Your payment has been verified, but membership activation could not be confirmed. Please do not pay again. Contact our support team for assistance.',
 
-          this.currentLang === 'ta'
-
-            ? 'கட்டணம் உறுதிப்படுத்தப்பட்டது. உறுப்பினர் நிலையைச் சரிபார்க்கவும். மீண்டும் பணம் செலுத்த வேண்டாம்.'
-
-            : 'Payment verified. Membership status needs confirmation. Do not pay again; contact support.'
-
-        );
+  this.currentLang === 'ta'
+    ? 'பேமெண்ட் உறுதி செய்யப்பட்டுள்ளது'
+    : 'Membership confirmation pending'
+);
 
       }
 
@@ -881,15 +865,15 @@ export class Plans implements OnInit {
 
     if (!token) {
 
-      this.snackbar.error(
+this.snackbar.info(
+  ta()
+    ? 'மெம்பர்ஷிப் பிளானை வாங்க முதலில் உங்கள் மொபைல் நம்பர் மற்றும் பிறந்த தேதியை பயன்படுத்தி லாகின் செய்யுங்கள்.'
+    : 'To purchase a membership plan, please log in using your registered mobile number and date of birth.',
 
-        ta()
-
-          ? 'முதலில் உள்நுழையவும்'
-
-          : 'Please log in first'
-
-      );
+  ta()
+    ? 'லாகின் செய்யுங்கள்'
+    : 'Login required'
+);
 
       await this.router.navigate(
 
@@ -933,15 +917,15 @@ export class Plans implements OnInit {
 
     ) {
 
-      this.snackbar.error(
+this.snackbar.warning(
+  ta()
+    ? 'நீங்கள் தேர்வு செய்த மெம்பர்ஷிப் பிளானை தற்போது வாங்க முடியவில்லை. இந்த பக்கத்தை ரெஃப்ரெஷ் செய்து மீண்டும் பிளானை தேர்வு செய்யுங்கள்.'
+    : 'The selected membership plan is currently unavailable for purchase. Please refresh this page and select a plan again.',
 
-        ta()
-
-          ? 'தவறான உறுப்பினர் திட்டம்'
-
-          : 'Invalid membership plan'
-
-      );
+  ta()
+    ? 'மெம்பர்ஷிப் பிளான் கிடைக்கவில்லை'
+    : 'Membership plan unavailable'
+);
 
       return;
 
@@ -999,15 +983,15 @@ export class Plans implements OnInit {
 
         this.auth.invalidateFlowStatus();
 
-        this.snackbar.success(
+  this.snackbar.info(
+  ta()
+    ? 'நீங்கள் தேர்வு செய்த மெம்பர்ஷிப் பிளான் ஏற்கனவே ஆக்டிவாக உள்ளது. மீண்டும் பேமெண்ட் செய்ய தேவையில்லை. இந்த பிளானில் உள்ள வசதிகளை தொடர்ந்து பயன்படுத்தலாம்.'
+    : 'Your selected membership plan is already active. You do not need to pay again. You can continue using your existing membership benefits.',
 
-          ta()
-
-            ? 'இந்தத் திட்டம் ஏற்கனவே செயல்பாட்டில் உள்ளது.'
-
-            : 'This plan is already active.'
-
-        );
+  ta()
+    ? 'மெம்பர்ஷிப் ஏற்கனவே ஆக்டிவாக உள்ளது'
+    : 'Membership already active'
+);
 
         return;
 
@@ -1021,15 +1005,11 @@ export class Plans implements OnInit {
 
         this.activePlanId &&
 
-        !window.confirm(
-
-          ta()
-
-            ? 'புதிய திட்டம் தற்போதைய திட்டத்தையும் மீதமுள்ள கிரெடிட்களையும் மாற்றும். தொடரவா?'
-
-            : 'The new plan will replace your current membership and remaining credits. Continue?'
-
-        )
+!window.confirm(
+  ta()
+    ? 'உங்களிடம் ஏற்கனவே ஒரு மெம்பர்ஷிப் பிளான் ஆக்டிவாக உள்ளது. புதிய பிளானை வாங்கினால் பழைய பிளானும் அதில் மீதமுள்ள கிரெடிட்ஸும் நீக்கப்படும். புதிய பிளானை வாங்க விரும்புகிறீர்களா?'
+    : 'You already have an active membership plan. Purchasing a new plan will replace your existing plan and its remaining credits. Do you want to continue?'
+)
 
       ) {
 
@@ -1130,15 +1110,15 @@ export class Plans implements OnInit {
 
       if (order.amount !== amount) {
 
-        this.snackbar.error(
+this.snackbar.warning(
+  ta()
+    ? 'நீங்கள் தேர்வு செய்த மெம்பர்ஷிப் பிளானின் விலை மாறியுள்ளது. புதிய விலையை சரிபார்த்து, மீண்டும் பிளானை தேர்வு செய்து பேமெண்ட் செய்யுங்கள்.'
+    : 'The price of your selected membership plan has changed. Please review the updated price and select the plan again before making payment.',
 
-          ta()
-
-            ? 'திட்டத்தின் விலை மாறியுள்ளது. மீண்டும் சரிபார்க்கவும்.'
-
-            : 'The plan price has changed. Review the updated price before paying.'
-
-        );
+  ta()
+    ? 'மெம்பர்ஷிப் பிளான் விலை மாற்றம்'
+    : 'Membership plan price updated'
+);
 
         await this.loadDbPlans();
 
@@ -1263,16 +1243,15 @@ export class Plans implements OnInit {
 
         this.ngZone.run(() => {
 
-          this.snackbar.error(
+       this.snackbar.warning(
+  ta()
+    ? 'பேமெண்ட் விண்டோ மூடப்பட்டுள்ளது. உங்கள் வங்கி கணக்கிலிருந்து பணம் எடுக்கப்பட்டிருந்தால் மீண்டும் பேமெண்ட் செய்ய வேண்டாம். எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+    : 'The payment window was closed. If money has been deducted from your bank account, please do not pay again. Contact our support team for assistance.',
 
-            ta()
-
-              ? 'கட்டண சாளரம் மூடப்பட்டது. பணம் பிடித்திருந்தால் மீண்டும் செலுத்த வேண்டாம்.'
-
-              : 'Checkout closed. If money was deducted, do not pay again; contact support.'
-
-          );
-
+  ta()
+    ? 'பேமெண்ட் விண்டோ மூடப்பட்டது'
+    : 'Payment window closed'
+);
         });
 
         return;
@@ -1413,15 +1392,15 @@ export class Plans implements OnInit {
 
         this.ngZone.run(() => {
 
-          this.snackbar.error(
+this.snackbar.warning(
+  ta()
+    ? 'உங்கள் பேமெண்ட் நிலையை இன்னும் உறுதி செய்ய முடியவில்லை. மீண்டும் பேமெண்ட் செய்ய வேண்டாம். உங்கள் பேமெண்ட் விவரங்களுடன் எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+    : 'We are unable to confirm your payment status at the moment. Please do not pay again. Contact our support team with your payment details.',
 
-            ta()
-
-              ? 'கட்டணத்தை உறுதிப்படுத்த முடியவில்லை. மீண்டும் பணம் செலுத்தாமல் நிர்வாகியை தொடர்பு கொள்ளவும்.'
-
-              : 'Payment status is uncertain. Do not pay again; contact support.'
-
-          );
+  ta()
+    ? 'பேமெண்ட் உறுதிப்படுத்தப்படவில்லை'
+    : 'Payment confirmation pending'
+);
 
         });
 
@@ -1443,77 +1422,61 @@ export class Plans implements OnInit {
 
       let message: string;
 
-      // ========================================
-      // PROFILE APPROVAL REQUIRED
-      // ========================================
+// ========================================
+// PROFILE APPROVAL REQUIRED
+// ========================================
 
-      if (
-        body?.code === 'PROFILE_NOT_APPROVED'
-      ) {
+if (
+  body?.code === 'PROFILE_NOT_APPROVED'
+) {
 
-        message = ta()
+  message = ta()
+    ? 'உங்கள் பயோடேட்டாவிற்கு அட்மின் அப்ரூவல் கிடைத்த பிறகுதான் மெம்பர்ஷிப் பிளானை வாங்க முடியும். அதுவரை இலவசமாக வரன்களை பார்க்கலாம்.'
+    : 'You can purchase a membership plan only after your biodata receives admin approval. Until then, you can continue browsing profiles through Free Search.';
 
-          ? 'உறுப்பினர் திட்டத்தை வாங்க உங்கள் சுயவிவரம் ஒப்புதல் பெற வேண்டும்.'
+}
 
-          : 'Your profile must be approved before purchasing a membership.';
+// ========================================
+// PENDING OR DUPLICATE PAYMENT
+// ========================================
 
-      }
+else if (error?.status === 409) {
 
-      // ========================================
-      // PENDING OR DUPLICATE PAYMENT
-      // ========================================
+  message = ta()
+    ? 'உங்கள் முந்தைய பேமெண்ட் அல்லது மெம்பர்ஷிப் நிலையை சரிபார்க்க வேண்டியுள்ளது. மீண்டும் பேமெண்ட் செய்வதற்கு முன் எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+    : (
+        typeof body?.message === 'string'
+          ? body.message
+          : 'Your previous payment or membership status needs to be checked. Please contact our support team before making another payment.'
+      );
 
-      else if (error?.status === 409) {
+}
 
-        message = ta()
+// ========================================
+// AUTHENTICATION ERROR
+// ========================================
 
-          ? 'முந்தைய கட்டணம் அல்லது உறுப்பினர் நிலையை சரிபார்க்கவும். தேவைப்பட்டால் நிர்வாகியை தொடர்பு கொள்ளவும்.'
+else if (
+  error?.status === 401 ||
+  error?.status === 403
+) {
 
-          : (
+  message = ta()
+    ? 'உங்கள் அக்கவுண்ட்டில் பேமெண்ட் செய்ய அனுமதி கிடைக்கவில்லை. மீண்டும் லாகின் செய்து முயற்சி செய்யுங்கள். தொடர்ந்து இந்த பிரச்சனை இருந்தால் எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+    : 'Your account is currently not authorized to make this payment. Please log in again and try. If the issue continues, contact our support team.';
 
-              typeof body?.message === 'string'
+}
+// ========================================
+// GENERAL PAYMENT ERROR
+// ========================================
 
-                ? body.message
+else {
 
-                : 'Check your previous payment or contact support before paying again.'
+  message = ta()
+    ? 'தற்போது பேமெண்ட்டை தொடங்க முடியவில்லை. சிறிது நேரம் கழித்து மீண்டும் முயற்சி செய்யுங்கள். தொடர்ந்து இந்த பிரச்சனை இருந்தால் எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+    : 'Unable to start your payment at the moment. Please try again after some time. If the issue continues, contact our support team.';
 
-            );
-
-      }
-
-      // ========================================
-      // AUTHENTICATION ERROR
-      // ========================================
-
-      else if (
-
-        error?.status === 401 ||
-
-        error?.status === 403
-
-      ) {
-
-        message = ta()
-
-          ? 'உறுப்பினர் அனுமதியை சரிபார்க்கவும்.'
-
-          : 'Please check your member login and eligibility.';
-
-      }
-
-      // ========================================
-      // GENERAL PAYMENT ERROR
-      // ========================================
-
-      else {
-
-        message = ta()
-
-          ? 'கட்டணத்தை தொடங்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.'
-
-          : 'Unable to start payment. Please try again.';
-
-      }
+}
 
       this.ngZone.run(() => {
 

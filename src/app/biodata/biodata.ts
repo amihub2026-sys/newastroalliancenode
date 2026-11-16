@@ -2491,16 +2491,22 @@ this.additionalImagePreviews = data.media?.gallery || [];
       this.onDobChange();
     }
 
-  } catch (error: any) {
-    this.snackbar.error(
-      error?.error?.message ||
-      error?.message ||
-      this.tr.alerts.profileLoadFailed
-    );
-  } finally {
-    this.isLoadingProfile = false;
-    this.cdr.detectChanges();
-  }
+} catch (error: any) {
+
+  this.snackbar.error(
+    this.currentLang === 'ta'
+      ? 'உங்கள் பயோடேட்டா விவரங்களை தற்போது பார்க்க முடியவில்லை. சிறிது நேரம் கழித்து மீண்டும் முயற்சி செய்யுங்கள்.'
+      : 'Unable to load your biodata at the moment. Please try again after some time.',
+
+    this.currentLang === 'ta'
+      ? 'பயோடேட்டாவை திறக்க முடியவில்லை'
+      : 'Unable to load biodata'
+  );
+
+} finally {
+  this.isLoadingProfile = false;
+  this.cdr.detectChanges();
+}
 }
 async checkAdminDuplicate(): Promise<void> {
   console.log(
@@ -2536,11 +2542,15 @@ async checkAdminDuplicate(): Promise<void> {
     this.duplicateProfileExists =
       res?.exists === true;
 
- if (this.duplicateProfileExists) {
-  this.snackbar.error(
+if (this.duplicateProfileExists) {
+  this.snackbar.warning(
     this.currentLang === 'ta'
-      ? 'இந்த மொபைல் எண்ணில் ஏற்கனவே சுயவிவரம் உள்ளது'
-      : 'Profile already exists with this mobile number'
+      ? 'இந்த மொபைல் நம்பரில் ஏற்கனவே ஒரு ப்ரொபைல் உள்ளது. புதிய பயோடேட்டாவை உருவாக்குவதற்கு முன் அந்த ப்ரொபைலை சரிபார்க்கவும்.'
+      : 'A profile already exists with this mobile number. Please check the existing profile before creating a new biodata.',
+
+    this.currentLang === 'ta'
+      ? 'ப்ரொபைல் ஏற்கனவே உள்ளது!'
+      : 'Profile already exists!'
   );
 }
 
@@ -2670,7 +2680,17 @@ async checkAdminDuplicate(): Promise<void> {
 
 async extractHoroscopeData(): Promise<void> {
   if (!this.selectedHoroscopeFile) {
-    this.snackbar.error(this.tr.alerts.uploadHoroscopeFirst);
+
+    this.snackbar.warning(
+      this.currentLang === 'ta'
+        ? 'ஜாதக விவரங்களை நிரப்ப முதலில் உங்கள் ஜாதகத்தை அப்லோட் செய்யுங்கள்.'
+        : 'Please upload your horoscope file to automatically fill in your horoscope details.',
+
+      this.currentLang === 'ta'
+        ? 'ஜாதகத்தை அப்லோட் செய்யுங்கள்'
+        : 'Upload your horoscope'
+    );
+
     return;
   }
 
@@ -2685,12 +2705,22 @@ async extractHoroscopeData(): Promise<void> {
       body: uploadData
     });
 
-    const result = await response.json();
+ const result = await response.json();
 
-    if (!response.ok || !result.success) {
-      this.snackbar.error(result.message || this.tr.alerts.horoscopeFailed);
-      return;
-    }
+if (!response.ok || !result.success) {
+
+  this.snackbar.error(
+    this.currentLang === 'ta'
+      ? 'அப்லோட் செய்த ஜாதகத்திலிருந்து விவரங்களை எடுக்க முடியவில்லை. மீண்டும் அப்லோட் செய்யுங்கள் அல்லது ஜாதக விவரங்களை நீங்களே நிரப்புங்கள்.'
+      : 'Unable to extract details from the uploaded horoscope. Please upload it again or enter the horoscope details manually.',
+
+    this.currentLang === 'ta'
+      ? 'ஜாதக விவரங்களை எடுக்க முடியவில்லை'
+      : 'Horoscope extraction failed'
+  );
+
+  return;
+}
 
     const d = result.data || {};
 
@@ -2870,19 +2900,34 @@ const lagnam = this.lagnamDbList.find(
   (x: any) => x.nameEn === d.lagnam || x.nameTa === d.lagnam
 );
 
-this.formData.lagnam =
-  lagnam?.nameEn || d.lagnam || this.formData.lagnam;
+this.formDataTa.paatham = d.paatham || this.formDataTa.paatham;
 
-    this.formData.paatham = d.paatham || this.formData.paatham;
-    this.formDataTa.paatham = d.paatham || this.formDataTa.paatham;
+this.snackbar.success(
+  this.currentLang === 'ta'
+    ? 'உங்கள் ஜாதகத்திலிருந்து கிடைத்த விவரங்கள் நிரப்பப்பட்டுள்ளன. அனைத்து விவரங்களும் சரியாக உள்ளதா என்று பார்த்த பிறகு தொடருங்கள்.'
+    : 'Available details from your horoscope have been filled in. Please check all the details before continuing.',
 
-    this.snackbar.success(this.tr.alerts.horoscopeFilled);
-  } catch (error) {
-    this.snackbar.error(this.tr.alerts.horoscopeFailed);
-  } finally {
-    this.isExtracting = false;
-    this.cdr.detectChanges();
-  }
+  this.currentLang === 'ta'
+    ? 'ஜாதக விவரங்கள் நிரப்பப்பட்டன!'
+    : 'Horoscope details filled successfully!'
+);
+
+} catch (error) {
+
+  this.snackbar.error(
+    this.currentLang === 'ta'
+      ? 'ஜாதக விவரங்களை எடுக்க முடியவில்லை. மீண்டும் முயற்சி செய்யுங்கள் அல்லது ஜாதக விவரங்களை நீங்களே நிரப்புங்கள்.'
+      : 'Unable to extract horoscope details. Please try again or enter the details manually.',
+
+    this.currentLang === 'ta'
+      ? 'ஜாதக விவரங்களை எடுக்க முடியவில்லை'
+      : 'Horoscope extraction failed'
+  );
+
+} finally {
+  this.isExtracting = false;
+  this.cdr.detectChanges();
+}
 }
 
   private getCompletionPercentage(): number {
@@ -3037,12 +3082,15 @@ const missingField = this.markRequiredErrors();
 if (missingField) {
   this.isSaving = false;
 
-  this.snackbar.error(
-    this.currentLang === 'ta'
-      ? `${missingField} நிரப்பவும்`
-      : `Please fill ${missingField}`
-  );
+this.snackbar.warning(
+  this.currentLang === 'ta'
+    ? `${missingField} விவரத்தை சரியாக நிரப்பி, மீண்டும் பயோடேட்டாவை சப்மிட் செய்யுங்கள்.`
+    : `Please enter a valid value for ${missingField} and submit your biodata again.`,
 
+  this.currentLang === 'ta'
+    ? 'தேவையான விவரத்தை நிரப்புங்கள்'
+    : 'Required details missing or invalid'
+);
   // Navigate to the step containing
   // the first incomplete required field.
   if (!this.isAdminBiodataMode()) {
@@ -3358,11 +3406,31 @@ if (this.editProfileId) {
 }
 
 
-this.snackbar.success(
-  this.currentLang === 'ta'
-    ? 'உங்கள் சுயவிவரம் சமர்ப்பிக்கப்பட்டது. நிர்வாகியின் ஒப்புதலுக்காக காத்திருக்கவும்.'
-    : 'Biodata submitted successfully. Please wait for admin approval.'
-);
+if (this.isAdminBiodataMode()) {
+
+  this.snackbar.success(
+    this.currentLang === 'ta'
+      ? 'பயோடேட்டா விவரங்கள் சேவ் செய்யப்பட்டுள்ளன.'
+      : 'The biodata details have been saved successfully.',
+
+    this.currentLang === 'ta'
+      ? 'பயோடேட்டா சேவ் செய்யப்பட்டது!'
+      : 'Biodata saved successfully!'
+  );
+
+} else {
+
+  this.snackbar.success(
+    this.currentLang === 'ta'
+      ? 'உங்கள் பயோடேட்டா அட்மின் அப்ரூவலுக்கு அனுப்பப்பட்டுள்ளது. அப்ரூவல் கிடைத்த பிறகு மெம்பர்ஷிப் பிளானை வாங்கலாம். அதுவரை காத்திருக்கவும்.'
+      : 'Your biodata has been submitted for admin approval. Please wait for approval. Once approved, you can purchase a membership plan.',
+
+    this.currentLang === 'ta'
+      ? 'பயோடேட்டா வெற்றிகரமாக அனுப்பப்பட்டது!'
+      : 'Biodata submitted successfully!'
+  );
+
+}
 // Submission changes the server-side approval flow. Never reuse an earlier
 // status response from the short navigation cache.
 this.auth.invalidateFlowStatus();
@@ -3399,10 +3467,19 @@ if (this.isAdminCreated || this.editProfileId) {
 // Registration fees and full-detail memberships never precede this approval.
 await this.flow.syncFromServer();
 await this.router.navigate(['/approval-pending']);
-    } catch (error: any) {
-      
-      this.snackbar.error(error?.message || 'Something went wrong while saving biodata');
-    } finally {
+} catch (error: any) {
+
+  this.snackbar.error(
+    this.currentLang === 'ta'
+      ? 'உங்கள் பயோடேட்டா சேவ் ஆனதா என்று உறுதி செய்ய முடியவில்லை. மீண்டும் சப்மிட் செய்வதற்கு முன் உங்கள் பயோடேட்டாவை சரிபார்க்கவும்.'
+      : 'We could not confirm that your biodata was saved. Please check your biodata before submitting again.',
+
+    this.currentLang === 'ta'
+      ? 'பயோடேட்டா சேவ் ஆனதா என்று உறுதி செய்ய முடியவில்லை'
+      : 'Unable to confirm biodata status'
+  );
+
+} finally {
   this.isSaving = false;
   this.cdr.detectChanges();
 }

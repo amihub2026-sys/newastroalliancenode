@@ -147,7 +147,7 @@ currentPlan = {
 
   currentSubscriptionId = '';
   currentPlanId = '';
-
+private lastExpiryNotificationKey = '';
  profiles: ProfileItem[] = [];
 likedMeProfiles: ProfileItem[] = [];
 likedProfilesCount = 0;
@@ -800,9 +800,104 @@ private getDaysLeft(endDate: string | null | undefined): number {
   return Math.ceil(remainingMs / (1000 * 60 * 60 * 24));
 }
 
-  get isLoggedIn(): boolean {
-    return !!this.getLoggedInUserId();
+private showMembershipExpiryNotification(subscription: any): void {
+
+  if (!this.isBrowser || !subscription?.end_date) return;
+
+  const userId = this.getLoggedInUserId();
+  if (!userId) return;
+
+  const expiry = new Date(subscription.end_date);
+  const now = new Date();
+
+  if (!Number.isFinite(expiry.getTime())) return;
+
+  const today = Date.UTC(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+
+  const expiryDay = Date.UTC(
+    expiry.getFullYear(),
+    expiry.getMonth(),
+    expiry.getDate()
+  );
+
+  const days = expiry.getTime() <= now.getTime()
+    ? -1
+    : Math.round((expiryDay - today) / 86400000);
+
+  if (days > 2) return;
+
+  if (days >= 0 && this.currentPlan.expired) return;
+
+  const key = `astro_expiry_${userId}_${subscription.subscription_id || subscription.plan_id}_${expiry.getTime()}_${days}`;
+
+  if (this.lastExpiryNotificationKey === key) return;
+
+  try {
+    if (localStorage.getItem(key)) return;
+  } catch {}
+
+  const ta = this.currentLang === 'ta';
+
+  if (days === -1) {
+
+    this.snackbar.error(
+      ta
+        ? 'உங்கள் மெம்பர்ஷிப் காலம் முடிந்துவிட்டது. தொடர்ந்து மெம்பர்ஷிப் வசதிகளை பயன்படுத்த உங்கள் பிளானை புதுப்பிக்கவும்.'
+        : 'Your membership has expired. Please renew your plan to continue using membership benefits.',
+      ta
+        ? 'மெம்பர்ஷிப் காலம் முடிந்துவிட்டது'
+        : 'Membership expired'
+    );
+
+  } else if (days === 0) {
+
+    this.snackbar.warning(
+      ta
+        ? 'உங்கள் மெம்பர்ஷிப் இன்றுடன் முடிவடைகிறது. உங்கள் மெம்பர்ஷிப் பிளானை புதுப்பிக்கவும்.'
+        : 'Your membership expires today. Please renew your membership plan.',
+      ta
+        ? 'மெம்பர்ஷிப் இன்று முடிவடைகிறது'
+        : 'Membership expires today'
+    );
+
+  } else if (days === 1) {
+
+    this.snackbar.warning(
+      ta
+        ? 'உங்கள் மெம்பர்ஷிப் நாளையுடன் முடிவடைகிறது. உங்கள் மெம்பர்ஷிப் பிளானை புதுப்பிக்க மறக்காதீர்கள்.'
+        : 'Your membership expires tomorrow. Please remember to renew your plan.',
+      ta
+        ? 'மெம்பர்ஷிப் நாளை முடிவடைகிறது'
+        : 'Membership expires tomorrow'
+    );
+
+  } else if (days === 2) {
+
+    this.snackbar.info(
+      ta
+        ? 'உங்கள் மெம்பர்ஷிப் முடிய இன்னும் 2 நாட்கள் உள்ளன. தொடர்ந்து மெம்பர்ஷிப் வசதிகளை பயன்படுத்த உங்கள் பிளானை புதுப்பிக்கவும்.'
+        : 'Your membership expires in 2 days. Please renew your plan to continue enjoying membership benefits.',
+      ta
+        ? 'மெம்பர்ஷிப் புதுப்பித்தல் நினைவூட்டல்'
+        : 'Membership renewal reminder'
+    );
+
   }
+
+  this.lastExpiryNotificationKey = key;
+
+  try {
+    localStorage.setItem(key, 'shown');
+  } catch {}
+}
+
+get isLoggedIn(): boolean {
+  return !!this.getLoggedInUserId();
+}
 
   tryGetUserLocation(): void {
   if (!this.isBrowser || !('geolocation' in navigator)) {
@@ -958,18 +1053,39 @@ async loadCurrentPlan(): Promise<void> {
   .toPromise();
 const activeSubscription = response?.data || null;
 
-    if (!activeSubscription) {
-      this.currentPlan = {
-        name: 'No Active Plan',
-        profileViewLimit: 0,
-        profileViewsUsed: 0,
-        contactLimit: 0,
-        contactsUsed: 0,
-        daysLeft: 0,
-        expired: true
-      };
-      return;
-    }
+if (!activeSubscription) {
+  this.currentPlan = {
+    name: 'No Active Plan',
+    profileViewLimit: 0,
+    profileViewsUsed: 0,
+    contactLimit: 0,
+    contactsUsed: 0,
+    daysLeft: 0,
+    expired: true
+  };
+
+  if (response?.success === true) {
+    try {
+      const saved = localStorage.getItem(
+        `astro_last_membership_${userId}`
+      );
+
+      if (saved) {
+        const previous = JSON.parse(saved);
+
+        if (
+          previous?.end_date &&
+          new Date(previous.end_date).getTime() <= Date.now()
+        ) {
+          this.showMembershipExpiryNotification(previous);
+        }
+      }
+    } catch {}
+  }
+
+  this.cdr.detectChanges();
+  return;
+}
 
     const daysLeft = this.getDaysLeft(activeSubscription.end_date);
 
@@ -985,10 +1101,26 @@ const activeSubscription = response?.data || null;
       daysLeft,
       expired:
   activeSubscription.is_active !== true ||
-  activeSubscription.subscription_status_id !== 'ACTIVE' ||
+  (activeSubscription.subscription_status_id != null &&
+ activeSubscription.subscription_status_id !== 'ACTIVE') ||
   !Number.isFinite(new Date(activeSubscription.end_date).getTime()) ||
   new Date(activeSubscription.end_date).getTime() <= Date.now()
     };
+if (response?.success === true && !this.currentPlan.expired) {
+  try {
+    localStorage.setItem(
+      `astro_last_membership_${userId}`,
+      JSON.stringify({
+        subscription_id: activeSubscription.subscription_id,
+        plan_id: activeSubscription.plan_id,
+        end_date: activeSubscription.end_date
+      })
+    );
+  } catch {}
+}
+
+
+      this.showMembershipExpiryNotification(activeSubscription);
 
     this.cdr.detectChanges();
   } catch (error) {

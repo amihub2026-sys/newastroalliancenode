@@ -360,25 +360,47 @@ next: (res) => {
         // Registration creates a DRAFT profile. Retain the registration session
         // ONLY so the member can complete their own eight-step Biodata.
         // Both the route guard and backend must restrict draft users to onboarding.
-        if (!res?.data?.token || !res?.data?.user || !res?.data?.profile) {
-          this.isLoading = false;
-          this.snackbar.error(this.currentLang === 'ta'
-            ? 'பதிவு சேமிக்கப்பட்டது; சுயவிவரத்தைத் தொடங்க முடியவில்லை. உதவியைத் தொடர்புகொள்ளவும்.'
-            : 'Registration was received, but the Biodata session could not be opened. Contact support.');
-          return;
-        }
-        this.authService.logout(); // remove an unrelated previous member session
-        this.authService.saveUserSession(res.data);
-        this.snackbar.success(this.currentLang === 'ta'
-          ? 'பதிவு வெற்றி. இப்போது உங்கள் சுயவிவரத்தை நிரப்பவும்.'
-          : 'Registration successful. Now complete your Biodata.');
-        void this.router.navigate(['/biodata']);
+     if (!res?.data?.token || !res?.data?.user || !res?.data?.profile) {
+  this.isLoading = false;
+
+  this.snackbar.warning(
+    this.currentLang === 'ta'
+      ? 'உங்கள் ரெஜிஸ்ட்ரேஷன் விவரங்கள் பெறப்பட்டுள்ளன. ஆனால் பயோடேட்டா பக்கத்தை திறக்க முடியவில்லை. மீண்டும் ரெஜிஸ்டர் செய்யாமல் எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+      : 'Your registration details have been received, but the biodata page could not be opened. Please contact our support team instead of registering again.',
+
+    this.currentLang === 'ta'
+      ? 'பயோடேட்டா பக்கத்தை திறக்க முடியவில்லை'
+      : 'Unable to open biodata'
+  );
+
+  return;
+}
+this.authService.logout(); // remove an unrelated previous member session
+this.authService.saveUserSession(res.data);
+
+this.snackbar.success(
+  this.currentLang === 'ta'
+    ? 'உங்கள் ரெஜிஸ்ட்ரேஷன் முடிந்துவிட்டது. அடுத்ததாக பயோடேட்டா விவரங்களை முழுமையாக நிரப்பி சப்மிட் செய்யுங்கள். அதன் பிறகு அட்மின் உங்கள் பயோடேட்டாவை சரிபார்ப்பார்.'
+    : 'Your registration is complete. Next, fill in and submit your biodata for admin approval.',
+
+  this.currentLang === 'ta'
+    ? 'ரெஜிஸ்ட்ரேஷன் வெற்றிகரமாக முடிந்தது!'
+    : 'Registration successful!'
+);
+
+void this.router.navigate(['/biodata']);
       },
-    error: (err) => {
+  error: (err) => {
   this.isLoading = false;
 
   this.snackbar.error(
-    err?.error?.message || this.tr.alerts.somethingWrong
+    this.currentLang === 'ta'
+      ? 'உங்கள் ரெஜிஸ்ட்ரேஷன் முடிந்ததா என்று உறுதி செய்ய முடியவில்லை. ஏற்கனவே ரெஜிஸ்டர் செய்திருந்தால் லாகின் செய்து பாருங்கள். முடியவில்லை என்றால் எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+      : 'We could not confirm your registration. If you have already registered, try logging in. If you need help, please contact our support team.',
+
+    this.currentLang === 'ta'
+      ? 'ரெஜிஸ்ட்ரேஷனை உறுதி செய்ய முடியவில்லை'
+      : 'Unable to confirm registration'
   );
 },
       complete: () => {
@@ -389,35 +411,73 @@ next: (res) => {
     this.subscriptions.push(sub);
   }
 
-  private isFormValid(): boolean {
-    if (
-      !this.firstName.trim() ||
-      !this.phone.trim() ||
-      !this.profileFor.trim() ||
-      !this.gender.trim() ||
-      !this.age ||
-      !this.dob ||
-      !this.religion.trim()
-    ) {
-      this.snackbar.error(this.tr.alerts.fillAll);
-      return false;
-    }
+private isFormValid(): boolean {
+  if (
+    !this.firstName.trim() ||
+    !this.phone.trim() ||
+    !this.profileFor.trim() ||
+    !this.gender.trim() ||
+    !this.age ||
+    !this.dob ||
+    !this.religion.trim()
+  ) {
+    this.snackbar.warning(
+      this.currentLang === 'ta'
+        ? 'ரெஜிஸ்ட்ரேஷனை முடிக்க தேவையான அனைத்து விவரங்களையும் நிரப்பி, மீண்டும் முயற்சி செய்யுங்கள்.'
+        : 'Please fill in all the required details to complete your registration.',
+
+      this.currentLang === 'ta'
+        ? 'விவரங்களை முழுமையாக நிரப்புங்கள்'
+        : 'Required details missing'
+    );
+
+    return false;
+  }
 
     if (!this.acceptedTerms) {
-      this.snackbar.error(this.tr.alerts.acceptTerms);
-      return false;
-    }
 
-    if (!this.age || this.age < 18) {
-      this.snackbar.error(this.tr.alerts.ageInvalid);
-      return false;
-    }
+  this.snackbar.warning(
+    this.currentLang === 'ta'
+      ? 'ரெஜிஸ்ட்ரேஷனை தொடர, Terms & Conditions படித்து அதற்கு அருகில் உள்ள டிக் பாக்ஸை தேர்வு செய்யுங்கள்.'
+      : 'Please read and accept the Terms & Conditions by selecting the checkbox to continue your registration.',
 
-    if (!/^[0-9]{10}$/.test(this.normalizePhone(this.phone))) {
-      this.snackbar.error(this.tr.alerts.phoneInvalid);
-      return false;
-    }
+    this.currentLang === 'ta'
+      ? 'Terms & Conditions ஏற்கவும்'
+      : 'Accept Terms & Conditions'
+  );
 
+  return false;
+}
+
+  if (!this.age || this.age < 18) {
+
+  this.snackbar.warning(
+    this.currentLang === 'ta'
+      ? 'ரெஜிஸ்டர் செய்ய குறைந்தபட்சம் 18 வயது இருக்க வேண்டும். நீங்கள் கொடுத்த பிறந்த தேதியை சரிபார்க்கவும்.'
+      : 'You must be at least 18 years old to register. Please check the entered date of birth.',
+
+    this.currentLang === 'ta'
+      ? 'வயது தகுதி இல்லை'
+      : 'Age requirement not met'
+  );
+
+  return false;
+}
+
+  if (!/^[0-9]{10}$/.test(this.normalizePhone(this.phone))) {
+
+  this.snackbar.warning(
+    this.currentLang === 'ta'
+      ? 'உங்கள் மொபைல் நம்பர் 10 இலக்கங்கள் கொண்டதாக இருக்க வேண்டும். சரியான மொபைல் நம்பரை கொடுத்து மீண்டும் முயற்சி செய்யுங்கள்.'
+      : 'Your mobile number must contain 10 digits. Please enter a valid mobile number and try again.',
+
+    this.currentLang === 'ta'
+      ? 'மொபைல் நம்பர் தவறாக உள்ளது'
+      : 'Invalid mobile number'
+  );
+
+  return false;
+}
     return true;
   }
 

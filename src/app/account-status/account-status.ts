@@ -17,7 +17,7 @@ import {
 
 import { firstValueFrom, timeout } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-
+import { SnackbarService } from '../shared/snackbar.service';
 type Language = 'en' | 'ta';
 type StageStatus = 'completed' | 'current' | 'upcoming';
 
@@ -66,6 +66,7 @@ export class AccountStatus implements OnInit, OnDestroy {
   // ==========================================
 
   private readonly auth = inject(AuthService);
+  private readonly snackbar = inject(SnackbarService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -492,30 +493,54 @@ export class AccountStatus implements OnInit, OnDestroy {
       this.statusInitialized = true;
 
       this.errorMessage = '';
+// ========================================
+// AUTOMATIC NAVIGATION AND NOTIFICATIONS
+// ========================================
 
-      // ========================================
-      // AUTOMATIC NAVIGATION
-      // ========================================
+// MEMBERSHIP ACTIVATED
 
-      // If a subscription becomes active
-      // while this page is open.
-      if (planJustActivated) {
-        void this.router.navigateByUrl(
-          '/free-search'
-        );
-        return;
-      }
+if (planJustActivated) {
 
-      // If admin approval and publication
-      // become complete while this page is open.
-      if (
-        approvalJustCompleted &&
-        !active
-      ) {
-        void this.router.navigateByUrl(
-          '/plans'
-        );
-      }
+  this.snackbar.success(
+    this.tr(
+      'Your membership is now active. You can explore suitable matches and use the benefits included in your membership plan.',
+      'உங்கள் மெம்பர்ஷிப் ஆக்டிவாகிவிட்டது. இனி உங்களுக்கு பொருத்தமான வரன்களை பார்க்கலாம். மெம்பர்ஷிப் பிளானில் உள்ள வசதிகளையும் பயன்படுத்தலாம்.'
+    ),
+    this.tr(
+      'Membership activated successfully!',
+      'மெம்பர்ஷிப் ஆக்டிவாகிவிட்டது!'
+    )
+  );
+
+  void this.router.navigateByUrl(
+    '/free-search'
+  );
+
+  return;
+}
+
+// ADMIN APPROVAL COMPLETED
+
+if (
+  approvalJustCompleted &&
+  !active
+) {
+
+  this.snackbar.success(
+    this.tr(
+      'Congratulations! Your biodata has been approved. Choose a membership plan to access additional profile details.',
+      'வாழ்த்துகள்! உங்கள் பயோடேட்டா அட்மின் அப்ரூவ் செய்யப்பட்டுள்ளது. கூடுதல் ப்ரொபைல் விவரங்களைப் பார்க்க உங்களுக்கு ஏற்ற மெம்பர்ஷிப் பிளானை தேர்வு செய்யுங்கள்.'
+    ),
+    this.tr(
+      'Your biodata is approved!',
+      'உங்கள் பயோடேட்டா அப்ரூவ் செய்யப்பட்டது!'
+    )
+  );
+
+  void this.router.navigateByUrl(
+    '/plans'
+  );
+}
 
     } catch (error) {
 
@@ -529,7 +554,7 @@ export class AccountStatus implements OnInit, OnDestroy {
       if (!silent) {
         this.errorMessage = this.tr(
           'Unable to load your current status. Please try again.',
-          'உங்கள் தற்போதைய நிலையை ஏற்ற முடியவில்லை. மீண்டும் முயற்சிக்கவும்.'
+          'உங்கள் அக்கவுண்ட் நிலையை தற்போது பார்க்க முடியவில்லை. மீண்டும் முயற்சி செய்யுங்கள்.'
         );
 
         this.currentStage = 0;
@@ -540,11 +565,7 @@ export class AccountStatus implements OnInit, OnDestroy {
       this.checking = false;
 
       if (!this.destroyed) {
-
-        // Critical loading spinner fix.
         this.loading = false;
-
-        // Immediately render new backend status.
         this.cdr.detectChanges();
       }
 
@@ -631,96 +652,95 @@ export class AccountStatus implements OnInit, OnDestroy {
     );
   }
 
-  // ==========================================
-  // STATUS TITLE
-  // ==========================================
+// ==========================================
+// STATUS TITLE
+// ==========================================
 
-  get statusTitle(): string {
+get statusTitle(): string {
 
-    if (this.isRejected) {
-      return this.tr(
-        'Profile needs changes',
-        'சுயவிவரத்தில் திருத்தம் தேவை'
-      );
-    }
-
-    if (!this.biodataCompleted) {
-      return this.tr(
-        'Complete your biodata',
-        'சுயவிவரத்தை நிறைவு செய்யவும்'
-      );
-    }
-
-    if (
-      !this.adminApproved ||
-      !this.profilePublished
-    ) {
-      return this.tr(
-        'Profile under review',
-        'சுயவிவரம் பரிசீலனையில் உள்ளது'
-      );
-    }
-
-    if (!this.planActive) {
-      return this.tr(
-        'Profile approved',
-        'சுயவிவரம் அங்கீகரிக்கப்பட்டது'
-      );
-    }
-
+  if (this.isRejected) {
     return this.tr(
-      'Membership active',
-      'சந்தா செயல்பாட்டில் உள்ளது'
+      'Biodata corrections required',
+      'பயோடேட்டாவில் திருத்தம் தேவை'
     );
   }
 
-  // ==========================================
-  // STATUS DESCRIPTION
-  // ==========================================
-
-  get statusDescription(): string {
-
-    if (this.isRejected) {
-      return this.tr(
-        'Please review your biodata and contact support before resubmitting.',
-        'மீண்டும் சமர்ப்பிக்கும் முன் உங்கள் சுயவிவரத்தை சரிபார்த்து உதவிக் குழுவைத் தொடர்புகொள்ளவும்.'
-      );
-    }
-
-    if (!this.biodataCompleted) {
-      return this.tr(
-        'Complete and submit your biodata to begin the approval process.',
-        'ஒப்புதல் செயல்முறையைத் தொடங்க உங்கள் சுயவிவரத்தை நிறைவு செய்து சமர்ப்பிக்கவும்.'
-      );
-    }
-
-    if (!this.adminApproved) {
-      return this.tr(
-        'Your biodata has been submitted. Our team is reviewing your profile.',
-        'உங்கள் சுயவிவரம் சமர்ப்பிக்கப்பட்டுள்ளது. நிர்வாகக் குழு அதைப் பரிசீலித்து வருகிறது.'
-      );
-    }
-
-    if (!this.profilePublished) {
-      return this.tr(
-        'Your profile is approved and awaiting publication.',
-        'உங்கள் சுயவிவரம் அங்கீகரிக்கப்பட்டுள்ளது. வெளியீட்டிற்காகக் காத்திருக்கிறது.'
-      );
-    }
-
-    if (!this.planActive) {
-      return this.tr(
-        'Your profile is approved and published. Choose a subscription plan.',
-        'உங்கள் சுயவிவரம் அங்கீகரிக்கப்பட்டு வெளியிடப்பட்டுள்ளது. சந்தா திட்டத்தைத் தேர்ந்தெடுக்கவும்.'
-      );
-    }
-
+  if (!this.biodataCompleted) {
     return this.tr(
-      'Your membership is active. Explore eligible profiles and available features.',
-      'உங்கள் சந்தா செயல்பாட்டில் உள்ளது. தகுதியான வரன்களைப் பார்க்கலாம்.'
+      'Complete your biodata',
+      'பயோடேட்டாவை முழுமையாக நிரப்புங்கள்'
     );
   }
 
+  if (
+    !this.adminApproved ||
+    !this.profilePublished
+  ) {
+    return this.tr(
+      'Waiting for admin approval',
+      'அட்மின் அப்ரூவலுக்காக காத்திருக்கிறது'
+    );
+  }
+
+  if (!this.planActive) {
+    return this.tr(
+      'Your biodata is approved!',
+      'உங்கள் பயோடேட்டா அப்ரூவ் செய்யப்பட்டது!'
+    );
+  }
+
+  return this.tr(
+    'Your membership is active!',
+    'உங்கள் மெம்பர்ஷிப் ஆக்டிவாக உள்ளது!'
+  );
+}
+
+// ==========================================
+// STATUS DESCRIPTION
+// ==========================================
+
+get statusDescription(): string {
+
+  if (this.isRejected) {
+    return this.tr(
+      'Your biodata requires some corrections. Please review your details and contact our support team before submitting again.',
+      'உங்கள் பயோடேட்டாவில் சில விவரங்களை திருத்த வேண்டியுள்ளது. விவரங்களை சரிபார்த்து, மீண்டும் சப்மிட் செய்வதற்கு முன் எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+    );
+  }
+
+  if (!this.biodataCompleted) {
+    return this.tr(
+      'Complete all the required biodata details and submit them for admin approval.',
+      'உங்கள் பயோடேட்டாவில் தேவையான அனைத்து விவரங்களையும் நிரப்பி அட்மின் அப்ரூவலுக்கு அனுப்புங்கள்.'
+    );
+  }
+
+  if (!this.adminApproved) {
+    return this.tr(
+      'Your biodata has been submitted successfully. Please wait for admin approval. Once approved, you can purchase a membership plan.',
+      'உங்கள் பயோடேட்டா அட்மின் அப்ரூவலுக்கு அனுப்பப்பட்டுள்ளது. அப்ரூவல் கிடைத்த பிறகு மெம்பர்ஷிப் பிளானை வாங்கலாம். அதுவரை காத்திருக்கவும்.'
+    );
+  }
+
+  if (!this.profilePublished) {
+    return this.tr(
+      'Your biodata has been approved. Please wait until your profile is published before purchasing a membership plan.',
+      'உங்கள் பயோடேட்டா அப்ரூவ் செய்யப்பட்டுள்ளது. உங்கள் ப்ரொபைல் பப்ளிஷ் செய்யப்பட்ட பிறகு மெம்பர்ஷிப் பிளானை வாங்கலாம்.'
+    );
+  }
+
+  if (!this.planActive) {
+    return this.tr(
+      'Congratulations! Your biodata is approved and published. Choose a membership plan to access additional profile details and membership benefits.',
+      'வாழ்த்துகள்! உங்கள் பயோடேட்டா அப்ரூவ் செய்யப்பட்டுள்ளது. கூடுதல் ப்ரொபைல் விவரங்களைப் பார்க்க உங்களுக்கு ஏற்ற மெம்பர்ஷிப் பிளானை தேர்வு செய்யுங்கள்.'
+    );
+  }
+
+  return this.tr(
+    'Your membership is active. You can now explore suitable matches and use the benefits included in your membership plan.',
+    'உங்கள் மெம்பர்ஷிப் ஆக்டிவாக உள்ளது. இனி உங்களுக்கு பொருத்தமான வரன்களை பார்க்கலாம். உங்கள் மெம்பர்ஷிப் பிளானில் உள்ள வசதிகளையும் பயன்படுத்தலாம்.'
+  );
+}
   // ==========================================
   // NEXT ACTION ROUTE
   // ==========================================
@@ -747,45 +767,40 @@ export class AccountStatus implements OnInit, OnDestroy {
 
     return '/profiles';
   }
+get actionLabel(): string {
 
-  // ==========================================
-  // NEXT ACTION LABEL
-  // ==========================================
-
-  get actionLabel(): string {
-
-    if (
-      this.isRejected ||
-      !this.biodataCompleted
-    ) {
-      return this.tr(
-        'Continue Biodata',
-        'சுயவிவரத்தைத் தொடரவும்'
-      );
-    }
-
-    if (
-      !this.adminApproved ||
-      !this.profilePublished
-    ) {
-      return this.tr(
-        'Explore Free Search',
-        'இலவச தேடல்'
-      );
-    }
-
-    if (!this.planActive) {
-      return this.tr(
-        'View Membership Plans',
-        'சந்தா திட்டங்களைப் பார்க்க'
-      );
-    }
-
+  if (
+    this.isRejected ||
+    !this.biodataCompleted
+  ) {
     return this.tr(
-      'Explore Matches',
-      'பொருத்தமான வரன்களைப் பார்க்க'
+      'Continue Biodata',
+      'பயோடேட்டாவை தொடருங்கள்'
     );
   }
+
+  if (
+    !this.adminApproved ||
+    !this.profilePublished
+  ) {
+    return this.tr(
+      'Explore Free Search',
+      'இலவசமாக வரன்களை பார்க்க'
+    );
+  }
+
+  if (!this.planActive) {
+    return this.tr(
+      'View Membership Plans',
+      'மெம்பர்ஷிப் பிளான்களை பார்க்க'
+    );
+  }
+
+  return this.tr(
+    'Explore Matches',
+    'பொருத்தமான வரன்களை பார்க்க'
+  );
+}
 
   // ==========================================
   // CURRENT STAGE LABEL

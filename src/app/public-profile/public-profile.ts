@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import {
@@ -48,9 +48,8 @@ type PremiumField = {
 @Component({
   selector: 'app-public-profile',
   standalone: true,
- imports: [
+imports: [
   CommonModule,
-  RouterLink,
   PublicProfileValuePipe,
   PhotoLightbox,
   ProfilePrivacyDirective
@@ -756,32 +755,50 @@ get avatar(): string {
       return;
     }
 
-    if (!this.loggedIn) {
-      this.notify(
-        this.t(
-          'Register or log in to view premium details.',
-          'கூடுதல் விவரங்களைப் பார்க்க பதிவு செய்யவும் அல்லது உள்நுழையவும்.'
-        )
-      );
-      return;
-    }
+if (!this.loggedIn) {
+
+  this.snackbar.info(
+    this.t(
+      'To view additional biodata details, please register or log in to your account.',
+      'கூடுதல் பயோடேட்டா விவரங்களை பார்க்க முதலில் ரெஜிஸ்டர் செய்யுங்கள் அல்லது உங்கள் அக்கவுண்ட்டில் லாகின் செய்யுங்கள்.'
+    ),
+    this.t(
+      'Login required',
+      'லாகின் செய்யுங்கள்'
+    )
+  );
+
+  return;
+}
 
     await this.refreshMembership();
 
-    if (!this.hasActiveMembership) {
-      this.notify(
-        this.membershipApproved
-          ? this.t(
-              'Subscribe or renew to view these details.',
-              'இந்த விவரங்களைப் பார்க்க உறுப்பினர் திட்டத்தைப் பெறவும் அல்லது புதுப்பிக்கவும்.'
-            )
-          : this.t(
-              'Complete your biodata and obtain admin approval first.',
-              'முதலில் பயோடேட்டாவை முடித்து நிர்வாகி ஒப்புதல் பெறவும்.'
-            )
-      );
-      return;
-    }
+if (!this.hasActiveMembership) {
+
+  this.snackbar.info(
+    this.membershipApproved
+      ? this.t(
+          'To view additional biodata details, please purchase or renew your membership plan.',
+          'கூடுதல் பயோடேட்டா விவரங்களை பார்க்க மெம்பர்ஷிப் பிளானை வாங்குங்கள் அல்லது புதுப்பிக்கவும்.'
+        )
+      : this.t(
+          'Complete your biodata and wait for admin approval. Once approved, you can purchase a membership plan.',
+          'உங்கள் பயோடேட்டாவை முழுமையாக நிரப்பி அட்மின் அப்ரூவலுக்கு அனுப்புங்கள். அப்ரூவல் கிடைத்த பிறகு மெம்பர்ஷிப் பிளானை வாங்கலாம்.'
+        ),
+
+    this.membershipApproved
+      ? this.t(
+          'Membership required',
+          'மெம்பர்ஷிப் தேவை'
+        )
+      : this.t(
+          'Admin approval required',
+          'அட்மின் அப்ரூவல் தேவை'
+        )
+  );
+
+  return;
+}
 
     if (tab === 'contact') {
       await this.refreshInterest();
@@ -869,12 +886,17 @@ get avatar(): string {
         this.hasActiveMembership = false;
       }
 
-      this.notify(
-        this.t(
-          'Premium details could not be authorized. Please check your membership.',
-          'பிரீமியம் விவரங்களுக்கு அனுமதி கிடைக்கவில்லை. உறுப்பினர் திட்டத்தைச் சரிபார்க்கவும்.'
-        )
-      );
+ this.snackbar.warning(
+  this.t(
+    'Unable to view additional biodata details at the moment. Please check your membership status and try again. If the issue continues, contact our support team.',
+    'தற்போது கூடுதல் பயோடேட்டா விவரங்களை பார்க்க முடியவில்லை. உங்கள் மெம்பர்ஷிப் ஆக்டிவாக உள்ளதா என்பதை சரிபார்த்து மீண்டும் முயற்சி செய்யுங்கள். தொடர்ந்து இந்த பிரச்சனை இருந்தால் எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+  ),
+  this.t(
+    'Unable to view biodata details',
+    'பயோடேட்டா விவரங்களை பார்க்க முடியவில்லை'
+  )
+);
+      
 
     } finally {
       if (
@@ -944,16 +966,21 @@ get avatar(): string {
       return;
     }
 
-    if (this.hasSentInterest) {
-      this.notify(
-        this.t(
-          'An interest has already been sent to this profile.',
-          'இந்த சுயவிவரத்திற்கு ஏற்கனவே விருப்பக் கோரிக்கை அனுப்பப்பட்டுள்ளது.'
-        )
-      );
-      return;
-    }
+if (this.hasSentInterest) {
 
+  this.snackbar.info(
+    this.t(
+      'You have already sent an interest request to this profile. There is no need to send another request.',
+      'இந்த வரனுக்கு ஏற்கனவே இன்ட்ரஸ்ட் அனுப்பியுள்ளீர்கள். மீண்டும் இன்ட்ரஸ்ட் அனுப்ப தேவையில்லை.'
+    ),
+    this.t(
+      'Interest already sent',
+      'ஏற்கனவே இன்ட்ரஸ்ட் அனுப்பப்பட்டுள்ளது'
+    )
+  );
+
+  return;
+}
     this.sendingInterest = true;
     this.cdr.markForCheck();
 
@@ -978,13 +1005,16 @@ get avatar(): string {
 
       this.interestStatus = 'pending';
 
-      this.snackbar.success(
-        this.t(
-          'Interest sent. 1 interest credit used.',
-          'விருப்பக் கோரிக்கை அனுப்பப்பட்டது. ஒரு எண்ணிக்கை கழிக்கப்பட்டது.'
-        )
-      );
-
+  this.snackbar.success(
+  this.t(
+    'Your interest request has been sent successfully. One interest credit has been deducted. Please wait for their response.',
+    'உங்கள் இன்ட்ரஸ்ட் வெற்றிகரமாக அனுப்பப்பட்டுள்ளது. உங்கள் அக்கவுண்ட்டிலிருந்து 1 இன்ட்ரஸ்ட் கிரெடிட் கழிக்கப்பட்டுள்ளது. அவர்களின் பதிலுக்காக காத்திருக்கவும்.'
+  ),
+  this.t(
+    'Interest sent successfully!',
+    'இன்ட்ரஸ்ட் அனுப்பப்பட்டது!'
+  )
+);
       this.auth.invalidateFlowStatus();
 
     } catch (error: any) {
@@ -992,16 +1022,27 @@ get avatar(): string {
         this.interestStatus = 'pending';
       }
 
-      this.notify(
-        this.t(
-          error?.error?.code === 'INTEREST_LIMIT_REACHED'
-            ? 'No interest credits remaining.'
-            : 'Unable to send interest.',
-          error?.error?.code === 'INTEREST_LIMIT_REACHED'
-            ? 'விருப்பக் கோரிக்கை எண்ணிக்கை முடிந்துவிட்டது.'
-            : 'விருப்பக் கோரிக்கையை அனுப்ப முடியவில்லை.'
-        )
-      );
+  this.snackbar.warning(
+  this.t(
+    error?.error?.code === 'INTEREST_LIMIT_REACHED'
+      ? 'You have used all your available interest credits. Please check your membership plan or contact our support team.'
+      : 'Unable to send your interest request at the moment. Please check your sent interests before trying again.',
+
+    error?.error?.code === 'INTEREST_LIMIT_REACHED'
+      ? 'உங்கள் இன்ட்ரஸ்ட் கிரெடிட்ஸ் அனைத்தும் முடிந்துவிட்டது. உங்கள் மெம்பர்ஷிப் பிளானை சரிபார்க்கவும் அல்லது எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
+      : 'தற்போது இன்ட்ரஸ்ட் அனுப்ப முடியவில்லை. மீண்டும் அனுப்புவதற்கு முன் ஏற்கனவே இன்ட்ரஸ்ட் அனுப்பப்பட்டுள்ளதா என்பதை சரிபார்க்கவும்.'
+  ),
+
+  this.t(
+    error?.error?.code === 'INTEREST_LIMIT_REACHED'
+      ? 'Interest credits exhausted'
+      : 'Unable to send interest',
+
+    error?.error?.code === 'INTEREST_LIMIT_REACHED'
+      ? 'இன்ட்ரஸ்ட் கிரெடிட்ஸ் முடிந்துவிட்டது'
+      : 'இன்ட்ரஸ்ட் அனுப்ப முடியவில்லை'
+  )
+);
 
     } finally {
       this.sendingInterest = false;
@@ -1012,22 +1053,29 @@ get avatar(): string {
   // ======================================
   // VERIFY ACCEPTED CONTACT
   // ======================================
+async verifyContact(): Promise<void> {
 
-  async verifyContact(): Promise<void> {
-    await this.selectTab('contact');
+  await this.selectTab('contact');
 
-    if (
-      this.hasActiveMembership &&
-      !this.contactUnlocked
-    ) {
-      this.notify(
-        this.t(
-          'Contact details will appear after interest acceptance.',
-          'விருப்பக் கோரிக்கை ஏற்கப்பட்ட பிறகு தொடர்பு விவரங்கள் காட்டப்படும்.'
-        )
-      );
-    }
+  if (
+    this.hasActiveMembership &&
+    !this.contactUnlocked
+  ) {
+
+    this.snackbar.info(
+      this.t(
+        'The mobile number and address are currently locked. Contact details will be available once your interest request is accepted.',
+        'மொபைல் நம்பர் மற்றும் முகவரி தற்போது லாக் செய்யப்பட்டுள்ளது. நீங்கள் அனுப்பிய இன்ட்ரஸ்ட்டை அவர்கள் ஏற்றுக்கொண்ட பிறகு தொடர்பு விவரங்களை பார்க்கலாம்.'
+      ),
+      this.t(
+        'Contact details locked',
+        'தொடர்பு விவரங்கள் லாக் செய்யப்பட்டுள்ளது'
+      )
+    );
+
   }
+
+}
 
   // ======================================
   // SHORTLIST
@@ -1050,15 +1098,21 @@ get avatar(): string {
 
     const userId = this.auth.getCurrentUserId();
 
-    if (!profileId || !userId) {
-      this.notify(
-        this.t(
-          'Please open a premium tab before shortlisting.',
-          'பிடித்ததில் சேர்க்கும் முன் பிரீமியம் விவரங்களைத் திறக்கவும்.'
-        )
-      );
-      return;
-    }
+if (!profileId || !userId) {
+
+  this.snackbar.info(
+    this.t(
+      'To add this profile to your favourites, please open the additional biodata details first.',
+      'இந்த வரனை உங்களுக்கு பிடித்த வரன்கள் பட்டியலில் சேர்க்க முதலில் கூடுதல் பயோடேட்டா விவரங்களை திறந்து பார்க்கவும்.'
+    ),
+    this.t(
+      'View biodata details first',
+      'முதலில் பயோடேட்டாவை பார்க்கவும்'
+    )
+  );
+
+  return;
+}
 
     this.shortlistBusy = true;
     this.cdr.markForCheck();
@@ -1087,20 +1141,29 @@ get avatar(): string {
 
       this.alreadyShortlisted = true;
 
-      this.snackbar.success(
-        this.t(
-          'Profile shortlisted.',
-          'சுயவிவரம் பிடித்ததில் சேர்க்கப்பட்டது.'
-        )
-      );
+    this.snackbar.success(
+  this.t(
+    'This profile has been successfully added to your favourites. You can view it anytime from your shortlisted profiles.',
+    'இந்த வரன் உங்களுக்கு பிடித்த வரன்கள் பட்டியலில் சேர்க்கப்பட்டுள்ளது. எப்போது வேண்டுமானாலும் அந்த பட்டியலில் இந்த வரனை பார்க்கலாம்.'
+  ),
+  this.t(
+    'Added to favourites!',
+    'பிடித்த வரன்களில் சேர்க்கப்பட்டது!'
+  )
+);
 
-    } catch (error) {
-      this.notify(
-        this.t(
-          'Unable to shortlist this profile.',
-          'இந்த சுயவிவரத்தை பிடித்ததில் சேர்க்க முடியவில்லை.'
-        )
-      );
+ } catch (error) {
+
+  this.snackbar.error(
+    this.t(
+      'Unable to add this profile to your favourites. Please check your favourites list before trying again.',
+      'இந்த வரனை பிடித்த வரன்கள் பட்டியலில் சேர்க்க முடியவில்லை. மீண்டும் முயற்சி செய்வதற்கு முன் உங்கள் பிடித்த வரன்கள் பட்டியலை சரிபார்க்கவும்.'
+    ),
+    this.t(
+      'Unable to add to favourites',
+      'பிடித்த வரன்களில் சேர்க்க முடியவில்லை'
+    )
+  );
 
     } finally {
       this.shortlistBusy = false;
@@ -1132,11 +1195,4 @@ get avatar(): string {
     });
   }
 
-  // ======================================
-  // SNACKBAR
-  // ======================================
-
-  private notify(message: string): void {
-    this.snackbar.error(message);
-  }
-}
+ }

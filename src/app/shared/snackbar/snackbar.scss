@@ -1,57 +1,318 @@
+
+/* ==========================================
+   GLOBAL SNACKBAR
+========================================== */
+
 .snackbar {
+
+  --status-color: #21854b;
+  --status-light: #e9f7ef;
+
   position: fixed;
-  top: 100px;
+  top: 110px;
   left: 50%;
-  transform: translateX(-50%) translateY(-20px);
 
-  background: linear-gradient(135deg, #ff2d75, #ff4f9a);
-  color: #fff;
+  transform: translateX(-50%);
 
-  padding: 14px 22px;
-  border-radius: 14px;
+  width: 520px;
+  max-width: calc(100vw - 32px);
 
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  background: #ffffff;
 
-  min-width: 280px;
-  max-width: 90vw;
+  border: 1px solid #e9e3df;
+  border-radius: 16px;
 
-  font-size: 15px;
-  font-weight: 600;
+  box-shadow:
+    0 18px 55px rgba(75, 15, 30, 0.16),
+    0 3px 12px rgba(0, 0, 0, 0.05);
 
-  box-shadow: 0 12px 35px rgba(255, 45, 117, 0.35);
+  overflow: hidden;
 
-  opacity: 0;
-  visibility: hidden;
+  z-index: 2147483647;
 
-  z-index: 9999999999;
+  box-sizing: border-box;
 
-  transition: all 0.35s ease;
+  animation: snackbarEnter 0.3s ease-out;
+
 }
 
-.snackbar.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0);
+/* ==========================================
+   NOTIFICATION COLORS
+========================================== */
+
+.snackbar.success {
+  --status-color: #21854b;
+  --status-light: #e9f7ef;
 }
 
 .snackbar.error {
-  background: linear-gradient(135deg, #ff4d4d, #ff6b6b);
+  --status-color: #dc3545;
+  --status-light: #fff0f0;
 }
+
+.snackbar.warning {
+  --status-color: #c58a18;
+  --status-light: #fff7df;
+}
+
+.snackbar.info {
+  --status-color: #2563eb;
+  --status-light: #edf4ff;
+}
+
+/* ==========================================
+   TOP STATUS INDICATOR
+========================================== */
+
+.snackbar-indicator {
+
+  width: 100%;
+  height: 5px;
+
+  background: var(--status-color);
+
+}
+
+/* ==========================================
+   NOTIFICATION BODY
+========================================== */
+
+.snackbar-body {
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 15px;
+
+  padding: 22px;
+
+}
+
+/* ==========================================
+   NOTIFICATION ICON
+========================================== */
 
 .snack-icon {
-  font-size: 18px;
-  animation: pulse 1s infinite;
+
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--status-light);
+  color: var(--status-color);
+
+  font-size: 25px;
+  font-weight: 700;
+
 }
 
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
+/* ==========================================
+   CONTENT
+========================================== */
+
+.snackbar-content {
+
+  flex: 1;
+  min-width: 0;
+
+  max-height: 60vh;
+  overflow-y: auto;
+
+}
+
+.snackbar-title {
+
+  margin: 0 0 8px;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  line-height: 1.5;
+
+  color: #800020;
+
+}
+
+.snackbar-message {
+
+  margin: 0;
+
+  color: #343434;
+
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.8;
+
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+
+}
+
+.snackbar-brand {
+
+  display: block;
+
+  margin-top: 15px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  color: #ae873b;
+
+  letter-spacing: 1.2px;
+
+}
+
+/* ==========================================
+   MANUAL CLOSE BUTTON
+========================================== */
+
+.snackbar-close {
+
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f5f3f3;
+  color: #666666;
+
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease,
+              color 0.2s ease;
+
+}
+
+.snackbar-close:hover {
+
+  background: #800020;
+  color: #ffffff;
+
+}
+
+.snackbar-close:focus-visible {
+
+  outline: 2px solid #b58b39;
+  outline-offset: 3px;
+
+}
+
+/* ==========================================
+   ENTRANCE ANIMATION
+========================================== */
+
+@keyframes snackbarEnter {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateX(-50%) translateY(-15px);
+
   }
 
-  50% {
-    transform: scale(1.2);
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateX(-50%) translateY(0);
+
   }
+
+}
+
+/* ==========================================
+   MOBILE RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+
+  .snackbar {
+
+    top: 85px;
+
+    width: calc(100% - 24px);
+
+    max-width: 100%;
+
+    border-radius: 14px;
+
+  }
+
+  .snackbar-body {
+
+    padding: 16px;
+
+    gap: 10px;
+
+  }
+
+  .snack-icon {
+
+    width: 36px;
+    height: 36px;
+
+    font-size: 21px;
+
+  }
+
+  .snackbar-title {
+
+    font-size: 16px;
+
+  }
+
+  .snackbar-message {
+
+    font-size: 14px;
+
+    line-height: 1.8;
+
+  }
+
+  .snackbar-brand {
+
+    font-size: 9px;
+
+  }
+
+  .snackbar-close {
+
+    width: 28px;
+    height: 28px;
+
+    font-size: 22px;
+
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .snackbar {
+    animation: none;
+  }
+
 }

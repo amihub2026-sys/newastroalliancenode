@@ -1,22 +1,56 @@
+
 <div
   *ngIf="visible"
-  style="
-    position: fixed;
-    top: 110px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2147483647;
-    background: #ef4444;
-    color: white;
-    padding: 14px 22px;
-    border-radius: 14px;
-    font-weight: 700;
-    font-size: 15px;
-    box-shadow: 0 12px 35px rgba(0,0,0,0.35);
-    min-width: 280px;
-    max-width: 90vw;
-    text-align: center;
-  "
+  class="snackbar show"
+  [ngClass]="type"
 >
-  {{ type === 'success' ? '❤' : '⚠' }} {{ message }}
+  <!-- STATUS INDICATOR -->
+
+  <div class="snackbar-indicator"></div>
+
+  <!-- NOTIFICATION BODY -->
+
+  <div class="snackbar-body">
+
+    <!-- STATUS ICON -->
+
+    <div class="snack-icon" aria-hidden="true">
+      {{ notificationIcon }}
+    </div>
+
+    <!-- NOTIFICATION CONTENT -->
+
+    <div
+      class="snackbar-content"
+      [attr.role]="type === 'error' ? 'alert' : 'status'"
+    >
+
+      <h4 *ngIf="title" class="snackbar-title">
+        {{ title }}
+      </h4>
+
+      <p class="snackbar-message">
+        {{ message }}
+      </p>
+
+      <span class="snackbar-brand">
+        ASTRO ALLIANCE MATRIMONY
+      </span>
+
+    </div>
+
+    <!-- MANUAL CLOSE BUTTON -->
+
+    <button
+      type="button"
+      class="snackbar-close"
+      aria-label="Close notification / அறிவிப்பை மூடு"
+      title="Close"
+      (click)="close()"
+    >
+      &times;
+    </button>
+
+  </div>
+
 </div>
