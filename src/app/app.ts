@@ -156,8 +156,7 @@ accountPhotoFailed = false;
 
 
 async loadAccountProfilePhoto(): Promise<void> {
-  if (!this.isBrowser) return;
-
+  if (!this.isBrowser || this.isAdminPage) return;
   if (!this.auth.isLoggedIn()) {
     this.accountProfilePhoto = '';
     this.accountProfileGender = '';
@@ -657,9 +656,11 @@ openSentInterests(): void {
 }
 async checkProfileStatus(){
 
-  if(
+  if (
+    !this.isBrowser ||
+    this.isAdminPage ||
     !localStorage.getItem('matrimony_token')
-  ){
+  ) {
     return;
   }
 
