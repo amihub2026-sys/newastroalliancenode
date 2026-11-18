@@ -198,7 +198,7 @@ export class Login implements OnInit, OnDestroy {
     : 'Waiting for admin approval'
 );
 
-void this.router.navigate(['/approval-pending']);
+void this.router.navigate(['/free-search']);
 return;
         }
        if (!res?.data?.token || !res?.data?.user) {
@@ -262,7 +262,7 @@ this.snackbar.success(
     : 'Login successful!'
 );
 
-void this.router.navigate(['/dashboard']);
+void this.router.navigate(['/profiles']);
       },
    error: (err) => {
 

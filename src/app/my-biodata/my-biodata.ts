@@ -200,6 +200,12 @@ private normalizeProfile(data: any): any {
 
   return {
 
+    profile_status: String(
+      data.profileStatus || ''
+    ).trim().toLowerCase(),
+
+    is_published: data.isPublished === true,
+
     profile_code: data.profileCode,
     profile_image_url: profileMediaUrl(data.media?.profileImage) || 'assets/default-profile.png',
     gallery_images: profileGalleryUrls(data.media?.gallery),

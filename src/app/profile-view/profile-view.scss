@@ -2096,3 +2096,179 @@
 .profile-view-page .aa-gallery-item img { display:block; width:100%; height:100%; min-height:60px; object-fit:contain; background:#f5e8ed; }
 .profile-view-page .aa-gallery-item:focus-visible,.profile-view-page .aa-photo-click:focus-visible { outline:3px solid #b2637c; outline-offset:3px; }
 
+
+/* ============================================
+   ASTRO ALLIANCE - CONTACT UNLOCK POPUP
+============================================ */
+
+.aa-contact-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(28, 7, 19, 0.72);
+  backdrop-filter: blur(7px);
+}
+
+.aa-contact-modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 38px 30px 30px;
+  border: 1px solid #e8cc96;
+  border-radius: 22px;
+  background: #fffaf6;
+  box-shadow: 0 24px 75px rgba(35, 0, 15, 0.3);
+  text-align: center;
+  animation: aaModalEnter 0.25s ease-out;
+}
+
+.aa-contact-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #f6e9e9;
+  color: #720d2d;
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.aa-contact-modal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 20px;
+  border: 2px solid #dfbb76;
+  border-radius: 50%;
+  background: #fff2d8;
+  font-size: 32px;
+}
+
+.aa-contact-modal h2 {
+  margin: 0 0 14px;
+  color: #720d2d;
+  font-size: 24px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.aa-contact-modal-description {
+  margin: 0;
+  color: #65545b;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.aa-contact-credit-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 24px 0;
+  padding: 15px;
+  border: 1px solid #eddbaf;
+  border-radius: 12px;
+  background: #fff3dc;
+  color: #7c4c0c;
+  font-size: 16px;
+}
+
+.aa-contact-credit-info span {
+  font-size: 24px;
+}
+
+.aa-contact-modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.aa-contact-cancel-btn,
+.aa-contact-confirm-btn {
+  flex: 1;
+  min-height: 48px;
+  padding: 12px;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.aa-contact-cancel-btn {
+  border: 1px solid #dbc8ce;
+  background: white;
+  color: #720d2d;
+}
+
+.aa-contact-confirm-btn {
+  border: 1px solid #720d2d;
+  background: linear-gradient(135deg, #770c30, #48051c);
+  color: #fff;
+}
+
+.aa-contact-confirm-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #8c1740;
+}
+
+.aa-contact-cancel-btn:hover:not(:disabled) {
+  background: #faeef1;
+}
+
+.aa-contact-modal button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.aa-contact-modal button:focus-visible {
+  outline: 3px solid #d9aa50;
+  outline-offset: 3px;
+}
+
+@keyframes aaModalEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 480px) {
+  .aa-contact-modal {
+    padding: 34px 20px 24px;
+    border-radius: 18px;
+  }
+
+  .aa-contact-modal h2 {
+    font-size: 21px;
+  }
+
+  .aa-contact-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .aa-contact-cancel-btn,
+  .aa-contact-confirm-btn {
+    width: 100%;
+    flex: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aa-contact-modal {
+    animation: none;
+  }
+}

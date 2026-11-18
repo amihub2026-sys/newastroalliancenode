@@ -769,13 +769,13 @@
 
     <!-- UNLOCK CONTACT WITH ONE PROFILE CREDIT -->
 
-    <button
-     *ngIf="unlocked && !contactUnlocked"
-      type="button"
-      class="unlock-premium-btn"
-      (click)="unlockContact()"
-      [disabled]="unlockingContact"
-    >
+   <button
+  *ngIf="unlocked && !contactUnlocked"
+  type="button"
+  class="unlock-premium-btn"
+  (click)="openContactUnlockPopup()"
+  [disabled]="unlockingContact"
+>
    {{
   unlockingContact
     ? (
@@ -1023,6 +1023,76 @@
 
 <div class="container" *ngIf="!isLoading && !profile">
   <p>{{ currentLang === 'ta' ? 'சுயவிவரம் கிடைக்கவில்லை.' : 'Profile not found.' }}</p>
+</div>
+
+<!-- CUSTOM CONTACT UNLOCK MODAL -->
+<div
+  *ngIf="showContactUnlockPopup"
+  class="aa-contact-modal-overlay"
+  (click)="closeContactUnlockPopup()"
+>
+  <div
+    class="aa-contact-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="aa-contact-modal-title"
+    (click)="$event.stopPropagation()"
+  >
+    <button
+      type="button"
+      class="aa-contact-modal-close"
+      (click)="closeContactUnlockPopup()"
+      [disabled]="unlockingContact"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+    <div class="aa-contact-modal-icon">🔒</div>
+
+    <h2 id="aa-contact-modal-title">
+      {{ currentLang === 'ta'
+        ? 'தொடர்பு விவரங்களைத் திறக்கவும்'
+        : 'Unlock Contact Details' }}
+    </h2>
+
+    <p class="aa-contact-modal-description">
+      {{ currentLang === 'ta'
+        ? 'இந்த வரனின் மொபைல் எண் மற்றும் முழு முகவரியைப் பார்க்க உங்கள் கணக்கிலிருந்து 1 காண்டாக்ட் கிரெடிட் கழிக்கப்படும்.'
+        : 'Unlock this member’s mobile number and full address. One contact credit will be deducted from your account.' }}
+    </p>
+
+    <div class="aa-contact-credit-info">
+      <span>🪙</span>
+      <strong>
+        {{ currentLang === 'ta'
+          ? '1 காண்டாக்ட் கிரெடிட்'
+          : '1 Contact Credit' }}
+      </strong>
+    </div>
+
+    <div class="aa-contact-modal-actions">
+      <button
+        type="button"
+        class="aa-contact-cancel-btn"
+        (click)="closeContactUnlockPopup()"
+        [disabled]="unlockingContact"
+      >
+        {{ currentLang === 'ta' ? 'ரத்து செய்' : 'Cancel' }}
+      </button>
+
+      <button
+        type="button"
+        class="aa-contact-confirm-btn"
+        (click)="unlockContact()"
+        [disabled]="unlockingContact"
+      >
+        {{ unlockingContact
+          ? (currentLang === 'ta' ? 'திறக்கப்படுகிறது...' : 'Unlocking...')
+          : (currentLang === 'ta' ? 'இப்போது திறக்கவும்' : 'Unlock Now') }}
+      </button>
+    </div>
+  </div>
 </div>
 
 </section>

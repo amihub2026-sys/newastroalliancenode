@@ -754,13 +754,12 @@ get statusDescription(): string {
       return '/biodata';
     }
 
-    if (
-      !this.adminApproved ||
-      !this.profilePublished
-    ) {
-      return '/free-search';
-    }
-
+if (
+  !this.adminApproved ||
+  !this.profilePublished
+) {
+  return '/biodata';
+}
     if (!this.planActive) {
       return '/plans';
     }
@@ -779,16 +778,15 @@ get actionLabel(): string {
     );
   }
 
-  if (
-    !this.adminApproved ||
-    !this.profilePublished
-  ) {
-    return this.tr(
-      'Explore Free Search',
-      'இலவசமாக வரன்களை பார்க்க'
-    );
-  }
-
+if (
+  !this.adminApproved ||
+  !this.profilePublished
+) {
+  return this.tr(
+    'Edit Biodata',
+    'பயோடேட்டாவை திருத்தவும்'
+  );
+}
   if (!this.planActive) {
     return this.tr(
       'View Membership Plans',

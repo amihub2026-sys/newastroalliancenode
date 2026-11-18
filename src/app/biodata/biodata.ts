@@ -2957,13 +2957,27 @@ this.snackbar.success(
 
     return Math.round((filledCount / completionFields.length) * 100);
   }
-private async uploadFile(file: File, folder: string): Promise<string | null> {
+private async uploadFile(file: File, folder: string): Promise<string> {
   const formData = new FormData();
+
   formData.append('file', file);
   formData.append('folder', folder);
 
-  const res: any = await firstValueFrom(this.api.uploadFile(formData));
-  return res?.url || res?.data?.url || null;
+  const res: any = await firstValueFrom(
+    this.api.uploadFile(formData)
+  );
+
+  const uploadedUrl = String(
+    res?.url || res?.data?.url || ''
+  ).trim();
+
+  if (res?.success === false || !uploadedUrl) {
+    throw new Error(
+      'Photo upload failed. Please upload the photo again before saving.'
+    );
+  }
+
+  return uploadedUrl;
 }
 
 private uploadProfileImage(file: File) {
@@ -3466,7 +3480,9 @@ if (this.isAdminCreated || this.editProfileId) {
 // A completed Biodata must be reviewed by admin before matching or payment.
 // Registration fees and full-detail memberships never precede this approval.
 await this.flow.syncFromServer();
-await this.router.navigate(['/approval-pending']);
+await this.router.navigate(
+  this.isEditMode ? ['/my-biodata'] : ['/approval-pending']
+);
 } catch (error: any) {
 
   this.snackbar.error(

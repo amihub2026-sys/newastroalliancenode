@@ -13,17 +13,26 @@ export const authGuard: CanActivateFn = async (_route, state) => {
   const auth = inject(AuthService);
   if (typeof window === 'undefined') return true; // SSR routes aren't authenticated here
 
+  const path = state.url.split('?')[0];
+
+  // Free Search is public for guests and all members.
+  // Admin approval is not required to browse public profiles.
+  if (path === '/free-search') {
+    return true;
+  }
+
   const token = localStorage.getItem('matrimony_token');
   const user = localStorage.getItem('matrimony_user');
+
   if (!token || !user || hasExpiredJwt(token)) {
     return router.createUrlTree(['/login']);
   }
-
-  const path = state.url.split('?')[0];
   // Own Biodata is a special case: permit the page shell immediately for any
   // authenticated applicant. GET /profile/me MUST validate token + ownership.
   // This allows pending applicants to view their own submitted details.
-  if (path === '/my-biodata') return true;
+ if (path === '/my-biodata' || path === '/biodata') {
+  return true;
+}
 
   // Never rely on cached localStorage flags to grant access after registration.
   // A network failure fails closed rather than using stale approval status.
@@ -48,16 +57,7 @@ export const authGuard: CanActivateFn = async (_route, state) => {
   }
   
 if (path === '/approval-pending') {
-  // Permanent Matrimony Journey page.
-  // Allow submitted members to view their journey
-  // even after admin approval and subscription.
-
-  return (
-    flow.biodataCompleted === true ||
-    ['pending', 'approved', 'rejected'].includes(status)
-  )
-    ? true
-    : router.createUrlTree(['/biodata']);
+  return router.createUrlTree(['/my-biodata']);
 }
 
   if (path === '/profile-rejected') {

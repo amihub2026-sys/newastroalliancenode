@@ -4,8 +4,33 @@
       <h1>{{ currentLang === 'ta' ? 'என் பயோடேட்டா' : 'My Biodata' }}</h1>
       <p>{{ currentLang === 'ta' ? 'உங்கள் சேமிக்கப்பட்ட திருமண விவரங்கள்' : 'Your saved matrimony profile details' }}
       </p>
+    
     </div>
 
+    <!-- PROFILE APPROVAL STATUS -->
+    <div
+      *ngIf="!loading && profile?.profile_status === 'pending'"
+      class="state-card approval-status-message"
+      style="background: #fff8e6; border: 1px solid #e8c56a; border-radius: 12px; padding: 20px; margin-bottom: 20px;"
+    >
+      <h3 style="color: #835800; margin: 0 0 10px;">
+        {{
+          currentLang === 'ta'
+            ? 'உங்கள் பயோடேட்டா நிர்வாக ஒப்புதலுக்காக காத்திருக்கிறது'
+            : 'Your Profile Is Waiting for Admin Approval'
+        }}
+      </h3>
+
+      <p style="margin: 0; line-height: 1.7; color: #58471d;">
+        {{
+          currentLang === 'ta'
+            ? 'உங்கள் பயோடேட்டா வெற்றிகரமாக சமர்ப்பிக்கப்பட்டுள்ளது. நிர்வாகக் குழு உங்கள் விவரங்களை சரிபார்த்து வருகிறது. ஒப்புதல் கிடைக்கும் வரை உங்கள் பயோடேட்டாவைப் பார்க்கவும் திருத்தவும் முடியும்.'
+            : 'Your biodata has been submitted successfully and is under review. You can continue to view and edit your biodata while waiting for admin approval.'
+        }}
+      </p>
+    </div>
+
+    <!-- LOADING -->
     <div *ngIf="loading" class="state-card">
       Loading your biodata...
     </div>

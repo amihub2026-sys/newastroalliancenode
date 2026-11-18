@@ -59,8 +59,8 @@
 
           <!-- FIND YOUR MATCH -->
 
-         <a
-  [routerLink]="isLoggedIn ? '/profiles' : '/free-search'"
+<a
+  [routerLink]="isLoggedIn && mobileAccountStage === 'approved' ? '/profiles' : '/free-search'"
   routerLinkActive="is-active"
 >
   {{ profilesNavText }}
@@ -545,9 +545,8 @@
 
 
       <!-- SEARCH -->
-
-     <a
-  [routerLink]="isLoggedIn ? '/profiles' : '/free-search'"
+<a
+  [routerLink]="isLoggedIn && mobileAccountStage === 'approved' ? '/profiles' : '/free-search'"
   routerLinkActive="is-active"
   class="astro-bottom-nav-item"
   (click)="mobileProfileChoiceOpen = false"

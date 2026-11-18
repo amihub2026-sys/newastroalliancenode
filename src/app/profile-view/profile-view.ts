@@ -786,7 +786,24 @@ private getStoredLoggedInUser(): any | null {
   contactUnlocked = false;
   unlockingContact = false;
   
+// Custom Contact Unlock Popup
+showContactUnlockPopup = false;
 
+openContactUnlockPopup(): void {
+  if (this.unlockingContact || this.contactUnlocked) {
+    return;
+  }
+
+  this.showContactUnlockPopup = true;
+}
+
+closeContactUnlockPopup(): void {
+  if (this.unlockingContact) {
+    return;
+  }
+
+  this.showContactUnlockPopup = false;
+}
 
 
 async unlockContact(): Promise<void> {
@@ -809,13 +826,7 @@ if (!this.unlocked || !this.selectedProfileId) {
   return;
 }
 
-const confirmed = window.confirm(
-  this.currentLang === 'ta'
-    ? 'இந்த வரனின் மொபைல் நம்பர் மற்றும் முழு முகவரியை பார்க்க உங்கள் அக்கவுண்ட்டிலிருந்து 1 காண்டாக்ட் கிரெடிட் கழிக்கப்படும். தொடர்பு விவரங்களை அன்லாக் செய்ய விரும்புகிறீர்களா?'
-    : 'To unlock the mobile number and full address of this profile, 1 contact credit will be deducted from your account. Do you want to continue?'
-);
 
-  if (!confirmed) return;
 
   this.unlockingContact = true;
 
@@ -841,7 +852,9 @@ const confirmed = window.confirm(
 
     await this.loadProfile();
 
-  if (this.contactUnlocked) {
+if (this.contactUnlocked) {
+
+  this.showContactUnlockPopup = false;
 
   this.snackbar.success(
     this.currentLang === 'ta'
