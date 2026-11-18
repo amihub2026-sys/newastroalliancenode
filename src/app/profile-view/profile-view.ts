@@ -89,9 +89,11 @@ noCastePreference: boolean;
   standalone: true,
   imports: [CommonModule, PhotoLightbox],
   templateUrl: './profile-view.html',
-  styleUrls: ['./profile-view.scss']
+  styleUrls: ['./profile-view.scss', './profile-view.responsive.scss']
 })
 export class ProfileView implements OnInit {
+  // UI-only selected detail panel. Does not change member access or credits.
+  activeDetailTab: 'basic' | 'family' | 'horoscope' | 'contact' = 'basic';
   app = inject(LanguageService);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -1541,4 +1543,39 @@ this.snackbar.success(
     : 'Biodata downloaded successfully!'
 );
 }
+
+
+
+onProfileImageLoad(event: Event): void {
+  const img = event.target as HTMLImageElement;
+
+  // Actual container in your existing HTML
+  const frame = img.closest(
+    '.profile-image-card'
+  ) as HTMLElement | null;
+
+  if (!frame) return;
+
+  const width = img.naturalWidth;
+  const height = img.naturalHeight;
+
+  if (!width || !height) return;
+
+  frame.classList.remove(
+    'photo-portrait',
+    'photo-landscape',
+    'photo-square'
+  );
+
+  const ratio = width / height;
+
+  if (ratio > 1.15) {
+    frame.classList.add('photo-landscape');
+  } else if (ratio < 0.85) {
+    frame.classList.add('photo-portrait');
+  } else {
+    frame.classList.add('photo-square');
+  }
+}
+
 }
