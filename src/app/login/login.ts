@@ -264,17 +264,32 @@ this.snackbar.success(
 
 void this.router.navigate(['/profiles']);
       },
-   error: (err) => {
+error: (err) => {
+  const message = String(err?.error?.message || '');
 
-  this.snackbar.error(
-    this.currentLang === 'ta'
-      ? 'நீங்கள் ரெஜிஸ்டர் செய்த மொபைல் நம்பர் மற்றும் பிறந்த தேதி சரியாக உள்ளதா என்று பார்த்து மீண்டும் லாகின் செய்யுங்கள். தொடர்ந்து லாகின் செய்ய முடியவில்லை என்றால் எங்கள் சப்போர்ட் டீமை தொடர்பு கொள்ளுங்கள்.'
-      : 'Please check your registered mobile number and date of birth and try again. If you are still unable to log in, contact our support team.',
-
-    this.currentLang === 'ta'
-      ? 'லாகின் செய்ய முடியவில்லை'
-      : 'Login unsuccessful'
+  const approvalPending = message.includes(
+    'Your biodata is not approved yet'
   );
+
+  if (approvalPending) {
+    this.snackbar.warning(
+      this.currentLang === 'ta'
+        ? 'உங்கள் பயோடேட்டா அட்மின் அனுமதிக்காக காத்திருக்கிறது. அனுமதி கிடைத்த பிறகு உள்நுழையலாம்.'
+        : 'Your biodata is awaiting admin approval. You can log in only after approval.',
+
+      this.currentLang === 'ta'
+        ? 'அட்மின் அனுமதி நிலுவையில் உள்ளது'
+        : 'Approval Pending'
+    );
+  } else {
+    this.snackbar.error(
+      message || this.tr.alerts.somethingWrong,
+
+      this.currentLang === 'ta'
+        ? 'உள்நுழைவு தோல்வி'
+        : 'Login unsuccessful'
+    );
+  }
 
   this.stopLoading();
 },

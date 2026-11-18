@@ -60,7 +60,7 @@
     <div class="astro-video-actions">
 
       <a
-        routerLink="/free-search"
+        [routerLink]="searchRoute"
         class="astro-video-primary"
       >
         {{ currentLang === 'ta'
@@ -96,7 +96,7 @@
         {{ t.hero[0].title1 }} <span>{{ t.hero[0].title2 }}</span>
       </h1>
       <div class="hero-buttons astro-legacy-actions">
-        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="primary-btn" [routerLink]="searchRoute">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
         <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
       </div>
     </div>
@@ -113,7 +113,7 @@
         {{ t.hero[1].title1 }} <span>{{ t.hero[1].title2 }}</span>
       </h1>
       <div class="hero-buttons astro-legacy-actions">
-        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="primary-btn" [routerLink]="searchRoute">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
         <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
       </div>
     </div>
@@ -130,7 +130,7 @@
         {{ t.hero[2].title1 }} <span>{{ t.hero[2].title2 }}</span>
       </h1>
       <div class="hero-buttons astro-legacy-actions">
-        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="primary-btn" [routerLink]="searchRoute">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
         <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
       </div>
     </div>
@@ -146,7 +146,7 @@
         {{ t.hero[3].title1 }} <span>{{ t.hero[3].title2 }}</span>
       </h1>
       <div class="hero-buttons astro-legacy-actions">
-        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="primary-btn" [routerLink]="searchRoute">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
         <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
       </div>
     </div>
@@ -164,7 +164,7 @@
       <span>{{ t.hero[0].title2 }}</span>
     </h1>
       <div class="hero-buttons astro-legacy-actions">
-        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="primary-btn" [routerLink]="searchRoute">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
         <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
       </div>
   </div>
@@ -183,7 +183,7 @@
       <span>{{ t.hero[1].title2 }}</span>
     </h1>
       <div class="hero-buttons astro-legacy-actions">
-        <a class="primary-btn" routerLink="/free-search">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
+        <a class="primary-btn" [routerLink]="searchRoute">{{ currentLang === 'ta' ? 'இலவச தேடல்' : 'Free Search' }}</a>
         <a class="secondary-btn" routerLink="/register">{{ currentLang === 'ta' ? 'பதிவு செய்யுங்கள்' : 'Register' }}</a>
       </div>
   </div>
@@ -310,7 +310,7 @@
       @for (community of visibleCommunities; track community.nameEn) {
         <a
           class="astro-community-card"
-          routerLink="/free-search"
+          [routerLink]="searchRoute"
           [queryParams]="{ caste: community.nameEn }"
           [attr.aria-label]="(currentLang === 'ta' ? community.nameTa : community.nameEn) + ' profiles'"
         >
@@ -409,7 +409,7 @@
 
       <a
         class="community-explore-btn"
-        routerLink="/free-search"
+        [routerLink]="searchRoute"
         [queryParams]="selectedCommunity
           ? { caste: selectedCommunity.nameEn }
           : {}"

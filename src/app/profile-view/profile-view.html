@@ -133,9 +133,12 @@
     </div>
 
     <h1>{{ getText(p.fullName) }}</h1>
-        <p class="hero-sub">
-          {{ p.age }} yrs • {{ getCategoryText(p.gender) }} • {{ getCategoryText(p.job) }}
-        </p>
+       <p class="hero-sub">
+  {{ p.age }} yrs • {{ getCategoryText(p.gender) }}
+  <ng-container *ngIf="getText(p.job)">
+    • {{ getCategoryText(p.job) }}
+  </ng-container>
+</p>
         <p class="hero-location">
           {{ fullLocation }}
         </p>

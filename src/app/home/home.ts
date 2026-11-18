@@ -12,6 +12,7 @@ import {
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
 import { environment } from '../../environments/environment';
 import { SUCCESS_STORY_PHOTOS, SuccessStoryPhoto } from './success-stories.data';
 import { HomeDiscovery } from './home-discovery/home-discovery';
@@ -64,6 +65,8 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
   private router = inject(Router);
+  private auth = inject(AuthService);
+  searchRoute: '/free-search' | '/profiles' = '/free-search';
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
 
@@ -430,7 +433,32 @@ ngOnInit(): void {
   if (savedLang === 'en' || savedLang === 'ta') {
     this.currentLang = savedLang;
   }
+if (this.auth.isLoggedIn()) {
+  const token = localStorage.getItem('matrimony_token');
 
+  this.auth.getUserFlowStatus()
+    .pipe(timeout(8000))
+    .subscribe({
+      next: (res: any) => {
+        if (localStorage.getItem('matrimony_token') !== token) return;
+
+        const approved =
+          res?.success === true &&
+          res?.data?.profileStatus === 'approved' &&
+          res?.data?.isPublished === true;
+
+        this.searchRoute = approved
+          ? '/profiles'
+          : '/free-search';
+
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.searchRoute = '/free-search';
+        this.cdr.markForCheck();
+      }
+    });
+}
   window.addEventListener(
     'app-language-changed',
     this.handleLanguageChange

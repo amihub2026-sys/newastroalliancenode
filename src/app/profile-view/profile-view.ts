@@ -1073,14 +1073,42 @@ this.snackbar.warning(
       .join(', ');
   }
 
-getText(value: string | LangText): string {
-  if (typeof value === 'string') return value || '-';
+getText(value: unknown): string {
+  const resolve = (input: unknown, depth = 0): string => {
+    if (depth > 5 || input === null || input === undefined) {
+      return '';
+    }
 
-  if (this.currentLang === 'ta') {
-    return value?.ta || value?.en || '-';
-  }
+    if (typeof input === 'string') {
+      return input.trim();
+    }
 
-  return value?.en || value?.ta || '-';
+    if (typeof input === 'number') {
+      return String(input);
+    }
+
+    if (typeof input !== 'object' || Array.isArray(input)) {
+      return '';
+    }
+
+    const obj = input as Record<string, unknown>;
+
+    const keys = this.currentLang === 'ta'
+      ? ['ta', 'en']
+      : ['en', 'ta'];
+
+    for (const key of keys) {
+      const result = resolve(obj[key], depth + 1);
+
+      if (result) {
+        return result;
+      }
+    }
+
+    return '';
+  };
+
+  return resolve(value);
 }
 getCategoryText(value: string | LangText): string {
   return publicDisplayValue(this.getText(value), this.currentLang);

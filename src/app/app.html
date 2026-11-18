@@ -215,13 +215,13 @@
 
 
 <!-- APPROVAL STATUS -->
-<a
+<!-- <a
   routerLink="/approval-pending"
   class="account-menu-item"
   (click)="closeAccountMenu()"
 >
   Approval Status
-</a>
+</a> -->
 
 <!-- Keep your existing Logout button below -->
 
@@ -701,7 +701,7 @@
 
 
               <!-- APPROVAL STATUS -->
-
+<!-- 
               @if (
                 mobileAccountStage === 'pending' ||
                 mobileAccountStage === 'approved' ||
@@ -743,7 +743,7 @@
 
                 </a>
 
-              }
+              } -->
 
 
               <!-- DASHBOARD OR BIODATA -->
@@ -876,7 +876,9 @@
             {{ t.footer.home }}
           </a>
 
-          <a routerLink="/free-search">
+         <a
+  [routerLink]="isLoggedIn && mobileAccountStage === 'approved' ? '/profiles' : '/free-search'"
+>
             {{ t.footer.profiles }}
           </a>
 

@@ -569,10 +569,10 @@ async changeLanguage(lang: Language): Promise<void> {
   this.currentLang = lang;
 
   if (this.isBrowser) {
-    if (this.auth.isLoggedIn()) {
+if (this.auth.isLoggedIn()) {
   void this.loadAccountProfilePhoto();
-}
-    localStorage.setItem('tm_language', lang);
+  void this.syncAccountMenuStage();
+}   localStorage.setItem('tm_language', lang);
 
     window.dispatchEvent(
       new CustomEvent('app-language-changed', {

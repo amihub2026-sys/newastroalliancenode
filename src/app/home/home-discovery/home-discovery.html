@@ -17,9 +17,10 @@
           }}
         </p>
       </div>
-      <a routerLink="/free-search"
-        >{{ t('View All', 'அனைத்தும்') }} <span aria-hidden="true">›</span></a
-      >
+     <a [routerLink]="auth.isLoggedIn() ? '/profiles' : '/free-search'">
+  {{ t('View All', 'அனைத்தும்') }}
+  <span aria-hidden="true">›</span>
+</a>
     </header>
 
     @if (mode === 'recent' && !auth.isLoggedIn()) {
@@ -109,7 +110,9 @@
               </div>
               <a
                 class="astro-view-profile"
-                [routerLink]="['/free-profile', p.code]"
+                [routerLink]="auth.isLoggedIn()
+  ? ['/profile-view', p.code]
+  : ['/free-profile', p.code]"
                 (click)="$event.stopPropagation()"
                 >{{ t('View Profile', 'சுயவிவரம் காண') }} <span>↗</span></a
               >
@@ -150,9 +153,12 @@
         </div>
       </div>
       <div class="home-show-more-wrap">
-        <a class="home-show-more" routerLink="/free-search"
-          >{{ t('Show More Profiles', 'மேலும் காண') }} →</a
-        >
+      <a
+  class="home-show-more"
+  [routerLink]="auth.isLoggedIn() ? '/profiles' : '/free-search'"
+>
+  {{ t('Show More Profiles', 'மேலும் காண') }} →
+</a>
       </div>
     } @else if (error) {
       <div class="home-status" role="alert">

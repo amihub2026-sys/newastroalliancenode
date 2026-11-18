@@ -49,11 +49,15 @@ interface DbPlanRow {
 
 interface ActiveSubscriptionResponse {
   success: boolean;
+  last_expired_plan_id?: string | null;
   data: {
     plan_id: string;
     plan_name: string;
     plan_name_ta?: string;
     is_active: boolean;
+    profile_views_used: number;
+    profile_view_limit: number;
+    end_date: string;
   } | null;
 }
 
@@ -134,8 +138,25 @@ export class Plans implements OnInit {
   // ==========================================
 
   activePlanId: string | null = null;
-  activePlanName = '';
+activePlanName = '';
+remainingUnlockCredits: number | null = null;
 
+canBuyAgainSamePlan(planId: string): boolean {
+  return (
+    this.activePlanId === planId &&
+    this.remainingUnlockCredits === 0
+  );
+}
+lastExpiredPlanId: string | null = null;
+shouldShowBuyAgain(planId: string): boolean {
+  return (
+    this.canBuyAgainSamePlan(planId) ||
+    (
+      this.activePlanId === null &&
+      this.lastExpiredPlanId === String(planId)
+    )
+  );
+}
   isSavingPlan = false;
   activatingPlanId: string | null = null;
 
@@ -403,14 +424,14 @@ translations = {
     const token =
       localStorage.getItem('matrimony_token');
 
-    if (!token) {
+  if (!token) {
 
-      this.activePlanId = null;
-      this.activePlanName = '';
-
-      return false;
-
-    }
+  this.activePlanId = null;
+  this.activePlanName = '';
+  this.remainingUnlockCredits = null;
+this.lastExpiredPlanId = null;
+  return false;
+}
 
     try {
 
@@ -448,10 +469,28 @@ translations = {
 
       this.ngZone.run(() => {
 
-        this.activePlanId =
-          response.data?.is_active
-            ? String(response.data.plan_id)
-            : null;
+      
+const active = response.data?.is_active === true;
+
+this.activePlanId = active
+  ? String(response.data!.plan_id)
+  : null;
+this.lastExpiredPlanId =
+  !active && response.last_expired_plan_id
+    ? String(response.last_expired_plan_id)
+    : null;
+const used = response.data?.profile_views_used;
+const limit = response.data?.profile_view_limit;
+
+this.remainingUnlockCredits =
+  active &&
+  used != null &&
+  limit != null &&
+  Number.isFinite(Number(used)) &&
+  Number.isFinite(Number(limit))
+    ? Math.max(0, Number(limit) - Number(used))
+    : null;
+
 
         this.activePlanName = (
 
@@ -933,10 +972,12 @@ this.snackbar.warning(
 
     // PREVENT PURCHASING SAME ACTIVE PLAN
 
-    if (this.activePlanId === planId) {
-      return;
-    }
-
+   if (
+  this.activePlanId === planId &&
+  !this.canBuyAgainSamePlan(planId)
+) {
+  return;
+}
     // ==========================================
     // PAYMENT LOADING STATE
     // ==========================================
@@ -979,7 +1020,10 @@ this.snackbar.warning(
         return;
       }
 
-      if (this.activePlanId === planId) {
+      if (
+  this.activePlanId === planId &&
+  !this.canBuyAgainSamePlan(planId)
+) {
 
         this.auth.invalidateFlowStatus();
 
@@ -1001,11 +1045,11 @@ this.snackbar.warning(
       // CONFIRM EXISTING MEMBERSHIP REPLACEMENT
       // ========================================
 
-      if (
+if (
+  this.activePlanId &&
+  !this.canBuyAgainSamePlan(planId) &&
 
-        this.activePlanId &&
-
-!window.confirm(
+  !window.confirm(
   ta()
     ? 'உங்களிடம் ஏற்கனவே ஒரு மெம்பர்ஷிப் பிளான் ஆக்டிவாக உள்ளது. புதிய பிளானை வாங்கினால் பழைய பிளானும் அதில் மீதமுள்ள கிரெடிட்ஸும் நீக்கப்படும். புதிய பிளானை வாங்க விரும்புகிறீர்களா?'
     : 'You already have an active membership plan. Purchasing a new plan will replace your existing plan and its remaining credits. Do you want to continue?'

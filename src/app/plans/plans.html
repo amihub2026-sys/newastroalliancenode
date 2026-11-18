@@ -173,17 +173,23 @@
           [ngClass]="'plan-' + i"
           [class.popular]="plan.popular"
           [class.disabled-plan]="plan.disabled"
-          [class.current-plan]="activePlanId === plan.code"
+          [class.current-plan]="
+  activePlanId === plan.code &&
+  !canBuyAgainSamePlan(plan.code)
+"
         >
 
           <div class="plan-glow"></div>
 
           <!-- CURRENT ACTIVE PLAN -->
 
-          <div
-            class="current-plan-badge"
-            *ngIf="activePlanId === plan.code"
-          >
+         <div
+  class="current-plan-badge"
+  *ngIf="
+    activePlanId === plan.code &&
+    !canBuyAgainSamePlan(plan.code)
+  "
+>
             ✓ {{
               currentLang === 'ta'
                 ? 'தற்போதைய திட்டம்'
@@ -244,39 +250,55 @@
 
           <!-- RAZORPAY PAYMENT BUTTON -->
 
-          <button
-            class="choose-btn"
-            type="button"
-            (click)="selectPlan(plan)"
-            [disabled]="
-              plan.disabled ||
-              plan.priceAmount <= 0 ||
-              isSavingPlan ||
-              activePlanId === plan.code
-            "
-          >
+       
+<!-- RAZORPAY PAYMENT BUTTON -->
 
-            {{
-              activePlanId === plan.code
-                ? (
-                    currentLang === 'ta'
-                      ? 'செயலில் உள்ளது'
-                      : 'Active Plan'
-                  )
-                : isSavingPlan && activatingPlanId === plan.code
-                  ? (
-                      currentLang === 'ta'
-                        ? 'கட்டணம் செயலாக்கப்படுகிறது...'
-                        : 'Processing Payment...'
-                    )
-                  : (
-                      currentLang === 'ta'
-                        ? 'இப்போது வாங்கவும் - '
-                        : 'Buy Now - '
-                    ) + plan.price
-            }}
+<button
+  class="choose-btn"
+  type="button"
+  (click)="selectPlan(plan)"
+  [disabled]="
+    plan.disabled ||
+    plan.priceAmount <= 0 ||
+    isSavingPlan ||
+    (
+      activePlanId === plan.code &&
+      !canBuyAgainSamePlan(plan.code)
+    )
+  "
+>
 
-          </button>
+  {{
+    isSavingPlan && activatingPlanId === plan.code
+      ? (
+          currentLang === 'ta'
+            ? 'கட்டணம் செயலாக்கப்படுகிறது...'
+            : 'Processing Payment...'
+        )
+
+      : shouldShowBuyAgain(plan.code)
+        ? (
+            currentLang === 'ta'
+              ? 'மீண்டும் வாங்கவும் - '
+              : 'Buy Again - '
+          ) + plan.price
+
+      : activePlanId === plan.code
+        ? (
+            currentLang === 'ta'
+              ? 'செயலில் உள்ளது'
+              : 'Active Plan'
+          )
+
+      : (
+          currentLang === 'ta'
+            ? 'இப்போது வாங்கவும் - '
+            : 'Buy Now - '
+        ) + plan.price
+  }}
+
+</button>
+
 
         </div>
 

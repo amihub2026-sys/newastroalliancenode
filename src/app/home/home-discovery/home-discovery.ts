@@ -511,10 +511,10 @@ this.profiles = data
       this.isBrowser &&
       window.innerWidth <= 880
     ) {
-      void this.router.navigate([
-        '/free-profile',
-        profile.code
-      ]);
+     void this.router.navigate([
+  this.auth.isLoggedIn() ? '/profile-view' : '/free-profile',
+  profile.code
+]);
 
       return;
     }
