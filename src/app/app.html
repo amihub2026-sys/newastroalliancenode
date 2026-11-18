@@ -60,7 +60,7 @@
           <!-- FIND YOUR MATCH -->
 
 <a
-  [routerLink]="isLoggedIn && mobileAccountStage === 'approved' ? '/profiles' : '/free-search'"
+ [routerLink]="isLoggedIn ? '/profiles' : '/free-search'"
   routerLinkActive="is-active"
 >
   {{ profilesNavText }}
@@ -546,7 +546,7 @@
 
       <!-- SEARCH -->
 <a
-  [routerLink]="isLoggedIn && mobileAccountStage === 'approved' ? '/profiles' : '/free-search'"
+ [routerLink]="isLoggedIn ? '/profiles' : '/free-search'"
   routerLinkActive="is-active"
   class="astro-bottom-nav-item"
   (click)="mobileProfileChoiceOpen = false"
@@ -877,7 +877,7 @@
           </a>
 
          <a
-  [routerLink]="isLoggedIn && mobileAccountStage === 'approved' ? '/profiles' : '/free-search'"
+ [routerLink]="isLoggedIn ? '/profiles' : '/free-search'"
 >
             {{ t.footer.profiles }}
           </a>
