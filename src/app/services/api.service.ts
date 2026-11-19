@@ -38,16 +38,24 @@ export class ApiService {
       { headers: this.getAuthHeaders() }
     );
   }
-  checkAdminProfileExists(mobile: string, dob: string) {
+ 
+
+checkAdminProfileExists(
+  mobile: string,
+  dob?: string,
+  profileId?: string
+) {
   return this.http.post<any>(
     `${this.baseUrl}/admin/profiles/check-existing`,
     {
       mobile,
-      dob
+      ...(profileId ? { profileId } : {})
     },
     { headers: this.getAuthHeaders() }
   );
 }
+
+
 createBiodataByAdmin(data: any) {
   return this.http.post<any>(
     `${this.baseUrl}/admin/profiles/create`,

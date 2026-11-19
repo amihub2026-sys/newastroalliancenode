@@ -2517,26 +2517,27 @@ async checkAdminDuplicate(): Promise<void> {
   this.formData.dob
 );
 
-  if (!this.isAdminCreated || this.editProfileId) {
-    return;
-  }
+  if (!this.isAdminBiodataMode()) {
+  return;
+}
 
   const mobile = String(this.formData.mobile || '').trim();
   const dob = String(this.formData.dob || '').trim();
 
-  if (!dob || !/^[6-9]\d{9}$/.test(mobile)) {
-    this.duplicateProfileExists = false;
-    return;
-  }
+ if (!/^[6-9]\d{9}$/.test(mobile)) {
+  this.duplicateProfileExists = false;
+  return;
+}
 
   try {
     this.isCheckingDuplicate = true;
 
     const res: any = await firstValueFrom(
-      this.api.checkAdminProfileExists(
-        mobile,
-        dob
-      )
+    this.api.checkAdminProfileExists(
+  mobile,
+  dob,
+  this.editProfileId || undefined
+)
     );
 
     this.duplicateProfileExists =
@@ -3072,6 +3073,50 @@ async onSubmit(): Promise<void> {
 
   this.submitted = true;
   this.fieldErrors = {};
+
+if (this.isAdminBiodataMode()) {
+  const mobile = String(this.formData.mobile || '').trim();
+
+  if (/^[6-9]\d{9}$/.test(mobile)) {
+    this.isSaving = true;
+
+    try {
+      const result: any = await firstValueFrom(
+        this.api.checkAdminProfileExists(
+          mobile,
+          undefined,
+          this.editProfileId || undefined
+        )
+      );
+
+      this.duplicateProfileExists = result?.exists === true;
+
+      if (this.duplicateProfileExists) {
+        this.fieldErrors['mobile'] = true;
+
+        this.snackbar.warning(
+          'This mobile number is already registered. Please use another number.',
+          'Duplicate Mobile Number'
+        );
+
+        return;
+      }
+    } catch (error) {
+      console.error('Mobile duplicate verification failed:', error);
+
+      this.snackbar.error(
+        'Unable to verify this mobile number. Please try again.',
+        'Verification Failed'
+      );
+
+      return;
+    } finally {
+      this.isSaving = false;
+      this.cdr.markForCheck();
+    }
+  }
+}
+
 // Do not erase loaded location values when the language changes or a search
 // input is left empty. Canonical names are resolved from selected IDs below.
 if (this.countrySearch.trim() && !this.selectedCountryId) this.formData.country = this.countrySearch.trim();
